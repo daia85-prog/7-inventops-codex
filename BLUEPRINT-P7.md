@@ -12,7 +12,7 @@
 O **InventOps** é o sistema operacional dos projetos da Invent, **operado pelo PMO — o coração
 que bombeia os projetos pela empresa**: a fonte única de verdade que acompanha cada projeto
 atravessando os **14 departamentos** — do Comercial ao Pós-vendas — com visão por nível de
-acesso (analista · gestor · diretor), progresso provado por **evidências** (não por "achismo
+acesso (analista · gestor/PMO · diretor), progresso provado por **evidências** (não por "achismo
 de %") e riscos antecipados por **simulação**. A conexão com o **chão de fábrica** (sensores/CLP)
 é a **visão de futuro** do produto — apresentada sempre como roadmap, nunca como promessa de
 agora. Nasce como demo para a Invent e é desenhado desde o primeiro dia para virar **produto
@@ -25,8 +25,9 @@ Pensa no InventOps como um **hospital de projetos**:
 
 | Peça | Papel no hospital | Em uma frase |
 |---|---|---|
+| **PMO** 🫀 | O **corpo clínico** — o médico-chefe e a equipe que cuidam dos pacientes | Não é sistema: é QUEM opera o InventOps no dia a dia — o coração humano que bombeia os projetos pelos 14 departamentos |
 | **Nexus (P3/P6, do Rapha)** | A **recepção/triagem** | É onde o projeto "dá entrada": o gestor faz o kickoff e preenche a ficha do paciente |
-| **InventOps (P7 — nosso)** | O **centro cirúrgico + UTI + painel dos médicos** | Acompanha o projeto vivo: quem cuida, o que trava, risco, previsão |
+| **InventOps (P7 — nosso)** | O **centro cirúrgico + UTI + painel dos médicos** | Acompanha o projeto vivo: quem cuida, o que trava, risco, previsão — a ferramenta de trabalho do PMO |
 | **SharePoint (P5)** | O **arquivo/prontuário** | Onde ficam os documentos oficiais que os times compartilham |
 | **Velox demo (P1)** | O **piloto que provou o conceito** | O que o Igor viu; continua no ar como vitrine e fonte dos dados reais de infra |
 | **P0 Infra** | As **normas do hospital** | Não é um sistema: é o conjunto de regras de como trabalhamos (sync, segurança, qualidade) |
