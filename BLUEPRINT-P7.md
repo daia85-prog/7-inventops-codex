@@ -117,6 +117,21 @@ diretoria vê saúde, risco e previsão sem perguntar nada em grupo de WhatsApp.
 | **4** | Inteligência | Simulador calculando de verdade sobre o histórico · previsão de gargalo | A casa que avisa antes de dar problema |
 | **5** | Chão de fábrica & ecossistema Velox | Telemetria CLP/IoT real no Comissionamento + **integração com o sistema WCS Velox e os servidores dos projetos** (saúde do ambiente, versão instalada, status por projeto — sistemas conversando entre si) | O diferencial que ninguém no mercado de PMO tem: o sistema de projetos conectado ao produto entregue |
 
+**Era 5 detalhada — o fim do "Velox a sete chaves" (Daiana, 12/07):** hoje a informação do que
+o dev entrega e de qual Velox roda em cada cliente é guardada pelo time de dev — e é **dado da
+empresa, não do time**. A Era 5 devolve isso pra empresa em 4 peças:
+1. **Passaporte do projeto** — qual versão do WCS Velox roda em cada cliente, em qual servidor,
+   desde quando (inventário vivo; Pós-vendas e Suporte param de "perguntar pro dev")
+2. **Release notes visíveis** — dev soltou versão nova → a empresa inteira vê o que mudou e
+   quais clientes recebem
+3. **Matriz cliente × versão × funcionalidades** — o Comercial sabe o que pode vender de upgrade;
+   o Suporte sabe o que o cliente tem
+4. **Progresso do dev por evidência** — a tela de Evidências conectada ao repositório real do
+   Velox: commits/builds/testes viram dado automático — **transparência sem depender de boa
+   vontade** (mesma régua de evidência que vale pros outros 13 departamentos)
+> Nota política (honestidade): isso muda cultura, não só tela — apresentar como "transparência
+> padrão da empresa" com patrocínio da diretoria, nunca como fiscalização do dev.
+
 **Regra de ouro do roadmap:** cada era só abre quando a anterior tem **critério de saída** batido
 (o app já traz isso na tela Releases & Roadmap — vira o roadmap oficial, realinhado a estas eras).
 
@@ -215,6 +230,21 @@ Dez lacunas reais encontradas e adotadas, cada uma com a era certa:
 > Método pra não repetir o "caso Opus": toda mudança de rumo passa por este documento, e
 > **a cada fechamento de era roda-se um pente-fino adversarial** (revisores independentes,
 > ferramenta de workflow multi-agente) sobre o blueprint E o código.
+
+## 12. Pente-fino nº 2 (12/07) — lente de EXECUÇÃO e risco de apresentação
+
+Segunda varredura, outra pergunta: *"o que pode dar errado AMANHÃ e na operação do projeto?"*
+Sete riscos reais, cada um com resposta pronta:
+
+| # | Risco | Resposta adotada |
+|---|---|---|
+| 1 | **Sessão acabar no meio do trabalho** (limite de conta) | **Regra de salvamento por bloco** no `CLAUDE.md` do P7: commit+push a cada bloco concluído (~20-30 min máx sem push) + `_DIARIO.md` sempre com "PRÓXIMO PASSO" explícito + task list viva. Rede de máquina: watchdog 15 min já cobre o P7 (auto-descoberta verificada) |
+| 2 | **Build do P7 dar problema em cima da hora** | **Apresentação em camadas:** Camada 1 = P7 novo · Camada 2 = Predictive Twin atual (JÁ no ar e validado em `velox-demo.pages.dev/predictive-twin/`) · Camada 3 = velox-demo clássico. Nunca ficamos sem demo |
+| 3 | **Vídeo com dados reais circulando** (clientes Stellantis/Falabella, nomes de colegas — vídeo vaza fácil) | Vídeo pro Igor = uso interno, ok. Se um dia for pra fora (Instagram/venda), regravar com dados mascarados — decisão já registrada aqui pra ninguém esquecer |
+| 4 | **Telão/resolução da sala** | Lição do P1 (título cortado em 1280×720): QA final roda TAMBÉM em 720p. Testar na resolução do projetor antes |
+| 5 | **Acessos da demo na hora H** | Logins demo (admin/gestor/analista) documentados no `CREDENCIAIS.md` da raiz `Code/` (gitignored) — quem apresenta acha em 10 segundos |
+| 6 | **Quem apresenta não é quem construiu** (Douglas/Igor mexendo sozinhos) | Material auto-explicativo: tour + legendas + **roteiro de bolso de 1 página** pro apresentador (entra no kit do vídeo) |
+| 7 | **OneDrive × node_modules** (P7 vive no OneDrive; P2/P3 já sofreram com poluição) | `node_modules`/`dist` fora do git ✅; se builds ficarem lentos/instáveis, aplicar **Opção A** (`.git` fora do OneDrive — ferramenta pronta: `OPCAO-A-GIT.sh`). Risco conhecido, monitorado, com cura de prateleira |
 
 ---
 
