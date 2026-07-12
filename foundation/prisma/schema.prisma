@@ -1,0 +1,164 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role { ADMIN EDITOR VIEWER ANALYST }
+enum ProjectStatus { NOT_STARTED IN_PROGRESS WAITING BLOCKED STANDBY COMPLETED CANCELED }
+enum TaskStatus { NOT_STARTED IN_PROGRESS WAITING BLOCKED COMPLETED }
+enum Severity { P0 P1 P2 }
+enum RiskKind { RISK ASSUMPTION ISSUE DEPENDENCY }
+enum DepartmentCode { COM PMO PCP CMP ENG TI DEV MNT PLC HML LOG IMP SUP FIN }
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  role      Role
+  active    Boolean  @default(true)
+  tasks     Task[]
+  auditLogs AuditLog[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Project {
+  id              String        @id @default(cuid())
+  code            String        @unique
+  name            String
+  client          String?
+  location        String?
+  status          ProjectStatus @default(NOT_STARTED)
+  healthScore     Int           @default(100)
+  progress        Decimal       @default(0) @db.Decimal(5, 2)
+  plannedStart    DateTime?
+  plannedEnd      DateTime?
+  adjustedEnd     DateTime?
+  completedAt     DateTime?
+  delayDays       Int           @default(0)
+  blockCategory   String?
+  blockOwner      String?
+  nextAction      String?
+  unblockForecast DateTime?
+  departments     ProjectDepartment[]
+  tasks           Task[]
+  milestones      Milestone[]
+  risks           RiskItem[]
+  alerts          Alert[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  @@index([status, adjustedEnd])
+}
+
+model ProjectDepartment {
+  id           String          @id @default(cuid())
+  projectId    String
+  department   DepartmentCode
+  status       TaskStatus      @default(NOT_STARTED)
+  weight       Decimal         @default(1) @db.Decimal(6, 3)
+  progress     Decimal         @default(0) @db.Decimal(5, 2)
+  capacityLoad Decimal         @default(0) @db.Decimal(6, 2)
+  project      Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tasks        Task[]
+  @@unique([projectId, department])
+}
+
+model Task {
+  id                  String             @id @default(cuid())
+  projectId           String
+  projectDepartmentId String?
+  title               String
+  phase               Int
+  status              TaskStatus         @default(NOT_STARTED)
+  ownerId              String?
+  ownerEmail           String?
+  dueAt                DateTime?
+  weight               Decimal            @default(1) @db.Decimal(6, 3)
+  project              Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectDepartment    ProjectDepartment? @relation(fields: [projectDepartmentId], references: [id])
+  owner                User?               @relation(fields: [ownerId], references: [id])
+  evidence             Evidence[]
+  secureTokens         SecureTaskToken[]
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+  @@index([ownerEmail, status])
+}
+
+model Evidence {
+  id         String   @id @default(cuid())
+  taskId     String
+  type       String
+  source     String
+  reference  String
+  contentHash String?
+  accepted   Boolean  @default(false)
+  createdBy  String
+  createdAt  DateTime @default(now())
+  task       Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+}
+
+model Milestone {
+  id        String   @id @default(cuid())
+  projectId String
+  name      String
+  dueAt     DateTime
+  completedAt DateTime?
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model RiskItem {
+  id          String   @id @default(cuid())
+  projectId   String
+  kind        RiskKind
+  title       String
+  probability Int
+  impact      Int
+  score       Int
+  owner       String
+  response    String?
+  dueAt       DateTime?
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@index([score])
+}
+
+model Alert {
+  id           String   @id @default(cuid())
+  projectId    String
+  severity     Severity
+  title        String
+  status       String
+  ownerEmail   String?
+  slaDeadline  DateTime
+  source       String
+  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  @@index([severity, status, slaDeadline])
+}
+
+model SecureTaskToken {
+  id        String   @id @default(cuid())
+  taskId    String
+  tokenHash String   @unique
+  email     String
+  expiresAt DateTime
+  usedAt    DateTime?
+  revokedAt DateTime?
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+}
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  actorId     String?
+  action      String
+  entityType  String
+  entityId    String
+  before      Json?
+  after       Json?
+  correlationId String?
+  createdAt   DateTime @default(now())
+  actor       User?    @relation(fields: [actorId], references: [id])
+  @@index([entityType, entityId, createdAt])
+}
