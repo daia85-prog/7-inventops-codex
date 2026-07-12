@@ -22,11 +22,14 @@
   headless** (script Node no scratchpad: 17 nós · 6 eras · 0 undefined) — pixels validados pela
   Daiana (screenshot do ambiente trava, limitação conhecida).
 
-**⏭️ PRÓXIMO:** executar a Era 1 (escopo fechado na seção 10 do blueprint), nesta ordem:
-1. Transplante de realidade — 14 deptos reais + gestores reais + domínio `@invent-corp.com`
-   (fonte: `velox-demo/fluxo-data.js`; editar `departments` em FoundationModules.jsx:21-29,
-   `areas` em ProjectControlModal.jsx:11-14, refs "TI"/"ENG" em blockers, e-mail no LoginScreen)
-2. Selos "VISÃO · ROADMAP" em Simulador/Comissionamento + seletor de idiomas (em breve)
+**✅ APROVADO pela Daiana ("aprovado, vai") — Era 1 EM EXECUÇÃO.**
+**✅ E1.1 CONCLUÍDO (transplante de realidade):** 14 deptos reais + gestores reais (FoundationModules
+`departments` + ProjectControlModal `departments`/`defaultActivities`), blockers INF/EMC, briefing
+"Infraestrutura, Compras e PLC", risco R-18 → Claudia Duarte, login `douglas.alves@invent-corp.com`,
+fix sigla morta `TI`→`INF` na matriz do modal (achado da varredura). Build ✓.
+
+**⏭️ PRÓXIMO:** continuar a Era 1 na ordem (specs completas no ROADMAP-P7.md §2):
+2. E1.2 — Selos "VISÃO · ROADMAP" em Simulador/Comissionamento + seletor de idiomas PT/ES/EN (em breve)
 3. Cockpit "Meu Departamento" (nova tela: minhas entregas · aguardando · esperam por mim ·
    botão concluir+notificar com carimbo de hora)
 4. Import Nexus (JSON de `_NEXUS-KICKOFFS/`, `tbd` → pendências por depto)
