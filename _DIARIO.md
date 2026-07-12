@@ -28,8 +28,23 @@
 "Infraestrutura, Compras e PLC", risco R-18 → Claudia Duarte, login `douglas.alves@invent-corp.com`,
 fix sigla morta `TI`→`INF` na matriz do modal (achado da varredura). Build ✓.
 
-**⏭️ PRÓXIMO:** continuar a Era 1 na ordem (specs completas no ROADMAP-P7.md §2):
-2. E1.2 — Selos "VISÃO · ROADMAP" em Simulador/Comissionamento + seletor de idiomas PT/ES/EN (em breve)
+**✅ ERA 1 EXECUTADA (12/07 noite):** E1.2 selos+idiomas ✅ · E1.3 Cockpit ✅ (concluir+notificar
+verificado ao vivo: toast+carimbo+feed) · E1.4 import Nexus ✅ (kickoff REAL BR SUPPLY → 23 pend/
+4 áreas, INF 9, sem dup; exemplo em `public/exemplos/`) · E1.5 cartão SharePoint ✅ (⚠️ BASE da URL
+= constante `SHAREPOINT_BASE` no App.jsx, Daiana confirma) · E1.6 QA 0 erros + **DEPLOY 200 em
+velox-demo.pages.dev/inventops/** (P1 commit `ca3cf93`, add cirúrgico) · E1.7 kit do vídeo em
+`P1/_KIT-VIDEO-IGOR.md`. Placar preenchido no ROADMAP-P7 §5. Vários blocos salvos pelo watchdog
+no meio (padrão saudável).
+**⚠️ SESSÃO PARALELA detectada ~18:40 editando `App.jsx`/`FoundationModules.jsx`** (Ação→"Minha
+Operação", actionsSeed enriquecido). Regra "uma sessão por arquivo": esta sessão NÃO tocou mais
+no código depois disso — commits daqui foram só docs (add cirúrgico). O deploy /inventops/ usa o
+build ANTERIOR a essas mudanças (estável p/ 13/07); a sessão paralela precisa buildar+redeployar
+quando terminar.
+
+**⏭️ PRÓXIMO:** (1) Daiana valida a lista única (entregue no chat 12/07) e grava o vídeo com o
+`_KIT-VIDEO-IGOR.md`; (2) confirmar `SHAREPOINT_BASE` (1 linha no App.jsx) + rebuild/redeploy;
+(3) conferir 720p de olho humano; (4) pós-apresentação: Cloudflare Pages próprio do repo
+`7-inventops` + Era 1.5 (TypeScript, CI, i18n real).
 3. Cockpit "Meu Departamento" (nova tela: minhas entregas · aguardando · esperam por mim ·
    botão concluir+notificar com carimbo de hora)
 4. Import Nexus (JSON de `_NEXUS-KICKOFFS/`, `tbd` → pendências por depto)

@@ -130,15 +130,15 @@ com linha no §4._
 
 ## 5. PLACAR DA ERA 1 (preencher ao fechar — "o que ficou no final")
 
-| Entrega | Planejado (§2) | O que ficou de verdade | Desvio? |
+| Entrega | Planejado (§2) | O que ficou de verdade (12/07, aguardando validação da Daiana) | Desvio? |
 |---|---|---|---|
-| E1.1 Transplante | — | _(preencher no fechamento)_ | — |
-| E1.2 Selos+idiomas | — | | |
-| E1.3 Cockpit | — | | |
-| E1.4 Import Nexus | — | | |
-| E1.5 SharePoint F1 | — | | |
-| E1.6 QA+deploy | — | | |
-| E1.7 Kit vídeo | — | | |
+| E1.1 Transplante | 14 deptos+gestores reais, domínio | ✅ Entregue e VERIFICADO no navegador (14 áreas, 10 gestores reais, 0 fictício) + bônus: fix sigla morta `TI` na matriz do modal | Nenhum |
+| E1.2 Selos+idiomas | Selo nas 2 telas + seletor | ✅ Selo "✦ VISÃO · ROADMAP" no Simulador e Comissionamento (verificado) + PT/ES/EN na topbar E no login com "em breve" | Nenhum |
+| E1.3 Cockpit | 3 colunas + concluir/notificar + feed | ✅ Entregue e verificado ao vivo: toast "WCS Velox notificada ✓ 18:30", feed com carimbo, INF piloto real, demais rotulados exemplo | Nenhum |
+| E1.4 Import Nexus | prévia, tbd→pendências, sem dup | ✅ Testado com o kickoff REAL do BR SUPPLY: prévia "23 pendências → WCS 8 · EMC 5 · ESP 1 · INF 9", re-import não duplica, 9 no Cockpit INF com tag "Kickoff Nexus" | Bônus: exemplo servido em `/exemplos/` p/ demo ao vivo |
+| E1.5 SharePoint F1 | cartão + link | ✅ Cartão na Central do Projeto (`proj-i26.4018.aspx`) | ⚠️ BASE da URL a confirmar pela Daiana (constante única) |
+| E1.6 QA+deploy | 0 console errors + rota garantida | ✅ QA funcional completo (0 erros) + **NO AR: velox-demo.pages.dev/inventops/ (HTTP 200)** | URL própria (Pages novo do repo 7-inventops) fica pós-apresentação; teste 720p pendente de olho humano |
+| E1.7 Kit vídeo | arquivo único | ✅ `P1/_KIT-VIDEO-IGOR.md`: 5 blocos narrados (ElevenLabs) + capítulo novo do InventOps + roteiro de bolso + checklist | Nenhum |
 
 ---
 
