@@ -134,9 +134,19 @@ function Sidebar({ active, setActive, alertCount, notify, role, onLogout }) {
   </aside>;
 }
 
-function Topbar({ active, role, onLogout }) {
-  return <header className="topbar"><div><h1>{pageMeta[active][0]}</h1><p>{pageMeta[active][1]}</p></div><div className="top-actions">
-    <span className="date"><CalendarBlank size={18}/>11 jul 2026</span><span className="avatar">D</span><span className="top-user">Douglas<small>{role}</small></span><button className="top-logout" onClick={onLogout} aria-label="Sair"><SignOut/></button>
+const VISION_PAGES = ["simulator", "commissioning"];
+
+function LangSwitch({ notify }) {
+  return <span className="lang-switch" role="group" aria-label="Idioma">
+    <button className="active" aria-pressed="true">PT</button>
+    <button onClick={()=>notify("Español · em breve — chega na próxima versão do InventOps.")} title="Em breve · disponível na próxima versão">ES</button>
+    <button onClick={()=>notify("English · em breve — chega na próxima versão do InventOps.")} title="Em breve · disponível na próxima versão">EN</button>
+  </span>;
+}
+
+function Topbar({ active, role, onLogout, notify }) {
+  return <header className="topbar"><div><div className="title-line"><h1>{pageMeta[active][0]}</h1>{VISION_PAGES.includes(active)?<span className="vision-badge" title="Este módulo mostra aonde o produto vai — faz parte do roadmap (Eras 4-5) e ainda não está em operação. Os dados são simulados.">✦ VISÃO · ROADMAP</span>:null}</div><p>{pageMeta[active][1]}</p></div><div className="top-actions">
+    <LangSwitch notify={notify}/><span className="date"><CalendarBlank size={18}/>11 jul 2026</span><span className="avatar">D</span><span className="top-user">Douglas<small>{role}</small></span><button className="top-logout" onClick={onLogout} aria-label="Sair"><SignOut/></button>
   </div></header>;
 }
 
@@ -321,5 +331,5 @@ export function App() {
     evidence:<EvidencePage/>,settings:<SettingsPage/>
   };
   const page=canAccess?pages[active]:<AccessDenied setActive={setActive}/>;
-  return <div className="app-shell"><Sidebar active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} onLogout={logout}/><main className="workspace"><Topbar active={active} role={role} onLogout={logout}/>{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
+  return <div className="app-shell"><Sidebar active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} onLogout={logout}/><main className="workspace"><Topbar active={active} role={role} onLogout={logout} notify={notify}/>{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
 }
