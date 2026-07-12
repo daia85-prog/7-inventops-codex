@@ -1,0 +1,218 @@
+{
+  "meta": {
+    "project": "BR SUPLLY",
+    "date": "2026-06-24T17:28:26.284Z",
+    "v": "4.0",
+    "total_pct": 54,
+    "filled": 67
+  },
+  "sections": {
+    "ge": {
+      "g1": "BR SUPLLY",
+      "g2": "I26.4018",
+      "g_codinome": "BR SBC",
+      "g3": "São Bernardo do Campo - ",
+      "g4": "new_proj",
+      "g5": "Spark ",
+      "g_golive": "14/02/2027 ",
+      "g_layout_ref": "PETER 2 "
+    },
+    "la": {
+      "c2": "no",
+      "l1": "cardboard",
+      "l3": "yes",
+      "l5": "1",
+      "l6": "no"
+    },
+    "cu": {
+      "cu1": "tbd",
+      "c1": "tbd"
+    },
+    "in": {
+      "in1": "tbd"
+    },
+    "os": {
+      "os_gate": "yes",
+      "os_r": "wcs",
+      "os1": "1",
+      "os_imp_etq": "yes",
+      "os4": "tbd",
+      "os5": "tbd"
+    },
+    "pb": {
+      "p1": "yes"
+    },
+    "ct": {
+      "ct1": "no"
+    },
+    "fc": {
+      "fc1": "yes",
+      "fc_r": "tbd",
+      "fc_i": "yes",
+      "fc_if": "client",
+      "fc_conf": "no",
+      "fc_conf_forn": "client"
+    },
+    "pk": {
+      "cf_gate": "no"
+    },
+    "so": {
+      "st1": "yes",
+      "st2": "10 rampas ",
+      "st3": "1",
+      "st_cap": "6.000",
+      "st5": "1",
+      "st6": "3",
+      "st_criterio": "tbd",
+      "st7": "tbd",
+      "st10": "tbd",
+      "st11": "yes",
+      "st11_tvs": "1",
+      "st_rc": "no"
+    },
+    "pt": {
+      "pt_gate": "yes",
+      "pt1": "tbd",
+      "pt_frag": "yes",
+      "pt8": "yes",
+      "pt_tem_ptl": "yes",
+      "pt_tipo_disp": "ptl_hw",
+      "pt_ptm": "no"
+    },
+    "es": {
+      "es1": "tbd",
+      "es2": "tbd",
+      "es3": "tbd",
+      "es7": "yes",
+      "es8": "A definir com cliente "
+    },
+    "et": {
+      "et_r": "tbd",
+      "et1": "2 impressoras (linha de picking + full case) Precisa avaliar possibilidade de adicionar + Order Start!"
+    },
+    "if": {
+      "if_resp_infra": "tbd",
+      "if_resp_srv": "srv_client",
+      "if_ambiente": "tbd",
+      "if_s": "tbd",
+      "if_ambientes": "tbd",
+      "if1": "tbd",
+      "if2": "tbd",
+      "if3": "tbd",
+      "if4": "tbd",
+      "if6": "tbd"
+    }
+  },
+  "progress": {
+    "ge": {
+      "title": "Info Gerais",
+      "pct": 100,
+      "filled": 7,
+      "total": 7
+    },
+    "la": {
+      "title": "Layout e Caixas",
+      "pct": 100,
+      "filled": 4,
+      "total": 4
+    },
+    "cu": {
+      "title": "Cubagem",
+      "pct": 0,
+      "filled": 0,
+      "total": 2
+    },
+    "in": {
+      "title": "Integração",
+      "pct": 0,
+      "filled": 0,
+      "total": 1
+    },
+    "os": {
+      "title": "Order Start",
+      "pct": 75,
+      "filled": 3,
+      "total": 4
+    },
+    "pb": {
+      "title": "PBL / FlowRack",
+      "pct": 38,
+      "filled": 6,
+      "total": 16
+    },
+    "ct": {
+      "title": "Picking Cart",
+      "pct": 100,
+      "filled": 1,
+      "total": 1
+    },
+    "fc": {
+      "title": "Full Case",
+      "pct": 83,
+      "filled": 5,
+      "total": 6
+    },
+    "pk": {
+      "title": "Conferência & Packing",
+      "pct": 50,
+      "filled": 1,
+      "total": 2
+    },
+    "so": {
+      "title": "Sorter",
+      "pct": 86,
+      "filled": 6,
+      "total": 7
+    },
+    "pt": {
+      "title": "Palletização & PTL",
+      "pct": 33,
+      "filled": 1,
+      "total": 3
+    },
+    "es": {
+      "title": "Gestão de Estoque",
+      "pct": 0,
+      "filled": 0,
+      "total": 2
+    },
+    "et": {
+      "title": "Etiquetas",
+      "pct": 50,
+      "filled": 1,
+      "total": 2
+    },
+    "if": {
+      "title": "Infraestrutura",
+      "pct": 10,
+      "filled": 1,
+      "total": 10
+    }
+  },
+  "notes": {
+    "cu": "Precisamos entender atualmente como o cliente usa hoje, para depois pensar em trazer a melhor solução para ele",
+    "in": "Tipo de integração (validar integração atual do projeto) talvez possamos usar a do projeto navepark, validar com cliente ",
+    "os": "Precisamos avaliar a possibilidade do projeto obter + de 1 order start por nível, pois no 1º nível passam caixas vazias e realizam coletas apenas no térreo, avaliar também matriz de fragilidade + balanceamento ",
+    "pb": "picking costas é picking corredor neste caso + pulmão caixote preto com ptl que é para armazenar itens de alto giro que nao cabem no nicho do flowrack ",
+    "so": "6 pallets que contemplam o ptl por saída. sorter contém balança antes de ser lido no portal (avaliar se precisa fazer check do peso ou apenas registrar e disparar o peso da caixa) "
+  },
+  "pbl_lines": [
+    {
+      "p_r": "wcs",
+      "p_m": "led_mode",
+      "p_led": "led10",
+      "p_g": "both_turn",
+      "p_pdv": "tbd",
+      "p_sct": "tbd",
+      "p_sc_f": "tbd",
+      "p10": "yes"
+    }
+  ],
+  "os_devices": [],
+  "os_details": [],
+  "mez_details": [
+    "Order Start + Picking corredor com led"
+  ],
+  "etiquetas_custom": [],
+  "meeting_notes": "AUTOMAÇÃO RETROFIT \n\n-Sorter com 10 saídas (6 palletes por saída) + processo de ptl + 1 rejeito\n-Contempla IA \n-Linha de picking frente + picking costas / corredor + pulmão \n-Indução \n-Order start \n-Picking by ligth em níveis de prateleiras \n-Cliente tem produto químico \n-Matriz de fragilidade, curva abc na \n-Avaliar viabilidade para incluir novo order start (a inteligência deve ser nossa caso necessário no projeto) \n-Solicitar ao cliente lista de skus, alto giro, baixo giro e itens frágeis \n-Gerenciamento de estoque precisa avaliar se o wms ira fazer do lado deles\n-6 mil caixas horas no sorter com -singulator \n-Servidor IA \n-Servidor projeto será do cliente, precisamos passar especificação contemplando as 2 condições.\n+ 2 balanças existentes no projeto atual \n-Etiqueta ivt nas impressoras full case e fracionado \n-Não contempla supervisório \n-Fardos e caixas de papelão\n-Layout executivo \n"
+}
