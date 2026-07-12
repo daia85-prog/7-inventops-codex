@@ -3,6 +3,17 @@
 > Ler ao ABRIR a sessão (antes de varrer código). Atualizar ao FECHAR cada bloco.
 > Estado mais recente no topo. Regra de salvamento por bloco: ver CLAUDE.md.
 
+**✅ CICLO 12/07/2026 — MINHA OPERAÇÃO V17.5 CONCLUÍDA**
+
+- “Ação” renomeada para **Minha Operação**, com foco real na rotina do analista.
+- Fila inteligente construída com prioridade, projeto, departamento, impacto, SLA, responsável e e-mail corporativo.
+- Dependências classificadas como bloqueante, externa ou paralela; compras e especificação continuam avançando quando Infra trabalha.
+- Conclusão exige evidência: `Pendente → Anexada/Em validação → Concluída`.
+- Comunicação operacional pronta para revisão em Outlook ou WhatsApp, sem envio automático e com destinatário vinculado.
+- QA visual salvo em `qa/audit-current-2026-07-12/04-minha-operacao-final.png` e `05-comunicacao-operacional.png`.
+- Build Vite concluído sem erros; console do navegador com zero erros.
+- Diretório desta etapa confirmado com Daiana: `Claude\Code\Conta_Invent\7 - InventOps`. Próxima evolução será iniciada em outro diretório a ser definido.
+
 **🔄 CICLO 12/07/2026 — NASCIMENTO (sessão 0, Fable 5, com a Daiana ao vivo)**
 
 - **P7 criado:** cópia do Predictive Twin (Codex) promovida a projeto próprio · repo privado

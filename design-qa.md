@@ -1,5 +1,28 @@
 # Design QA — InventOps Predictive Twin
 
+## Iteração — Minha Operação V17.5
+
+- Antes: `qa/audit-current-2026-07-12/03-acao-atual.png`.
+- Implementação final: `qa/audit-current-2026-07-12/04-minha-operacao-final.png`.
+- Comunicação operacional: `qa/audit-current-2026-07-12/05-comunicacao-operacional.png`.
+- Estado validado: tarefa NAVEPARK/INF atribuída a Daiana Costa, evidência pendente, dependência paralela e fluxo multidepartamental.
+
+### Jornada verificada
+
+1. A fila abre priorizada e permite filtros Minha fila, Hoje, Aguardando e P0.
+2. Selecionar uma tarefa atualiza o painel de contexto sem perder a fila.
+3. A atividade não oferece conclusão sem evidência; o primeiro passo é “Registrar evidência”.
+4. Após o registro, o estado muda para “Em validação” e a ação passa a “Validar e concluir”.
+5. A conclusão é refletida na tarefa e a atualização operacional usa o e-mail corporativo vinculado.
+6. Outlook recebe `mailto:` preenchido e WhatsApp recebe mensagem formatada; o usuário revisa antes de enviar.
+
+### Resultado técnico e visual
+
+- Build Vite de produção aprovado, sem erro de compilação.
+- Console do navegador com zero erros.
+- Hierarquia, tokens, tipografia, ícones e densidade seguem a referência aprovada `reference-approved.png`.
+- O layout compacto de desktop mantém fila, contexto e fluxo paralelo legíveis sem vazamentos horizontais.
+
 ## Evidências
 
 - Referência aprovada: `reference-approved.png`

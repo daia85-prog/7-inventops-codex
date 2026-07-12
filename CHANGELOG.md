@@ -1,5 +1,15 @@
 # Changelog
 
+## V17.5 — Minha Operação — 12/07/2026
+
+- Módulo **Ação** evoluído para **Minha Operação**, com briefing diário e fila priorizada por impacto, SLA e dependência.
+- Cada atividade agora traz projeto, departamento, responsável, e-mail corporativo, prazo e evidência exigida.
+- Conclusão governada em duas etapas: registrar evidência e validar; não é possível concluir no “olhômetro”.
+- Painel contextual explica por que a tarefa importa e distingue dependências bloqueantes, externas e paralelas.
+- Fluxo visual demonstra áreas trabalhando em paralelo sem impor uma sequência artificial entre os 14 departamentos.
+- Atualização operacional preparada para revisão, com destinatário corporativo e atalhos para Outlook e WhatsApp.
+- Build de produção, jornada crítica e console validados; evidências em `qa/audit-current-2026-07-12/`.
+
 ## V17.4 — Comunicação e apresentação por perfil — 12/07/2026
 
 - Nome oficial **InventOps** preservado em toda a experiência; referência operacional antiga “Go Live Velox” removida.
