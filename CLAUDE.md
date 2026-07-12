@@ -36,6 +36,14 @@ A sessão pode acabar a qualquer momento (limite de conta). Por isso:
 
 `_DIARIO.md` na raiz — ler ao ABRIR (antes de varrer código), atualizar ao FECHAR cada ciclo/bloco.
 
+## 🔎 REGRA — NÃO AFIRMAR SEM CONFIRMAR (feedback da Daiana, 12/07/2026)
+
+Nenhuma frase de estado — "está feito", "está lá", "existe", "está documentado" — sem
+**verificação no ato** (ler o arquivo, rodar o comando, testar). Se não verificou, dizer
+"não verifiquei" explicitamente. Documentação que cita outro arquivo/config: abrir o citado
+e conferir que bate ANTES de escrever. Contexto: 3 ocorrências em 12/07 (PMO "estava" na tabela
+e não estava · "logins documentados" que não existiam · porta 3340 prometida sem config criada).
+
 ## 🤖 Autonomia e modelos
 
 - **AUTONOMIA-99** (P0): executar tudo sozinho; parar só por risco de perda irreversível/produção.
