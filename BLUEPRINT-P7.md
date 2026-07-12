@@ -9,12 +9,15 @@
 
 ## 1. Visão em um parágrafo
 
-O **InventOps** é o sistema operacional dos projetos da Invent: a fonte única de verdade que
-acompanha cada projeto atravessando os **14 departamentos** — do Comercial ao Pós-vendas — com
-visão por nível de acesso (analista · gestor · diretor), progresso provado por **evidências**
-(não por "achismo de %"), riscos antecipados por **simulação** e, no futuro, conectado ao
-**chão de fábrica** (sensores/CLP). Nasce como demo para a Invent e é desenhado desde o primeiro
-dia para virar **produto vendável a outras empresas** (multi-empresa, marca trocável, PT/ES).
+O **InventOps** é o sistema operacional dos projetos da Invent, **operado pelo PMO — o coração
+que bombeia os projetos pela empresa**: a fonte única de verdade que acompanha cada projeto
+atravessando os **14 departamentos** — do Comercial ao Pós-vendas — com visão por nível de
+acesso (analista · gestor · diretor), progresso provado por **evidências** (não por "achismo
+de %") e riscos antecipados por **simulação**. A conexão com o **chão de fábrica** (sensores/CLP)
+é a **visão de futuro** do produto — apresentada sempre como roadmap, nunca como promessa de
+agora. Nasce como demo para a Invent e é desenhado desde o primeiro dia para virar **produto
+vendável a outras empresas** (multi-empresa, marca trocável, **trilíngue PT-BR · ES · EN** —
+a Invent é uma empresa Comau: público internacional desde já).
 
 ## 2. O ecossistema em linguagem simples
 
@@ -95,7 +98,7 @@ diretoria vê saúde, risco e previsão sem perguntar nada em grupo de WhatsApp.
 | **Zod** | O porteiro: confere se todo dado que entra tem o formato certo | Já é padrão nosso (P6/Padrão Ouro) |
 | **SSO Microsoft 365** | Entrar com a conta da empresa, sem senha nova | A Invent (e qualquer cliente corporativo) vive no M365 |
 | **Playwright + CI** | Robô que clica no sistema inteiro a cada mudança e acusa se algo quebrou | Rapha usa no P6; qualidade sem depender de olho humano |
-| **i18n PT/ES** | Sistema bilíngue por troca de dicionário, não por reescrita | Market Peru/Chile/Guatemala: o produto JÁ atende cliente hispânico |
+| **i18n PT-BR/ES/EN** | Sistema trilíngue por troca de dicionário, não por reescrita | Invent é Comau (público internacional) + Market Peru/Chile/Guatemala; decisão da Daiana 12/07: **três idiomas são padrão do produto** |
 
 **Decisões anti-arrependimento (as duas disciplinas de berço):**
 1. **Dados separados das telas** — nunca escrever dado dentro do componente; sempre em arquivos
@@ -140,6 +143,7 @@ e pergunta se houver risco de perda irreversível/produção. Validação consol
 | Modelo | Quando | Exemplos no P7 |
 |---|---|---|
 | **Fable 5** (máximo) | Decisão cara de errar: arquitetura, produto, auditoria final pré-diretoria, pente-fino adversarial | Este blueprint · a noite pré-Igor |
+| **Opus 4.8** (estratégico-rápido) | Mesmo tipo de trabalho do Fable quando: o Fable não está disponível/estourou o limite da conta, OU a tarefa estratégica é grande e o modo rápido (/fast, exclusivo do Opus) compensa | Pente-fino longo · dia de limite estourado |
 | **Sonnet 5** (padrão) | O dia a dia de construir: telas, ajustes, docs, integrações já desenhadas | Implementar o Cockpit já especificado |
 | **Haiku 4.5** (mecânico) | Tarefa repetitiva sem decisão: renomear, sync, varredura simples | Trocar domínio de e-mail em N arquivos |
 
@@ -174,8 +178,13 @@ descompasso é o Claude (aviso na hora, você decide a troca).
 7. **Deploy:** rota garantida no `velox-demo.pages.dev` + URL própria na sequência
 
 **Fora do escopo de amanhã (com data pra entrar):** TypeScript, banco, SSO real, upload
-SharePoint, notificação real por e-mail — tudo mapeado nas eras acima. A demo NÃO finge que
-já tem isso (honestidade de copy).
+SharePoint, notificação real por e-mail, tradução ES/EN — tudo mapeado nas eras acima. A demo
+NÃO finge que já tem isso (honestidade de copy).
+
+**Regra de expectativa (Daiana, 12/07):** as telas de **Comissionamento/CLP** e o **Simulador**
+ficam na demo, mas SEMPRE rotuladas/narradas como **visão de futuro do roadmap** — mostram aonde
+o produto vai, sem gerar expectativa de que já existe. O idioma da demo de amanhã é PT-BR; o
+seletor trilíngue (PT-BR/ES/EN) entra na Era 1.5 junto com a fundação técnica.
 
 ---
 
