@@ -146,7 +146,8 @@ empresa, não do time**. A Era 5 devolve isso pra empresa em 4 peças:
 - **Honestidade de copy:** demo não fala como produto ("prepara o e-mail" ≠ "envia sozinho") —
   auditoria de escrita antes de qualquer apresentação
 - **QA pré-apresentação:** ritual clique-a-clique com zero erro de console
-- **Continuidade:** `_DIARIO.md` + `_ROTEIRO.md` no repo (memória que viaja entre máquinas/contas)
+- **Continuidade:** `_DIARIO.md` no repo, sempre fechando com "⏭️ PRÓXIMO PASSO" (memória que
+  viaja entre máquinas/contas; `_ROTEIRO.md` separado só se o projeto crescer a ponto de precisar)
 
 ## 9. Autonomia, modelos e economia de tokens (política oficial do P7)
 
@@ -250,7 +251,7 @@ Sete riscos reais, cada um com resposta pronta:
 | 2 | **Build do P7 dar problema em cima da hora** | **Apresentação em camadas:** Camada 1 = P7 novo · Camada 2 = Predictive Twin atual (JÁ no ar e validado em `velox-demo.pages.dev/predictive-twin/`) · Camada 3 = velox-demo clássico. Nunca ficamos sem demo |
 | 3 | **Vídeo com dados reais circulando** (clientes Stellantis/Falabella, nomes de colegas — vídeo vaza fácil) | Vídeo pro Igor = uso interno, ok. Se um dia for pra fora (Instagram/venda), regravar com dados mascarados — decisão já registrada aqui pra ninguém esquecer |
 | 4 | **Telão/resolução da sala** | Lição do P1 (título cortado em 1280×720): QA final roda TAMBÉM em 720p. Testar na resolução do projetor antes |
-| 5 | **Acessos da demo na hora H** | Logins demo (admin/gestor/analista) documentados no `CREDENCIAIS.md` da raiz `Code/` (gitignored) — quem apresenta acha em 10 segundos |
+| 5 | **Acessos da demo na hora H** | Honestidade: hoje a demo aceita **qualquer e-mail + senha** (não há credencial real — é demonstrativo e o app avisa isso). Documentar no `CREDENCIAIS.md` da raiz `Code/` o passo-a-passo: e-mail sugerido pra digitar bonito na tela + como trocar de perfil (Admin→Gestor→Analista) na Administração |
 | 6 | **Quem apresenta não é quem construiu** (Douglas/Igor mexendo sozinhos) | Material auto-explicativo: tour + legendas + **roteiro de bolso de 1 página** pro apresentador (entra no kit do vídeo) |
 | 7 | **OneDrive × node_modules** (P7 vive no OneDrive; P2/P3 já sofreram com poluição) | `node_modules`/`dist` fora do git ✅; se builds ficarem lentos/instáveis, aplicar **Opção A** (`.git` fora do OneDrive — ferramenta pronta: `OPCAO-A-GIT.sh`). Risco conhecido, monitorado, com cura de prateleira |
 
