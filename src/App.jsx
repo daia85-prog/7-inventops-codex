@@ -23,6 +23,11 @@ import { DepartmentCockpit } from "./DepartmentCockpit";
 
 const assetPath = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
+/* E1.5 — F1 SharePoint: link vivo por projeto (padrão proj-<código> do P5).
+   ⚠️ Base a confirmar com a Daiana antes da apresentação — trocar SÓ esta linha. */
+const SHAREPOINT_BASE = "https://inventsmart.sharepoint.com/sites/ProjetosInvent/SitePages";
+const sharePointUrl = (code) => `${SHAREPOINT_BASE}/proj-${String(code||"").toLowerCase().replace(/\s+/g,"")}.aspx`;
+
 const capacityData = [
   { d: "14 jul", base: 48, scenario: 32 }, { d: "21 jul", base: 55, scenario: 48 },
   { d: "28 jul", base: 62, scenario: 60 }, { d: "04 ago", base: 66, scenario: 76 },
@@ -60,6 +65,15 @@ const initialAlert = {
   id: "P0-2026-0711-01", project: "TITANO", priority: "P0", title: "Falha crítica no Sensor X",
   description: "Leitura 0,00 mA detectada durante o comissionamento da Linha de Expedição 01.",
   owner: "Rodrigo Baruco", source: "IoT / CLP", detected: "11/07/2026 10:23:56", status: "Em triagem"
+};
+
+/* E1.4 — contrato Nexus: seção do kickoff → departamento dono (campos 'tbd' viram pendências) */
+const SEC2DEPT = { ge:"PMO", la:"EMC", cu:"WCS", in:"WCS", os:"WCS", pb:"EMC", ct:"EMC", fc:"EMC", pk:"EMC", so:"EMC", pt:"EMC", es:"WCS", et:"ESP", if:"INF" };
+const IF_LABELS = {
+  if_resp_infra:"Definir responsável de infra do projeto", if_resp_srv:"Servidor: cliente × Invent",
+  if_ambiente:"Ambiente: nuvem × on-premise", if_s:"Especificação técnica de servidores",
+  if_ambientes:"Ambientes PRD / HML", if1:"VPN site-to-site", if2:"Range de IPs",
+  if3:"Acessos remotos", if4:"Domínio / DNS", if6:"Backup e monitoramento"
 };
 
 const navGroups = [
@@ -229,12 +243,51 @@ function DecisionRoom({setActive,notify}){ return <section className="page decis
 function StatusBadge({status}) { return <span className={`status-badge status-${status.toLowerCase().replaceAll(" ","-")}`}>{status}</span>; }
 function RiskBadge({risk}) { return <span className={`risk-badge risk-${risk.toLowerCase()}`}><i/>{risk}</span>; }
 
-function PortfolioPage({projects,setProjects,setActive,setSelectedProject,setProjectModalOpen,notify}) {
+function PortfolioPage({projects,setProjects,setActive,setSelectedProject,setProjectModalOpen,setImportedDemands,notify}) {
   const [search,setSearch]=useState("");
   const [filter,setFilter]=useState("Todos");
   const [view,setView]=useState("kanban");
   const [creating,setCreating]=useState(false);
+  const [preview,setPreview]=useState(null);
+  const fileRef=useRef(null);
   const [draft,setDraft]=useState({name:"",client:"",owner:"Daiana Costa"});
+  const handleFile=e=>{
+    const file=e.target.files&&e.target.files[0]; e.target.value="";
+    if(!file)return;
+    const reader=new FileReader();
+    reader.onload=()=>{
+      try{
+        const data=JSON.parse(reader.result);
+        if(!data||!data.meta||!data.meta.project||!data.sections||!data.progress)throw new Error("estrutura");
+        const name=data.meta.project.trim();
+        const code=((data.sections.ge&&data.sections.ge.g2)||"S/CÓDIGO").trim();
+        if(projects.some(p=>p.code===code||p.name===name.toUpperCase())){notify(`${name} (${code}) já está no portfólio — nada foi duplicado.`);return}
+        const secs=Object.entries(data.progress).map(([k,v])=>({k,title:v.title,pct:v.pct,pend:Math.max(0,v.total-v.filled)}));
+        const demands=[];
+        for(const [k,fields] of Object.entries(data.sections)){
+          if(typeof fields!=="object"||!fields)continue;
+          for(const [f,val] of Object.entries(fields)){
+            if(String(val).trim().toLowerCase()==="tbd"){
+              const dept=SEC2DEPT[k]||"PMO";
+              const secTitle=(data.progress[k]&&data.progress[k].title)||k;
+              demands.push({dept,project:name.toUpperCase(),title:IF_LABELS[f]||`${secTitle} — definição pendente (${f})`,to:"PMO",due:"kickoff"});
+            }
+          }
+        }
+        const byDept={};demands.forEach(d=>{byDept[d.dept]=(byDept[d.dept]||0)+1});
+        const golive=((data.sections.ge&&data.sections.ge.g_golive)||"").trim()||"a definir";
+        setPreview({name,code,golive,totalPct:data.meta.total_pct,secs,demands,byDept,
+          project:{name:name.toUpperCase(),code,client:((data.sections.ge&&data.sections.ge.g5)||"Cliente a definir").trim(),location:((data.sections.ge&&data.sections.ge.g3)||"Local a definir").trim().replace(/[-·]\s*$/,""),owner:"Daiana Costa",pmo:"A definir",status:"Em andamento",risk:"Baixo",phase:1,progress:0,next:"Kickoff técnico",date:golive,health:75,blocker:"Sem bloqueio registrado.",nextAction:"Distribuir as pendências do kickoff pelas áreas responsáveis.",milestones:["Kickoff importado do Nexus · hoje",`Go Live · ${golive}`]}});
+      }catch{notify("Arquivo inválido — esperado um Nexus_Kickoff_*.json gerado pelo Nexus.")}
+    };
+    reader.readAsText(file);
+  };
+  const applyImport=()=>{
+    setProjects([preview.project,...projects]);
+    setImportedDemands(d=>[...d,...preview.demands]);
+    notify(`${preview.name} importado: ${preview.demands.length} pendências distribuídas para ${Object.keys(preview.byDept).length} áreas. Veja no Meu Departamento.`);
+    setPreview(null);
+  };
   useEffect(()=>{if(!creating)return;const close=event=>event.key==="Escape"&&setCreating(false);document.addEventListener("keydown",close);return()=>document.removeEventListener("keydown",close)},[creating]);
   const shown=projects.filter(p=>(filter==="Todos"||p.status===filter||p.risk===filter)&&`${p.name} ${p.client} ${p.code}`.toLowerCase().includes(search.toLowerCase()));
   const openProject=(project)=>{setSelectedProject(project);setProjectModalOpen(true)};
@@ -246,7 +299,7 @@ function PortfolioPage({projects,setProjects,setActive,setSelectedProject,setPro
       <article><Warning/><span><small>RISCO ALTO</small><b>2 projetos</b><em>Market Peru e Navepark</em></span></article>
       <article><FlagCheckered/><span><small>PRÓXIMOS 30 DIAS</small><b>4 marcos</b><em>2 Go Lives confirmados</em></span></article>
     </div>
-    <div className="portfolio-toolbar"><div><h2>Portfólio operacional</h2><p>Da estratégia à atividade: cada número abre a evidência que o sustenta.</p></div><div className="portfolio-view-actions"><span><button className={view==="kanban"?"active":""} onClick={()=>setView("kanban")}><SquaresFour/>Kanban</button><button className={view==="table"?"active":""} onClick={()=>setView("table")}><Rows/>Lista</button></span><button className="primary" onClick={()=>setCreating(true)}><Plus/>Novo projeto</button></div></div>
+    <div className="portfolio-toolbar"><div><h2>Portfólio operacional</h2><p>Da estratégia à atividade: cada número abre a evidência que o sustenta.</p></div><div className="portfolio-view-actions"><span><button className={view==="kanban"?"active":""} onClick={()=>setView("kanban")}><SquaresFour/>Kanban</button><button className={view==="table"?"active":""} onClick={()=>setView("table")}><Rows/>Lista</button></span><button className="ghost" onClick={()=>fileRef.current&&fileRef.current.click()} title="Importa um Nexus_Kickoff_*.json — o projeto nasce com as pendências distribuídas pelas áreas"><UploadSimple/>Importar kickoff</button><input ref={fileRef} type="file" accept="application/json,.json" hidden onChange={handleFile} aria-label="Importar kickoff do Nexus"/><button className="primary" onClick={()=>setCreating(true)}><Plus/>Novo projeto</button></div></div>
     <div className="portfolio-filters"><label><MagnifyingGlass/><input aria-label="Buscar projeto" value={search} onChange={e=>setSearch(e.target.value)} placeholder="Buscar projeto, cliente ou código"/></label><Funnel/>{["Todos","Em andamento","Bloqueado","Alto"].map(x=><button key={x} className={filter===x?"active":""} onClick={()=>setFilter(x)}>{x}</button>)}</div>
     {view==="kanban"?<div className="portfolio-kanban">{[["Em andamento",shown.filter(p=>p.status==="Em andamento")],["Bloqueado",shown.filter(p=>p.status==="Bloqueado")],["Concluído",shown.filter(p=>p.status==="Concluído")]].map(([status,items])=><section key={status}><header><span><i className={`kanban-dot ${status.toLowerCase().replaceAll(" ","-")}`}/><b>{status}</b></span><em>{items.length}</em></header><div>{items.map(p=><button key={p.name} onClick={()=>openProject(p)} aria-label={`Abrir projeto ${p.name}`}><span className="kanban-card-top"><small>{p.code}</small><RiskBadge risk={p.risk}/></span><h3>{p.name}</h3><p>{p.client} · {p.location}</p><span className="kanban-phase"><small>FASE {p.phase}/7</small><b>{phaseNames[p.phase-1]}</b></span><span className="kanban-progress evidence-tooltip" tabIndex="0" data-tooltip={`${p.progress}% calculado por evidências técnicas verificadas.`}><i><em style={{width:`${p.progress}%`}}/></i><b>{p.progress}%</b></span><footer><span className="avatar">{p.owner[0]}</span><span><small>PRÓXIMO MARCO</small><b>{p.next} · {p.date}</b></span><ArrowRight/></footer></button>)}</div>{!items.length?<p className="kanban-empty">Nenhum projeto nesta etapa.</p>:null}</section>)}</div>:null}
     {view==="table"?<div className="portfolio-table"><header><span>Projeto</span><span>Fase atual</span><span>Progresso</span><span>Risco</span><span>Próximo marco</span><span>Responsável</span><span/></header>
@@ -258,6 +311,13 @@ function PortfolioPage({projects,setProjects,setActive,setSelectedProject,setPro
       {!shown.length?<div className="empty"><MagnifyingGlass size={32}/>Nenhum projeto encontrado.</div>:null}
     </div>:null}
     <div className="portfolio-bottom"><article><div className="section-heading"><b>Capacidade das equipes</b><span>Carga projetada para os próximos 90 dias.</span></div><CapacityChart compact/></article><article className="attention-list"><div className="section-heading"><b>Fila de atenção</b><span>Onde a governança deve agir primeiro.</span></div><div><strong>01</strong><span><b>MARKET PERU</b><small>3 dependências externas sem data confirmada</small></span><em>Escalar hoje</em></div><div><strong>02</strong><span><b>NAVEPARK</b><small>Ambiente HML compromete o marco de agosto</small></span><em>Definir dono</em></div></article></div>
+    {preview?<div className="modal-layer" role="presentation" onMouseDown={e=>e.target===e.currentTarget&&setPreview(null)}><div className="project-modal import-preview" role="dialog" aria-modal="true" aria-labelledby="imp-title">
+      <div><span className="project-symbol">⇪</span><div><h2 id="imp-title">Importar kickoff · {preview.name}</h2><p>{preview.code} · Go Live {preview.golive} · kickoff {preview.totalPct}% preenchido no Nexus</p></div><button type="button" aria-label="Fechar" onClick={()=>setPreview(null)}><XCircle/></button></div>
+      <div className="imp-depts"><b>{preview.demands.length} pendências serão distribuídas:</b><div>{Object.entries(preview.byDept).map(([d,n])=><span key={d}><b>{d}</b>{n}</span>)}</div></div>
+      <div className="imp-secs">{preview.secs.map(s=><div key={s.k}><span>{s.title}</span><i><em style={{width:`${s.pct}%`}}/></i><small>{s.pct}%{s.pend?` · ${s.pend} pend.`:""}</small></div>)}</div>
+      <p className="imp-note">Prévia — nada é aplicado antes de confirmar. Cada pendência aparece no Cockpit da área responsável.</p>
+      <div className="modal-actions"><button type="button" className="ghost" onClick={()=>setPreview(null)}>Cancelar</button><button className="primary" type="button" onClick={applyImport}><UploadSimple/>Confirmar import</button></div>
+    </div></div>:null}
     {creating?<div className="modal-layer" role="presentation" onMouseDown={e=>e.target===e.currentTarget&&setCreating(false)}><form className="project-modal" role="dialog" aria-modal="true" aria-labelledby="new-project-title" onSubmit={createProject}><div><span className="project-symbol">NP</span><div><h2 id="new-project-title">Novo projeto</h2><p>Crie a estrutura mínima. Fases e atividades entram em seguida.</p></div><button type="button" aria-label="Fechar" onClick={()=>setCreating(false)}><XCircle/></button></div><label>Nome do projeto<input autoFocus value={draft.name} onChange={e=>setDraft({...draft,name:e.target.value})} placeholder="Ex.: EXPANSÃO CD SUL" required/></label><label>Cliente<input value={draft.client} onChange={e=>setDraft({...draft,client:e.target.value})} placeholder="Empresa ou unidade"/></label><label>Responsável<select value={draft.owner} onChange={e=>setDraft({...draft,owner:e.target.value})}><option>Daiana Costa</option><option>Rodrigo Baruco</option><option>Douglas</option></select></label><div className="modal-actions"><button type="button" className="ghost" onClick={()=>setCreating(false)}>Cancelar</button><button className="primary" type="submit"><Plus/>Criar projeto</button></div></form></div>:null}
   </section>;
 }
@@ -280,6 +340,10 @@ function ProjectWorkspace({project,setActive,notify}) {
       <aside className="governance-card"><div className="section-heading"><b>Próxima ação</b><span>A cobrança que move o projeto.</span></div><h3>{project.nextAction}</h3><dl><div><dt>Dono</dt><dd>{project.owner}</dd></div><div><dt>Prazo</dt><dd>15 jul 2026</dd></div><div><dt>Criticidade</dt><dd><RiskBadge risk={project.risk}/></dd></div></dl><button className="primary" onClick={()=>notify(`Cobrança registrada para ${project.owner}.`)}>Registrar cobrança</button></aside>
       <article className="evidence-summary"><div className="section-heading"><b>Evidências de execução</b><span>O progresso só avança quando existe entrega verificável.</span></div><div><span><CheckSquare/><b>4/5</b><small>checklists de infraestrutura</small></span><span><GitCommit/><b>12</b><small>commits em base homologada</small></span><span><TestTube/><b>18/20</b><small>testes aprovados</small></span><span><CloudCheck/><b>3</b><small>documentos aceitos</small></span></div></article>
       <article className="milestone-summary"><div className="section-heading"><b>Marcos principais</b><span>Datas que dirigem as decisões.</span></div>{project.milestones.map((m,i)=><div key={m}><i className={i===0?"active":""}/><span><b>{m.split(" · ")[0]}</b><small>{m.split(" · ")[1]||"Data a confirmar"}</small></span></div>)}</article>
+      <article className="sharepoint-card"><div className="section-heading"><b>Documentos do projeto</b><span>Os arquivos oficiais vivem no SharePoint — cofre único da empresa.</span></div>
+        <div className="sp-row"><span className="sp-ico">📁</span><div><b>Página do projeto no SharePoint</b><small>{project.code} · specs, atas, evidências e anexos compartilhados entre os times</small></div>
+        <a className="sp-open" href={sharePointUrl(project.code)} target="_blank" rel="noopener noreferrer">Abrir no SharePoint ↗</a></div>
+        <small className="sp-note">Acesso com a conta corporativa M365 · upload direto pelo InventOps chega na Era 3 do roadmap.</small></article>
     </div>:null}
     {tab==="activities"?<div className="workplan"><div className="workplan-head"><div><h3>Plano de trabalho integrado</h3><p>Atividades, responsáveis, prazos e evidências.</p></div><button className="primary" onClick={addActivity}><Plus/>Nova atividade</button></div><div className="activity-table"><header><span>Atividade</span><span>Fase</span><span>Responsável</span><span>Prazo</span><span>Evidência</span><span>Status</span></header>{activities.map(a=><div key={a.id}><span><b>{a.name}</b>{a.new?<small>Adicionada agora</small>:null}</span><span>{a.phase}</span><span><User/>{a.owner}</span><span><CalendarBlank/>{a.due}</span><span><LinkSimple/>{a.evidence}</span><select aria-label={`Status de ${a.name}`} value={a.status} onChange={e=>updateActivity(a.id,e.target.value)}><option>Não iniciado</option><option>Em andamento</option><option>Aguardando</option><option>Concluído</option></select></div>)}</div></div>:null}
     {tab==="risks"?<div className="risk-workspace"><article className={hasBlocker?"has-blocker":"clear-risk"}><div className="section-heading"><b>{hasBlocker?"Bloqueador atual":"Situação monitorada"}</b><span>{hasBlocker?"Problema materializado que exige correção.":"Nenhum impedimento crítico registrado."}</span></div>{hasBlocker?<Warning size={30}/>:<ShieldCheck size={30}/>}<h3>{project.blocker}</h3><dl><div><dt>Estratégia</dt><dd>{hasBlocker?"Mitigar":"Monitorar"}</dd></div><div><dt>Responsável</dt><dd>{project.owner}</dd></div><div><dt>Revisão</dt><dd>{hasBlocker?"Diária":"Semanal"}</dd></div></dl><button className={hasBlocker?"danger-button":"primary"} onClick={()=>notify(hasBlocker?"Plano de resposta atualizado e responsável notificado.":"Novo risco registrado para acompanhamento.")}>{hasBlocker?"Atualizar plano de resposta":"Registrar novo risco"}</button></article><article><div className="section-heading"><b>Marcos e decisões</b><span>Linha do tempo contratual e operacional.</span></div><div className="decision-log">{project.milestones.map((m,i)=><div key={m}><i className={i===0?"active":""}/><span><b>{m}</b><small>{i===0?"Evidência anexada":"Dependências monitoradas"}</small></span></div>)}</div><button className="ghost" onClick={()=>notify("Decisão registrada na linha do tempo do projeto.")}><Plus/>Registrar decisão</button></article></div>:null}
@@ -327,7 +391,7 @@ export function App() {
     home:<ExecutiveDashboard projects={projects} setActive={setActive}/>,
     action:<ActionCenter notify={notify}/>,management:<ManagementPage/>,analytics:<AnalyticsPage/>,
     executive:<ExecutiveOnePager projects={projects} notify={notify}/>,
-    portfolio:<PortfolioPage projects={projects} setProjects={setProjects} setActive={setActive} setSelectedProject={setSelectedProject} setProjectModalOpen={setProjectModalOpen} notify={notify}/>,
+    portfolio:<PortfolioPage projects={projects} setProjects={setProjects} setActive={setActive} setSelectedProject={setSelectedProject} setProjectModalOpen={setProjectModalOpen} setImportedDemands={setImportedDemands} notify={notify}/>,
     project:<ProjectWorkspace key={selectedProject.name} project={selectedProject} setActive={setActive} notify={notify}/>,
     cockpit:<DepartmentCockpit notify={notify} imported={importedDemands}/>,
     areas:<AreasPage/>,raid:<RaidPage/>,admin:<AdminGovernance role={role} setRole={setRole} notify={notify}/>,
