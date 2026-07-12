@@ -79,7 +79,7 @@ const IF_LABELS = {
 const navGroups = [
   { label: "EXECUTIVO", items: [
     { id: "home", label: "Dashboard Executivo", icon: House, mobile: true },
-    { id: "action", label: "Ação", icon: CheckSquare, mobile: true },
+    { id: "action", label: "Minha Operação", icon: CheckSquare, mobile: true },
     { id: "management", label: "Gerencial", icon: TrendUp },
     { id: "analytics", label: "Análise / BI", icon: ChartLineUp },
     { id: "executive", label: "Relatório Executivo", icon: ClipboardText },
@@ -107,7 +107,7 @@ const navGroups = [
 
 const pageMeta = {
   home: ["Dashboard Executivo", "A carteira inteira traduzida em decisões para hoje."],
-  action: ["Ação", "Checklist diário e central de cobrança prioritária."],
+  action: ["Minha Operação", "Trabalho diário priorizado por impacto, dependência e evidência."],
   management: ["Visão Gerencial", "Tendência, capacidade e gargalos ativos."],
   analytics: ["Análise / BI", "Indicadores avançados e engajamento técnico."],
   executive: ["Relatório Executivo", "O portfólio consolidado em uma página."],
