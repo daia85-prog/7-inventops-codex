@@ -146,3 +146,25 @@ button.ghost-mini:hover{color:#eef3fb;border-color:#3d4d6e}
 .feed-list>div.fresh{background:rgba(245,195,0,.05);border-radius:10px}
 .feed-list>div.fresh .feed-time{color:#f5c300;font-weight:700}
 @media(max-width:1100px){.cockpit-grid{grid-template-columns:1fr}}
+
+/* ===== E1.4 — preview do import Nexus ===== */
+.import-preview .imp-depts{margin:14px 0 10px}
+.import-preview .imp-depts>b{font-size:13.5px;color:#c7d0df}
+.import-preview .imp-depts>div{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.import-preview .imp-depts span{display:inline-flex;align-items:center;gap:6px;background:#101827;border:1px solid #1d2a44;border-radius:999px;padding:5px 12px;font-size:12px;color:#8b96ab}
+.import-preview .imp-depts span b{color:#f5c300}
+.import-preview .imp-secs{display:flex;flex-direction:column;gap:6px;max-height:220px;overflow-y:auto;margin:8px 0;padding-right:6px}
+.import-preview .imp-secs>div{display:grid;grid-template-columns:1fr 120px 90px;align-items:center;gap:10px;font-size:12.5px;color:#c7d0df}
+.import-preview .imp-secs i{display:block;height:6px;border-radius:3px;background:#17233b;overflow:hidden}
+.import-preview .imp-secs em{display:block;height:100%;background:linear-gradient(90deg,#38bdf8,#f5c300);border-radius:3px}
+.import-preview .imp-secs small{color:#8b96ab;text-align:right}
+.import-preview .imp-note{font-size:12px;color:#5b6577;margin:6px 0 0}
+
+/* ===== E1.5 — cartao SharePoint ===== */
+.sharepoint-card{grid-column:1 / -1}
+.sharepoint-card .sp-row{display:flex;align-items:center;gap:14px;background:#101827;border:1px solid #1d2a44;border-radius:12px;padding:14px 16px;margin-top:10px}
+.sharepoint-card .sp-ico{font-size:22px}
+.sharepoint-card .sp-row b{font-size:14.5px;color:#eef3fb}
+.sharepoint-card .sp-row small{display:block;color:#8b96ab;font-size:12px;margin-top:2px}
+.sharepoint-card .sp-open{margin-left:auto;background:linear-gradient(135deg,#ffd75e,#e0a800);color:#131313;font-weight:700;font-size:13px;padding:9px 16px;border-radius:9px;text-decoration:none;white-space:nowrap}
+.sharepoint-card .sp-note{display:block;color:#5b6577;font-size:11.5px;margin-top:8px}
