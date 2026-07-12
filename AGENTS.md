@@ -9,6 +9,8 @@ When implementing from a selected generated mock, treat that image as the source
 ## Product decisions
 
 - Approved visual target: `reference-approved.png`.
+- This repository is the independent **Codex product line**. Never push changes to the Claude repository; `upstream-claude` is reference-only.
+- Baseline imported from `daia85-prog/7-inventops` at commit `e5caccd`. All work after this point belongs to the Codex line.
 - Build one cohesive product with three first-class modules: Simulador de Impacto, Comissionamento and Sala de Decisão.
 - The Simulador de Impacto is the default screen.
 - Use plain executive language. Naming may change autonomously when a term is unclear or technically imprecise.
