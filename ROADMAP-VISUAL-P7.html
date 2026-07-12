@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>InventOps — Roadmap Visual do Produto</title>
+<style>
+  html,body{margin:0;padding:0;background:#05080f;min-height:100vh}
+  body{display:flex;flex-direction:column;align-items:center;font-family:'Segoe UI',system-ui,sans-serif}
+  .wrap{width:100%;max-width:1900px;padding:8px 12px 24px}
+  svg{width:100%;height:auto;display:block}
+  .hint{color:#5b6577;font-size:12px;text-align:center;margin-top:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<svg viewBox="0 0 2560 860" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Roadmap do InventOps em 5 eras, da demo ao produto vendável">
+  <defs>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="7" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glowSoft" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="3.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <linearGradient id="spine" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#f5c300"/><stop offset=".45" stop-color="#ffb02e"/>
+      <stop offset=".8" stop-color="#38bdf8"/><stop offset="1" stop-color="#7dd3fc"/>
+    </linearGradient>
+    <linearGradient id="nodeStroke" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd75e"/><stop offset="1" stop-color="#c98a00"/>
+    </linearGradient>
+    <linearGradient id="nodeStrokeCyan" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#0284c7"/>
+    </linearGradient>
+    <radialGradient id="bgGlow" cx="50%" cy="42%" r="70%">
+      <stop offset="0" stop-color="#0d1526"/><stop offset="1" stop-color="#05080f"/>
+    </radialGradient>
+  </defs>
+
+  <!-- fundo -->
+  <rect width="2560" height="860" fill="url(#bgGlow)"/>
+  <g stroke="#101a2e" stroke-width="1">
+    <path d="M0 120 H2560 M0 240 H2560 M0 640 H2560 M0 760 H2560" opacity=".5"/>
+    <path d="M320 0 V860 M960 0 V860 M1600 0 V860 M2240 0 V860" opacity=".35"/>
+  </g>
+  <!-- bits decorativos -->
+  <g fill="#22304a" font-family="Consolas,monospace" font-size="15" opacity=".8">
+    <text x="240" y="150">01</text><text x="700" y="205">1</text><text x="1150" y="140">0</text>
+    <text x="1690" y="200">10</text><text x="2130" y="150">0</text><text x="2380" y="220">01</text>
+  </g>
+
+  <!-- título -->
+  <text x="1280" y="66" text-anchor="middle" fill="#f5c300" font-size="34" font-weight="700" letter-spacing="6" filter="url(#glowSoft)">INVENTOPS · ROADMAP DO PRODUTO</text>
+  <text x="1280" y="102" text-anchor="middle" fill="#8b96ab" font-size="19" letter-spacing="2">da demo à operação viva — 5 eras · Controlar → Conectar → Prever → Agir</text>
+
+  <!-- espinha -->
+  <path d="M120 430 H2440" stroke="url(#spine)" stroke-width="7" fill="none" filter="url(#glow)" opacity=".95"/>
+  <g fill="#ffe27a" filter="url(#glowSoft)">
+    <path d="M628 430 l-16 -9 v18 z"/><path d="M1000 430 l-16 -9 v18 z"/>
+    <path d="M1372 430 l-16 -9 v18 z"/><path d="M1744 430 l-16 -9 v18 z"/><path d="M2085 430 l-16 -9 v18 z"/>
+  </g>
+
+  <!-- ===== NÓ INICIAL ===== -->
+  <g filter="url(#glow)">
+    <rect x="60" y="368" width="150" height="124" rx="20" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="3.5"/>
+    <text x="135" y="418" text-anchor="middle" fill="#eef3fb" font-size="21" font-weight="700">InventOps</text>
+    <text x="135" y="444" text-anchor="middle" fill="#f5c300" font-size="17" font-weight="600">HOJE</text>
+    <text x="135" y="468" text-anchor="middle" fill="#8b96ab" font-size="14">demo viva</text>
+  </g>
+  <!-- você está aqui -->
+  <g filter="url(#glowSoft)">
+    <rect x="52" y="300" width="166" height="34" rx="17" fill="#1a1305" stroke="#f5c300" stroke-width="1.5"/>
+    <text x="135" y="323" text-anchor="middle" fill="#ffd75e" font-size="15" font-weight="700" letter-spacing="1">📍 VOCÊ ESTÁ AQUI</text>
+    <path d="M135 334 V368" stroke="#f5c300" stroke-width="2" stroke-dasharray="4 4"/>
+  </g>
+
+  <!-- helper de nó: rect 168x74 -->
+  <!-- ===== ERA 1 · CONTROLE GOVERNADO ===== -->
+  <g filter="url(#glowSoft)" font-weight="600">
+    <path d="M330 355 V430 M436 505 V430 M542 355 V430 M648 505 V430" stroke="#f5c300" stroke-width="2" opacity=".7"/>
+    <rect x="246" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
+    <text x="330" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">14 Deptos</text><text x="330" y="336" text-anchor="middle" fill="#eef3fb" font-size="17">Reais</text>
+    <rect x="352" y="505" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
+    <text x="436" y="536" text-anchor="middle" fill="#eef3fb" font-size="17">Cockpit</text><text x="436" y="560" text-anchor="middle" fill="#eef3fb" font-size="17">Meu Depto</text>
+    <rect x="458" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
+    <text x="542" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">Import</text><text x="542" y="336" text-anchor="middle" fill="#eef3fb" font-size="17">Nexus</text>
+    <rect x="564" y="505" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
+    <text x="648" y="536" text-anchor="middle" fill="#eef3fb" font-size="17">SharePoint</text><text x="648" y="560" text-anchor="middle" fill="#eef3fb" font-size="17">+ Vídeo Igor</text>
+  </g>
+
+  <!-- ===== ERA 1.5 · FUNDAÇÃO ===== -->
+  <g filter="url(#glowSoft)" font-weight="600">
+    <path d="M840 355 V430 M946 505 V430 M1052 355 V430" stroke="#f5c300" stroke-width="2" opacity=".7"/>
+    <rect x="756" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
+    <text x="840" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">TypeScript</text><text x="840" y="336" text-anchor="middle" fill="#8b96ab" font-size="14">código blindado</text>
+    <rect x="862" y="505" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
+    <text x="946" y="536" text-anchor="middle" fill="#eef3fb" font-size="17">Testes + CI</text><text x="946" y="560" text-anchor="middle" fill="#8b96ab" font-size="14">robô de qualidade</text>
+    <rect x="968" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
+    <text x="1052" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">Mobile · PWA</text><text x="1052" y="336" text-anchor="middle" fill="#8b96ab" font-size="14">+ idiomas ES/EN</text>
+  </g>
+
+  <!-- ===== ERA 2 · CONEXÃO ===== -->
+  <g filter="url(#glowSoft)" font-weight="600">
+    <path d="M1244 355 V430 M1350 505 V430 M1456 355 V430" stroke="#f5c300" stroke-width="2" opacity=".7"/>
+    <rect x="1160" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
+    <text x="1244" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">Banco real</text><text x="1244" y="336" text-anchor="middle" fill="#8b96ab" font-size="14">Supabase</text>
+    <rect x="1266" y="505" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
+    <text x="1350" y="536" text-anchor="middle" fill="#eef3fb" font-size="17">Login M365</text><text x="1350" y="560" text-anchor="middle" fill="#8b96ab" font-size="14">conta da empresa</text>
+    <rect x="1372" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
+    <text x="1456" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">Dados reais</text><text x="1456" y="336" text-anchor="middle" fill="#8b96ab" font-size="14">migração P1 + LGPD</text>
+  </g>
+
+  <!-- ===== ERA 3 · INTEGRAÇÕES ===== -->
+  <g filter="url(#glowSoft)" font-weight="600">
+    <path d="M1648 355 V430 M1754 505 V430 M1860 355 V430" stroke="#38bdf8" stroke-width="2" opacity=".7"/>
+    <rect x="1564" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStrokeCyan)" stroke-width="2.5"/>
+    <text x="1648" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">Notificações</text><text x="1648" y="336" text-anchor="middle" fill="#8b96ab" font-size="14">e-mail · Teams · Wpp</text>
+    <rect x="1670" y="505" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStrokeCyan)" stroke-width="2.5"/>
+    <text x="1754" y="536" text-anchor="middle" fill="#eef3fb" font-size="17">SharePoint</text><text x="1754" y="560" text-anchor="middle" fill="#8b96ab" font-size="14">ler + subir arquivos</text>
+    <rect x="1776" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStrokeCyan)" stroke-width="2.5"/>
+    <text x="1860" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">Outlook</text><text x="1860" y="336" text-anchor="middle" fill="#eef3fb" font-size="17">· Planner</text>
+  </g>
+
+  <!-- ===== ERA 4 · INTELIGÊNCIA ===== -->
+  <g filter="url(#glowSoft)" font-weight="600">
+    <path d="M2000 355 V430 M2106 505 V430" stroke="#38bdf8" stroke-width="2" opacity=".7"/>
+    <rect x="1916" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStrokeCyan)" stroke-width="2.5"/>
+    <text x="2000" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">Simulador</text><text x="2000" y="336" text-anchor="middle" fill="#8b96ab" font-size="14">calculando de verdade</text>
+    <rect x="2022" y="505" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStrokeCyan)" stroke-width="2.5"/>
+    <text x="2106" y="536" text-anchor="middle" fill="#eef3fb" font-size="17">Previsão</text><text x="2106" y="560" text-anchor="middle" fill="#8b96ab" font-size="14">gargalo antes de doer</text>
+  </g>
+
+  <!-- ===== ERA 5 · FÁBRICA & VELOX ===== -->
+  <g filter="url(#glowSoft)" font-weight="600">
+    <path d="M2246 355 V430 M2352 505 V430" stroke="#38bdf8" stroke-width="2" opacity=".7"/>
+    <rect x="2162" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStrokeCyan)" stroke-width="2.5"/>
+    <text x="2246" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">CLP · IoT</text><text x="2246" y="336" text-anchor="middle" fill="#8b96ab" font-size="14">esteira ao vivo</text>
+    <rect x="2268" y="505" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStrokeCyan)" stroke-width="2.5"/>
+    <text x="2352" y="536" text-anchor="middle" fill="#eef3fb" font-size="17">Passaporte</text><text x="2352" y="560" text-anchor="middle" fill="#8b96ab" font-size="14">Velox por cliente</text>
+  </g>
+
+  <!-- ===== NÓ FINAL ===== -->
+  <g filter="url(#glow)">
+    <rect x="2400" y="368" width="150" height="124" rx="20" fill="#0e1420" stroke="url(#nodeStrokeCyan)" stroke-width="3.5"/>
+    <text x="2475" y="418" text-anchor="middle" fill="#eef3fb" font-size="19" font-weight="700">Produto</text>
+    <text x="2475" y="444" text-anchor="middle" fill="#7dd3fc" font-size="17" font-weight="600">vendável</text>
+    <text x="2475" y="468" text-anchor="middle" fill="#8b96ab" font-size="14">PT · ES · EN</text>
+  </g>
+
+  <!-- ===== CHAVES / GRUPOS ===== -->
+  <g stroke="#c98a00" stroke-width="2.5" fill="none" opacity=".9">
+    <path d="M240 618 v16 h498 v-16"/><path d="M750 618 v16 h392 v-16"/><path d="M1154 618 v16 h392 v-16"/>
+  </g>
+  <g stroke="#0284c7" stroke-width="2.5" fill="none" opacity=".9">
+    <path d="M1558 618 v16 h392 v-16"/><path d="M1962 618 v16 h234 v-16"/><path d="M2208 618 v16 h234 v-16"/>
+  </g>
+  <g text-anchor="middle" font-weight="700" font-size="19" letter-spacing="2.5" filter="url(#glowSoft)">
+    <text x="489" y="672" fill="#ffb02e">ERA 1 · CONTROLE</text>
+    <text x="946" y="672" fill="#ffb02e">ERA 1.5 · FUNDAÇÃO</text>
+    <text x="1350" y="672" fill="#ffb02e">ERA 2 · CONEXÃO</text>
+    <text x="1754" y="672" fill="#38bdf8">ERA 3 · INTEGRAÇÕES</text>
+    <text x="2079" y="672" fill="#38bdf8">ERA 4 · INTELIGÊNCIA</text>
+    <text x="2325" y="672" fill="#38bdf8">ERA 5 · FÁBRICA+VELOX</text>
+  </g>
+  <g text-anchor="middle" font-size="14" fill="#5b6577">
+    <text x="489" y="698">agora · demo diretoria</text>
+    <text x="946" y="698">jul–ago/26</text>
+    <text x="1350" y="698">set–nov/26</text>
+    <text x="1754" y="698">dez/26–mar/27</text>
+    <text x="2079" y="698">2027</text>
+    <text x="2325" y="698">2027+</text>
+  </g>
+
+  <!-- portões (critérios de saída) -->
+  <g text-anchor="middle" font-size="13.5" fill="#7c8699" font-style="italic">
+    <text x="489" y="748">🚪 sai quando: Igor validar a demo</text>
+    <text x="946" y="748">🚪 CI verde · zero dado na tela</text>
+    <text x="1350" y="748">🚪 3 áreas usando no dia a dia</text>
+    <text x="1754" y="748">🚪 1 handoff 100% sem WhatsApp</text>
+    <text x="2079" y="748">🚪 acurácia medida</text>
+    <text x="2325" y="748">🚪 1 esteira piloto</text>
+  </g>
+
+  <!-- rodapé -->
+  <text x="1280" y="812" text-anchor="middle" fill="#5b6577" font-size="14" letter-spacing="1">Janelas são estimativas de planejamento, não promessas · cada era abre com o portão da anterior batido + pente-fino · detalhes: ROADMAP-P7.md §2-3</text>
+  <text x="1280" y="838" text-anchor="middle" fill="#f5c300" font-size="14" font-weight="600" letter-spacing="1">✦ Desenvolvido por Daiana Costa · InventOps · 12/07/2026</text>
+</svg>
+</div>
+<p class="hint">Abra em tela cheia · dê zoom à vontade (é vetor, não perde qualidade) · print bonito pra slide: Ctrl+P → paisagem</p>
+</body>
+</html>
