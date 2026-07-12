@@ -173,6 +173,13 @@ descompasso é o Claude (aviso na hora, você decide a troca).
 - **Sessão própria:** criar a sessão **"7 - InventOps"** no padrão da casa (trabalho do P7 roda nela;
   o guarda-chuva continua na sessão 0)
 
+**Princípio-mestre da economia (tese da Daiana, 12/07):** *token só se gasta onde existe
+DECISÃO; toda repetição vira automação determinística (hook, script, watchdog, CI) — que custa
+zero, pra sempre.* A meta de longo prazo é edição/ajuste rotineiro tender a token-zero: o Claude
+desenha, revisa e decide; os robôs (CI/testes/hooks/deploy) executam e verificam o repetitivo.
+O watchdog de 15 min é exemplo: rede de segurança git por Tarefa Agendada do Windows — 0 token
+em qualquer frequência; 15 min é escolha de HIGIENE (histórico limpo, OneDrive em paz), não de custo.
+
 **Economia de tokens (como gastamos pouco e rendemos muito):**
 1. Ler `_ROTEIRO.md`/`_DIARIO.md` ANTES de varrer código (contexto em 2 arquivos, não em 200)
 2. Uma sessão por assunto (não misturar P7 com infra geral)
