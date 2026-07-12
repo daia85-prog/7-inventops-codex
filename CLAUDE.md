@@ -65,7 +65,8 @@ Preview no Claude Code: config no `.claude/launch.json` da raiz `Code/` (porta 3
 
 | Caminho | O quê |
 |---|---|
-| `BLUEPRINT-P7.md` | O desenho oficial — LER PRIMEIRO |
+| `BLUEPRINT-P7.md` | O desenho oficial (visão/políticas) — LER PRIMEIRO |
+| `ROADMAP-P7.md` | Execução: entregas com aceite, status ⬜/✅, registro de mudanças (começamos→mudamos→ficou) |
 | `src/App.jsx` | Shell, navegação, portfólio, simulador, comissionamento |
 | `src/FoundationModules.jsx` | Dashboard exec, ação, gerencial, BI, áreas, RAID, admin, apresentação, login |
 | `src/ProjectControlModal.jsx` | Central sobreposta do projeto |
