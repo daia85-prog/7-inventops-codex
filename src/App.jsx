@@ -6,7 +6,8 @@ import {
   UsersThree, ChartLineUp, GitCommit, TestTube, Wrench, Timer,
   ArrowCounterClockwise, XCircle, CloudCheck, LinkSimple, CheckSquare,
   Circuitry, Radio, Package, Eye, CaretDown, MagnifyingGlass, FolderOpen,
-  Funnel, ArrowLeft, MapPin, User, Target, Plus, Rows, FlagCheckered, SignOut, LockKey
+  Funnel, ArrowLeft, MapPin, User, Target, Plus, Rows, FlagCheckered, SignOut, LockKey,
+  HandWaving, UploadSimple
 } from "@phosphor-icons/react";
 import {
   Area, AreaChart, CartesianGrid, Line, LineChart, ResponsiveContainer,
@@ -18,6 +19,7 @@ import {
   ManagementPage, PresentationPage, RaidPage, StatusReportModal
 } from "./FoundationModules";
 import { ProjectControlModal } from "./ProjectControlModal";
+import { DepartmentCockpit } from "./DepartmentCockpit";
 
 const assetPath = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
@@ -70,6 +72,7 @@ const navGroups = [
   ]},
   { label: "OPERAÇÃO", items: [
     { id: "portfolio", label: "Projetos", icon: FolderOpen, mobile: true },
+    { id: "cockpit", label: "Meu Departamento", icon: HandWaving, mobile: true },
     { id: "areas", label: "Áreas Técnicas", icon: UsersThree },
     { id: "alerts", label: "Smart Triage", icon: Warning },
     { id: "raid", label: "Matriz RAID", icon: ShieldCheck },
@@ -95,6 +98,7 @@ const pageMeta = {
   analytics: ["Análise / BI", "Indicadores avançados e engajamento técnico."],
   executive: ["Relatório Executivo", "O portfólio consolidado em uma página."],
   portfolio: ["Controle de Projetos", "Planeje, acompanhe e cobre entregas em uma visão operacional."],
+  cockpit: ["Meu Departamento", "O bastão de cada área: entregas, esperas e handoffs com carimbo de hora."],
   project: ["Central do Projeto", "Fases, atividades, marcos, riscos e evidências em um único lugar."],
   simulator: ["Simulador de Impacto", "Antecipe riscos. Decida com confiança."],
   commissioning: ["Comissionamento em Tempo Real", "Telemetria da operação conectada à governança."],
@@ -300,6 +304,7 @@ export function App() {
   const [projectModalOpen,setProjectModalOpen]=useState(false);
   const [scenario,setScenario]=useState("E se o projeto TITANO atrasar 5 dias por falta de hardware?");
   const [fault,setFault]=useState(true); const [alerts,setAlerts]=useState(initialAlerts);
+  const [importedDemands,setImportedDemands]=useState([]);
   const [message,setMessage]=useState("");
   const toastTimer=useRef();
   const notify=useCallback((text)=>{setMessage(text);window.clearTimeout(toastTimer.current);toastTimer.current=window.setTimeout(()=>setMessage(""),3200)},[]);
@@ -313,9 +318,9 @@ export function App() {
   if(!authenticated)return <LoginScreen onLogin={login}/>;
   const allowed={
     Admin:"*",
-    Editor:["home","action","management","analytics","executive","portfolio","project","areas","alerts","raid","simulator","commissioning","decision","evidence","presentation","lifecycle"],
-    Analista:["home","action","portfolio","project","areas","alerts","raid","commissioning","evidence","presentation"],
-    Viewer:["home","management","analytics","executive","portfolio","project","areas","evidence","presentation","lifecycle"]
+    Editor:["home","action","management","analytics","executive","portfolio","project","cockpit","areas","alerts","raid","simulator","commissioning","decision","evidence","presentation","lifecycle"],
+    Analista:["home","action","portfolio","project","cockpit","areas","alerts","raid","commissioning","evidence","presentation"],
+    Viewer:["home","management","analytics","executive","portfolio","project","cockpit","areas","evidence","presentation","lifecycle"]
   };
   const canAccess=allowed[role]==="*"||allowed[role].includes(active);
   const pages={
@@ -324,6 +329,7 @@ export function App() {
     executive:<ExecutiveOnePager projects={projects} notify={notify}/>,
     portfolio:<PortfolioPage projects={projects} setProjects={setProjects} setActive={setActive} setSelectedProject={setSelectedProject} setProjectModalOpen={setProjectModalOpen} notify={notify}/>,
     project:<ProjectWorkspace key={selectedProject.name} project={selectedProject} setActive={setActive} notify={notify}/>,
+    cockpit:<DepartmentCockpit notify={notify} imported={importedDemands}/>,
     areas:<AreasPage/>,raid:<RaidPage/>,admin:<AdminGovernance role={role} setRole={setRole} notify={notify}/>,
     presentation:<PresentationPage notify={notify}/>,lifecycle:<LifecyclePage/>,simulator:<Simulator scenario={scenario} setScenario={setScenario} notify={notify}/>,
     commissioning:<Commissioning fault={fault} setFault={setFault} alerts={alerts} setAlerts={setAlerts} setActive={setActive} notify={notify}/>,

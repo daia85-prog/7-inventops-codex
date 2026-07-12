@@ -92,3 +92,57 @@ body.modal-open{overflow:hidden}.pcm-layer{position:fixed;inset:0;z-index:90;dis
 .lang-switch button.active{background:linear-gradient(135deg,#ffd75e,#e0a800);color:#131313;cursor:default}
 .login-lang{margin:14px 0 10px}
 .login-lang em{font-style:normal;font-size:12px;color:#7dd3fc;margin-left:10px}
+
+/* ===== E1.3 — Cockpit Meu Departamento (12/07/2026) ===== */
+.cockpit-page{display:flex;flex-direction:column;gap:18px}
+.cockpit-picker{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px}
+.cockpit-picker::-webkit-scrollbar{height:8px}
+.cockpit-picker::-webkit-scrollbar-thumb{background:#1c2942;border-radius:6px}
+.cockpit-picker button{flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-start;gap:2px;background:#0e1420;border:1px solid #1d2a44;border-radius:12px;padding:9px 14px;cursor:pointer;color:#8b96ab;transition:border-color .15s,color .15s;min-width:96px}
+.cockpit-picker button b{font-size:14px;color:#c7d0df;letter-spacing:.5px}
+.cockpit-picker button small{font-size:10.5px;white-space:nowrap}
+.cockpit-picker button:hover{border-color:#3d4d6e}
+.cockpit-picker button.active{border-color:#f5c300;color:#f5c300;box-shadow:0 0 14px rgba(245,195,0,.18)}
+.cockpit-picker button.active b{color:#f5c300}
+.cockpit-head{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.cockpit-head h2{margin:0;font-size:24px}
+.cockpit-head p{margin:4px 0 0;color:#8b96ab;font-size:14px}
+.pilot-tag{margin-left:12px;color:#f5c300;font-size:12.5px;display:inline-flex;align-items:center;gap:5px}
+.sample-tag{margin-left:12px;color:#5b6577;font-size:12.5px;font-style:italic}
+.cockpit-kpis{display:flex;gap:12px}
+.cockpit-kpis span{background:#0e1420;border:1px solid #1d2a44;border-radius:12px;padding:10px 16px;display:flex;flex-direction:column;align-items:center;min-width:92px}
+.cockpit-kpis b{font-size:20px;color:#eef3fb}
+.cockpit-kpis small{font-size:11px;color:#8b96ab;text-align:center}
+.cockpit-grid{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:16px;align-items:start}
+.cockpit-grid article,.cockpit-feed{background:#0e1420;border:1px solid #17233b;border-radius:16px;padding:16px}
+.cockpit-list{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.hand-card{background:#101827;border:1px solid #1d2a44;border-radius:12px;padding:12px 14px}
+.hand-card header{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.hand-card header small{color:#f5c300;font-weight:700;letter-spacing:.5px;font-size:11.5px}
+.origin-tag{font-style:normal;font-size:10.5px;color:#7dd3fc;border:1px solid rgba(56,189,248,.4);border-radius:999px;padding:2px 8px}
+.hstatus{margin-left:auto;font-size:11px;font-weight:700;letter-spacing:.4px;border-radius:999px;padding:3px 10px}
+.hstatus.pronto{color:#40d986;background:rgba(64,217,134,.1)}
+.hstatus.andamento{color:#38bdf8;background:rgba(56,189,248,.1)}
+.hstatus.aguardando{color:#f5c300;background:rgba(245,195,0,.1)}
+.hstatus.done{color:#40d986;background:rgba(64,217,134,.12)}
+.hand-card h3{margin:2px 0 10px;font-size:15px;color:#eef3fb;line-height:1.35}
+.hand-card footer{display:flex;align-items:center;gap:14px;flex-wrap:wrap;font-size:12.5px;color:#8b96ab}
+.hand-card footer svg{vertical-align:-2px;margin-right:4px}
+.hand-card.done{opacity:.72}
+button.conclude{margin-left:auto;display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#ffd75e,#e0a800);border:0;color:#131313;font-weight:700;font-size:12.5px;padding:8px 14px;border-radius:9px;cursor:pointer}
+button.conclude:disabled{background:#22304a;color:#5b6577;cursor:not-allowed}
+.done-stamp{margin-left:auto;color:#40d986;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.side-tag{margin-left:auto;font-size:10.5px;font-weight:700;border-radius:999px;padding:3px 9px}
+.side-tag.inv{color:#7dd3fc;background:rgba(56,189,248,.1)}
+.side-tag.cli{color:#fb7185;background:rgba(251,113,133,.12)}
+button.ghost-mini{display:inline-flex;align-items:center;gap:6px;background:transparent;border:1px solid #2a3650;color:#8b96ab;font-size:11.5px;padding:5px 10px;border-radius:8px;cursor:pointer;margin-left:auto}
+button.ghost-mini:hover{color:#eef3fb;border-color:#3d4d6e}
+.feed-list{display:flex;flex-direction:column;gap:0;margin-top:10px}
+.feed-list>div{display:flex;align-items:center;gap:16px;padding:10px 6px;border-bottom:1px dashed #17233b}
+.feed-list>div:last-child{border-bottom:0}
+.feed-list .feed-time{color:#8b96ab;font-size:12px;min-width:96px;font-variant-numeric:tabular-nums}
+.feed-list .feed-route{display:inline-flex;align-items:center;gap:6px;color:#f5c300;font-size:12.5px;min-width:110px}
+.feed-list p{margin:0;color:#c7d0df;font-size:13.5px}
+.feed-list>div.fresh{background:rgba(245,195,0,.05);border-radius:10px}
+.feed-list>div.fresh .feed-time{color:#f5c300;font-weight:700}
+@media(max-width:1100px){.cockpit-grid{grid-template-columns:1fr}}
