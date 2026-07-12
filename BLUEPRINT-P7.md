@@ -115,7 +115,7 @@ diretoria vê saúde, risco e previsão sem perguntar nada em grupo de WhatsApp.
 | **2** | Operação conectada | Banco real (Supabase) + login M365 + fim do "salvo só no navegador" | A casa ganha luz e água |
 | **3** | Integrações vivas | SharePoint F2/F3 · notificações reais (e-mail/WhatsApp/Teams) · Outlook/Planner | A casa conectada à rua |
 | **4** | Inteligência | Simulador calculando de verdade sobre o histórico · previsão de gargalo | A casa que avisa antes de dar problema |
-| **5** | Chão de fábrica | Telemetria CLP/IoT real no Comissionamento | O diferencial que ninguém no mercado de PMO tem |
+| **5** | Chão de fábrica & ecossistema Velox | Telemetria CLP/IoT real no Comissionamento + **integração com o sistema WCS Velox e os servidores dos projetos** (saúde do ambiente, versão instalada, status por projeto — sistemas conversando entre si) | O diferencial que ninguém no mercado de PMO tem: o sistema de projetos conectado ao produto entregue |
 
 **Regra de ouro do roadmap:** cada era só abre quando a anterior tem **critério de saída** batido
 (o app já traz isso na tela Releases & Roadmap — vira o roadmap oficial, realinhado a estas eras).
@@ -182,9 +182,39 @@ SharePoint, notificação real por e-mail, tradução ES/EN — tudo mapeado nas
 NÃO finge que já tem isso (honestidade de copy).
 
 **Regra de expectativa (Daiana, 12/07):** as telas de **Comissionamento/CLP** e o **Simulador**
-ficam na demo, mas SEMPRE rotuladas/narradas como **visão de futuro do roadmap** — mostram aonde
-o produto vai, sem gerar expectativa de que já existe. O idioma da demo de amanhã é PT-BR; o
-seletor trilíngue (PT-BR/ES/EN) entra na Era 1.5 junto com a fundação técnica.
+ficam na demo, mas SEMPRE rotuladas/narradas como **visão de futuro do roadmap** (selo visual
+"VISÃO · ROADMAP") — mostram aonde o produto vai, sem gerar expectativa de que já existe. O mesmo
+vale pra **integração com o sistema WCS Velox/servidores** (Era 5): aparece como visão, nunca
+como promessa de agora.
+
+**Idiomas na demo (Daiana, 12/07):** o seletor **PT-BR · ES · EN aparece no visual desde amanhã**
+(bandeirinhas/menu no topo) — PT-BR ativo; ES e EN mostram **"em breve · disponível na próxima
+versão"** ao clicar/passar o mouse. O produto já se apresenta internacional (Invent é Comau);
+a tradução completa entra na Era 1.5.
+
+---
+
+## 11. Pente-fino de lacunas (12/07 — pedido da Daiana: "o que estamos deixando passar?")
+
+O blueprint foi varrido com a pergunta *"o que um produto de verdade tem que ainda não escrevemos?"*.
+Dez lacunas reais encontradas e adotadas, cada uma com a era certa:
+
+| # | Lacuna | Por que importa | Entra em |
+|---|---|---|---|
+| 1 | **Celular / PWA** | Gestor vive em obra, fábrica e viagem — o sistema precisa funcionar e instalar no celular (o P1 já domina PWA; herdar) | Era 1.5 (responsivo) · Era 2 (instalável) |
+| 2 | **Backup & exportação** | Dado do usuário NUNCA pode se perder; exportar/importar tudo em um clique (herança do Admin do P1) + backup automático quando houver banco | Era 1.5 (export) · Era 2 (backup auto) |
+| 3 | **LGPD & privacidade** | O sistema carrega nomes e e-mails de colaboradores; produto vendável (e empresa Comau) exige política de dados pessoais, retenção e acesso | Era 2 — antes de dados reais em banco |
+| 4 | **Ambientes separados** (demo · homologação · produção) | A Invent entrega isso pros clientes dela; o nosso produto merece o mesmo — nunca apresentar em cima de dado de trabalho | Era 2 |
+| 5 | **Dono do dado** (governança de edição) | Cada informação tem UM dono: kickoff = gestor no Nexus · status da área = o departamento · risco = PMO. Evita dado sobrescrito e "guerra de edição" | Regra desde a demo |
+| 6 | **Re-import do kickoff com comparação** | O kickoff evolui depois da reunião; re-importar mostra O QUE MUDOU antes de aplicar (padrão prévia que o P1 já provou) | Era 1–2 |
+| 7 | **Migração dos dados do velox (P1→P7)** | Quando o P7 virar o sistema oficial, os dados reais de infra migram por importador — ninguém redigita nada | Era 2 |
+| 8 | **Kit de adoção por departamento** | "Empresa inteira" só funciona se cada área tiver dono, marcos padrão e treino de 15 min — senão vira tela vazia e o sistema morre | Era 2–3 (processo + material) |
+| 9 | **Telemetria de adoção** | Medir quem usa e quem atualiza, por área — pra provar valor ao Igor com número, não com sensação | Era 2 |
+| 10 | **Acessibilidade (a11y)** | Padrão que sua campanha pente-fino já elevou nos 6 projetos + regras automáticas do P6; produto vendável será cobrado disso | Contínuo, desde a demo |
+
+> Método pra não repetir o "caso Opus": toda mudança de rumo passa por este documento, e
+> **a cada fechamento de era roda-se um pente-fino adversarial** (revisores independentes,
+> ferramenta de workflow multi-agente) sobre o blueprint E o código.
 
 ---
 
