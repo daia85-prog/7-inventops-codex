@@ -19,13 +19,13 @@ const trend = [
 ];
 
 const departments = [
-  ["COM","Comercial","Marina",74,66,1],["PMO","Governança","Daiana",91,78,2],
-  ["PCP","Planejamento","Fabio",86,72,2],["CMP","Compras","Lucas",103,61,3],
-  ["ENG","Engenharia","Baruco",94,69,2],["TI","Infraestrutura","Ivan",112,65,4],
-  ["DEV","Desenvolvimento","Matheus",98,73,2],["MNT","Montagem","Anderson",83,57,1],
-  ["PLC","Automação","Rodrigo",117,71,4],["HML","Homologação","Douglas",89,62,2],
-  ["LOG","Logística","Camila",76,54,1],["IMP","Implantação","Giovanni",108,68,3],
-  ["SUP","Suporte","Rafael",63,82,0],["FIN","Financeiro","Juliana",71,77,1]
+  ["COM","Comercial / Concept","André Mota",74,66,1],["PMO","PMO","Rodrigo Baruco",91,78,2],
+  ["PCP","PCP","Weslley Silva",86,72,2],["CMP","Compras / Importação","Claudia Duarte",103,61,3],
+  ["EMC","Eng. Mecânica","Gustavo Pereira",94,69,2],["EEL","Eng. Elétrica","Gustavo Pereira",88,64,1],
+  ["PRD","Produção","Flavio Moreno",82,70,1],["MON","Montagem","Rojekson Souza",83,57,1],
+  ["INF","Infraestrutura","Douglas Alves",112,65,4],["ESP","Espec. de Software","Douglas Alves",78,62,1],
+  ["WCS","WCS Velox","Marcelo Sanches",98,73,2],["IMP","Implantação","Douglas Alves",108,68,3],
+  ["PLC","PLC","Gustavo Pereira",117,71,4],["PÓS","Pós-vendas","Caique Fracaro",63,82,0]
 ].map(([code,name,owner,load,progress,blocked])=>({code,name,owner,load,progress,blocked}));
 
 const actionsSeed = [
@@ -37,8 +37,8 @@ const actionsSeed = [
 ];
 
 const blockers = [
-  {project:"MARKET PERU",area:"TI · Cliente",age:"12 dias",impact:"Infra de testes sem condição de homologação",owner:"Ivan",action:"Escalar arquitetura e fechar IP/VPN até 12/07."},
-  {project:"NAVEPARK",area:"ENG · TI",age:"8 dias",impact:"Ambiente HML ameaça o Go Live de setembro",owner:"Daiana",action:"Validar VMs e registrar decisão técnica até 14/07."},
+  {project:"MARKET PERU",area:"INF · Cliente",age:"12 dias",impact:"Infra de testes sem condição de homologação",owner:"Ivan",action:"Escalar arquitetura e fechar IP/VPN até 12/07."},
+  {project:"NAVEPARK",area:"EMC · INF",age:"8 dias",impact:"Ambiente HML ameaça o Go Live de setembro",owner:"Daiana",action:"Validar VMs e registrar decisão técnica até 14/07."},
   {project:"TITANO",area:"CMP · PLC",age:"2 horas",impact:"Sensor físico interrompe sequência de testes",owner:"Baruco",action:"Trocar sensor, testar 20 ciclos e anexar evidência."}
 ];
 

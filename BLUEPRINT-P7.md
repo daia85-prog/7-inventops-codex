@@ -257,5 +257,5 @@ Sete riscos reais, cada um com resposta pronta:
 
 ---
 
-_Aprovado por: Daiana (pendente) · Escrito por: Claude (Fable 5) · 12/07/2026_
+_**Aprovado por: Daiana · 12/07/2026** ("aprovado, vai") · Escrito por: Claude (Fable 5) · 12/07/2026_
 _Este documento evolui por commit; mudanças de rumo passam por aqui antes do código._

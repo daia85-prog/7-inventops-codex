@@ -8,17 +8,17 @@ import { StatusReportModal } from "./FoundationModules";
 
 const phases = ["Kickoff","Levantamento","Provisionamento","Implantação","Homologação","Go Live","Encerramento"];
 const departments = [
-  ["COM","Comercial"],["PMO","Governança"],["PCP","Planejamento"],["CMP","Compras"],
-  ["ENG","Engenharia"],["TI","Infraestrutura"],["DEV","Desenvolvimento"],["MNT","Montagem"],
-  ["PLC","Automação"],["HML","Homologação"],["LOG","Logística"],["IMP","Implantação"],
-  ["SUP","Suporte"],["FIN","Financeiro"]
+  ["COM","Comercial / Concept"],["PMO","PMO"],["PCP","PCP"],["CMP","Compras / Importação"],
+  ["EMC","Eng. Mecânica"],["EEL","Eng. Elétrica"],["PRD","Produção"],["MON","Montagem"],
+  ["INF","Infraestrutura"],["ESP","Espec. de Software"],["WCS","WCS Velox"],["IMP","Implantação"],
+  ["PLC","PLC"],["PÓS","Pós-vendas"]
 ];
 
 const defaultActivities = project => [
-  {id:`${project.code}-1`,name:"Validar arquitetura e premissas técnicas",area:"ENG",owner:"Daiana",due:"15 jul",status:"Concluído",evidence:"Documento REV4"},
-  {id:`${project.code}-2`,name:"Provisionar servidores e acessos",area:"TI",owner:"Ivan",due:"18 jul",status:"Em andamento",evidence:"Checklist 4/5"},
-  {id:`${project.code}-3`,name:"Configurar VPN site-to-site",area:"TI",owner:"Jonathan",due:"19 jul",status:"Aguardando",evidence:"Ticket #3278268"},
-  {id:`${project.code}-4`,name:"Executar testes de integração",area:"HML",owner:"Matheus",due:"24 jul",status:"Não iniciado",evidence:"0/12 testes"},
+  {id:`${project.code}-1`,name:"Validar arquitetura e premissas técnicas",area:"EMC",owner:"Daiana",due:"15 jul",status:"Concluído",evidence:"Documento REV4"},
+  {id:`${project.code}-2`,name:"Provisionar servidores e acessos",area:"INF",owner:"Ivan",due:"18 jul",status:"Em andamento",evidence:"Checklist 4/5"},
+  {id:`${project.code}-3`,name:"Configurar VPN site-to-site",area:"INF",owner:"Jonathan",due:"19 jul",status:"Aguardando",evidence:"Ticket #3278268"},
+  {id:`${project.code}-4`,name:"Executar testes de integração",area:"WCS",owner:"Matheus",due:"24 jul",status:"Não iniciado",evidence:"0/12 testes"},
   {id:`${project.code}-5`,name:"Preparar plano de Go Live",area:"IMP",owner:"Fabio",due:"26 jul",status:"Não iniciado",evidence:"Modelo pendente"}
 ];
 
