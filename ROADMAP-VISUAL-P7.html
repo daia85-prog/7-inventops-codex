@@ -4,191 +4,320 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>InventOps — Roadmap Visual do Produto</title>
+<title>InventOps — Roadmap Vivo do Produto</title>
 <style>
-  html,body{margin:0;padding:0;background:#05080f;min-height:100vh}
-  body{display:flex;flex-direction:column;align-items:center;font-family:'Segoe UI',system-ui,sans-serif}
-  .wrap{width:100%;max-width:1900px;padding:8px 12px 24px}
-  svg{width:100%;height:auto;display:block}
-  .hint{color:#5b6577;font-size:12px;text-align:center;margin-top:4px}
+  :root{
+    --bg:#05080f; --panel:#0e1420; --text:#eef3fb; --muted:#8b96ab; --dim:#5b6577;
+    --gold:#f5c300; --gold-2:#ffb02e; --gold-soft:#ffd75e; --cyan:#38bdf8; --cyan-2:#7dd3fc;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif}
+  body{min-height:100vh;overflow-x:hidden}
+
+  header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 34px 6px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:14px}
+  .brand .io{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#ffd75e,#c98a00);display:grid;place-items:center;font-weight:800;color:#131313;font-size:18px;box-shadow:0 0 22px rgba(245,195,0,.45)}
+  .brand h1{margin:0;font-size:22px;letter-spacing:.5px}
+  .brand h1 span{color:var(--gold)}
+  .brand small{display:block;color:var(--muted);font-size:12.5px;letter-spacing:2.5px;margin-top:2px}
+  .actions{display:flex;gap:10px;align-items:center}
+  button.play{background:linear-gradient(135deg,#ffd75e,#e0a800);border:0;color:#131313;font-weight:700;font-size:14px;padding:10px 18px;border-radius:10px;cursor:pointer;letter-spacing:.5px;box-shadow:0 0 18px rgba(245,195,0,.35);transition:transform .15s}
+  button.play:hover{transform:translateY(-1px)}
+  button.ghost{background:transparent;border:1px solid #2a3650;color:var(--muted);font-size:13px;padding:9px 14px;border-radius:10px;cursor:pointer}
+  button.ghost:hover{color:var(--text);border-color:#3d4d6e}
+
+  .tagline{padding:0 34px 4px;color:var(--muted);font-size:14.5px;letter-spacing:.4px}
+  .tagline b{color:var(--gold)}
+
+  .stage{position:relative;margin:6px 18px 8px;border:1px solid #131d31;border-radius:18px;background:
+    radial-gradient(ellipse 90% 70% at 50% 30%, #0c1424 0%, #05080f 75%);overflow-x:auto;overflow-y:hidden}
+  .stage::-webkit-scrollbar{height:10px}
+  .stage::-webkit-scrollbar-thumb{background:#1c2942;border-radius:6px}
+  svg{display:block;min-width:1720px;width:100%;height:auto}
+
+  /* nós */
+  .node{cursor:pointer;opacity:0;transform:translateY(14px);animation:nodeIn .55s ease forwards}
+  .node rect.body{fill:var(--panel);stroke-width:2.5;transition:filter .2s}
+  .node:hover rect.body,.node:focus-visible rect.body{filter:drop-shadow(0 0 14px rgba(245,195,0,.55))}
+  .node:focus{outline:none}
+  .node.cy:hover rect.body,.node.cy:focus-visible rect.body{filter:drop-shadow(0 0 14px rgba(56,189,248,.55))}
+  @keyframes nodeIn{to{opacity:1;transform:translateY(0)}}
+  .era-dim{opacity:.16;transition:opacity .5s}
+  .era-lit{opacity:1;transition:opacity .5s}
+
+  /* trilha que se desenha */
+  #spinePath{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw 2.4s ease-out .3s forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+
+  /* cometa — o único herói pulsante da tela */
+  .comet-core{filter:drop-shadow(0 0 10px #ffd75e) drop-shadow(0 0 22px rgba(245,195,0,.8))}
+
+  /* tooltip */
+  .tip{position:fixed;z-index:50;max-width:330px;background:#0d1524;border:1px solid rgba(245,195,0,.5);border-radius:14px;
+    padding:14px 16px;box-shadow:0 12px 40px rgba(0,0,0,.6),0 0 24px rgba(245,195,0,.12);pointer-events:none;
+    opacity:0;transform:translateY(6px);transition:opacity .18s,transform .18s}
+  .tip.on{opacity:1;transform:translateY(0)}
+  .tip.cy{border-color:rgba(56,189,248,.5)}
+  .tip .era-tag{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--gold-2)}
+  .tip.cy .era-tag{color:var(--cyan)}
+  .tip h3{margin:4px 0 6px;font-size:16.5px}
+  .tip p{margin:0 0 8px;font-size:13.5px;color:var(--muted);line-height:1.45}
+  .tip .aceite{font-size:12.5px;color:#9fe6c3;border-top:1px dashed #223050;padding-top:8px}
+  .tip .aceite b{color:#40d986}
+
+  /* legenda de apresentação */
+  .caption{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);z-index:60;opacity:0;
+    background:#0d1524ee;border:1px solid rgba(245,195,0,.45);border-radius:14px;padding:14px 26px;max-width:760px;
+    text-align:center;box-shadow:0 14px 50px rgba(0,0,0,.65);transition:opacity .4s,transform .4s;pointer-events:none}
+  .caption.on{opacity:1;transform:translateX(-50%) translateY(0)}
+  .caption b{color:var(--gold)}
+  .caption .t{font-size:17px;font-weight:700;letter-spacing:1px}
+  .caption .d{font-size:14px;color:var(--muted);margin-top:5px;line-height:1.5}
+
+  footer{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:8px 34px 22px;flex-wrap:wrap}
+  .legend{display:flex;gap:22px;align-items:center;font-size:13px;color:var(--muted)}
+  .legend i{display:inline-block;width:26px;height:4px;border-radius:2px;margin-right:7px;vertical-align:middle}
+  .legend .lg i{background:linear-gradient(90deg,#f5c300,#ffb02e);box-shadow:0 0 8px rgba(245,195,0,.6)}
+  .legend .lc i{background:linear-gradient(90deg,#38bdf8,#7dd3fc);box-shadow:0 0 8px rgba(56,189,248,.5)}
+  .credit{color:var(--dim);font-size:13px}
+  .credit b{color:var(--gold)}
+
+  @media (prefers-reduced-motion: reduce){
+    .node{animation:none;opacity:1;transform:none}
+    #spinePath{animation:none;stroke-dashoffset:0}
+    #comet{display:none}
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-<svg viewBox="0 0 2560 860" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Roadmap do InventOps em 5 eras, da demo ao produto vendável">
-  <defs>
-    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="7" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <filter id="glowSoft" x="-60%" y="-60%" width="220%" height="220%">
-      <feGaussianBlur stdDeviation="3.5" result="b"/>
-      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-    </filter>
-    <linearGradient id="spine" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0" stop-color="#f5c300"/><stop offset=".45" stop-color="#ffb02e"/>
-      <stop offset=".8" stop-color="#38bdf8"/><stop offset="1" stop-color="#7dd3fc"/>
-    </linearGradient>
-    <linearGradient id="nodeStroke" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#ffd75e"/><stop offset="1" stop-color="#c98a00"/>
-    </linearGradient>
-    <linearGradient id="nodeStrokeCyan" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#0284c7"/>
-    </linearGradient>
-    <radialGradient id="bgGlow" cx="50%" cy="42%" r="70%">
-      <stop offset="0" stop-color="#0d1526"/><stop offset="1" stop-color="#05080f"/>
-    </radialGradient>
-  </defs>
 
-  <!-- fundo -->
-  <rect width="2560" height="860" fill="url(#bgGlow)"/>
-  <g stroke="#101a2e" stroke-width="1">
-    <path d="M0 120 H2560 M0 240 H2560 M0 640 H2560 M0 760 H2560" opacity=".5"/>
-    <path d="M320 0 V860 M960 0 V860 M1600 0 V860 M2240 0 V860" opacity=".35"/>
-  </g>
-  <!-- bits decorativos -->
-  <g fill="#22304a" font-family="Consolas,monospace" font-size="15" opacity=".8">
-    <text x="240" y="150">01</text><text x="700" y="205">1</text><text x="1150" y="140">0</text>
-    <text x="1690" y="200">10</text><text x="2130" y="150">0</text><text x="2380" y="220">01</text>
-  </g>
+<header>
+  <div class="brand">
+    <div class="io">IO</div>
+    <div>
+      <h1>Invent<span>Ops</span> · Roadmap do Produto</h1>
+      <small>DA DEMO À OPERAÇÃO VIVA · CONTROLAR → CONECTAR → PREVER → AGIR</small>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="ghost" id="btnReplay" title="Redesenha a trilha">↻ Redesenhar</button>
+    <button class="play" id="btnPlay">▶ Modo apresentação</button>
+  </div>
+</header>
+<p class="tagline">Passe o mouse (ou Tab) em qualquer entrega pra ver <b>o que é</b> e <b>quando está pronta de verdade</b> · dourado = compromisso · ciano = visão</p>
 
-  <!-- título -->
-  <text x="1280" y="66" text-anchor="middle" fill="#f5c300" font-size="34" font-weight="700" letter-spacing="6" filter="url(#glowSoft)">INVENTOPS · ROADMAP DO PRODUTO</text>
-  <text x="1280" y="102" text-anchor="middle" fill="#8b96ab" font-size="19" letter-spacing="2">da demo à operação viva — 5 eras · Controlar → Conectar → Prever → Agir</text>
+<div class="stage" id="stage"></div>
 
-  <!-- espinha -->
-  <path d="M120 430 H2440" stroke="url(#spine)" stroke-width="7" fill="none" filter="url(#glow)" opacity=".95"/>
-  <g fill="#ffe27a" filter="url(#glowSoft)">
-    <path d="M628 430 l-16 -9 v18 z"/><path d="M1000 430 l-16 -9 v18 z"/>
-    <path d="M1372 430 l-16 -9 v18 z"/><path d="M1744 430 l-16 -9 v18 z"/><path d="M2085 430 l-16 -9 v18 z"/>
-  </g>
+<footer>
+  <div class="legend">
+    <span class="lg"><i></i>Eras 1–2 · compromisso</span>
+    <span class="lc"><i></i>Eras 3–5 · visão de futuro</span>
+    <span>🚪 = portão: o critério que abre a era seguinte</span>
+  </div>
+  <div class="credit">✦ Desenvolvido por <b>Daiana Costa</b> · detalhes no ROADMAP-P7.md · 12/07/2026</div>
+</footer>
 
-  <!-- ===== NÓ INICIAL ===== -->
-  <g filter="url(#glow)">
-    <rect x="60" y="368" width="150" height="124" rx="20" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="3.5"/>
-    <text x="135" y="418" text-anchor="middle" fill="#eef3fb" font-size="21" font-weight="700">InventOps</text>
-    <text x="135" y="444" text-anchor="middle" fill="#f5c300" font-size="17" font-weight="600">HOJE</text>
-    <text x="135" y="468" text-anchor="middle" fill="#8b96ab" font-size="14">demo viva</text>
-  </g>
-  <!-- você está aqui -->
-  <g filter="url(#glowSoft)">
-    <rect x="52" y="300" width="166" height="34" rx="17" fill="#1a1305" stroke="#f5c300" stroke-width="1.5"/>
-    <text x="135" y="323" text-anchor="middle" fill="#ffd75e" font-size="15" font-weight="700" letter-spacing="1">📍 VOCÊ ESTÁ AQUI</text>
-    <path d="M135 334 V368" stroke="#f5c300" stroke-width="2" stroke-dasharray="4 4"/>
-  </g>
+<div class="tip" id="tip" role="status"></div>
+<div class="caption" id="caption"></div>
 
-  <!-- helper de nó: rect 168x74 -->
-  <!-- ===== ERA 1 · CONTROLE GOVERNADO ===== -->
-  <g filter="url(#glowSoft)" font-weight="600">
-    <path d="M330 355 V430 M436 505 V430 M542 355 V430 M648 505 V430" stroke="#f5c300" stroke-width="2" opacity=".7"/>
-    <rect x="246" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
-    <text x="330" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">14 Deptos</text><text x="330" y="336" text-anchor="middle" fill="#eef3fb" font-size="17">Reais</text>
-    <rect x="352" y="505" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
-    <text x="436" y="536" text-anchor="middle" fill="#eef3fb" font-size="17">Cockpit</text><text x="436" y="560" text-anchor="middle" fill="#eef3fb" font-size="17">Meu Depto</text>
-    <rect x="458" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
-    <text x="542" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">Import</text><text x="542" y="336" text-anchor="middle" fill="#eef3fb" font-size="17">Nexus</text>
-    <rect x="564" y="505" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
-    <text x="648" y="536" text-anchor="middle" fill="#eef3fb" font-size="17">SharePoint</text><text x="648" y="560" text-anchor="middle" fill="#eef3fb" font-size="17">+ Vídeo Igor</text>
-  </g>
+<script>
+/* ============ DADOS (separados do desenho — disciplina do blueprint) ============ */
+const ERAS = [
+  { id:"e1", nome:"ERA 1 · CONTROLE", janela:"agora · demo 13/07", portao:"Igor validar a demo", tone:"gold",
+    story:"Tudo começa aqui: a demo empresa-inteira, com departamentos e gestores reais — a maquete rica da casa.",
+    nodes:[
+      {t:["14 Deptos","Reais"], d:"Áreas e gestores de verdade em todas as telas — fim dos nomes fictícios; e-mail @invent-corp.com.", a:"zero gestor fictício no app"},
+      {t:["Cockpit","Meu Depto"], d:"A tela da dor: minhas entregas · o que aguardo · quem espera por mim — e o botão 'Concluir e notificar' com carimbo de hora.", a:"handoff com hora no feed (adeus caça no WhatsApp)"},
+      {t:["Import","Nexus"], d:"O kickoff do gestor vira projeto com pendências já distribuídas pros 14 departamentos — sozinho.", a:"importar o JSON real do BR SUPPLY funciona, sem duplicar"},
+      {t:["SharePoint","+ Vídeo Igor"], d:"Cartão 'Documentos do projeto' apontando pro SharePoint + kit completo do vídeo por nível de acesso.", a:"Daiana grava o vídeo sem perguntar nada"}
+    ]},
+  { id:"e15", nome:"ERA 1.5 · FUNDAÇÃO", janela:"jul–ago/26", portao:"CI verde · zero dado na tela", tone:"gold",
+    story:"Antes de morar, reforçamos a estrutura: código blindado, robô de testes e o alicerce trilíngue.",
+    nodes:[
+      {t:["TypeScript"], d:"O código passa a avisar o erro ANTES de rodar — menos bug bobo, mais velocidade depois.", a:"projeto 100% migrado"},
+      {t:["Testes + CI"], d:"Um robô clica no sistema inteiro a cada mudança e acusa o que quebrou — qualidade sem depender de olho.", a:"esteira verde a cada push"},
+      {t:["Mobile · PWA","+ ES · EN"], d:"Instala no celular do gestor em obra + os idiomas saem do 'em breve' e viram tradução real.", a:"seletor funcional nos 3 idiomas"}
+    ]},
+  { id:"e2", nome:"ERA 2 · CONEXÃO", janela:"set–nov/26", portao:"3 áreas usando no dia a dia", tone:"gold",
+    story:"A casa ganha luz e água: banco de verdade, login da empresa e os dados reais migrados.",
+    nodes:[
+      {t:["Banco real","Supabase"], d:"Fim do 'salvo só no navegador' — os dados moram num banco de verdade, com backup automático.", a:"nada se perde nunca mais"},
+      {t:["Login M365"], d:"Entra com a conta da empresa, sem senha nova — e cada perfil vê só o que deve.", a:"SSO corporativo funcionando"},
+      {t:["Dados reais","+ LGPD"], d:"Migração dos dados do Velox (P1), ambientes separados (demo/homolog/prod) e política de privacidade.", a:"ninguém redigita nada"}
+    ]},
+  { id:"e3", nome:"ERA 3 · INTEGRAÇÕES", janela:"dez/26–mar/27", portao:"1 handoff 100% sem WhatsApp", tone:"cyan",
+    story:"A casa se conecta à rua: avisos de verdade chegando onde as pessoas já estão.",
+    nodes:[
+      {t:["Notificações","reais"], d:"E-mail, Teams e WhatsApp avisando o próximo departamento na hora do handoff — sozinho.", a:"aviso chega sem ninguém pedir"},
+      {t:["SharePoint","total"], d:"Ler E subir arquivos pelo próprio InventOps — o SharePoint vira o cofre invisível por trás.", a:"upload sem sair do sistema"},
+      {t:["Outlook","· Planner"], d:"As pontes que a Daiana já domina no Cowork alimentando o sistema automaticamente.", a:"dado entra sem digitação"}
+    ]},
+  { id:"e4", nome:"ERA 4 · INTELIGÊNCIA", janela:"2027", portao:"acurácia medida e publicada", tone:"cyan",
+    story:"A casa que avisa antes de dar problema: o Simulador deixa de encenar e passa a calcular.",
+    nodes:[
+      {t:["Simulador","real"], d:"'E se o TITANO atrasar 5 dias?' respondido com cálculo sobre o histórico real — não com encenação.", a:"cenários auditáveis"},
+      {t:["Previsão de","gargalos"], d:"O sistema aponta a sobrecarga e o atraso ANTES de doer — com % de confiança honesto.", a:"previsão com acurácia medida"}
+    ]},
+  { id:"e5", nome:"ERA 5 · FÁBRICA + VELOX", janela:"2027+", portao:"1 esteira piloto no ar", tone:"cyan",
+    story:"O diferencial que ninguém tem: o sistema de projetos conversando com a esteira e com o WCS Velox.",
+    nodes:[
+      {t:["CLP · IoT"], d:"A esteira falando com o sistema: falha física de sensor vira alerta P0 com dono e SLA.", a:"telemetria real de 1 linha"},
+      {t:["Passaporte","Velox"], d:"Fim do 'a sete chaves': versão do WCS por cliente, release notes visíveis e progresso do dev por evidência.", a:"inventário Velox completo"}
+    ]}
+];
 
-  <!-- ===== ERA 1.5 · FUNDAÇÃO ===== -->
-  <g filter="url(#glowSoft)" font-weight="600">
-    <path d="M840 355 V430 M946 505 V430 M1052 355 V430" stroke="#f5c300" stroke-width="2" opacity=".7"/>
-    <rect x="756" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
-    <text x="840" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">TypeScript</text><text x="840" y="336" text-anchor="middle" fill="#8b96ab" font-size="14">código blindado</text>
-    <rect x="862" y="505" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
-    <text x="946" y="536" text-anchor="middle" fill="#eef3fb" font-size="17">Testes + CI</text><text x="946" y="560" text-anchor="middle" fill="#8b96ab" font-size="14">robô de qualidade</text>
-    <rect x="968" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
-    <text x="1052" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">Mobile · PWA</text><text x="1052" y="336" text-anchor="middle" fill="#8b96ab" font-size="14">+ idiomas ES/EN</text>
-  </g>
+/* ============ GEOMETRIA ============ */
+const NW=172, NH=78, TOPY=228, BOTY=452, SPINE=378, ERA_GAP=64, STEP=112;
+const startX=60, startW=152;
+let x=startX+startW+58;
+const layout=[];
+for(const era of ERAS){
+  const nodes=era.nodes.map((n,i)=>({...n, cx:x+i*STEP+NW/2, top:i%2===0}));
+  const x0=nodes[0].cx-NW/2, x1=nodes[nodes.length-1].cx+NW/2;
+  layout.push({era, nodes, x0, x1, cx:(x0+x1)/2});
+  x=x1+ERA_GAP;
+}
+const endX=x+20, endW=152, W=endX+endW+70, H=760;
 
-  <!-- ===== ERA 2 · CONEXÃO ===== -->
-  <g filter="url(#glowSoft)" font-weight="600">
-    <path d="M1244 355 V430 M1350 505 V430 M1456 355 V430" stroke="#f5c300" stroke-width="2" opacity=".7"/>
-    <rect x="1160" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
-    <text x="1244" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">Banco real</text><text x="1244" y="336" text-anchor="middle" fill="#8b96ab" font-size="14">Supabase</text>
-    <rect x="1266" y="505" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
-    <text x="1350" y="536" text-anchor="middle" fill="#eef3fb" font-size="17">Login M365</text><text x="1350" y="560" text-anchor="middle" fill="#8b96ab" font-size="14">conta da empresa</text>
-    <rect x="1372" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStroke)" stroke-width="2.5"/>
-    <text x="1456" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">Dados reais</text><text x="1456" y="336" text-anchor="middle" fill="#8b96ab" font-size="14">migração P1 + LGPD</text>
-  </g>
+/* ============ SVG ============ */
+const gold="url(#gGold)", cyan="url(#gCyan)";
+let svg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Roadmap do InventOps em 5 eras">
+<defs>
+  <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd75e"/><stop offset="1" stop-color="#c98a00"/></linearGradient>
+  <linearGradient id="gCyan" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#0284c7"/></linearGradient>
+  <linearGradient id="gSpine" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#f5c300"/><stop offset=".52" stop-color="#ffb02e"/><stop offset=".78" stop-color="#38bdf8"/><stop offset="1" stop-color="#7dd3fc"/>
+  </linearGradient>
+  <filter id="fGlow" x="-60%" y="-60%" width="220%" height="220%">
+    <feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+<g stroke="#0f1a2e" stroke-width="1" opacity=".6"><path d="M0 110 H${W} M0 610 H${W}"/>`;
+for(let gx=280; gx<W; gx+=320) svg+=`<path d="M${gx} 0 V${H}"/>`;
+svg+=`</g>`;
 
-  <!-- ===== ERA 3 · INTEGRAÇÕES ===== -->
-  <g filter="url(#glowSoft)" font-weight="600">
-    <path d="M1648 355 V430 M1754 505 V430 M1860 355 V430" stroke="#38bdf8" stroke-width="2" opacity=".7"/>
-    <rect x="1564" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStrokeCyan)" stroke-width="2.5"/>
-    <text x="1648" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">Notificações</text><text x="1648" y="336" text-anchor="middle" fill="#8b96ab" font-size="14">e-mail · Teams · Wpp</text>
-    <rect x="1670" y="505" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStrokeCyan)" stroke-width="2.5"/>
-    <text x="1754" y="536" text-anchor="middle" fill="#eef3fb" font-size="17">SharePoint</text><text x="1754" y="560" text-anchor="middle" fill="#8b96ab" font-size="14">ler + subir arquivos</text>
-    <rect x="1776" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStrokeCyan)" stroke-width="2.5"/>
-    <text x="1860" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">Outlook</text><text x="1860" y="336" text-anchor="middle" fill="#eef3fb" font-size="17">· Planner</text>
-  </g>
+/* espinha */
+svg+=`<path id="spinePath" d="M${startX+startW} ${SPINE} H${endX}" stroke="url(#gSpine)" stroke-width="7" fill="none" filter="url(#fGlow)"/>`;
 
-  <!-- ===== ERA 4 · INTELIGÊNCIA ===== -->
-  <g filter="url(#glowSoft)" font-weight="600">
-    <path d="M2000 355 V430 M2106 505 V430" stroke="#38bdf8" stroke-width="2" opacity=".7"/>
-    <rect x="1916" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStrokeCyan)" stroke-width="2.5"/>
-    <text x="2000" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">Simulador</text><text x="2000" y="336" text-anchor="middle" fill="#8b96ab" font-size="14">calculando de verdade</text>
-    <rect x="2022" y="505" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStrokeCyan)" stroke-width="2.5"/>
-    <text x="2106" y="536" text-anchor="middle" fill="#eef3fb" font-size="17">Previsão</text><text x="2106" y="560" text-anchor="middle" fill="#8b96ab" font-size="14">gargalo antes de doer</text>
-  </g>
+/* nó inicial + pin */
+svg+=`<g filter="url(#fGlow)">
+ <rect x="${startX}" y="${SPINE-62}" width="${startW}" height="124" rx="20" fill="#0e1420" stroke="${gold}" stroke-width="3.5"/>
+ <text x="${startX+startW/2}" y="${SPINE-12}" text-anchor="middle" fill="#eef3fb" font-size="21" font-weight="700">InventOps</text>
+ <text x="${startX+startW/2}" y="${SPINE+14}" text-anchor="middle" fill="#f5c300" font-size="16" font-weight="600">HOJE · demo</text>
+ <text x="${startX+startW/2}" y="${SPINE+38}" text-anchor="middle" fill="#8b96ab" font-size="13">nascido do P1+Codex</text>
+</g>
+<g filter="url(#fGlow)">
+ <rect x="${startX-6}" y="${SPINE-130}" width="${startW+12}" height="34" rx="17" fill="#1a1305" stroke="#f5c300" stroke-width="1.5"/>
+ <text x="${startX+startW/2}" y="${SPINE-107}" text-anchor="middle" fill="#ffd75e" font-size="14" font-weight="700">📍 VOCÊ ESTÁ AQUI</text>
+ <path d="M${startX+startW/2} ${SPINE-96} V${SPINE-62}" stroke="#f5c300" stroke-width="2" stroke-dasharray="4 4"/>
+</g>`;
 
-  <!-- ===== ERA 5 · FÁBRICA & VELOX ===== -->
-  <g filter="url(#glowSoft)" font-weight="600">
-    <path d="M2246 355 V430 M2352 505 V430" stroke="#38bdf8" stroke-width="2" opacity=".7"/>
-    <rect x="2162" y="281" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStrokeCyan)" stroke-width="2.5"/>
-    <text x="2246" y="312" text-anchor="middle" fill="#eef3fb" font-size="17">CLP · IoT</text><text x="2246" y="336" text-anchor="middle" fill="#8b96ab" font-size="14">esteira ao vivo</text>
-    <rect x="2268" y="505" width="168" height="74" rx="16" fill="#0e1420" stroke="url(#nodeStrokeCyan)" stroke-width="2.5"/>
-    <text x="2352" y="536" text-anchor="middle" fill="#eef3fb" font-size="17">Passaporte</text><text x="2352" y="560" text-anchor="middle" fill="#8b96ab" font-size="14">Velox por cliente</text>
-  </g>
+/* eras */
+let nodeIdx=0;
+layout.forEach((L,ei)=>{
+  const tone=L.era.tone==="gold"?gold:cyan;
+  const lineC=L.era.tone==="gold"?"#f5c300":"#38bdf8";
+  const labC=L.era.tone==="gold"?"#ffb02e":"#38bdf8";
+  svg+=`<g class="eraG" id="${L.era.id}">`;
+  L.nodes.forEach(n=>{
+    const y=n.top?TOPY:BOTY;
+    const cyCls=L.era.tone==="cyan"?" cy":"";
+    svg+=`<path d="M${n.cx} ${n.top?y+NH:y} V${SPINE}" stroke="${lineC}" stroke-width="2" opacity=".65"/>`;
+    svg+=`<g class="node${cyCls}" tabindex="0" role="button" data-era="${ei}" data-node="${nodeIdx}" style="animation-delay:${.35+nodeIdx*.12}s" aria-label="${n.t.join(' ')}">
+      <rect class="body" x="${n.cx-NW/2}" y="${y}" width="${NW}" height="${NH}" rx="16" stroke="${tone}"/>`;
+    if(n.t.length===1)
+      svg+=`<text x="${n.cx}" y="${y+46}" text-anchor="middle" fill="#eef3fb" font-size="17.5" font-weight="600">${n.t[0]}</text>`;
+    else
+      svg+=`<text x="${n.cx}" y="${y+32}" text-anchor="middle" fill="#eef3fb" font-size="17" font-weight="600">${n.t[0]}</text>
+            <text x="${n.cx}" y="${y+56}" text-anchor="middle" fill="#eef3fb" font-size="17" font-weight="600">${n.t[1]||""}</text>`;
+    svg+=`</g>`;
+    nodeIdx++;
+  });
+  /* chave + rótulos */
+  svg+=`<path d="M${L.x0} 574 v14 h${L.x1-L.x0} v-14" stroke="${lineC}" stroke-width="2.5" fill="none" opacity=".85"/>
+  <text x="${L.cx}" y="620" text-anchor="middle" fill="${labC}" font-size="18" font-weight="700" letter-spacing="2">${L.era.nome}</text>
+  <text x="${L.cx}" y="646" text-anchor="middle" fill="#5b6577" font-size="13.5">${L.era.janela}</text>
+  <text x="${L.cx}" y="676" text-anchor="middle" fill="#7c8699" font-size="13" font-style="italic">🚪 ${L.era.portao}</text></g>`;
+  /* seta na espinha entre eras */
+  if(ei<layout.length-1){
+    const ax=L.x1+ERA_GAP/2;
+    svg+=`<path d="M${ax} ${SPINE} l-15 -8 v16 z" fill="#ffe27a" filter="url(#fGlow)"/>`;
+  }
+});
 
-  <!-- ===== NÓ FINAL ===== -->
-  <g filter="url(#glow)">
-    <rect x="2400" y="368" width="150" height="124" rx="20" fill="#0e1420" stroke="url(#nodeStrokeCyan)" stroke-width="3.5"/>
-    <text x="2475" y="418" text-anchor="middle" fill="#eef3fb" font-size="19" font-weight="700">Produto</text>
-    <text x="2475" y="444" text-anchor="middle" fill="#7dd3fc" font-size="17" font-weight="600">vendável</text>
-    <text x="2475" y="468" text-anchor="middle" fill="#8b96ab" font-size="14">PT · ES · EN</text>
-  </g>
+/* nó final */
+svg+=`<g filter="url(#fGlow)">
+ <rect x="${endX+20}" y="${SPINE-62}" width="${endW}" height="124" rx="20" fill="#0e1420" stroke="${cyan}" stroke-width="3.5"/>
+ <text x="${endX+20+endW/2}" y="${SPINE-12}" text-anchor="middle" fill="#eef3fb" font-size="19" font-weight="700">Produto</text>
+ <text x="${endX+20+endW/2}" y="${SPINE+14}" text-anchor="middle" fill="#7dd3fc" font-size="16" font-weight="600">vendável</text>
+ <text x="${endX+20+endW/2}" y="${SPINE+38}" text-anchor="middle" fill="#8b96ab" font-size="13">PT · ES · EN</text>
+</g>`;
 
-  <!-- ===== CHAVES / GRUPOS ===== -->
-  <g stroke="#c98a00" stroke-width="2.5" fill="none" opacity=".9">
-    <path d="M240 618 v16 h498 v-16"/><path d="M750 618 v16 h392 v-16"/><path d="M1154 618 v16 h392 v-16"/>
-  </g>
-  <g stroke="#0284c7" stroke-width="2.5" fill="none" opacity=".9">
-    <path d="M1558 618 v16 h392 v-16"/><path d="M1962 618 v16 h234 v-16"/><path d="M2208 618 v16 h234 v-16"/>
-  </g>
-  <g text-anchor="middle" font-weight="700" font-size="19" letter-spacing="2.5" filter="url(#glowSoft)">
-    <text x="489" y="672" fill="#ffb02e">ERA 1 · CONTROLE</text>
-    <text x="946" y="672" fill="#ffb02e">ERA 1.5 · FUNDAÇÃO</text>
-    <text x="1350" y="672" fill="#ffb02e">ERA 2 · CONEXÃO</text>
-    <text x="1754" y="672" fill="#38bdf8">ERA 3 · INTEGRAÇÕES</text>
-    <text x="2079" y="672" fill="#38bdf8">ERA 4 · INTELIGÊNCIA</text>
-    <text x="2325" y="672" fill="#38bdf8">ERA 5 · FÁBRICA+VELOX</text>
-  </g>
-  <g text-anchor="middle" font-size="14" fill="#5b6577">
-    <text x="489" y="698">agora · demo diretoria</text>
-    <text x="946" y="698">jul–ago/26</text>
-    <text x="1350" y="698">set–nov/26</text>
-    <text x="1754" y="698">dez/26–mar/27</text>
-    <text x="2079" y="698">2027</text>
-    <text x="2325" y="698">2027+</text>
-  </g>
+/* cometa (herói único) */
+svg+=`<g id="comet"><circle r="7" fill="#ffd75e" class="comet-core">
+  <animateMotion dur="9s" repeatCount="indefinite" path="M${startX+startW} ${SPINE} H${endX}"/>
+</circle></g>`;
 
-  <!-- portões (critérios de saída) -->
-  <g text-anchor="middle" font-size="13.5" fill="#7c8699" font-style="italic">
-    <text x="489" y="748">🚪 sai quando: Igor validar a demo</text>
-    <text x="946" y="748">🚪 CI verde · zero dado na tela</text>
-    <text x="1350" y="748">🚪 3 áreas usando no dia a dia</text>
-    <text x="1754" y="748">🚪 1 handoff 100% sem WhatsApp</text>
-    <text x="2079" y="748">🚪 acurácia medida</text>
-    <text x="2325" y="748">🚪 1 esteira piloto</text>
-  </g>
+svg+=`</svg>`;
+document.getElementById("stage").innerHTML=svg;
 
-  <!-- rodapé -->
-  <text x="1280" y="812" text-anchor="middle" fill="#5b6577" font-size="14" letter-spacing="1">Janelas são estimativas de planejamento, não promessas · cada era abre com o portão da anterior batido + pente-fino · detalhes: ROADMAP-P7.md §2-3</text>
-  <text x="1280" y="838" text-anchor="middle" fill="#f5c300" font-size="14" font-weight="600" letter-spacing="1">✦ Desenvolvido por Daiana Costa · InventOps · 12/07/2026</text>
-</svg>
-</div>
-<p class="hint">Abra em tela cheia · dê zoom à vontade (é vetor, não perde qualidade) · print bonito pra slide: Ctrl+P → paisagem</p>
+/* comprimento da trilha p/ animação de desenho */
+const sp=document.getElementById("spinePath");
+sp.style.setProperty("--len", sp.getTotalLength());
+
+/* ============ TOOLTIP ============ */
+const tip=document.getElementById("tip");
+const flat=[]; layout.forEach((L,ei)=>L.nodes.forEach(n=>flat.push({era:L.era,n})));
+function showTip(el){
+  const i=+el.dataset.node, {era,n}=flat[i];
+  tip.className="tip on"+(era.tone==="cyan"?" cy":"");
+  tip.innerHTML=`<div class="era-tag">${era.nome} · ${era.janela}</div>
+    <h3>${n.t.join(" ")}</h3><p>${n.d}</p>
+    <div class="aceite"><b>✓ pronto quando:</b> ${n.a}</div>`;
+  const r=el.getBoundingClientRect();
+  let tx=r.left+r.width/2-165, ty=r.top>window.innerHeight/2 ? r.top-tip.offsetHeight-14 : r.bottom+14;
+  requestAnimationFrame(()=>{ /* reposiciona com altura real */
+    ty=r.top>window.innerHeight/2 ? r.top-tip.offsetHeight-14 : r.bottom+14;
+    tip.style.left=Math.max(10,Math.min(tx,window.innerWidth-345))+"px";
+    tip.style.top=Math.max(10,ty)+"px";
+  });
+}
+function hideTip(){tip.classList.remove("on")}
+document.querySelectorAll(".node").forEach(el=>{
+  el.addEventListener("mouseenter",()=>showTip(el));
+  el.addEventListener("mouseleave",hideTip);
+  el.addEventListener("focus",()=>showTip(el));
+  el.addEventListener("blur",hideTip);
+});
+
+/* ============ MODO APRESENTAÇÃO ============ */
+const caption=document.getElementById("caption");
+let playing=false;
+function present(){
+  if(playing) return; playing=true;
+  const groups=[...document.querySelectorAll(".eraG")];
+  const stage=document.getElementById("stage");
+  let step=0;
+  const tick=()=>{
+    groups.forEach((g,i)=>{g.classList.toggle("era-dim",i!==step);g.classList.toggle("era-lit",i===step)});
+    const L=layout[step];
+    caption.innerHTML=`<div class="t">${L.era.nome} <span style="color:#5b6577;font-weight:400">· ${L.era.janela}</span></div>
+      <div class="d">${L.era.story}<br>🚪 <b>Portão:</b> ${L.era.portao}</div>`;
+    caption.classList.add("on");
+    stage.scrollTo({left:Math.max(0,(L.cx/W)*stage.scrollWidth-stage.clientWidth/2),behavior:"smooth"});
+    step++;
+    if(step<groups.length){ setTimeout(tick,4200); }
+    else setTimeout(()=>{
+      groups.forEach(g=>{g.classList.remove("era-dim","era-lit")});
+      caption.innerHTML=`<div class="t">Um produto. <b>Cinco eras.</b></div><div class="d">Da demo de amanhã ao sistema que conversa com a esteira — cada porta só abre com a anterior batida. ✦</div>`;
+      stage.scrollTo({left:0,behavior:"smooth"});
+      setTimeout(()=>{caption.classList.remove("on");playing=false},4500);
+    },4200);
+  };
+  tick();
+}
+document.getElementById("btnPlay").addEventListener("click",present);
+document.getElementById("btnReplay").addEventListener("click",()=>location.reload());
+</script>
 </body>
 </html>

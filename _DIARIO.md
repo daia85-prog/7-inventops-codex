@@ -13,6 +13,14 @@
   Haiku) · 10 lacunas adotadas (seção 11) · riscos de execução (seção 12).
 - **Contexto de negócio:** apresentação ao diretor Igor em 13/07; velox-demo (P1) congelado como
   vitrine + fonte do vídeo; P7 é a evolução company-wide.
+- **ROADMAP-P7.md criado** (pedido dela: rastreabilidade "começamos→mudamos→ficou"): linha de base
+  v0, Era 1 detalhada com aceites (E1.1–E1.7), portões das eras, registro de mudanças (10 decisões),
+  placar de fechamento.
+- **ROADMAP-VISUAL-P7.html** (preferência registrada: ela gosta de desenhos): roadmap vivo estilo
+  circuito — trilha se desenha, cometa (herói único), tooltip por entrega (o quê + aceite), modo
+  apresentação narrado por era, dourado=compromisso/ciano=visão, reduced-motion ok. **Validado
+  headless** (script Node no scratchpad: 17 nós · 6 eras · 0 undefined) — pixels validados pela
+  Daiana (screenshot do ambiente trava, limitação conhecida).
 
 **⏭️ PRÓXIMO:** executar a Era 1 (escopo fechado na seção 10 do blueprint), nesta ordem:
 1. Transplante de realidade — 14 deptos reais + gestores reais + domínio `@invent-corp.com`
