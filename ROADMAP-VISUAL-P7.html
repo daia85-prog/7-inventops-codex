@@ -306,13 +306,13 @@ function present(){
     caption.classList.add("on");
     stage.scrollTo({left:Math.max(0,(L.cx/W)*stage.scrollWidth-stage.clientWidth/2),behavior:"smooth"});
     step++;
-    if(step<groups.length){ setTimeout(tick,4200); }
+    if(step<groups.length){ setTimeout(tick,6500); }
     else setTimeout(()=>{
       groups.forEach(g=>{g.classList.remove("era-dim","era-lit")});
       caption.innerHTML=`<div class="t">Um produto. <b>Cinco eras.</b></div><div class="d">Da demo de amanhã ao sistema que conversa com a esteira — cada porta só abre com a anterior batida. ✦</div>`;
       stage.scrollTo({left:0,behavior:"smooth"});
-      setTimeout(()=>{caption.classList.remove("on");playing=false},4500);
-    },4200);
+      setTimeout(()=>{caption.classList.remove("on");playing=false},6000);
+    },6500);
   };
   tick();
 }
