@@ -1,5 +1,15 @@
 # Changelog
 
+## V17.6 — Entregas por Área — 18/07/2026
+
+- Nova matriz operacional dentro de cada projeto, conectando as 14 áreas a entregas verificáveis.
+- Cada entrega possui responsável, e-mail corporativo, prazo, percentual, evidência, dependência real e próximo handoff.
+- Trabalho paralelo explícito: uma área só bloqueia outra quando existe uma dependência técnica verdadeira.
+- Filtros de execução, trabalho paralelo, atenção e planejamento com painel contextual sincronizado.
+- Conclusão protegida: nenhuma entrega pode ser encerrada sem evidência registrada.
+- Cobrança por e-mail preparada diretamente para o responsável corporativo.
+- Build de produção, jornada crítica, filtros e console validados sem erros.
+
 ## V17.5 — Minha Operação — 12/07/2026
 
 - Módulo **Ação** evoluído para **Minha Operação**, com briefing diário e fila priorizada por impacto, SLA e dependência.

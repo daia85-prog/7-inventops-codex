@@ -3,6 +3,17 @@
 > Ler ao ABRIR a sessão (antes de varrer código). Atualizar ao FECHAR cada bloco.
 > Estado mais recente no topo. Regra de salvamento por bloco: ver CLAUDE.md.
 
+**✅ CICLO 18/07/2026 — ENTREGAS POR ÁREA V17.6 CONCLUÍDA (LINHA CODEX)**
+
+- Nova aba **Entregas por área** dentro da Central do Projeto.
+- As 14 áreas agora possuem entrega, responsável, e-mail corporativo, prazo, evidência, progresso, dependência real e próximo handoff.
+- Estados operacionais distinguem conclusão, execução, paralelo, validação, espera, risco e planejamento.
+- Filtros sincronizam automaticamente o painel contextual com as áreas visíveis.
+- Conclusão exige evidência; cobrança por e-mail é preparada para revisão do usuário.
+- Build Vite concluído; jornada `Login → Projetos → TITANO → Entregas por área → Atenção` validada.
+- Filtro Atenção confirmado com 2 áreas visíveis e seleção automática de **Itens críticos contratados**.
+- Console do navegador validado com zero erros.
+
 **✅ CICLO 12/07/2026 — MINHA OPERAÇÃO V17.5 CONCLUÍDA**
 
 - “Ação” renomeada para **Minha Operação**, com foco real na rotina do analista.

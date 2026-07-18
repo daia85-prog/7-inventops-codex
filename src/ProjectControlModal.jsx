@@ -5,6 +5,7 @@ import {
   ShieldCheck, TestTube, User, Warning, XCircle
 } from "@phosphor-icons/react";
 import { StatusReportModal } from "./FoundationModules";
+import { ProjectDeliveryMatrix } from "./ProjectDeliveryMatrix";
 
 const phases = ["Kickoff","Levantamento","Provisionamento","Implantação","Homologação","Go Live","Encerramento"];
 const departments = [
@@ -105,7 +106,7 @@ export function ProjectControlModal({project,onClose,onUpdate,onOpenFull,notify}
         <button className="pcm-close" onClick={onClose} aria-label="Fechar projeto"><XCircle/></button>
       </header>
 
-      <nav className="pcm-tabs" aria-label="Seções do projeto">{[["sheet","Ficha técnica"],["phases","Fases & áreas"],["activities","Atividades"],["audit","Histórico & comunicação"]].map(([id,label])=><button key={id} className={tab===id?"active":""} onClick={()=>setTab(id)}>{label}{id==="activities"?<em>{activities.length}</em>:id==="audit"?<em>{audit.length}</em>:null}</button>)}</nav>
+      <nav className="pcm-tabs" aria-label="Seções do projeto">{[["sheet","Ficha técnica"],["deliveries","Entregas por área"],["phases","Fases & áreas"],["activities","Atividades"],["audit","Histórico & comunicação"]].map(([id,label])=><button key={id} className={tab===id?"active":""} onClick={()=>setTab(id)}>{label}{id==="deliveries"?<em>14</em>:id==="activities"?<em>{activities.length}</em>:id==="audit"?<em>{audit.length}</em>:null}</button>)}</nav>
 
       <div className="pcm-content">
         {tab==="sheet"?<div className="pcm-sheet">
@@ -125,6 +126,8 @@ export function ProjectControlModal({project,onClose,onUpdate,onOpenFull,notify}
           </article>
           <aside className="pcm-side-column"><article><div className="pcm-section-title"><div><small>PROGRESSO EXPLICÁVEL</small><h3>{project.progress}% com evidência</h3></div><ShieldCheck/></div><div className="pcm-evidence-bars">{[["Entregáveis",progressEvidence.deliverables,35],["Checklists",progressEvidence.checklists,25],["Commits válidos",progressEvidence.commits,20],["Testes aprovados",progressEvidence.tests,20]].map(([n,v,w])=><span key={n}><small>{n}</small><b>{v}/{w}</b><i><em style={{width:`${Math.min(100,v/w*100)}%`}}/></i></span>)}</div></article><article className={project.status==="Bloqueado"?"pcm-alert-card":""}><div className="pcm-section-title"><div><small>PRÓXIMA COBRANÇA</small><h3>{project.status==="Bloqueado"?"Desbloquear projeto":"Mover o projeto"}</h3></div>{project.status==="Bloqueado"?<Warning/>:<CheckSquare/>}</div><p>{project.nextAction}</p><span><User/>{project.owner}</span><button className="primary" onClick={()=>{record("Registrou uma cobrança",project.nextAction,"comunicação");notify(`Cobrança registrada para ${project.owner}.`)}}>Registrar cobrança</button></article></aside>
         </div>:null}
+
+        {tab==="deliveries"?<ProjectDeliveryMatrix project={project} onUpdate={onUpdate} notify={notify}/>:null}
 
         {tab==="phases"?<div className="pcm-phases"><article><div className="pcm-section-title"><div><small>JORNADA CRONOLÓGICA</small><h3>Fases e gates de governança</h3></div><Badge tone="cyan">Fase atual: {project.phase}</Badge></div><div className="pcm-phase-list">{phases.map((name,i)=>{const state=i+1<project.phase?"done":i+1===project.phase?"current":"future";return <div className={state} key={name}><span>{state==="done"?<CheckCircle weight="fill"/>:i+1}</span><div><small>FASE {i+1}</small><b>{name}</b><p>{state==="done"?"Gate aprovado com evidências registradas.":state==="current"?"Execução em andamento e dependências monitoradas.":"Aguardando conclusão das fases anteriores."}</p></div><em>{state==="done"?"Aprovada":state==="current"?"Em curso":"Planejada"}</em></div>})}</div></article><article><div className="pcm-section-title"><div><small>MATRIZ OPERACIONAL</small><h3>14 áreas conectadas</h3></div><Buildings/></div><div className="pcm-departments">{departments.map(([code,name],i)=>{const active=i<Math.min(14,project.phase*2);const blocked=project.status==="Bloqueado"&&(code==="INF"||code==="PLC");return <div className={blocked?"blocked":active?"active":""} key={code}><span>{code}</span><div><b>{name}</b><small>{blocked?"Bloqueio ativo":active?"Com evidência":"Planejada"}</small></div><em>{blocked?"!":active?<CheckCircle weight="fill"/>:"—"}</em></div>})}</div></article></div>:null}
 
