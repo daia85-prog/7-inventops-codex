@@ -1,5 +1,16 @@
 # Changelog
 
+## V17.9 — Fases & Gates — 18/07/2026
+
+- As sete fases do projeto agora possuem gates formais de governança.
+- Cada gate possui propósito, critérios de saída, área responsável, evidência esperada e aprovador.
+- Percentual de progresso não aprova fase automaticamente.
+- Avanço bloqueado enquanto existir qualquer critério sem evidência e aprovação.
+- Evidência registrada entra em validação antes da decisão do PMO.
+- Gate aprovado preserva responsável, data da decisão e trilha auditável.
+- Atividades paralelas continuam avançando mesmo quando a mudança de fase está bloqueada.
+- Roadmap e apresentação atualizados para V17.9.
+
 ## V17.8 — Plano Integrado — 18/07/2026
 
 - Nova aba Plano Integrado dentro da Central do Projeto.

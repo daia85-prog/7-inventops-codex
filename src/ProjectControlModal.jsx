@@ -7,6 +7,7 @@ import {
 import { StatusReportModal } from "./FoundationModules";
 import { ProjectDeliveryMatrix } from "./ProjectDeliveryMatrix";
 import { ProjectActivityPlanner } from "./ProjectActivityPlanner";
+import { ProjectPhaseGates } from "./ProjectPhaseGates";
 
 const phases = ["Kickoff","Levantamento","Provisionamento","Implantação","Homologação","Go Live","Encerramento"];
 const departments = [
@@ -107,7 +108,7 @@ export function ProjectControlModal({project,onClose,onUpdate,onOpenFull,notify}
         <button className="pcm-close" onClick={onClose} aria-label="Fechar projeto"><XCircle/></button>
       </header>
 
-      <nav className="pcm-tabs" aria-label="Seções do projeto">{[["sheet","Ficha técnica"],["deliveries","Entregas por área"],["phases","Fases & áreas"],["activities","Plano integrado"],["audit","Histórico & comunicação"]].map(([id,label])=><button key={id} className={tab===id?"active":""} onClick={()=>setTab(id)}>{label}{id==="deliveries"?<em>14</em>:id==="activities"?<em>{project.activityPlan?.length||42}</em>:id==="audit"?<em>{audit.length}</em>:null}</button>)}</nav>
+      <nav className="pcm-tabs" aria-label="Seções do projeto">{[["sheet","Ficha técnica"],["deliveries","Entregas por área"],["phases","Fases & Gates"],["activities","Plano integrado"],["audit","Histórico & comunicação"]].map(([id,label])=><button key={id} className={tab===id?"active":""} onClick={()=>setTab(id)}>{label}{id==="deliveries"?<em>14</em>:id==="phases"?<em>7</em>:id==="activities"?<em>{project.activityPlan?.length||42}</em>:id==="audit"?<em>{audit.length}</em>:null}</button>)}</nav>
 
       <div className="pcm-content">
         {tab==="sheet"?<div className="pcm-sheet">
@@ -130,7 +131,7 @@ export function ProjectControlModal({project,onClose,onUpdate,onOpenFull,notify}
 
         {tab==="deliveries"?<ProjectDeliveryMatrix project={project} onUpdate={onUpdate} notify={notify}/>:null}
 
-        {tab==="phases"?<div className="pcm-phases"><article><div className="pcm-section-title"><div><small>JORNADA CRONOLÓGICA</small><h3>Fases e gates de governança</h3></div><Badge tone="cyan">Fase atual: {project.phase}</Badge></div><div className="pcm-phase-list">{phases.map((name,i)=>{const state=i+1<project.phase?"done":i+1===project.phase?"current":"future";return <div className={state} key={name}><span>{state==="done"?<CheckCircle weight="fill"/>:i+1}</span><div><small>FASE {i+1}</small><b>{name}</b><p>{state==="done"?"Gate aprovado com evidências registradas.":state==="current"?"Execução em andamento e dependências monitoradas.":"Aguardando conclusão das fases anteriores."}</p></div><em>{state==="done"?"Aprovada":state==="current"?"Em curso":"Planejada"}</em></div>})}</div></article><article><div className="pcm-section-title"><div><small>MATRIZ OPERACIONAL</small><h3>14 áreas conectadas</h3></div><Buildings/></div><div className="pcm-departments">{departments.map(([code,name],i)=>{const active=i<Math.min(14,project.phase*2);const blocked=project.status==="Bloqueado"&&(code==="INF"||code==="PLC");return <div className={blocked?"blocked":active?"active":""} key={code}><span>{code}</span><div><b>{name}</b><small>{blocked?"Bloqueio ativo":active?"Com evidência":"Planejada"}</small></div><em>{blocked?"!":active?<CheckCircle weight="fill"/>:"—"}</em></div>})}</div></article></div>:null}
+        {tab==="phases"?<ProjectPhaseGates project={project} onUpdate={onUpdate} notify={notify}/>:null}
 
         {tab==="activities"?<ProjectActivityPlanner project={project} onUpdate={onUpdate} notify={notify}/>:null}
 

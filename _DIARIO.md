@@ -3,6 +3,18 @@
 > Ler ao ABRIR a sessão (antes de varrer código). Atualizar ao FECHAR cada bloco.
 > Estado mais recente no topo. Regra de salvamento por bloco: ver CLAUDE.md.
 
+**✅ CICLO 18/07/2026 — FASES & GATES V17.9 CONCLUÍDO (LINHA CODEX)**
+
+- Sete gates formais criados com três critérios de saída por fase.
+- Critérios possuem área, responsável, evidência esperada, evidência registrada e estado de aprovação.
+- Gate 4 do TITANO demonstrou 67% de prontidão e um critério pendente.
+- Tentativa de avanço testada: fase permaneceu 4/7 e o sistema explicou o bloqueio.
+- Registro de evidência integrado ao componente, sem caixas nativas do navegador.
+- Após evidência e aprovação do critério, prontidão chegou a 100% e o TITANO avançou formalmente para 5/7.
+- Auditoria repetida em sessão limpa: registro integrado confirmado e console com zero erros.
+- Atividades paralelas permanecem liberadas enquanto apenas o avanço de fase é bloqueado.
+- Roadmap e apresentação atualizados para V17.9.
+
 **✅ CICLO 18/07/2026 — PLANO INTEGRADO V17.8 CONCLUÍDO (LINHA CODEX)**
 
 - Nova aba Plano Integrado com 42 atividades iniciais distribuídas pelas 14 áreas.

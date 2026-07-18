@@ -149,6 +149,7 @@ com linha no §4._
 | V17.6 | Entregas por Área | 14 áreas com responsável, prazo, evidência, dependência e handoff dentro de cada projeto | ✅ Build + jornada visual validados |
 | V17.7 | Central PMO | Carteira consolidada, cobrança rastreável e abertura contextual do projeto | ✅ Filtro, atualização de indicador, vínculo com projeto e console validados |
 | V17.8 | Plano Integrado | 42 atividades por projeto, criação governada e conclusão somente com evidência | ✅ Criação, bloqueio sem evidência, filtro de dependência e console validados |
+| V17.9 | Fases & Gates | Sete gates formais, critérios de saída e avanço somente após aprovação do PMO | ✅ Bloqueio de avanço, prontidão e registro de evidência validados |
 
 ---
 

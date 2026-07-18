@@ -26,3 +26,7 @@ As entregas detalhadas passaram a alimentar uma visão consolidada para o PMO. A
 ### V17.8 — Plano Integrado
 
 A execução passou a ter um nível abaixo da entrega departamental. Cada projeto nasce com 42 atividades distribuídas pelas 14 áreas, com WBS, responsável, dependência, prazo e evidência. Novas atividades podem ser criadas e vinculadas automaticamente ao responsável da área.
+
+### V17.9 — Fases & Gates
+
+As sete fases passaram a ter critérios formais de saída. O projeto só avança quando todas as evidências do gate atual estão registradas e aprovadas pelo PMO, sem impedir que atividades realmente paralelas continuem em execução.
