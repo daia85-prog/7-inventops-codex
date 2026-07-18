@@ -1,5 +1,17 @@
 # Changelog
 
+## V17.8 — Plano Integrado — 18/07/2026
+
+- Nova aba Plano Integrado dentro da Central do Projeto.
+- Estrutura inicial com 42 atividades: três tarefas executáveis para cada uma das 14 áreas.
+- Hierarquia rastreável de projeto, entrega da área, WBS, atividade, responsável e evidência.
+- Dependências classificadas como paralelas, bloqueantes ou externas.
+- Criação de atividade com área, prazo e responsável corporativo atribuídos automaticamente.
+- Filtros por execução, bloqueios, ausência de evidência, conclusão e departamento.
+- Conclusão impedida até existir evidência auditável.
+- Plano persistido no projeto e refletido imediatamente na quantidade de atividades.
+- Roadmap e apresentação por perfil atualizados para V17.8.
+
 ## V17.7 — Central PMO — 18/07/2026
 
 - Nova Central PMO consolidando as entregas críticas dos seis projetos em uma fila única de governança.

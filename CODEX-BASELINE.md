@@ -22,3 +22,7 @@ A linha Codex passou a controlar a execução matricial dentro de cada projeto. 
 ### V17.7 — Central PMO
 
 As entregas detalhadas passaram a alimentar uma visão consolidada para o PMO. A nova central organiza a carteira por decisões, dependências, responsáveis, evidências e handoffs, permitindo registrar cobranças e abrir o projeto correspondente sem perder contexto.
+
+### V17.8 — Plano Integrado
+
+A execução passou a ter um nível abaixo da entrega departamental. Cada projeto nasce com 42 atividades distribuídas pelas 14 áreas, com WBS, responsável, dependência, prazo e evidência. Novas atividades podem ser criadas e vinculadas automaticamente ao responsável da área.

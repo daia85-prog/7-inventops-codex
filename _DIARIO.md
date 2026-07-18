@@ -3,6 +3,17 @@
 > Ler ao ABRIR a sessão (antes de varrer código). Atualizar ao FECHAR cada bloco.
 > Estado mais recente no topo. Regra de salvamento por bloco: ver CLAUDE.md.
 
+**✅ CICLO 18/07/2026 — PLANO INTEGRADO V17.8 CONCLUÍDO (LINHA CODEX)**
+
+- Nova aba Plano Integrado com 42 atividades iniciais distribuídas pelas 14 áreas.
+- Cada atividade possui WBS, entrega-pai, responsável, e-mail, dependência, prazo, evidência e impacto.
+- Dependências classificadas como paralelas, bloqueantes ou externas.
+- Criação testada: atividade “Validar plano de rollback do ambiente” vinculada automaticamente a Douglas Alves; total mudou de 42 para 43.
+- Governança testada: tentativa de concluir sem evidência permaneceu bloqueada com mensagem explícita.
+- Filtro Bloqueantes isolou corretamente “Executar testes de automação” em PLC.
+- Console do navegador validado sem erros.
+- Roadmap e apresentação por perfil atualizados para V17.8.
+
 **✅ CICLO 18/07/2026 — CENTRAL PMO V17.7 CONCLUÍDA (LINHA CODEX)**
 
 - Nova rota **Central PMO** na árvore operacional.
