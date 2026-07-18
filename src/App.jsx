@@ -20,6 +20,7 @@ import {
 } from "./FoundationModules";
 import { ProjectControlModal } from "./ProjectControlModal";
 import { DepartmentCockpit } from "./DepartmentCockpit";
+import { PmoControlTower } from "./PmoControlTower";
 
 const assetPath = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
@@ -86,6 +87,7 @@ const navGroups = [
   ]},
   { label: "OPERAÇÃO", items: [
     { id: "portfolio", label: "Projetos", icon: FolderOpen, mobile: true },
+    { id: "pmo", label: "Central PMO", icon: BellRinging, mobile: true },
     { id: "cockpit", label: "Meu Departamento", icon: HandWaving, mobile: true },
     { id: "areas", label: "Áreas Técnicas", icon: UsersThree },
     { id: "alerts", label: "Smart Triage", icon: Warning },
@@ -112,6 +114,7 @@ const pageMeta = {
   analytics: ["Análise / BI", "Indicadores avançados e engajamento técnico."],
   executive: ["Relatório Executivo", "O portfólio consolidado em uma página."],
   portfolio: ["Controle de Projetos", "Planeje, acompanhe e cobre entregas em uma visão operacional."],
+  pmo: ["Central PMO", "A carteira inteira organizada por decisões, dependências e handoffs."],
   cockpit: ["Meu Departamento", "O bastão de cada área: entregas, esperas e handoffs com carimbo de hora."],
   project: ["Central do Projeto", "Fases, atividades, marcos, riscos e evidências em um único lugar."],
   simulator: ["Simulador de Impacto", "Antecipe riscos. Decida com confiança."],
@@ -382,9 +385,9 @@ export function App() {
   if(!authenticated)return <LoginScreen onLogin={login}/>;
   const allowed={
     Admin:"*",
-    Editor:["home","action","management","analytics","executive","portfolio","project","cockpit","areas","alerts","raid","simulator","commissioning","decision","evidence","presentation","lifecycle"],
+    Editor:["home","action","management","analytics","executive","portfolio","project","pmo","cockpit","areas","alerts","raid","simulator","commissioning","decision","evidence","presentation","lifecycle"],
     Analista:["home","action","portfolio","project","cockpit","areas","alerts","raid","commissioning","evidence","presentation"],
-    Viewer:["home","management","analytics","executive","portfolio","project","cockpit","areas","evidence","presentation","lifecycle"]
+    Viewer:["home","management","analytics","executive","portfolio","project","pmo","cockpit","areas","evidence","presentation","lifecycle"]
   };
   const canAccess=allowed[role]==="*"||allowed[role].includes(active);
   const pages={
@@ -392,6 +395,7 @@ export function App() {
     action:<ActionCenter notify={notify}/>,management:<ManagementPage/>,analytics:<AnalyticsPage/>,
     executive:<ExecutiveOnePager projects={projects} notify={notify}/>,
     portfolio:<PortfolioPage projects={projects} setProjects={setProjects} setActive={setActive} setSelectedProject={setSelectedProject} setProjectModalOpen={setProjectModalOpen} setImportedDemands={setImportedDemands} notify={notify}/>,
+    pmo:<PmoControlTower projects={projects} onOpenProject={project=>{setSelectedProject(project);setProjectModalOpen(true)}} notify={notify}/>,
     project:<ProjectWorkspace key={selectedProject.name} project={selectedProject} setActive={setActive} notify={notify}/>,
     cockpit:<DepartmentCockpit notify={notify} imported={importedDemands}/>,
     areas:<AreasPage/>,raid:<RaidPage/>,admin:<AdminGovernance role={role} setRole={setRole} notify={notify}/>,

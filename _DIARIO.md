@@ -3,6 +3,20 @@
 > Ler ao ABRIR a sessão (antes de varrer código). Atualizar ao FECHAR cada bloco.
 > Estado mais recente no topo. Regra de salvamento por bloco: ver CLAUDE.md.
 
+**✅ CICLO 18/07/2026 — CENTRAL PMO V17.7 CONCLUÍDA (LINHA CODEX)**
+
+- Nova rota **Central PMO** na árvore operacional.
+- Seis projetos e 84 entregas consolidados em uma fila única de governança.
+- Priorização por crítico, hoje, handoff, planejado e em validação.
+- Painel contextual liga decisão, dependência real, áreas impactadas, evidência e responsável corporativo.
+- Registro de cobrança testado: indicador prioritário mudou de 3 para 2 e a ação recebeu estado “Acompanhada”.
+- Abertura contextual testada: MARKET PERU abriu diretamente na Central do Projeto.
+- Radar de handoffs criado para mostrar a passagem do bastão entre áreas.
+- Briefing diário revisável criado com atalhos explícitos para copiar, WhatsApp e Outlook.
+- Roteiro de apresentação por perfil atualizado com Minha Operação, Central PMO e Entregas por Área.
+- Roadmap visual interno atualizado de V17.3 para V17.7.
+- Build de produção e console do navegador validados sem erros.
+
 **✅ CICLO 18/07/2026 — ENTREGAS POR ÁREA V17.6 CONCLUÍDA (LINHA CODEX)**
 
 - Nova aba **Entregas por área** dentro da Central do Projeto.

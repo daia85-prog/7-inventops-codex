@@ -18,3 +18,7 @@ As comparações futuras devem considerar resultado visual, clareza do fluxo, pr
 ### V17.6 — Entregas por Área
 
 A linha Codex passou a controlar a execução matricial dentro de cada projeto. As 14 áreas deixaram de ser apenas uma lista institucional e agora possuem entregas, responsáveis, prazos, evidências, dependências e handoffs demonstráveis. A interface diferencia dependência bloqueante de trabalho paralelo e impede conclusão sem evidência.
+
+### V17.7 — Central PMO
+
+As entregas detalhadas passaram a alimentar uma visão consolidada para o PMO. A nova central organiza a carteira por decisões, dependências, responsáveis, evidências e handoffs, permitindo registrar cobranças e abrir o projeto correspondente sem perder contexto.

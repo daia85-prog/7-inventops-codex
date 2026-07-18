@@ -142,4 +142,13 @@ com linha no §4._
 
 ---
 
+## 6. TRILHA CODEX PÓS-BASELINE
+
+| Release | Entrega | Critério de aceite | Estado |
+|---|---|---|---|
+| V17.6 | Entregas por Área | 14 áreas com responsável, prazo, evidência, dependência e handoff dentro de cada projeto | ✅ Build + jornada visual validados |
+| V17.7 | Central PMO | Carteira consolidada, cobrança rastreável e abertura contextual do projeto | ✅ Filtro, atualização de indicador, vínculo com projeto e console validados |
+
+---
+
 _Criado 12/07/2026 · vive junto do BLUEPRINT-P7.md · toda entrega ⬜→✅ só com aceite batido._

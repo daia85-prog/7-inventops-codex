@@ -50,22 +50,30 @@ const tones = {
 
 const emailFor = name => `${name.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g,".")}@invent-corp.com`;
 
-function initialDeliveries(project){
+export function createProjectDeliveries(project){
   if(project.departmentDeliveries?.length) return project.departmentDeliveries;
   return template.map(([area,delivery,status,progress,due,evidence,dependency,handoff],index)=>{
     const [department,owner]=directory[area];
+    const projectOffset=(project.progress||64)-64;
+    const adjustedProgress=Math.max(4,Math.min(100,Number(progress.replace("%",""))+projectOffset));
+    const isProjectBlocker=project.status==="Bloqueado"&&(
+      (project.name==="MARKET PERU"&&area==="INF")||
+      (project.name==="NAVEPARK"&&area==="INF")
+    );
     return {
       id:`${project.code}-${area}`,
-      area,department,owner,email:emailFor(owner),delivery,status,progress:Number(progress.replace("%","")),
+      area,department,owner,email:emailFor(owner),delivery,
+      status:isProjectBlocker?"Em risco":status,
+      progress:isProjectBlocker?Math.min(adjustedProgress,42):adjustedProgress,
       due,evidence,dependency,handoff,updated:index<4?"Hoje":index<10?"Ontem":"Planejado"
     };
   });
 }
 
 export function ProjectDeliveryMatrix({project,onUpdate,notify}){
-  const [deliveries,setDeliveries]=useState(()=>initialDeliveries(project));
+  const [deliveries,setDeliveries]=useState(()=>createProjectDeliveries(project));
   const [filter,setFilter]=useState("Todas");
-  const [selectedId,setSelectedId]=useState(()=>initialDeliveries(project)[0].id);
+  const [selectedId,setSelectedId]=useState(()=>createProjectDeliveries(project)[0].id);
   const selected=deliveries.find(item=>item.id===selectedId)||deliveries[0];
   const filtered=filter==="Todas"?deliveries:deliveries.filter(item=>filter==="Atenção"?["Em risco","Aguardando"].includes(item.status):item.status===filter);
   const summary=useMemo(()=>({

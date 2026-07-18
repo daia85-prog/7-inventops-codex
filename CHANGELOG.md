@@ -1,5 +1,18 @@
 # Changelog
 
+## V17.7 — Central PMO — 18/07/2026
+
+- Nova Central PMO consolidando as entregas críticas dos seis projetos em uma fila única de governança.
+- 84 entregas mapeadas com projeto, área, responsável, e-mail, prazo, evidência e dependência real.
+- Priorização por criticidade, ação do dia, handoff e planejamento.
+- Painel contextual mostra a decisão necessária, quem está esperando e qual evidência sustenta o progresso.
+- Registro de cobrança atualiza imediatamente a fila e o indicador de ações prioritárias.
+- Abertura direta do projeto vinculado, preservando o contexto entre portfólio e execução.
+- Radar de handoffs evidencia a passagem do bastão entre áreas sem criar bloqueios artificiais.
+- Briefing diário do PMO gerado com as decisões, handoffs e indicadores da fonte oficial, pronto para revisão no WhatsApp ou Outlook.
+- Apresentação por perfil atualizada para demonstrar a jornada real de Analista, Gestor e Diretor.
+- Roadmap interno atualizado para a release atual V17.7.
+
 ## V17.6 — Entregas por Área — 18/07/2026
 
 - Nova matriz operacional dentro de cada projeto, conectando as 14 áreas a entregas verificáveis.
