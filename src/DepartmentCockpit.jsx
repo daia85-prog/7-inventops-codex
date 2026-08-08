@@ -229,6 +229,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
   const [doneMap, setDoneMap] = useState({});
   const [feed, setFeed] = useState(FEED_SEED);
   const [selectedTrack, setSelectedTrack] = useState("");
+  const [handoffMap, setHandoffMap] = useState({});
   const area = AREAS.find((a) => a.code === dept);
   const pilotConfig = PILOT_DEPARTMENTS[dept];
   const isPilot = Boolean(pilotConfig);
@@ -279,6 +280,30 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
     const text = `${area.nome} · ${activeTrack.label}\n${activeTrack.summary}\n${activeTrack.items.map((item)=>`${item.done ? "✓" : "•"} ${item.label}`).join("\n")}\nHandoff: ${activeTrack.handoff}`;
     try { await navigator.clipboard.writeText(text); } catch {}
     notify(`Resumo de ${activeTrack.label} preparado para Daniel/Thomas revisar.`);
+  };
+
+  const trackCompleted = activeTrack ? activeTrack.items.every((item) => item.done) : false;
+  const trackHandoffDone = activeTrack ? Boolean(handoffMap[activeTrack.id]) : false;
+
+  const registerCharge = () => {
+    if (!activeTrack) return;
+    const pending = activeTrack.items.filter((item) => !item.done).map((item) => item.label);
+    const target = base.waiting[0];
+    if (target) {
+      notify(`Cobrança registrada para ${target.from === "Cliente" ? "cliente" : areaName(target.from)} sobre ${activeTrack.label}.`);
+      return;
+    }
+    notify(`Cobrança registrada para destravar ${activeTrack.label}: ${pending[0] || "sem pendência aberta"}.`);
+  };
+
+  const confirmHandoff = () => {
+    if (!activeTrack || !trackCompleted || trackHandoffDone) return;
+    const now = new Date();
+    const hh = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+    const stamp = `hoje · ${hh}`;
+    setHandoffMap((current) => ({ ...current, [activeTrack.id]: stamp }));
+    setFeed((current) => [{ t: stamp, from: dept, to: activeTrack.handoff.replace("Passagem para ", "").replace("Passagem de bastão ao time de ", ""), txt: `${activeTrack.label} confirmou ${activeTrack.handoff}` }, ...current]);
+    notify(`Handoff confirmado em ${activeTrack.label}.`);
   };
 
   return (
@@ -426,7 +451,11 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
               <h3>{activeTrack.label}</h3>
               <p>{activeTrack.summary}</p>
               <span>{activeTrack.handoff}</span>
-              <button className="ghost cockpit-track-action" type="button" onClick={copyTrackSummary}><ClipboardText />Copiar resumo do projeto</button>
+              <div className="cockpit-track-actions">
+                <button className="ghost cockpit-track-action" type="button" onClick={copyTrackSummary}><ClipboardText />Copiar resumo</button>
+                <button className="ghost cockpit-track-action" type="button" onClick={registerCharge}><Envelope />Registrar cobrança</button>
+                <button className="ghost cockpit-track-action" type="button" onClick={confirmHandoff} disabled={!trackCompleted || trackHandoffDone}><PaperPlaneTilt />{trackHandoffDone ? "Handoff confirmado" : "Confirmar handoff"}</button>
+              </div>
             </div>
             <div className="cockpit-track-list">
               {activeTrack.items.map((item) => (
