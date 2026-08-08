@@ -448,19 +448,34 @@ const LOGIN_SYNC_TEXT={
     preparing:"Preparando seu ambiente",
     subtitle:"Autenticando perfil, sincronizando contexto e carregando a sua visão operacional.",
     finalizing:"Consolidando contexto, validando permissões e abrindo sua visão executiva.",
-    steps:["Autenticando credenciais","Conectando departamentos","Sincronizando indicadores","Abrindo dashboard executivo"]
+    steps:[
+      {icon:"auth",label:"Autenticando credenciais"},
+      {icon:"departments",label:"Conectando departamentos"},
+      {icon:"indicators",label:"Sincronizando indicadores"},
+      {icon:"dashboard",label:"Abrindo dashboard executivo"}
+    ]
   },
   es:{
     preparing:"Preparando tu entorno",
     subtitle:"Autenticando perfil, sincronizando contexto y cargando tu visión operativa.",
     finalizing:"Consolidando contexto, validando permisos y abriendo tu visión ejecutiva.",
-    steps:["Autenticando credenciales","Conectando departamentos","Sincronizando indicadores","Abriendo panel ejecutivo"]
+    steps:[
+      {icon:"auth",label:"Autenticando credenciales"},
+      {icon:"departments",label:"Conectando departamentos"},
+      {icon:"indicators",label:"Sincronizando indicadores"},
+      {icon:"dashboard",label:"Abriendo panel ejecutivo"}
+    ]
   },
   en:{
     preparing:"Preparing your workspace",
     subtitle:"Authenticating your profile, syncing context, and loading your operational view.",
     finalizing:"Consolidating context, validating permissions, and opening your executive view.",
-    steps:["Authenticating credentials","Connecting departments","Syncing indicators","Opening executive dashboard"]
+    steps:[
+      {icon:"auth",label:"Authenticating credentials"},
+      {icon:"departments",label:"Connecting departments"},
+      {icon:"indicators",label:"Syncing indicators"},
+      {icon:"dashboard",label:"Opening executive dashboard"}
+    ]
   }
 };
 
@@ -475,6 +490,12 @@ export function LoginScreen({onLogin}){
   const [syncMessage,setSyncMessage]=useState("");
   const copy=LOGIN_TEXT[lang];
   const syncCopy=LOGIN_SYNC_TEXT[lang];
+  const syncIcons={
+    auth:LockKey,
+    departments:Buildings,
+    indicators:ChartLineUp,
+    dashboard:Gauge
+  };
   const trustSignals=[
     {value:"14",label:copy.pulseA},
     {value:"342",label:copy.pulseB},
@@ -573,7 +594,7 @@ export function LoginScreen({onLogin}){
         <footer><ShieldCheck/>{copy.footer}</footer>
       </form>
     </section>
-    {isSubmitting?<div className="login-transition-layer" role="status" aria-live="polite"><div className="login-transition-card"><div className="login-transition-mark"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt=""/><span><b>InventOps</b><small>ENTERPRISE</small></span></div><div className="login-transition-orb" aria-hidden="true"><i/><i/><i/></div><h3>{syncCopy.preparing}</h3><p>{syncMessage||syncCopy.subtitle}</p><div className="login-transition-progress"><i style={{width:`${progress}%`}}/></div><strong>{progress}%</strong><ul>{syncCopy.steps.map((step,index)=><li key={step} className={index<=syncStep?"done":""}><span>{index+1}</span><b>{step}</b></li>)}</ul></div></div>:null}
+    {isSubmitting?<div className="login-transition-layer" role="status" aria-live="polite"><div className="login-transition-card"><div className="login-transition-mark"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt=""/><span><b>InventOps</b><small>ENTERPRISE</small></span></div><div className="login-transition-orb" aria-hidden="true"><i/><i/><i/></div><h3>{syncCopy.preparing}</h3><p>{syncMessage||syncCopy.subtitle}</p><div className="login-transition-progress"><i style={{width:`${progress}%`}}/></div><strong>{progress}%</strong><ul>{syncCopy.steps.map((step,index)=>{const StepIcon=syncIcons[step.icon]||MonitorPlay;return <li key={step.label} className={index<=syncStep?"done":""}><span><StepIcon weight="bold"/></span><b>{step.label}</b></li>})}</ul></div></div>:null}
   </main>;
 }
 

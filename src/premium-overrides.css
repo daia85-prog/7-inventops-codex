@@ -410,7 +410,7 @@
   position:relative;
   width:min(590px,100%);
   aspect-ratio:1/1;
-  margin:88px 0 0 118px;
+  margin:132px 0 0 118px;
   max-height:336px;
   transform:scale(.9);
   transform-origin:center left;
@@ -671,7 +671,7 @@
 
 .login-transition-card li{
   display:grid;
-  grid-template-columns:30px 1fr;
+  grid-template-columns:40px 1fr;
   align-items:center;
   gap:10px;
   padding:10px 12px;
@@ -685,13 +685,19 @@
 }
 
 .login-transition-card li span{
-  width:30px;
-  height:30px;
+  width:40px;
+  height:40px;
   border-radius:10px;
   display:grid;
   place-items:center;
   background:#111f31;
+  color:#89cfff;
   font:800 11px Sora;
+}
+
+.login-transition-card li span svg{
+  width:18px;
+  height:18px;
 }
 
 .login-transition-card li b{
@@ -1007,7 +1013,7 @@
   .ecosystem-orbit{
     max-height:278px;
     transform:scale(.76);
-    margin:72px 0 0 72px;
+    margin:102px 0 0 72px;
   }
 
   .ecosystem-orbit > span{
@@ -1049,7 +1055,7 @@
   .ecosystem-orbit{
     max-height:248px;
     transform:scale(.72);
-    margin:52px 0 0 68px;
+    margin:78px 0 0 68px;
   }
 
   .login-pulse.compact{
@@ -1074,7 +1080,7 @@
   .ecosystem-orbit{
     max-height:220px;
     transform:scale(.66);
-    margin:44px 0 0 54px;
+    margin:66px 0 0 54px;
   }
 
   .login-pulse.compact{
