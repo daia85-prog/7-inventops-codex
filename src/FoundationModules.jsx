@@ -2,7 +2,7 @@
 import {
   ArrowRight, BellRinging, Buildings, CalendarBlank, ChartLineUp,
   CheckCircle, CheckSquare, ClipboardText, ClockCountdown, Database, Envelope,
-  Factory, FileText, FlagCheckered, Gauge, GitCommit, LockKey, Play, Printer,
+  Factory, FileText, FlagCheckered, Gauge, GitCommit, LockKey, MonitorPlay, Play, Printer,
   RocketLaunch, ShieldCheck, Sparkle, TrendUp, UserGear, UsersThree, Warning,
   WhatsappLogo, XCircle
 } from "@phosphor-icons/react";
