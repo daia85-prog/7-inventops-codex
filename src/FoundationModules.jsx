@@ -242,14 +242,49 @@ const LOGIN_TEXT={
   }
 };
 
+const LOGIN_SYNC_TEXT={
+  pt:{
+    preparing:"Preparando seu ambiente",
+    subtitle:"Autenticando perfil, sincronizando contexto e carregando a sua visão operacional.",
+    steps:["Autenticando credenciais","Conectando departamentos","Sincronizando indicadores","Abrindo dashboard executivo"]
+  },
+  es:{
+    preparing:"Preparando tu entorno",
+    subtitle:"Autenticando perfil, sincronizando contexto y cargando tu visión operativa.",
+    steps:["Autenticando credenciales","Conectando departamentos","Sincronizando indicadores","Abriendo panel ejecutivo"]
+  },
+  en:{
+    preparing:"Preparing your workspace",
+    subtitle:"Authenticating your profile, syncing context, and loading your operational view.",
+    steps:["Authenticating credentials","Connecting departments","Syncing indicators","Opening executive dashboard"]
+  }
+};
+
 export function LoginScreen({onLogin}){
   const [email,setEmail]=useState("douglas.alves@invent-corp.com");
   const [password,setPassword]=useState("inventops2026");
   const [showDemo,setShowDemo]=useState(false);
   const [lang,setLang]=useState("pt");
+  const [isSubmitting,setIsSubmitting]=useState(false);
+  const [syncStep,setSyncStep]=useState(0);
+  const [progress,setProgress]=useState(12);
   const copy=LOGIN_TEXT[lang];
-  const submit=e=>{e.preventDefault();if(email&&password)onLogin(email)};
-  return <main className="login-screen premium-login-grid"><div className="login-global-topbar"><div className="lang-switch login-lang global" role="group" aria-label="Idioma">{["pt","es","en"].map(option=><button key={option} className={lang===option?"active":""} aria-pressed={lang===option} onClick={()=>setLang(option)}>{option==="pt"?"PT-BR":option.toUpperCase()}</button>)}</div></div><div className="login-visual ecosystem-visual"><div className="login-brand"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt="InventOps"/><span><b>Invent<span>Ops</span></b><small>OPERATIONS INTELLIGENCE</small></span></div><div className="ecosystem-copy"><small>{copy.eyebrow}</small><h1><span>{copy.titleTop}</span><span>{copy.titleBottom}</span></h1><p>{copy.subtitle}</p></div><div className="ecosystem-orbit" aria-hidden="true">{LOGIN_DEPARTMENTS.map((department,index)=><span key={department} style={{"--i":index}}>{department.split("\n").map((part,partIndex)=><strong key={`${department}-${partIndex}`}>{part}</strong>)}</span>)}<div className="ecosystem-core"><b>InventOps</b><small>ENTERPRISE</small></div></div><div className="login-pulse compact"><span><Factory/><b>128</b><small>{copy.pulseA}</small></span><span><ClipboardText/><b>342</b><small>{copy.pulseB}</small></span><span><UsersThree/><b>1.247</b><small>{copy.pulseC}</small></span><span><MonitorPlay/><b>23</b><small>{copy.pulseD}</small></span></div></div><section className="login-panel premium-panel"><form onSubmit={submit}><div className="login-mobile-brand"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt=""/><b>Invent<span>Ops</span></b></div><small>{copy.secure}</small><p>{copy.welcome}</p><h3>InventOps Enterprise</h3><p>{copy.body}</p><label>{copy.email}<input type="email" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus/></label><label>{copy.password}<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required/></label><div className="login-options"><label><input type="checkbox"/> {copy.keep}</label><button type="button" onClick={()=>setShowDemo(!showDemo)}>{copy.demo}</button></div>{showDemo?<div className="demo-credentials"><b>{copy.demoTitle}</b><span>{copy.demoBody}</span><small>{copy.demoFoot}</small></div>:null}<div className="login-support-row"><span>{copy.forgot}</span></div><button className="primary" type="submit">{copy.enter}<ArrowRight/></button><div className="sso-divider"><span>{copy.or}</span></div><button className="sso-button" type="button" onClick={()=>onLogin("douglas.alves@invent-corp.com")}><span>M</span>{copy.microsoft}</button><footer><ShieldCheck/>{copy.footer}</footer></form></section></main>;
+  const syncCopy=LOGIN_SYNC_TEXT[lang];
+  const runLogin=async(nextEmail)=>{
+    if(isSubmitting)return;
+    setIsSubmitting(true);
+    setSyncStep(0);
+    setProgress(12);
+    const checkpoints=[28,52,78,100];
+    for(let i=0;i<checkpoints.length;i+=1){
+      await new Promise(resolve=>window.setTimeout(resolve,i===0?340:420));
+      setSyncStep(i);
+      setProgress(checkpoints[i]);
+    }
+    await onLogin(nextEmail);
+  };
+  const submit=async e=>{e.preventDefault();if(email&&password)await runLogin(email)};
+  return <main className={`login-screen premium-login-grid ${isSubmitting?"is-authenticating":""}`}><div className="login-global-topbar"><div className="lang-switch login-lang global" role="group" aria-label="Idioma">{["pt","es","en"].map(option=><button key={option} className={lang===option?"active":""} aria-pressed={lang===option} onClick={()=>setLang(option)} disabled={isSubmitting}>{option==="pt"?"PT-BR":option.toUpperCase()}</button>)}</div></div><div className="login-visual ecosystem-visual"><div className="login-brand"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt="InventOps"/><span><b>Invent<span>Ops</span></b><small>OPERATIONS INTELLIGENCE</small></span></div><div className="ecosystem-copy"><small>{copy.eyebrow}</small><h1><span>{copy.titleTop}</span><span>{copy.titleBottom}</span></h1><p>{copy.subtitle}</p></div><div className="ecosystem-orbit" aria-hidden="true">{LOGIN_DEPARTMENTS.map((department,index)=><span key={department} style={{"--i":index}}>{department.split("\n").map((part,partIndex)=><strong key={`${department}-${partIndex}`}>{part}</strong>)}</span>)}<div className="ecosystem-core"><b>InventOps</b><small>ENTERPRISE</small></div></div><div className="login-pulse compact"><span><Factory/><b>128</b><small>{copy.pulseA}</small></span><span><ClipboardText/><b>342</b><small>{copy.pulseB}</small></span><span><UsersThree/><b>1.247</b><small>{copy.pulseC}</small></span><span><MonitorPlay/><b>23</b><small>{copy.pulseD}</small></span></div></div><section className="login-panel premium-panel"><form onSubmit={submit}><div className="login-mobile-brand"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt=""/><b>Invent<span>Ops</span></b></div><small>{copy.secure}</small><p>{copy.welcome}</p><h3>InventOps Enterprise</h3><p>{copy.body}</p><label>{copy.email}<input type="email" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus disabled={isSubmitting}/></label><label>{copy.password}<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required disabled={isSubmitting}/></label><div className="login-options"><label><input type="checkbox" disabled={isSubmitting}/> {copy.keep}</label><button type="button" onClick={()=>setShowDemo(!showDemo)} disabled={isSubmitting}>{copy.demo}</button></div>{showDemo?<div className="demo-credentials"><b>{copy.demoTitle}</b><span>{copy.demoBody}</span><small>{copy.demoFoot}</small></div>:null}<div className="login-support-row"><span>{copy.forgot}</span></div><button className="primary" type="submit" disabled={isSubmitting}>{isSubmitting?<><MonitorPlay/>Conectando...</>:<>{copy.enter}<ArrowRight/></>}</button><div className="sso-divider"><span>{copy.or}</span></div><button className="sso-button" type="button" onClick={()=>runLogin("douglas.alves@invent-corp.com")} disabled={isSubmitting}><span>M</span>{copy.microsoft}</button><footer><ShieldCheck/>{copy.footer}</footer></form></section>{isSubmitting?<div className="login-transition-layer" role="status" aria-live="polite"><div className="login-transition-card"><div className="login-transition-mark"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt=""/><span><b>InventOps</b><small>ENTERPRISE</small></span></div><h3>{syncCopy.preparing}</h3><p>{syncCopy.subtitle}</p><div className="login-transition-progress"><i style={{width:`${progress}%`}}/></div><strong>{progress}%</strong><ul>{syncCopy.steps.map((step,index)=><li key={step} className={index<=syncStep?"done":""}><span>{index+1}</span><b>{step}</b></li>)}</ul></div></div>:null}</main>;
 }
 
 export function StatusReportModal({project,onClose,notify}){
