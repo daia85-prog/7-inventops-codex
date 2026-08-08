@@ -383,6 +383,31 @@
   display:flex;
   flex-direction:column;
   gap:14px;
+  position:relative;
+  overflow:hidden;
+}
+
+.login-transition-card::before{
+  content:"";
+  position:absolute;
+  inset:-35% auto auto -15%;
+  width:260px;
+  height:260px;
+  border-radius:999px;
+  background:radial-gradient(circle,rgba(108,104,255,.22),rgba(108,104,255,0));
+  filter:blur(8px);
+  animation:transitionGlow 4.4s ease-in-out infinite;
+  pointer-events:none;
+}
+
+.login-transition-card::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(115deg,transparent 0%,rgba(255,255,255,.06) 48%,transparent 65%);
+  transform:translateX(-120%);
+  animation:transitionSheen 3.4s ease-in-out infinite;
+  pointer-events:none;
 }
 
 .login-transition-mark{
@@ -438,7 +463,16 @@
   border-radius:inherit;
   background:linear-gradient(90deg,#53d8ff,#8f73ff 62%,#f7c53a);
   box-shadow:0 0 22px rgba(83,216,255,.38);
-  transition:width .28s ease;
+  transition:width .72s cubic-bezier(.22,1,.36,1);
+  position:relative;
+}
+
+.login-transition-progress i::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.46),transparent);
+  animation:progressSweep 1.9s linear infinite;
 }
 
 .login-transition-card strong{
@@ -465,6 +499,8 @@
   background:rgba(10,21,36,.72);
   color:#73859b;
   transition:.22s ease;
+  position:relative;
+  overflow:hidden;
 }
 
 .login-transition-card li span{
@@ -485,12 +521,40 @@
   border-color:rgba(96,214,186,.28);
   background:linear-gradient(90deg,rgba(9,32,33,.92),rgba(10,22,38,.88));
   color:#eaf5ff;
+  box-shadow:0 0 18px rgba(104,217,162,.08);
 }
 
 .login-transition-card li.done span{
   background:linear-gradient(135deg,#102f2a,#18453d);
   color:#68d9a2;
   box-shadow:0 0 16px rgba(104,217,162,.14);
+}
+
+.login-transition-card li:last-child.done{
+  border-color:rgba(247,197,58,.34);
+  background:linear-gradient(90deg,rgba(39,30,7,.94),rgba(13,22,38,.9));
+  box-shadow:0 0 24px rgba(247,197,58,.14);
+}
+
+.login-transition-card li:last-child.done span{
+  background:linear-gradient(135deg,#3a2b09,#5f4810);
+  color:#ffd86a;
+  box-shadow:0 0 22px rgba(247,197,58,.2);
+}
+
+@keyframes transitionGlow{
+  0%,100%{transform:scale(.92);opacity:.52}
+  50%{transform:scale(1.08);opacity:.9}
+}
+
+@keyframes transitionSheen{
+  0%,38%{transform:translateX(-120%)}
+  60%,100%{transform:translateX(135%)}
+}
+
+@keyframes progressSweep{
+  from{transform:translateX(-100%)}
+  to{transform:translateX(100%)}
 }
 
 .login-pulse.compact > span{

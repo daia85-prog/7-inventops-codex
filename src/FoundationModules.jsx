@@ -246,16 +246,19 @@ const LOGIN_SYNC_TEXT={
   pt:{
     preparing:"Preparando seu ambiente",
     subtitle:"Autenticando perfil, sincronizando contexto e carregando a sua visão operacional.",
+    finalizing:"Consolidando contexto, validando permissões e abrindo sua visão executiva.",
     steps:["Autenticando credenciais","Conectando departamentos","Sincronizando indicadores","Abrindo dashboard executivo"]
   },
   es:{
     preparing:"Preparando tu entorno",
     subtitle:"Autenticando perfil, sincronizando contexto y cargando tu visión operativa.",
+    finalizing:"Consolidando contexto, validando permisos y abriendo tu visión ejecutiva.",
     steps:["Autenticando credenciales","Conectando departamentos","Sincronizando indicadores","Abriendo panel ejecutivo"]
   },
   en:{
     preparing:"Preparing your workspace",
     subtitle:"Authenticating your profile, syncing context, and loading your operational view.",
+    finalizing:"Consolidating context, validating permissions, and opening your executive view.",
     steps:["Authenticating credentials","Connecting departments","Syncing indicators","Opening executive dashboard"]
   }
 };
@@ -268,6 +271,7 @@ export function LoginScreen({onLogin}){
   const [isSubmitting,setIsSubmitting]=useState(false);
   const [syncStep,setSyncStep]=useState(0);
   const [progress,setProgress]=useState(12);
+  const [syncMessage,setSyncMessage]=useState("");
   const copy=LOGIN_TEXT[lang];
   const syncCopy=LOGIN_SYNC_TEXT[lang];
   const runLogin=async(nextEmail)=>{
@@ -275,16 +279,26 @@ export function LoginScreen({onLogin}){
     setIsSubmitting(true);
     setSyncStep(0);
     setProgress(12);
-    const checkpoints=[28,52,78,100];
-    for(let i=0;i<checkpoints.length;i+=1){
-      await new Promise(resolve=>window.setTimeout(resolve,i===0?340:420));
-      setSyncStep(i);
-      setProgress(checkpoints[i]);
+    setSyncMessage(syncCopy.subtitle);
+    const timeline=[
+      {step:0,progress:20,wait:560},
+      {step:1,progress:42,wait:760},
+      {step:2,progress:66,wait:980},
+      {step:3,progress:82,wait:1260},
+      {step:3,progress:93,wait:960,message:syncCopy.finalizing},
+      {step:3,progress:100,wait:1080,message:syncCopy.finalizing}
+    ];
+    for(const entry of timeline){
+      await new Promise(resolve=>window.setTimeout(resolve,entry.wait));
+      setSyncStep(entry.step);
+      setProgress(entry.progress);
+      if(entry.message)setSyncMessage(entry.message);
     }
+    await new Promise(resolve=>window.setTimeout(resolve,900));
     await onLogin(nextEmail);
   };
   const submit=async e=>{e.preventDefault();if(email&&password)await runLogin(email)};
-  return <main className={`login-screen premium-login-grid ${isSubmitting?"is-authenticating":""}`}><div className="login-global-topbar"><div className="lang-switch login-lang global" role="group" aria-label="Idioma">{["pt","es","en"].map(option=><button key={option} className={lang===option?"active":""} aria-pressed={lang===option} onClick={()=>setLang(option)} disabled={isSubmitting}>{option==="pt"?"PT-BR":option.toUpperCase()}</button>)}</div></div><div className="login-visual ecosystem-visual"><div className="login-brand"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt="InventOps"/><span><b>Invent<span>Ops</span></b><small>OPERATIONS INTELLIGENCE</small></span></div><div className="ecosystem-copy"><small>{copy.eyebrow}</small><h1><span>{copy.titleTop}</span><span>{copy.titleBottom}</span></h1><p>{copy.subtitle}</p></div><div className="ecosystem-orbit" aria-hidden="true">{LOGIN_DEPARTMENTS.map((department,index)=><span key={department} style={{"--i":index}}>{department.split("\n").map((part,partIndex)=><strong key={`${department}-${partIndex}`}>{part}</strong>)}</span>)}<div className="ecosystem-core"><b>InventOps</b><small>ENTERPRISE</small></div></div><div className="login-pulse compact"><span><Factory/><b>128</b><small>{copy.pulseA}</small></span><span><ClipboardText/><b>342</b><small>{copy.pulseB}</small></span><span><UsersThree/><b>1.247</b><small>{copy.pulseC}</small></span><span><MonitorPlay/><b>23</b><small>{copy.pulseD}</small></span></div></div><section className="login-panel premium-panel"><form onSubmit={submit}><div className="login-mobile-brand"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt=""/><b>Invent<span>Ops</span></b></div><small>{copy.secure}</small><p>{copy.welcome}</p><h3>InventOps Enterprise</h3><p>{copy.body}</p><label>{copy.email}<input type="email" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus disabled={isSubmitting}/></label><label>{copy.password}<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required disabled={isSubmitting}/></label><div className="login-options"><label><input type="checkbox" disabled={isSubmitting}/> {copy.keep}</label><button type="button" onClick={()=>setShowDemo(!showDemo)} disabled={isSubmitting}>{copy.demo}</button></div>{showDemo?<div className="demo-credentials"><b>{copy.demoTitle}</b><span>{copy.demoBody}</span><small>{copy.demoFoot}</small></div>:null}<div className="login-support-row"><span>{copy.forgot}</span></div><button className="primary" type="submit" disabled={isSubmitting}>{isSubmitting?<><MonitorPlay/>Conectando...</>:<>{copy.enter}<ArrowRight/></>}</button><div className="sso-divider"><span>{copy.or}</span></div><button className="sso-button" type="button" onClick={()=>runLogin("douglas.alves@invent-corp.com")} disabled={isSubmitting}><span>M</span>{copy.microsoft}</button><footer><ShieldCheck/>{copy.footer}</footer></form></section>{isSubmitting?<div className="login-transition-layer" role="status" aria-live="polite"><div className="login-transition-card"><div className="login-transition-mark"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt=""/><span><b>InventOps</b><small>ENTERPRISE</small></span></div><h3>{syncCopy.preparing}</h3><p>{syncCopy.subtitle}</p><div className="login-transition-progress"><i style={{width:`${progress}%`}}/></div><strong>{progress}%</strong><ul>{syncCopy.steps.map((step,index)=><li key={step} className={index<=syncStep?"done":""}><span>{index+1}</span><b>{step}</b></li>)}</ul></div></div>:null}</main>;
+  return <main className={`login-screen premium-login-grid ${isSubmitting?"is-authenticating":""}`}><div className="login-global-topbar"><div className="lang-switch login-lang global" role="group" aria-label="Idioma">{["pt","es","en"].map(option=><button key={option} className={lang===option?"active":""} aria-pressed={lang===option} onClick={()=>setLang(option)} disabled={isSubmitting}>{option==="pt"?"PT-BR":option.toUpperCase()}</button>)}</div></div><div className="login-visual ecosystem-visual"><div className="login-brand"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt="InventOps"/><span><b>Invent<span>Ops</span></b><small>OPERATIONS INTELLIGENCE</small></span></div><div className="ecosystem-copy"><small>{copy.eyebrow}</small><h1><span>{copy.titleTop}</span><span>{copy.titleBottom}</span></h1><p>{copy.subtitle}</p></div><div className="ecosystem-orbit" aria-hidden="true">{LOGIN_DEPARTMENTS.map((department,index)=><span key={department} style={{"--i":index}}>{department.split("\n").map((part,partIndex)=><strong key={`${department}-${partIndex}`}>{part}</strong>)}</span>)}<div className="ecosystem-core"><b>InventOps</b><small>ENTERPRISE</small></div></div><div className="login-pulse compact"><span><Factory/><b>128</b><small>{copy.pulseA}</small></span><span><ClipboardText/><b>342</b><small>{copy.pulseB}</small></span><span><UsersThree/><b>1.247</b><small>{copy.pulseC}</small></span><span><MonitorPlay/><b>23</b><small>{copy.pulseD}</small></span></div></div><section className="login-panel premium-panel"><form onSubmit={submit}><div className="login-mobile-brand"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt=""/><b>Invent<span>Ops</span></b></div><small>{copy.secure}</small><p>{copy.welcome}</p><h3>InventOps Enterprise</h3><p>{copy.body}</p><label>{copy.email}<input type="email" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus disabled={isSubmitting}/></label><label>{copy.password}<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required disabled={isSubmitting}/></label><div className="login-options"><label><input type="checkbox" disabled={isSubmitting}/> {copy.keep}</label><button type="button" onClick={()=>setShowDemo(!showDemo)} disabled={isSubmitting}>{copy.demo}</button></div>{showDemo?<div className="demo-credentials"><b>{copy.demoTitle}</b><span>{copy.demoBody}</span><small>{copy.demoFoot}</small></div>:null}<div className="login-support-row"><span>{copy.forgot}</span></div><button className="primary" type="submit" disabled={isSubmitting}>{isSubmitting?<><MonitorPlay/>Conectando...</>:<>{copy.enter}<ArrowRight/></>}</button><div className="sso-divider"><span>{copy.or}</span></div><button className="sso-button" type="button" onClick={()=>runLogin("douglas.alves@invent-corp.com")} disabled={isSubmitting}><span>M</span>{copy.microsoft}</button><footer><ShieldCheck/>{copy.footer}</footer></form></section>{isSubmitting?<div className="login-transition-layer" role="status" aria-live="polite"><div className="login-transition-card"><div className="login-transition-mark"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt=""/><span><b>InventOps</b><small>ENTERPRISE</small></span></div><h3>{syncCopy.preparing}</h3><p>{syncMessage||syncCopy.subtitle}</p><div className="login-transition-progress"><i style={{width:`${progress}%`}}/></div><strong>{progress}%</strong><ul>{syncCopy.steps.map((step,index)=><li key={step} className={index<=syncStep?"done":""}><span>{index+1}</span><b>{step}</b></li>)}</ul></div></div>:null}</main>;
 }
 
 export function StatusReportModal({project,onClose,notify}){
