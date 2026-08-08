@@ -167,7 +167,8 @@ const LOGIN_DEPARTMENTS=["Pós-vendas","Comercial","PM","PCP","Compras","Eng. Me
 const LOGIN_TEXT={
   pt:{
     eyebrow:"VISÃO UNIFICADA · 14 ÁREAS",
-    title:"Um ecossistema integrado. Um só propósito.",
+    titleTop:"Um ecossistema integrado.",
+    titleBottom:"Um só propósito.",
     subtitle:"Conecte departamentos, projetos, solicitações e decisões em uma única operação auditável.",
     secure:"ACESSO SEGURO",
     welcome:"Bem-vinda de volta",
@@ -191,7 +192,8 @@ const LOGIN_TEXT={
   },
   es:{
     eyebrow:"VISIÓN UNIFICADA · 14 ÁREAS",
-    title:"Un ecosistema integrado. Un solo propósito.",
+    titleTop:"Un ecosistema integrado.",
+    titleBottom:"Un solo propósito.",
     subtitle:"Conecta departamentos, proyectos, solicitudes y decisiones en una sola operación auditable.",
     secure:"ACCESO SEGURO",
     welcome:"Bienvenida de nuevo",
@@ -215,7 +217,8 @@ const LOGIN_TEXT={
   },
   en:{
     eyebrow:"UNIFIED VIEW · 14 AREAS",
-    title:"One connected ecosystem. One shared purpose.",
+    titleTop:"One connected ecosystem.",
+    titleBottom:"One shared purpose.",
     subtitle:"Connect departments, projects, requests, and decisions in a single auditable operation.",
     secure:"SECURE ACCESS",
     welcome:"Welcome back",
@@ -246,7 +249,7 @@ export function LoginScreen({onLogin}){
   const [lang,setLang]=useState("pt");
   const copy=LOGIN_TEXT[lang];
   const submit=e=>{e.preventDefault();if(email&&password)onLogin(email)};
-  return <main className="login-screen premium-login-grid"><div className="login-visual ecosystem-visual"><div className="login-brand"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt="InventOps"/><span><b>Invent<span>Ops</span></b><small>OPERATIONS INTELLIGENCE</small></span></div><div className="ecosystem-copy"><small>{copy.eyebrow}</small><h1>{copy.title}</h1><p>{copy.subtitle}</p></div><div className="ecosystem-orbit" aria-hidden="true">{LOGIN_DEPARTMENTS.map((department,index)=><span key={department} style={{"--i":index}}>{department}</span>)}<div className="ecosystem-core"><b>InventOps</b><small>ENTERPRISE</small></div></div><div className="login-pulse compact"><span><Factory/><b>128</b><small>{copy.pulseA}</small></span><span><ClipboardText/><b>342</b><small>{copy.pulseB}</small></span><span><UsersThree/><b>1.247</b><small>{copy.pulseC}</small></span><span><MonitorPlay/><b>23</b><small>{copy.pulseD}</small></span></div></div><section className="login-panel premium-panel"><div className="lang-switch login-lang strong" role="group" aria-label="Idioma">{["pt","es","en"].map(option=><button key={option} className={lang===option?"active":""} aria-pressed={lang===option} onClick={()=>setLang(option)}>{option.toUpperCase()}</button>)}</div><form onSubmit={submit}><div className="login-mobile-brand"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt=""/><b>Invent<span>Ops</span></b></div><small>{copy.secure}</small><p>{copy.welcome}</p><h3>InventOps Enterprise</h3><p>{copy.body}</p><label>{copy.email}<input type="email" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus/></label><label>{copy.password}<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required/></label><div className="login-options"><label><input type="checkbox"/> {copy.keep}</label><button type="button" onClick={()=>setShowDemo(!showDemo)}>{copy.demo}</button></div>{showDemo?<div className="demo-credentials"><b>{copy.demoTitle}</b><span>{copy.demoBody}</span><small>{copy.demoFoot}</small></div>:null}<div className="login-support-row"><span>{copy.forgot}</span></div><button className="primary" type="submit">{copy.enter}<ArrowRight/></button><div className="sso-divider"><span>{copy.or}</span></div><button className="sso-button" type="button" onClick={()=>onLogin("douglas.alves@invent-corp.com")}><span>M</span>{copy.microsoft}</button><footer><ShieldCheck/>{copy.footer}</footer></form></section></main>;
+  return <main className="login-screen premium-login-grid"><div className="login-global-topbar"><div className="lang-switch login-lang global" role="group" aria-label="Idioma">{["pt","es","en"].map(option=><button key={option} className={lang===option?"active":""} aria-pressed={lang===option} onClick={()=>setLang(option)}>{option==="pt"?"PT-BR":option.toUpperCase()}</button>)}</div></div><div className="login-visual ecosystem-visual"><div className="login-brand"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt="InventOps"/><span><b>Invent<span>Ops</span></b><small>OPERATIONS INTELLIGENCE</small></span></div><div className="ecosystem-copy"><small>{copy.eyebrow}</small><h1><span>{copy.titleTop}</span><span>{copy.titleBottom}</span></h1><p>{copy.subtitle}</p></div><div className="ecosystem-orbit" aria-hidden="true">{LOGIN_DEPARTMENTS.map((department,index)=><span key={department} style={{"--i":index}}>{department}</span>)}<div className="ecosystem-core"><b>InventOps</b><small>ENTERPRISE</small></div></div><div className="login-pulse compact"><span><Factory/><b>128</b><small>{copy.pulseA}</small></span><span><ClipboardText/><b>342</b><small>{copy.pulseB}</small></span><span><UsersThree/><b>1.247</b><small>{copy.pulseC}</small></span><span><MonitorPlay/><b>23</b><small>{copy.pulseD}</small></span></div></div><section className="login-panel premium-panel"><form onSubmit={submit}><div className="login-mobile-brand"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt=""/><b>Invent<span>Ops</span></b></div><small>{copy.secure}</small><p>{copy.welcome}</p><h3>InventOps Enterprise</h3><p>{copy.body}</p><label>{copy.email}<input type="email" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus/></label><label>{copy.password}<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required/></label><div className="login-options"><label><input type="checkbox"/> {copy.keep}</label><button type="button" onClick={()=>setShowDemo(!showDemo)}>{copy.demo}</button></div>{showDemo?<div className="demo-credentials"><b>{copy.demoTitle}</b><span>{copy.demoBody}</span><small>{copy.demoFoot}</small></div>:null}<div className="login-support-row"><span>{copy.forgot}</span></div><button className="primary" type="submit">{copy.enter}<ArrowRight/></button><div className="sso-divider"><span>{copy.or}</span></div><button className="sso-button" type="button" onClick={()=>onLogin("douglas.alves@invent-corp.com")}><span>M</span>{copy.microsoft}</button><footer><ShieldCheck/>{copy.footer}</footer></form></section></main>;
 }
 
 export function StatusReportModal({project,onClose,notify}){
@@ -262,4 +265,5 @@ export function StatusReportModal({project,onClose,notify}){
 export function AccessDenied({setActive}){
   return <section className="page access-denied"><LockKey/><small>ACESSO RESTRITO Â· 403</small><h2>Este perfil nÃ£o pode acessar este mÃ³dulo.</h2><p>A polÃ­tica de acesso foi aplicada antes da abertura da pÃ¡gina. Solicite permissÃ£o a um administrador ou retorne ao dashboard.</p><button className="primary" onClick={()=>setActive("home")}>Voltar ao Dashboard</button></section>;
 }
+
 

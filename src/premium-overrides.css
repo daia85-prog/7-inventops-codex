@@ -9,7 +9,7 @@
 .login-visual{
   padding:42px 56px 34px;
   background:linear-gradient(180deg,rgba(4,9,20,.36),rgba(4,9,20,.82)),linear-gradient(135deg,#071224,#050b15);
-  border-right:1px solid rgba(124,145,173,.12);
+  border-right:0;
 }
 
 .login-visual::before{
@@ -164,6 +164,14 @@
   height:100vh;
   max-height:100vh;
   align-items:stretch;
+  position:relative;
+}
+
+.login-global-topbar{
+  position:absolute;
+  top:18px;
+  right:24px;
+  z-index:4;
 }
 
 .ecosystem-visual{
@@ -192,13 +200,14 @@
 
 .ecosystem-orbit{
   position:relative;
-  width:min(500px,100%);
+  width:min(560px,100%);
   aspect-ratio:1/1;
   margin:0 auto;
-  max-height:288px;
-  transform:scale(.84);
+  max-height:320px;
+  transform:scale(.92);
   transform-origin:center;
   flex:0 0 auto;
+  filter:drop-shadow(0 0 22px rgba(96,127,255,.18));
 }
 
 .ecosystem-orbit::before,
@@ -217,37 +226,47 @@
     conic-gradient(
       from 0deg,
       rgba(83,216,255,0) 0deg,
-      rgba(83,216,255,.28) 18deg,
-      rgba(83,216,255,0) 36deg,
+      rgba(83,216,255,.58) 20deg,
+      rgba(83,216,255,0) 42deg,
       rgba(143,115,255,0) 90deg,
-      rgba(143,115,255,.24) 108deg,
-      rgba(143,115,255,0) 126deg,
+      rgba(143,115,255,.48) 112deg,
+      rgba(143,115,255,0) 134deg,
       rgba(83,216,255,0) 180deg,
-      rgba(83,216,255,.18) 198deg,
-      rgba(83,216,255,0) 216deg,
+      rgba(83,216,255,.42) 202deg,
+      rgba(83,216,255,0) 224deg,
       rgba(143,115,255,0) 270deg,
-      rgba(143,115,255,.22) 288deg,
-      rgba(143,115,255,0) 306deg
+      rgba(143,115,255,.5) 292deg,
+      rgba(143,115,255,0) 314deg
     );
   mask:radial-gradient(circle, transparent 58%, #000 59%, #000 61%, transparent 62%);
   -webkit-mask:radial-gradient(circle, transparent 58%, #000 59%, #000 61%, transparent 62%);
-  animation:connection-spin 10s linear infinite;
+  animation:connection-spin 6.8s linear infinite;
 }
 
 .ecosystem-orbit::before{
-  animation:orbit-pulse 4.2s ease-in-out infinite;
+  background:
+    radial-gradient(circle at center, rgba(83,216,255,.18), transparent 48%),
+    repeating-conic-gradient(
+      from 0deg,
+      rgba(113,163,255,.0) 0deg 20deg,
+      rgba(113,163,255,.18) 20deg 22deg,
+      rgba(143,115,255,.0) 22deg 40deg
+    );
+  mask:radial-gradient(circle, transparent 34%, #000 35%, #000 36%, transparent 37%);
+  -webkit-mask:radial-gradient(circle, transparent 34%, #000 35%, #000 36%, transparent 37%);
+  animation:orbit-pulse 2.8s ease-in-out infinite;
 }
 
 .ecosystem-orbit > span{
   position:absolute;
   left:50%;
   top:50%;
-  width:84px;
-  height:84px;
-  margin:-42px;
+  width:96px;
+  height:96px;
+  margin:-48px;
   transform:
     rotate(calc(var(--i) * 25.714deg))
-    translateY(-160px)
+    translateY(-172px)
     rotate(calc(var(--i) * -25.714deg));
   border:1px solid rgba(141,120,255,.46);
   border-radius:999px;
@@ -258,9 +277,9 @@
   text-align:center;
   padding:10px;
   color:#d7e0ee;
-  font:700 10.5px/1.16 Inter;
-  box-shadow:0 10px 30px rgba(0,0,0,.22);
-  animation:node-breathe 5.2s ease-in-out infinite;
+  font:700 11px/1.16 Inter;
+  box-shadow:0 10px 30px rgba(0,0,0,.22),0 0 14px rgba(143,115,255,.12);
+  animation:node-breathe 3.6s ease-in-out infinite;
   animation-delay:calc(var(--i) * .12s);
 }
 
@@ -268,9 +287,9 @@
   position:absolute;
   left:50%;
   top:50%;
-  width:132px;
-  height:132px;
-  margin:-66px;
+  width:142px;
+  height:142px;
+  margin:-71px;
   border-radius:50%;
   background:radial-gradient(circle at 35% 30%,#8f73ff,#5f35d6 58%,#34146b 100%);
   display:flex;
@@ -278,7 +297,7 @@
   align-items:center;
   justify-content:center;
   box-shadow:0 0 40px rgba(131,87,255,.45);
-  animation:core-bloom 4.6s ease-in-out infinite;
+  animation:core-bloom 3.1s ease-in-out infinite;
 }
 
 .ecosystem-core b{
@@ -331,6 +350,18 @@
 .login-lang.strong{
   justify-content:flex-end;
   margin:0 0 12px auto;
+}
+
+.login-lang.global{
+  margin:0;
+  background:rgba(7,18,33,.86);
+  border-color:rgba(125,142,170,.18);
+  backdrop-filter:blur(12px);
+  box-shadow:0 12px 26px rgba(0,0,0,.22);
+}
+
+.login-lang.global button{
+  min-width:68px;
 }
 
 .premium-panel{
@@ -390,13 +421,13 @@
 }
 
 @keyframes orbit-pulse{
-  0%,100%{box-shadow:0 0 0 rgba(95,216,255,0);opacity:.9}
-  50%{box-shadow:0 0 22px rgba(95,216,255,.12);opacity:1}
+  0%,100%{opacity:.76;filter:drop-shadow(0 0 0 rgba(95,216,255,0))}
+  50%{opacity:1;filter:drop-shadow(0 0 18px rgba(95,216,255,.38))}
 }
 
 @keyframes node-breathe{
-  0%,100%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-160px) rotate(calc(var(--i) * -25.714deg)) scale(1)}
-  50%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-160px) rotate(calc(var(--i) * -25.714deg)) scale(1.045)}
+  0%,100%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-172px) rotate(calc(var(--i) * -25.714deg)) scale(1)}
+  50%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-172px) rotate(calc(var(--i) * -25.714deg)) scale(1.08)}
 }
 
 @keyframes core-bloom{
@@ -410,25 +441,25 @@
   }
 
   .ecosystem-orbit{
-    max-height:260px;
-    transform:scale(.74);
+    max-height:278px;
+    transform:scale(.8);
   }
 
   .ecosystem-orbit > span{
-    width:74px;
-    height:74px;
-    margin:-37px;
+    width:82px;
+    height:82px;
+    margin:-41px;
     transform:
       rotate(calc(var(--i) * 25.714deg))
-      translateY(-136px)
+      translateY(-146px)
       rotate(calc(var(--i) * -25.714deg));
-    font-size:9px;
+    font-size:9.5px;
   }
 
   .ecosystem-core{
-    width:118px;
-    height:118px;
-    margin:-59px;
+    width:126px;
+    height:126px;
+    margin:-63px;
   }
 
   .ecosystem-copy h1{
@@ -447,7 +478,7 @@
 
   .ecosystem-orbit{
     max-height:248px;
-    transform:scale(.7);
+    transform:scale(.74);
   }
 
   .login-pulse.compact{
@@ -467,7 +498,7 @@
 
   .ecosystem-orbit{
     max-height:220px;
-    transform:scale(.62);
+    transform:scale(.66);
   }
 
   .login-pulse.compact{
@@ -479,6 +510,11 @@
 
   .premium-panel form{
     padding:18px 22px 14px;
+  }
+
+  .login-global-topbar{
+    top:14px;
+    right:18px;
   }
 
   .premium-panel form h3{
