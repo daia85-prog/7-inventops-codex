@@ -61,6 +61,18 @@ function Metric({icon:Icon,label,value,note,tone="cyan"}){
 export function ExecutiveDashboard({projects,setActive}){
   const health=Math.round(projects.reduce((sum,p)=>sum+p.health,0)/projects.length);
   const hotAreas=departments.filter(area=>area.load>=100).slice(0,3);
+  const coordinationNodes=[
+    {label:"Infraestrutura",className:"infra"},
+    {label:"Compras",className:"compras"},
+    {label:"Comercial",className:"comercial"},
+    {label:"Implantação",className:"implantacao"},
+    {label:"Produção",className:"producao"}
+  ];
+  const criticalRoute=[
+    ["Market Peru","VPN + range IP","Hoje"],
+    ["Titano","Sensor X + SAT","Próx. 18h"],
+    ["Navepark","VMs HML","14 jul"]
+  ];
   const decisionPulse=[
     {label:"Operação viva",value:"14 áreas conectadas",tone:"cyan"},
     {label:"Decisões hoje",value:"3 críticas",tone:"gold"},
@@ -92,6 +104,19 @@ export function ExecutiveDashboard({projects,setActive}){
           <button className="ghost" onClick={()=>setActive("decision")}><Sparkle/>Ver Decision Room</button>
         </div>
       </article>
+    </div>
+    <div className="foundation-grid equal executive-insight-grid">
+      <Panel title="Mapa de coordenação" subtitle="Quem precisa andar junto agora">
+        <div className="coordination-map">
+          {coordinationNodes.map(node=><span key={node.label} className={`coord-node ${node.className}`}>{node.label}</span>)}
+          <div className="coord-core"><b>PMO</b><small>núcleo da decisão</small></div>
+        </div>
+      </Panel>
+      <Panel title="Rota crítica da semana" subtitle="Os três movimentos que protegem a carteira">
+        <div className="critical-route-list">
+          {criticalRoute.map(([project,task,eta],index)=><button key={project} type="button" onClick={()=>setActive(index===0?"action":index===1?"alerts":"pmo")}><strong>{String(index+1).padStart(2,"0")}</strong><span><b>{project}</b><small>{task}</small></span><em>{eta}</em><ArrowRight/></button>)}
+        </div>
+      </Panel>
     </div>
     <div className="foundation-metrics"><Metric icon={Buildings} label="CARTEIRA" value={`${projects.length} projetos`} note="2 bloqueados"/><Metric icon={Warning} label="RISCO MATERIAL" value="R$ 1,8 mi" note="exposição estimada" tone="red"/><Metric icon={UsersThree} label="CAPACIDADE" value="117% PLC" note="pico em setembro" tone="yellow"/><Metric icon={FlagCheckered} label="GO LIVES" value="4 em 90d" note="2 confirmados" tone="green"/></div>
     <div className="foundation-grid two-one"><Panel title="Quem o COO deve cobrar hoje" subtitle="Priorização calculada por impacto, prazo e SLA"><div className="charge-list">{blockers.map((b,i)=><button key={b.project} onClick={()=>setActive(i===2?"alerts":"action")}><strong>0{i+1}</strong><span><b>{b.project}</b><small>{b.action}</small></span><em>{b.owner}</em><ArrowRight/></button>)}</div></Panel><Panel title="Pulso do portfólio" subtitle="Tendência dos últimos 30 dias"><div className="foundation-chart"><ResponsiveContainer><AreaChart data={trend}><defs><linearGradient id="healthFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#28c5e7" stopOpacity=".35"/><stop offset="1" stopColor="#28c5e7" stopOpacity="0"/></linearGradient></defs><CartesianGrid stroke="#17243a" vertical={false}/><XAxis dataKey="day" tick={{fontSize:9}} stroke="#66758c"/><YAxis domain={[40,100]} tick={{fontSize:9}} stroke="#66758c"/><Tooltip/><Area dataKey="health" stroke="#28c5e7" fill="url(#healthFill)" strokeWidth={2}/></AreaChart></ResponsiveContainer></div></Panel></div>
