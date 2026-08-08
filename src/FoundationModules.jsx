@@ -192,6 +192,8 @@ export function RaidPage(){
 export function AdminGovernance({role,setRole,notify}){
   const roles={Admin:[1,1,1,1,1],Diretoria:[1,0,1,0,0],Gestor:[1,1,1,0,0],Analista:[1,1,0,0,0]};
   const permissions=["Visualizar","Editar operação","Gerenciar projetos","Administrar acessos","Configurar integrações"];
+  const [theme,setTheme]=useState("Escuro");
+  const [invite,setInvite]=useState({name:"",email:"",profile:"Analista",area:"Infraestrutura"});
   const roleMeta={
     Admin:{label:"Enterprise Admin",helper:"Controle total da plataforma e das integrações.",scope:"Administração, governança, acessos e regras centrais."},
     Diretoria:{label:"Diretoria · DIREX",helper:"Leitura executiva, decisão e priorização.",scope:"Visão consolidada, indicadores, riscos e decisões."},
@@ -203,12 +205,43 @@ export function AdminGovernance({role,setRole,notify}){
     ["Sessões auditáveis","100%","Toda ação crítica deixa trilha"],
     ["Regra central","RBAC + evidência","Capacidade correta para cada contexto"]
   ];
+  const sendInvite=(event)=>{
+    event.preventDefault();
+    notify(`Acesso preparado para ${invite.name||"novo usuário"} · perfil ${invite.profile} · área ${invite.area}.`);
+    setInvite({name:"",email:"",profile:"Analista",area:"Infraestrutura"});
+  };
   return <section className="page foundation-page">
     <div className="admin-banner"><ShieldCheck/><div><small>GOVERNANÇA DE ACESSO</small><h2>Permissão clara, ação auditável</h2><p>A demonstração aplica perfis na interface. Em produção, a mesma regra será validada novamente no servidor.</p></div><span><LockKey/>Sessão ativa</span></div>
     <div className="executive-command-strip">
       {governancePulse.map(item=><span key={item[0]}><small>{item[0]}</small><b>{item[1]}</b><em>{item[2]}</em></span>)}
     </div>
-    <div className="foundation-grid equal"><Panel title="Simular perfil de acesso" subtitle="Use na apresentação para demonstrar o RBAC"><div className="role-selector">{Object.keys(roles).map(r=><button className={role===r?"active":""} key={r} onClick={()=>{setRole(r);notify(`Perfil alterado para ${roleMeta[r].label}. A navegação foi recalculada.`)}}><UserGear/><span><b>{roleMeta[r].label}</b><small>{roleMeta[r].helper}</small></span></button>)}</div></Panel><Panel title="Regras obrigatórias" subtitle="Validações que protegem a qualidade do dado"><ul className="governance-rules"><li><CheckCircle/><span><b>Concluído = 100%</b><small>Sem atraso pendente ou atividade aberta.</small></span></li><li><CheckCircle/><span><b>Bloqueado exige plano</b><small>Categoria, responsável, próxima ação e data.</small></span></li><li><CheckCircle/><span><b>Importação transacional</b><small>Arquivo inválido não altera a base.</small></span></li><li><CheckCircle/><span><b>Link seguro do analista</b><small>Token expirável vinculado a e-mail e tarefa.</small></span></li></ul></Panel></div><div className="admin-role-overview">{Object.entries(roleMeta).map(([key,item])=><article key={key} className={role===key?"active":""}><small>VER COMO</small><b>{item.label}</b><p>{item.scope}</p><span>{role===key?"Perfil ativo":"Capacidade disponível"}</span></article>)}</div><Panel title="Matriz de permissões" subtitle="Rotas e ações por perfil"><div className="permission-table"><header><span>Permissão</span>{Object.keys(roles).map(r=><span key={r}>{r==="Diretoria"?"DIREX":r}</span>)}</header>{permissions.map((p,i)=><div key={p}><b>{p}</b>{Object.keys(roles).map(r=><span key={r}>{roles[r][i]?<CheckCircle/>:<XCircle/>}</span>)}</div>)}</div></Panel><Panel title="Trilha de auditoria" subtitle="Quem fez o quê, quando e sobre qual registro"><div className="audit-log">{[["21:38","Douglas","Alterou prazo do Go Live","TITANO"],["20:54","Daiana Costa","Anexou evidência REV4","QUELUZ"],["19:42","Sistema IoT","Criou alerta P0","TITANO"],["18:17","Ivan","Atualizou bloqueio de VPN","MARKET PERU"]].map(x=><div key={x.join()}><span>{x[0]}</span><b>{x[1]}</b><p>{x[2]}</p><em>{x[3]}</em></div>)}</div></Panel></section>;
+    <div className="foundation-grid equal">
+      <Panel title="Simular perfil de acesso" subtitle="Use na apresentação para demonstrar o RBAC"><div className="role-selector">{Object.keys(roles).map(r=><button className={role===r?"active":""} key={r} onClick={()=>{setRole(r);notify(`Perfil alterado para ${roleMeta[r].label}. A navegação foi recalculada.`)}}><UserGear/><span><b>{roleMeta[r].label}</b><small>{roleMeta[r].helper}</small></span></button>)}</div></Panel>
+      <Panel title="Regras obrigatórias" subtitle="Validações que protegem a qualidade do dado"><ul className="governance-rules"><li><CheckCircle/><span><b>Concluído = 100%</b><small>Sem atraso pendente ou atividade aberta.</small></span></li><li><CheckCircle/><span><b>Bloqueado exige plano</b><small>Categoria, responsável, próxima ação e data.</small></span></li><li><CheckCircle/><span><b>Importação transacional</b><small>Arquivo inválido não altera a base.</small></span></li><li><CheckCircle/><span><b>Link seguro do analista</b><small>Token expirável vinculado a e-mail e tarefa.</small></span></li></ul></Panel>
+    </div>
+    <div className="admin-role-overview">{Object.entries(roleMeta).map(([key,item])=><article key={key} className={role===key?"active":""}><small>VER COMO</small><b>{item.label}</b><p>{item.scope}</p><span>{role===key?"Perfil ativo":"Capacidade disponível"}</span></article>)}</div>
+    <div className="foundation-grid equal">
+      <Panel title="Novo acesso" subtitle="Quem entra e o que cada perfil pode fazer">
+        <form className="admin-access-form" onSubmit={sendInvite}>
+          <label><span>Nome</span><input value={invite.name} onChange={e=>setInvite({...invite,name:e.target.value})} placeholder="Ex.: Daniel Souza" required/></label>
+          <label><span>E-mail corporativo</span><input type="email" value={invite.email} onChange={e=>setInvite({...invite,email:e.target.value})} placeholder="nome@invent-corp.com" required/></label>
+          <div className="admin-access-row">
+            <label><span>Perfil</span><select value={invite.profile} onChange={e=>setInvite({...invite,profile:e.target.value})}>{Object.keys(roleMeta).map(key=><option key={key}>{key}</option>)}</select></label>
+            <label><span>Área</span><select value={invite.area} onChange={e=>setInvite({...invite,area:e.target.value})}>{["Infraestrutura","Implantação","Espec. de Software","WCS Velox","PMO"].map(item=><option key={item}>{item}</option>)}</select></label>
+          </div>
+          <div className="admin-access-note"><b>Permissão por capacidade</b><p>Cada perfil enxerga e faz só o que precisa. O usuário recebe o acesso conforme o papel e a área definidos acima.</p></div>
+          <button className="primary" type="submit"><Envelope/>Preparar acesso</button>
+        </form>
+      </Panel>
+      <Panel title="Tema da interface" subtitle="Modelo vindo do inventops79">
+        <div className="admin-theme-picker">
+          {["Escuro","Claro","Alto contraste"].map(option=><button key={option} className={theme===option?"active":""} onClick={()=>{setTheme(option);notify(`Tema visual alterado para ${option}.`)}}><b>{option}</b><small>{option==="Escuro"?"Padrão corporativo":option==="Claro"?"Ambiente claro para leitura":"Máximo contraste para validação"}</small></button>)}
+        </div>
+        <div className="admin-theme-state"><ShieldCheck/><span><small>TEMA ATIVO</small><b>{theme}</b></span></div>
+      </Panel>
+    </div>
+    <Panel title="Matriz de permissões" subtitle="Rotas e ações por perfil"><div className="permission-table"><header><span>Permissão</span>{Object.keys(roles).map(r=><span key={r}>{r==="Diretoria"?"DIREX":r}</span>)}</header>{permissions.map((p,i)=><div key={p}><b>{p}</b>{Object.keys(roles).map(r=><span key={r}>{roles[r][i]?<CheckCircle/>:<XCircle/>}</span>)}</div>)}</div></Panel>
+    <Panel title="Trilha de auditoria" subtitle="Quem fez o quê, quando e sobre qual registro"><div className="audit-log">{[["21:38","Douglas","Alterou prazo do Go Live","TITANO"],["20:54","Daiana Costa","Anexou evidência REV4","QUELUZ"],["19:42","Sistema IoT","Criou alerta P0","TITANO"],["18:17","Ivan","Atualizou bloqueio de VPN","MARKET PERU"]].map(x=><div key={x.join()}><span>{x[0]}</span><b>{x[1]}</b><p>{x[2]}</p><em>{x[3]}</em></div>)}</div></Panel></section>;
 }
 
 export function LifecyclePage(){
