@@ -146,12 +146,28 @@ const initialAlerts = [
 ];
 
 function Logo() {
-  return <div className="brand"><img src={assetPath("icon.svg")} alt="InventOps"/><div><strong>Invent<span>Ops</span></strong><small>PREDICTIVE TWIN</small></div></div>;
+  return <div className="brand"><img src={assetPath("icon.svg")} alt="InventOps"/><div><strong>Invent<span>Ops</span></strong><small>ENTERPRISE</small></div></div>;
 }
 
-function Sidebar({ active, setActive, alertCount, notify, role, onLogout }) {
+function Sidebar({ active, setActive, alertCount, notify, role, setRole, theme, setTheme, onLogout }) {
+  const themeOptions = ["Escuro","Claro","Contraste"];
+  const roleOptions = ["Analista","Gestor","Diretoria","Admin"];
   return <aside className="sidebar">
     <Logo/>
+    <div className="sidebar-controls">
+      <section className="sidebar-card">
+        <small>TEMA</small>
+        <div className="sidebar-segmented">
+          {themeOptions.map(option=><button key={option} className={theme===option?"active":""} onClick={()=>{setTheme(option);notify(`Tema alterado para ${option}.`)}}>{option}</button>)}
+        </div>
+      </section>
+      <section className="sidebar-card">
+        <small>VER COMO</small>
+        <div className="sidebar-role-switch">
+          {roleOptions.map(option=><button key={option} className={role===option?"active":""} onClick={()=>{setRole(option);notify(`Visualização alterada para ${option}.`)}}>{option==="Diretoria"?"Direx":option}</button>)}
+        </div>
+      </section>
+    </div>
     <nav>{navGroups.map(group=><div className="nav-group" key={group.label}><small>{group.label}</small>{group.items.map(({id,label,icon:Icon,mobile,adminOnly}) => {const isActive=active===id||(active==="project"&&id==="portfolio");const restricted=adminOnly&&role!=="Admin";return <button data-mobile={mobile?"true":"false"} key={id} aria-label={label} className={`${isActive?"active":""} ${restricted?"restricted":""}`} onClick={()=>restricted?notify("Acesso restrito ao perfil Admin."):setActive(id)}>
       <Icon size={19} weight={isActive?"fill":"regular"}/><span>{label}</span>{restricted?<LockKey size={12}/>:null}{id==="alerts"&&alertCount>0?<b>{alertCount}</b>:null}
     </button>})}</div>)}</nav>
@@ -442,6 +458,7 @@ export function App() {
   const [authenticated,setAuthenticated]=useState(()=>sessionStorage.getItem("inventops-demo-session")==="active");
   const [active,setActive]=useState("home");
   const [role,setRole]=useState("Admin");
+  const [theme,setTheme]=useState("Escuro");
   const [cockpitDept,setCockpitDept]=useState("INF");
   const [projects,setProjects]=useState(()=>{try{const saved=sessionStorage.getItem("inventops-projects-demo");return saved?JSON.parse(saved):portfolioData}catch{return portfolioData}});
   const [selectedProject,setSelectedProject]=useState(()=>projects[0]);
@@ -484,5 +501,5 @@ export function App() {
     evidence:<EvidencePage/>,settings:<SettingsPage/>
   };
   const page=canAccess?pages[active]:<AccessDenied setActive={setActive}/>;
-  return <div className="app-shell"><Sidebar active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} onLogout={logout}/><main className="workspace"><Topbar active={active} role={role} onLogout={logout} notify={notify}/><DemoJourneyRail active={active} setActive={setActive} />{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
+  return <div className="app-shell" data-theme={theme}><Sidebar active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} setRole={setRole} theme={theme} setTheme={setTheme} onLogout={logout}/><main className="workspace"><Topbar active={active} role={role} onLogout={logout} notify={notify}/><DemoJourneyRail active={active} setActive={setActive} />{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
 }
