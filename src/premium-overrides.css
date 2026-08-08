@@ -206,9 +206,9 @@
   position:relative;
   width:min(590px,100%);
   aspect-ratio:1/1;
-  margin:8px auto 0;
+  margin:26px auto 0;
   max-height:336px;
-  transform:scale(.98);
+  transform:scale(.94);
   transform-origin:center;
   flex:0 0 auto;
   filter:drop-shadow(0 0 22px rgba(96,127,255,.18));
@@ -265,12 +265,12 @@
   position:absolute;
   left:50%;
   top:50%;
-  width:102px;
-  height:102px;
-  margin:-51px;
+  width:98px;
+  height:98px;
+  margin:-49px;
   transform:
     rotate(calc(var(--i) * 25.714deg))
-    translateY(-180px)
+    translateY(-174px)
     rotate(calc(var(--i) * -25.714deg));
   border:1px solid rgba(141,120,255,.46);
   border-radius:999px;
@@ -439,8 +439,8 @@
 }
 
 @keyframes node-breathe{
-  0%,100%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-180px) rotate(calc(var(--i) * -25.714deg)) scale(1)}
-  50%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-180px) rotate(calc(var(--i) * -25.714deg)) scale(1.08)}
+  0%,100%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-174px) rotate(calc(var(--i) * -25.714deg)) scale(1)}
+  50%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-174px) rotate(calc(var(--i) * -25.714deg)) scale(1.08)}
 }
 
 @keyframes core-bloom{
@@ -455,7 +455,7 @@
 
   .ecosystem-orbit{
     max-height:278px;
-    transform:scale(.84);
+    transform:scale(.8);
   }
 
   .ecosystem-orbit > span{
@@ -464,7 +464,7 @@
     margin:-44px;
     transform:
       rotate(calc(var(--i) * 25.714deg))
-      translateY(-154px)
+      translateY(-148px)
       rotate(calc(var(--i) * -25.714deg));
     font-size:10px;
   }
@@ -491,7 +491,7 @@
 
   .ecosystem-orbit{
     max-height:248px;
-    transform:scale(.8);
+    transform:scale(.76);
   }
 
   .login-pulse.compact{
@@ -511,7 +511,7 @@
 
   .ecosystem-orbit{
     max-height:220px;
-    transform:scale(.72);
+    transform:scale(.68);
   }
 
   .login-pulse.compact{
