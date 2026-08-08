@@ -190,19 +190,19 @@ export function RaidPage(){
 }
 
 export function AdminGovernance({role,setRole,notify}){
-  const roles={Admin:[1,1,1,1,1],Editor:[1,1,1,0,0],Analista:[1,1,0,0,0],Viewer:[1,0,0,0,0]};
+  const roles={Admin:[1,1,1,1,1],Diretoria:[1,0,1,0,0],Gestor:[1,1,1,0,0],Analista:[1,1,0,0,0]};
   const permissions=["Visualizar","Editar operação","Gerenciar projetos","Administrar acessos","Configurar integrações"];
   const governancePulse=[
-    ["Perfis ativos","4 perfis","Admin · Editor · Analista · Viewer"],
+    ["Perfis ativos","4 perfis","Admin · Diretoria · Gestor · Analista"],
     ["Sessões auditáveis","100%","Toda ação crítica deixa trilha"],
-    ["Regra central","RBAC + evidência","Permissão e conclusão validáveis"]
+    ["Regra central","RBAC + evidência","Capacidade correta para cada contexto"]
   ];
   return <section className="page foundation-page">
     <div className="admin-banner"><ShieldCheck/><div><small>GOVERNANÇA DE ACESSO</small><h2>Permissão clara, ação auditável</h2><p>A demonstração aplica perfis na interface. Em produção, a mesma regra será validada novamente no servidor.</p></div><span><LockKey/>Sessão ativa</span></div>
     <div className="executive-command-strip">
       {governancePulse.map(item=><span key={item[0]}><small>{item[0]}</small><b>{item[1]}</b><em>{item[2]}</em></span>)}
     </div>
-    <div className="foundation-grid equal"><Panel title="Simular perfil de acesso" subtitle="Use na apresentação para demonstrar o RBAC"><div className="role-selector">{Object.keys(roles).map(r=><button className={role===r?"active":""} key={r} onClick={()=>{setRole(r);notify(`Perfil alterado para ${r}. A navegação foi recalculada.`)}}><UserGear/><span><b>{r}</b><small>{r==="Admin"?"Controle total":r==="Viewer"?"Somente leitura":"Acesso operacional"}</small></span></button>)}</div></Panel><Panel title="Regras obrigatórias" subtitle="Validações que protegem a qualidade do dado"><ul className="governance-rules"><li><CheckCircle/><span><b>Concluído = 100%</b><small>Sem atraso pendente ou atividade aberta.</small></span></li><li><CheckCircle/><span><b>Bloqueado exige plano</b><small>Categoria, responsável, próxima ação e data.</small></span></li><li><CheckCircle/><span><b>Importação transacional</b><small>Arquivo inválido não altera a base.</small></span></li><li><CheckCircle/><span><b>Link seguro do analista</b><small>Token expirável vinculado a e-mail e tarefa.</small></span></li></ul></Panel></div><Panel title="Matriz de permissões" subtitle="Rotas e ações por perfil"><div className="permission-table"><header><span>Permissão</span>{Object.keys(roles).map(r=><span key={r}>{r}</span>)}</header>{permissions.map((p,i)=><div key={p}><b>{p}</b>{Object.keys(roles).map(r=><span key={r}>{roles[r][i]?<CheckCircle/>:<XCircle/>}</span>)}</div>)}</div></Panel><Panel title="Trilha de auditoria" subtitle="Quem fez o quê, quando e sobre qual registro"><div className="audit-log">{[["21:38","Douglas","Alterou prazo do Go Live","TITANO"],["20:54","Daiana Costa","Anexou evidência REV4","QUELUZ"],["19:42","Sistema IoT","Criou alerta P0","TITANO"],["18:17","Ivan","Atualizou bloqueio de VPN","MARKET PERU"]].map(x=><div key={x.join()}><span>{x[0]}</span><b>{x[1]}</b><p>{x[2]}</p><em>{x[3]}</em></div>)}</div></Panel></section>;
+    <div className="foundation-grid equal"><Panel title="Simular perfil de acesso" subtitle="Use na apresentação para demonstrar o RBAC"><div className="role-selector">{Object.keys(roles).map(r=><button className={role===r?"active":""} key={r} onClick={()=>{setRole(r);notify(`Perfil alterado para ${r==="Diretoria"?"Diretoria · DIREX":r}. A navegação foi recalculada.`)}}><UserGear/><span><b>{r==="Diretoria"?"Diretoria · DIREX":r}</b><small>{r==="Admin"?"Controle total da plataforma":r==="Diretoria"?"Decisão, leitura e priorização":"Acesso operacional por contexto"}</small></span></button>)}</div></Panel><Panel title="Regras obrigatórias" subtitle="Validações que protegem a qualidade do dado"><ul className="governance-rules"><li><CheckCircle/><span><b>Concluído = 100%</b><small>Sem atraso pendente ou atividade aberta.</small></span></li><li><CheckCircle/><span><b>Bloqueado exige plano</b><small>Categoria, responsável, próxima ação e data.</small></span></li><li><CheckCircle/><span><b>Importação transacional</b><small>Arquivo inválido não altera a base.</small></span></li><li><CheckCircle/><span><b>Link seguro do analista</b><small>Token expirável vinculado a e-mail e tarefa.</small></span></li></ul></Panel></div><Panel title="Matriz de permissões" subtitle="Rotas e ações por perfil"><div className="permission-table"><header><span>Permissão</span>{Object.keys(roles).map(r=><span key={r}>{r==="Diretoria"?"DIREX":r}</span>)}</header>{permissions.map((p,i)=><div key={p}><b>{p}</b>{Object.keys(roles).map(r=><span key={r}>{roles[r][i]?<CheckCircle/>:<XCircle/>}</span>)}</div>)}</div></Panel><Panel title="Trilha de auditoria" subtitle="Quem fez o quê, quando e sobre qual registro"><div className="audit-log">{[["21:38","Douglas","Alterou prazo do Go Live","TITANO"],["20:54","Daiana Costa","Anexou evidência REV4","QUELUZ"],["19:42","Sistema IoT","Criou alerta P0","TITANO"],["18:17","Ivan","Atualizou bloqueio de VPN","MARKET PERU"]].map(x=><div key={x.join()}><span>{x[0]}</span><b>{x[1]}</b><p>{x[2]}</p><em>{x[3]}</em></div>)}</div></Panel></section>;
 }
 
 export function LifecyclePage(){
@@ -254,7 +254,7 @@ const LOGIN_TEXT={
     keep:"Manter sessão neste dispositivo",
     demo:"Acessos da demonstração",
     demoTitle:"Perfis disponíveis após entrar",
-    demoBody:"Admin · Editor · Analista · Viewer",
+    demoBody:"Admin · Diretoria · Gestor · Analista",
     demoFoot:"Ambiente demonstrativo — sem credenciais reais.",
     forgot:"Esqueci minha senha",
     enter:"Entrar no InventOps",
@@ -279,7 +279,7 @@ const LOGIN_TEXT={
     keep:"Mantener la sesión en este dispositivo",
     demo:"Accesos de demostración",
     demoTitle:"Perfiles disponibles después de ingresar",
-    demoBody:"Admin · Editor · Analista · Viewer",
+    demoBody:"Admin · Directoria · Gestor · Analista",
     demoFoot:"Entorno demostrativo — sin credenciales reales.",
     forgot:"Olvidé mi contraseña",
     enter:"Entrar en InventOps",
@@ -304,7 +304,7 @@ const LOGIN_TEXT={
     keep:"Keep me signed in on this device",
     demo:"Demo access",
     demoTitle:"Profiles available after sign-in",
-    demoBody:"Admin · Editor · Analyst · Viewer",
+    demoBody:"Admin · Executive · Manager · Analyst",
     demoFoot:"Demonstration environment — no real credentials.",
     forgot:"Forgot my password",
     enter:"Enter InventOps",

@@ -4,7 +4,7 @@ Demo executiva independente que evolui o InventOps de acompanhamento de status p
 
 ## O que está demonstrado
 
-- **Login, sessão e logoff:** entrada premium, opção Microsoft 365 demonstrativa, encerramento seguro e perfis Admin, Editor, Analista e Viewer.
+- **Login, sessão e logoff:** entrada premium, opção Microsoft 365 demonstrativa, encerramento seguro e perfis Admin, Diretoria, Gestor e Analista.
 - **Dashboard Executivo:** Health Score global, contagem regressiva para Go Live e briefing sobre quem o COO deve cobrar hoje.
 - **Visões Ação, Gerencial, BI e Executivo:** checklist prioritário, tendências, gargalos, capacidade, Commit Grid e relatório one-page.
 - **Controle de Projetos:** portfólio operacional, Kanban, busca e filtros, cadastro e Central Sobreposta com ficha técnica, sete fases, 14 áreas, atividades, responsáveis, prazos, evidências, auditoria, marcos, riscos e decisões.

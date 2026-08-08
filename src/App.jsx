@@ -156,7 +156,7 @@ function Sidebar({ active, setActive, alertCount, notify, role, onLogout }) {
       <Icon size={19} weight={isActive?"fill":"regular"}/><span>{label}</span>{restricted?<LockKey size={12}/>:null}{id==="alerts"&&alertCount>0?<b>{alertCount}</b>:null}
     </button>})}</div>)}</nav>
     <div className="sidebar-bottom">
-      <button className="profile" onClick={()=>setActive("admin")}><span className="avatar">D</span><span><strong>Douglas</strong><small>{role}</small></span><CaretDown size={15}/></button>
+      <button className="profile" onClick={()=>setActive("admin")}><span className="avatar">D</span><span><strong>Douglas</strong><small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><CaretDown size={15}/></button>
       <button className="logout-button" onClick={onLogout}><SignOut/><span>Sair com segurança</span></button>
       <div className="credit"><Sparkle size={15} weight="fill"/><span>Desenvolvido por <b>Daiana Costa</b></span></div>
     </div>
@@ -175,7 +175,7 @@ function LangSwitch({ notify }) {
 
 function Topbar({ active, role, onLogout, notify }) {
   return <header className="topbar"><div><div className="title-line"><h1>{pageMeta[active][0]}</h1>{VISION_PAGES.includes(active) ? <span className="vision-badge" title="Este m?dulo mostra aonde o produto vai ? faz parte do roadmap (Eras 4-5) e ainda n?o est? em opera??o. Os dados s?o simulados.">? VIS?O ? ROADMAP</span> : null}</div><p>{pageMeta[active][1]}</p></div><div className="top-actions">
-    <LangSwitch notify={notify} /><span className="date"><CalendarBlank size={18} />11 jul 2026</span><span className="avatar">D</span><span className="top-user">Douglas<small>{role}</small></span><button className="top-logout" onClick={onLogout} aria-label="Sair"><SignOut /></button>
+    <LangSwitch notify={notify} /><span className="date"><CalendarBlank size={18} />11 jul 2026</span><span className="avatar">D</span><span className="top-user">Douglas<small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><button className="top-logout" onClick={onLogout} aria-label="Sair"><SignOut /></button>
   </div></header>;
 }
 
@@ -461,9 +461,9 @@ export function App() {
   if(!authenticated)return <LoginScreen onLogin={login}/>;
   const allowed={
     Admin:"*",
-    Editor:["home","action","management","analytics","executive","portfolio","project","pmo","cockpit","areas","alerts","raid","simulator","commissioning","decision","evidence","presentation","lifecycle"],
-    Analista:["home","action","portfolio","project","cockpit","areas","alerts","raid","commissioning","evidence","presentation"],
-    Viewer:["home","management","analytics","executive","portfolio","project","pmo","cockpit","areas","evidence","presentation","lifecycle"]
+    Diretoria:["home","management","analytics","executive","portfolio","project","pmo","cockpit","areas","simulator","decision","evidence","presentation","lifecycle"],
+    Gestor:["home","action","management","portfolio","project","pmo","cockpit","areas","alerts","raid","evidence","presentation","lifecycle"],
+    Analista:["home","action","portfolio","project","cockpit","areas","alerts","commissioning","evidence","presentation"]
   };
   const canAccess=allowed[role]==="*"||allowed[role].includes(active);
   const pages={
