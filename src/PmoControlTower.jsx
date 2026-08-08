@@ -33,6 +33,14 @@ const handoffs = [
   {project:"MARKET CHILE",from:"EMC",to:"PRD",label:"Lote mecânico 02",state:"Liberado por lote",tone:"done"}
 ];
 
+const journeySteps = [
+  { id:"login", label:"Login", status:"done", detail:"Experiência inicial já repaginada e validada." },
+  { id:"home", label:"Home", status:"done", detail:"Dashboard principal já elevado para a nova régua visual." },
+  { id:"pmo", label:"PMO", status:"active", detail:"Tela atual em fechamento com fila única, briefing e handoffs." },
+  { id:"infra", label:"Infra", status:"next", detail:"Próxima frente: Mission Control e enforcement operacional." },
+  { id:"executive", label:"Executive", status:"next", detail:"Fechamento visual da camada diretiva e narrativa final." }
+];
+
 export function PmoControlTower({projects,onOpenProject,notify}){
   const [queue,setQueue]=useState(()=>buildQueue(projects));
   const [filter,setFilter]=useState("Todos");
@@ -104,6 +112,26 @@ Fonte: InventOps · dados rastreáveis por projeto, área e evidência.`;
       <div><small>CENTRAL DE GOVERNANÇA · PMO</small><h2>Uma fila única para mover a carteira inteira.</h2><p>O InventOps cruza entregas, dependências e evidências dos projetos e mostra exatamente quem cobrar, por quê e quem está esperando.</p></div>
       <div className="pmo-hero-side"><span><ShieldCheck/><small>INTEGRIDADE DA CARTEIRA</small><b>100% com responsável</b><em>nenhuma cobrança sem contexto</em></span><button className="primary" onClick={()=>setBriefingOpen(true)}><ClipboardText/>Gerar briefing do dia</button></div>
     </div>
+
+    <article className="journey-checklist">
+      <header>
+        <div>
+          <small>SEQUÊNCIA DE ENTREGA</small>
+          <h3>O que já está validado e o que vem agora</h3>
+        </div>
+        <span>Ritmo atual: tela a tela, sem pular etapa</span>
+      </header>
+      <div>
+        {journeySteps.map(step=><section key={step.id} className={step.status}>
+          <i>{step.status==="done"?<CheckCircle weight="fill"/>:step.status==="active"?<BellRinging weight="fill"/>:<ClockCountdown weight="fill"/>}</i>
+          <div>
+            <small>{step.status==="done"?"CHECK":"EM FECHAMENTO"}</small>
+            <b>{step.label}</b>
+            <p>{step.detail}</p>
+          </div>
+        </section>)}
+      </div>
+    </article>
 
     <div className="pmo-metrics">
       <article><span><FileText/></span><div><small>ENTREGAS MAPEADAS</small><b>{metrics.deliveries}</b><em>{metrics.projects} projetos × 14 áreas</em></div></article>
