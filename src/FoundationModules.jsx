@@ -58,27 +58,193 @@ function Metric({icon:Icon,label,value,note,tone="cyan"}){
   return <article className={`foundation-metric ${tone}`}><Icon/><span><small>{label}</small><b>{value}</b><em>{note}</em></span></article>;
 }
 
-export function ExecutiveDashboard({projects,setActive,openCockpitDept}){
+export function ExecutiveDashboard({projects,setActive,openCockpitDept,lang="pt"}){
   const health=Math.round(projects.reduce((sum,p)=>sum+p.health,0)/projects.length);
   const hotAreas=departments.filter(area=>area.load>=100).slice(0,3);
+  const copyByLang={
+    pt:{
+      pulse:[
+        {label:"Operação viva",value:"14 áreas conectadas",tone:"cyan"},
+        {label:"Decisões hoje",value:"3 críticas",tone:"gold"},
+        {label:"Risco imediato",value:"PLC + Infra + Compras",tone:"red"}
+      ],
+      directorial:[
+        ["Pilotos ativos","2 áreas em validação real","Implantação + Especificação/DevOps"],
+        ["Próxima meta","Semana de uso assistido","subir confiança com usuários reais"],
+        ["Sinal do sistema","A mesma base alimenta direção e execução","sem narrativa paralela"]
+      ],
+      briefing:"BRIEFING EXECUTIVO · 11 JUL 2026",
+      heroTitle:"A operação já tem onde começar a usar de verdade.",
+      heroBody:"O InventOps já saiu do conceito básico: Implantação e Especificação/DevOps entram na próxima semana como pilotos reais, enquanto a diretoria acompanha a mesma verdade operacional sem precisar de relatório paralelo.",
+      openPlan:"Abrir plano de ação",
+      viewOnePager:"Ver one-page",
+      nextGoLive:"PRÓXIMO GO LIVE",
+      confidence:"78% de confiança",
+      pilotEyebrow:"Piloto pronto para teste",
+      pilotCards:{
+        IMP:{
+          title:"Implantação",
+          summary:"Campo, readiness, handoff e execução do Go Live em uma leitura única.",
+          metric:"7 handoffs vivos",
+          detail:"Daniel e time já conseguem navegar pela operação real da área.",
+          cta:"Abrir cockpit de Implantação"
+        },
+        ESP:{
+          title:"Especificação + DevOps",
+          summary:"Especificação, checkpoint, dependências e prontidão técnica sem planilha paralela.",
+          metric:"5 checkpoints ativos",
+          detail:"Thomas e time já entram num fluxo orientado por evidência e bloqueio real.",
+          cta:"Abrir cockpit de DevOps"
+        }
+      },
+      pressureTitle:"ÁREAS SOB PRESSÃO",
+      pressureBody:"Onde agir antes do atraso virar custo",
+      readingTitle:"LEITURA DO INVENTOPS",
+      readingBody:"A carteira está controlada, mas o sistema já aponta a próxima pressão.",
+      readingText:"O InventOps cruza capacidade, bloqueios e datas de marco para mostrar onde a coordenação precisa acontecer antes do problema aparecer no cronograma executivo.",
+      openPmo:"Abrir PMO Control Tower",
+      seeDecision:"Ver Decision Room",
+      coordTitle:"Mapa de coordenação",
+      coordSub:"Quem precisa andar junto agora",
+      routeTitle:"Rota crítica da semana",
+      routeSub:"Os três movimentos que protegem a carteira",
+      metrics:[
+        ["CARTEIRA",`${projects.length} projetos`,"2 bloqueados","cyan"],
+        ["RISCO MATERIAL","R$ 1,8 mi","exposição estimada","red"],
+        ["CAPACIDADE","117% PLC","pico em setembro","yellow"],
+        ["GO LIVES","4 em 90d","2 confirmados","green"]
+      ],
+      chargeTitle:"Quem o COO deve cobrar hoje",
+      chargeSub:"Priorização calculada por impacto, prazo e SLA",
+      pulseTitle:"Pulso do portfólio",
+      pulseSub:"Tendência dos últimos 30 dias."
+    },
+    es:{
+      pulse:[
+        {label:"Operación viva",value:"14 áreas conectadas",tone:"cyan"},
+        {label:"Decisiones hoy",value:"3 críticas",tone:"gold"},
+        {label:"Riesgo inmediato",value:"PLC + Infra + Compras",tone:"red"}
+      ],
+      directorial:[
+        ["Pilotos activos","2 áreas en validación real","Implantación + Especificación/DevOps"],
+        ["Próxima meta","Semana de uso asistido","subir confianza con usuarios reales"],
+        ["Señal del sistema","La misma base alimenta dirección y ejecución","sin narrativa paralela"]
+      ],
+      briefing:"BRIEFING EJECUTIVO · 11 JUL 2026",
+      heroTitle:"La operación ya tiene por dónde empezar a usarse de verdad.",
+      heroBody:"InventOps ya salió del concepto básico: Implantación y Especificación/DevOps entran la próxima semana como pilotos reales, mientras la dirección acompaña la misma verdad operacional sin depender de informes paralelos.",
+      openPlan:"Abrir plan de acción",
+      viewOnePager:"Ver one-page",
+      nextGoLive:"PRÓXIMO GO LIVE",
+      confidence:"78% de confianza",
+      pilotEyebrow:"Piloto listo para prueba",
+      pilotCards:{
+        IMP:{
+          title:"Implantación",
+          summary:"Campo, readiness, handoff y ejecución del Go Live en una sola lectura.",
+          metric:"7 handoffs vivos",
+          detail:"Daniel y el equipo ya pueden navegar la operación real del área.",
+          cta:"Abrir cockpit de Implantación"
+        },
+        ESP:{
+          title:"Especificación + DevOps",
+          summary:"Especificación, checkpoints, dependencias y preparación técnica sin planillas paralelas.",
+          metric:"5 checkpoints activos",
+          detail:"Thomas y el equipo ya entran en un flujo guiado por evidencia y bloqueo real.",
+          cta:"Abrir cockpit de DevOps"
+        }
+      },
+      pressureTitle:"ÁREAS BAJO PRESIÓN",
+      pressureBody:"Dónde actuar antes de que el atraso se convierta en costo",
+      readingTitle:"LECTURA DEL INVENTOPS",
+      readingBody:"La cartera está controlada, pero el sistema ya señala la próxima presión.",
+      readingText:"InventOps cruza capacidad, bloqueos y fechas clave para mostrar dónde debe ocurrir la coordinación antes de que el problema aparezca en el cronograma ejecutivo.",
+      openPmo:"Abrir PMO Control Tower",
+      seeDecision:"Ver Decision Room",
+      coordTitle:"Mapa de coordinación",
+      coordSub:"Quién necesita avanzar en conjunto ahora",
+      routeTitle:"Ruta crítica de la semana",
+      routeSub:"Los tres movimientos que protegen la cartera",
+      metrics:[
+        ["CARTERA",`${projects.length} proyectos`,"2 bloqueados","cyan"],
+        ["RIESGO MATERIAL","R$ 1,8 mi","exposición estimada","red"],
+        ["CAPACIDAD","117% PLC","pico en septiembre","yellow"],
+        ["GO LIVES","4 en 90d","2 confirmados","green"]
+      ],
+      chargeTitle:"A quién debe cobrar el COO hoy",
+      chargeSub:"Priorización calculada por impacto, plazo y SLA",
+      pulseTitle:"Pulso de la cartera",
+      pulseSub:"Tendencia de los últimos 30 días."
+    },
+    en:{
+      pulse:[
+        {label:"Live operation",value:"14 connected areas",tone:"cyan"},
+        {label:"Decisions today",value:"3 critical",tone:"gold"},
+        {label:"Immediate risk",value:"PLC + Infra + Purchasing",tone:"red"}
+      ],
+      directorial:[
+        ["Active pilots","2 areas in real validation","Implementation + Specification/DevOps"],
+        ["Next goal","Assisted usage week","raise confidence with real users"],
+        ["System signal","The same base feeds leadership and execution","no parallel narrative"]
+      ],
+      briefing:"EXECUTIVE BRIEFING · 11 JUL 2026",
+      heroTitle:"The operation now has a real place to start being used.",
+      heroBody:"InventOps has moved beyond the basic concept: Implementation and Specification/DevOps enter next week as real pilots, while leadership follows the same operational truth without relying on parallel reporting.",
+      openPlan:"Open action plan",
+      viewOnePager:"View one-page",
+      nextGoLive:"NEXT GO LIVE",
+      confidence:"78% confidence",
+      pilotEyebrow:"Pilot ready for testing",
+      pilotCards:{
+        IMP:{
+          title:"Implementation",
+          summary:"Field work, readiness, handoff, and Go Live execution in a single reading.",
+          metric:"7 live handoffs",
+          detail:"Daniel and team can already navigate the area's real operation.",
+          cta:"Open Implementation cockpit"
+        },
+        ESP:{
+          title:"Specification + DevOps",
+          summary:"Specification, checkpoints, dependencies, and technical readiness without parallel spreadsheets.",
+          metric:"5 active checkpoints",
+          detail:"Thomas and the team already enter a flow guided by evidence and real blockers.",
+          cta:"Open DevOps cockpit"
+        }
+      },
+      pressureTitle:"AREAS UNDER PRESSURE",
+      pressureBody:"Where to act before delay turns into cost",
+      readingTitle:"INVENTOPS READING",
+      readingBody:"The portfolio is controlled, but the system is already pointing to the next pressure point.",
+      readingText:"InventOps crosses capacity, blockers, and milestone dates to show where coordination must happen before the issue appears in the executive schedule.",
+      openPmo:"Open PMO Control Tower",
+      seeDecision:"View Decision Room",
+      coordTitle:"Coordination map",
+      coordSub:"Who needs to move together right now",
+      routeTitle:"Critical route of the week",
+      routeSub:"The three moves protecting the portfolio",
+      metrics:[
+        ["PORTFOLIO",`${projects.length} projects`,"2 blocked","cyan"],
+        ["MATERIAL RISK","R$ 1.8M","estimated exposure","red"],
+        ["CAPACITY","117% PLC","September peak","yellow"],
+        ["GO LIVES","4 in 90d","2 confirmed","green"]
+      ],
+      chargeTitle:"Who the COO should challenge today",
+      chargeSub:"Prioritization calculated by impact, due date, and SLA",
+      pulseTitle:"Portfolio pulse",
+      pulseSub:"Trend over the last 30 days."
+    }
+  };
+  const copy=copyByLang[lang]||copyByLang.pt;
   const pilotAreas = [
     {
       code: "IMP",
-      title: "Implantação",
-      eyebrow: "Piloto pronto para teste",
-      summary: "Campo, readiness, handoff e execução do Go Live em uma leitura única.",
-      metric: "7 handoffs vivos",
-      detail: "Daniel e time já conseguem navegar pela operação real da área.",
-      cta: "Abrir cockpit de Implantação"
+      ...copy.pilotCards.IMP,
+      eyebrow: copy.pilotEyebrow
     },
     {
       code: "ESP",
-      title: "Especificação + DevOps",
-      eyebrow: "Piloto pronto para teste",
-      summary: "Especificação, checkpoint, dependências e prontidão técnica sem planilha paralela.",
-      metric: "5 checkpoints ativos",
-      detail: "Thomas e time já entram num fluxo orientado por evidência e bloqueio real.",
-      cta: "Abrir cockpit de DevOps"
+      ...copy.pilotCards.ESP,
+      eyebrow: copy.pilotEyebrow
     }
   ];
   const coordinationNodes=[
@@ -93,27 +259,19 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept}){
     ["Titano","Sensor X + SAT","Próx. 18h"],
     ["Navepark","VMs HML","14 jul"]
   ];
-  const decisionPulse=[
-    {label:"Operação viva",value:"14 áreas conectadas",tone:"cyan"},
-    {label:"Decisões hoje",value:"3 críticas",tone:"gold"},
-    {label:"Risco imediato",value:"PLC + Infra + Compras",tone:"red"}
-  ];
-  const directorialReading = [
-    ["Pilotos ativos", "2 áreas em validação real", "Implantação + Especificação/DevOps"],
-    ["Próxima meta", "Semana de uso assistido", "subir confiança com usuários reais"],
-    ["Sinal do sistema", "A mesma base alimenta direção e execução", "sem narrativa paralela"]
-  ];
+  const decisionPulse=copy.pulse;
+  const directorialReading = copy.directorial;
   return <section className="page foundation-page">
     <div className="executive-command-strip">
       {decisionPulse.map(item=><span key={item.label} className={item.tone}><small>{item.label}</small><b>{item.value}</b></span>)}
     </div>
-    <div className="executive-world-strip">
+      <div className="executive-world-strip">
       {directorialReading.map(([label,value,detail])=><article key={label}><small>{label}</small><b>{value}</b><span>{detail}</span></article>)}
     </div>
     <div className="executive-hero executive-world-hero">
       <div className="health-visual"><ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={[{v:health},{v:100-health}]} dataKey="v" startAngle={90} endAngle={-270} innerRadius={55} outerRadius={67} stroke="none"><Cell fill="#f5c300"/><Cell fill="#18263a"/></Pie></PieChart></ResponsiveContainer><span><small>HEALTH SCORE</small><b>{health}</b><em>/100</em></span></div>
-      <div className="executive-brief"><small>BRIEFING EXECUTIVO · 11 JUL 2026</small><h2>A operação já tem onde começar a usar de verdade.</h2><p>O InventOps já saiu do conceito básico: <b>Implantação</b> e <b>Especificação/DevOps</b> entram na próxima semana como pilotos reais, enquanto a diretoria acompanha a mesma verdade operacional sem precisar de relatório paralelo.</p><div><button className="primary" onClick={()=>setActive("action")}><CheckSquare/>Abrir plano de ação</button><button className="ghost" onClick={()=>setActive("executive")}><FileText/>Ver one-page</button></div></div>
-      <div className="countdown"><small>PRÓXIMO GO LIVE</small><b>9</b><span>dias</span><strong>TITANO · 20 JUL</strong><em>78% de confiança</em></div>
+      <div className="executive-brief"><small>{copy.briefing}</small><h2>{copy.heroTitle}</h2><p>{copy.heroBody}</p><div><button className="primary" onClick={()=>setActive("action")}><CheckSquare/>{copy.openPlan}</button><button className="ghost" onClick={()=>setActive("executive")}><FileText/>{copy.viewOnePager}</button></div></div>
+      <div className="countdown"><small>{copy.nextGoLive}</small><b>9</b><span>dias</span><strong>TITANO · 20 JUL</strong><em>{copy.confidence}</em></div>
     </div>
     <div className="pilot-launch-grid">
       {pilotAreas.map(area=><article key={area.code} className="pilot-launch-card">
@@ -132,37 +290,37 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept}){
     </div>
     <div className="executive-signal-grid">
       <article className="signal-panel priority">
-        <small>ÁREAS SOB PRESSÃO</small>
-        <b>Onde agir antes do atraso virar custo</b>
+        <small>{copy.pressureTitle}</small>
+        <b>{copy.pressureBody}</b>
         <div className="signal-list">
           {hotAreas.map(area=><button key={area.code} type="button" onClick={()=>setActive("areas")}><span>{area.code}</span><div><strong>{area.name}</strong><small>{area.owner}</small></div><em>{area.load}%</em></button>)}
         </div>
       </article>
       <article className="signal-panel synopsis">
-        <small>LEITURA DO INVENTOPS</small>
-        <b>A carteira está controlada, mas o sistema já aponta a próxima pressão.</b>
-        <p>O InventOps cruza capacidade, bloqueios e datas de marco para mostrar onde a coordenação precisa acontecer antes do problema aparecer no cronograma executivo.</p>
+        <small>{copy.readingTitle}</small>
+        <b>{copy.readingBody}</b>
+        <p>{copy.readingText}</p>
         <div className="synopsis-actions">
-          <button className="ghost" onClick={()=>setActive("pmo")}><ChartLineUp/>Abrir PMO Control Tower</button>
-          <button className="ghost" onClick={()=>setActive("decision")}><Sparkle/>Ver Decision Room</button>
+          <button className="ghost" onClick={()=>setActive("pmo")}><ChartLineUp/>{copy.openPmo}</button>
+          <button className="ghost" onClick={()=>setActive("decision")}><Sparkle/>{copy.seeDecision}</button>
         </div>
       </article>
     </div>
     <div className="foundation-grid equal executive-insight-grid">
-      <Panel title="Mapa de coordenação" subtitle="Quem precisa andar junto agora">
+      <Panel title={copy.coordTitle} subtitle={copy.coordSub}>
         <div className="coordination-map">
           {coordinationNodes.map(node=><span key={node.label} className={`coord-node ${node.className}`}>{node.label}</span>)}
           <div className="coord-core"><b>PMO</b><small>núcleo da decisão</small></div>
         </div>
       </Panel>
-      <Panel title="Rota crítica da semana" subtitle="Os três movimentos que protegem a carteira">
+      <Panel title={copy.routeTitle} subtitle={copy.routeSub}>
         <div className="critical-route-list">
           {criticalRoute.map(([project,task,eta],index)=><button key={project} type="button" onClick={()=>setActive(index===0?"action":index===1?"alerts":"pmo")}><strong>{String(index+1).padStart(2,"0")}</strong><span><b>{project}</b><small>{task}</small></span><em>{eta}</em><ArrowRight/></button>)}
         </div>
       </Panel>
     </div>
-    <div className="foundation-metrics"><Metric icon={Buildings} label="CARTEIRA" value={`${projects.length} projetos`} note="2 bloqueados"/><Metric icon={Warning} label="RISCO MATERIAL" value="R$ 1,8 mi" note="exposição estimada" tone="red"/><Metric icon={UsersThree} label="CAPACIDADE" value="117% PLC" note="pico em setembro" tone="yellow"/><Metric icon={FlagCheckered} label="GO LIVES" value="4 em 90d" note="2 confirmados" tone="green"/></div>
-    <div className="foundation-grid two-one"><Panel title="Quem o COO deve cobrar hoje" subtitle="Priorização calculada por impacto, prazo e SLA"><div className="charge-list">{blockers.map((b,i)=><button key={b.project} onClick={()=>setActive(i===2?"alerts":"action")}><strong>0{i+1}</strong><span><b>{b.project}</b><small>{b.action}</small></span><em>{b.owner}</em><ArrowRight/></button>)}</div></Panel><Panel title="Pulso do portfólio" subtitle="Tendência dos últimos 30 dias"><div className="foundation-chart"><ResponsiveContainer><AreaChart data={trend}><defs><linearGradient id="healthFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#28c5e7" stopOpacity=".35"/><stop offset="1" stopColor="#28c5e7" stopOpacity="0"/></linearGradient></defs><CartesianGrid stroke="#17243a" vertical={false}/><XAxis dataKey="day" tick={{fontSize:9}} stroke="#66758c"/><YAxis domain={[40,100]} tick={{fontSize:9}} stroke="#66758c"/><Tooltip/><Area dataKey="health" stroke="#28c5e7" fill="url(#healthFill)" strokeWidth={2}/></AreaChart></ResponsiveContainer></div></Panel></div>
+    <div className="foundation-metrics">{copy.metrics.map(([label,value,note,tone])=><Metric key={label} icon={label===copy.metrics[0][0]?Buildings:label===copy.metrics[1][0]?Warning:label===copy.metrics[2][0]?UsersThree:FlagCheckered} label={label} value={value} note={note} tone={tone}/>)}</div>
+    <div className="foundation-grid two-one"><Panel title={copy.chargeTitle} subtitle={copy.chargeSub}><div className="charge-list">{blockers.map((b,i)=><button key={b.project} onClick={()=>setActive(i===2?"alerts":"action")}><strong>0{i+1}</strong><span><b>{b.project}</b><small>{b.action}</small></span><em>{b.owner}</em><ArrowRight/></button>)}</div></Panel><Panel title={copy.pulseTitle} subtitle={copy.pulseSub}><div className="foundation-chart"><ResponsiveContainer><AreaChart data={trend}><defs><linearGradient id="healthFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#28c5e7" stopOpacity=".35"/><stop offset="1" stopColor="#28c5e7" stopOpacity="0"/></linearGradient></defs><CartesianGrid stroke="#17243a" vertical={false}/><XAxis dataKey="day" tick={{fontSize:9}} stroke="#66758c"/><YAxis domain={[40,100]} tick={{fontSize:9}} stroke="#66758c"/><Tooltip/><Area dataKey="health" stroke="#28c5e7" fill="url(#healthFill)" strokeWidth={2}/></AreaChart></ResponsiveContainer></div></Panel></div>
   </section>;
 }
 

@@ -130,6 +130,19 @@ const pageMeta = {
   settings: ["Configurações", "Regras de simulação, telemetria e governança."],
 };
 
+const pageMetaIntl = {
+  es: {
+    home: ["Dashboard Ejecutivo", "Toda la cartera traducida en decisiones para hoy."],
+    portfolio: ["Control de Proyectos", "Planifica, acompaña y cobra entregas en una visión operativa."],
+    executive: ["Informe Ejecutivo", "La cartera consolidada en una sola página."],
+  },
+  en: {
+    home: ["Executive Dashboard", "The full portfolio translated into decisions for today."],
+    portfolio: ["Project Control", "Plan, track, and drive deliveries in one operational view."],
+    executive: ["Executive Report", "The portfolio consolidated into a single page."],
+  }
+};
+
 const demoJourney = [
   { id: "home", label: "Home", helper: "Entrada executiva" },
   { id: "portfolio", label: "Projetos", helper: "Carteira ativa" },
@@ -181,32 +194,57 @@ function Sidebar({ active, setActive, alertCount, notify, role, setRole, theme, 
 
 const VISION_PAGES = ["simulator", "commissioning"];
 
-function LangSwitch({ notify }) {
+function LangSwitch({ lang, setLang, notify }) {
   return <span className="lang-switch" role="group" aria-label="Idioma">
-    <button className="active" aria-pressed="true">PT</button>
-    <button onClick={() => notify("Espa?ol ? em breve ? chega na pr?xima vers?o do InventOps.")} title="Em breve ? dispon?vel na pr?xima vers?o">ES</button>
-    <button onClick={() => notify("English ? em breve ? chega na pr?xima vers?o do InventOps.")} title="Em breve ? dispon?vel na pr?xima vers?o">EN</button>
+    {[
+      { id: "pt", label: "PT" },
+      { id: "es", label: "ES" },
+      { id: "en", label: "EN" }
+    ].map(option => (
+      <button
+        key={option.id}
+        className={lang===option.id?"active":""}
+        aria-pressed={lang===option.id}
+        onClick={()=>{
+          setLang(option.id);
+          notify(option.id==="pt"?"Idioma alterado para português.":option.id==="es"?"Idioma alterado para espanhol.":"Language switched to English.");
+        }}
+      >
+        {option.label}
+      </button>
+    ))}
   </span>;
 }
 
-function Topbar({ active, role, onLogout, notify }) {
-  return <header className="topbar"><div><div className="title-line"><h1>{pageMeta[active][0]}</h1>{VISION_PAGES.includes(active) ? <span className="vision-badge" title="Este m?dulo mostra aonde o produto vai ? faz parte do roadmap (Eras 4-5) e ainda n?o est? em opera??o. Os dados s?o simulados.">? VIS?O ? ROADMAP</span> : null}</div><p>{pageMeta[active][1]}</p></div><div className="top-actions">
-    <LangSwitch notify={notify} /><span className="date"><CalendarBlank size={18} />11 jul 2026</span><span className="avatar">D</span><span className="top-user">Douglas<small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><button className="top-logout" onClick={onLogout} aria-label="Sair"><SignOut /></button>
+function Topbar({ active, role, onLogout, notify, lang, setLang }) {
+  const localizedMeta = pageMetaIntl[lang]?.[active] || pageMeta[active];
+  const roadmapTitle = {
+    pt: "Este módulo mostra aonde o produto vai — faz parte do roadmap (Eras 4-5) e ainda não está em operação. Os dados são simulados.",
+    es: "Este módulo muestra hacia dónde va el producto — forma parte del roadmap (Eras 4-5) y aún no está en operación. Los datos son simulados.",
+    en: "This module shows where the product is heading — it is part of the roadmap (Eras 4-5) and is not yet in operation. The data is simulated."
+  };
+  return <header className="topbar"><div><div className="title-line"><h1>{localizedMeta[0]}</h1>{VISION_PAGES.includes(active) ? <span className="vision-badge" title={roadmapTitle[lang]}>↗ VISÃO · ROADMAP</span> : null}</div><p>{localizedMeta[1]}</p></div><div className="top-actions">
+    <LangSwitch lang={lang} setLang={setLang} notify={notify} /><span className="date"><CalendarBlank size={18} />11 jul 2026</span><span className="avatar">D</span><span className="top-user">Douglas<small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><button className="top-logout" onClick={onLogout} aria-label="Sair"><SignOut /></button>
   </div></header>;
 }
 
-function DemoJourneyRail({ active, setActive }) {
+function DemoJourneyRail({ active, setActive, lang }) {
   const currentIndex = demoJourney.findIndex(step => step.id === active);
   if (currentIndex === -1) return null;
   const nextStep = demoJourney[currentIndex + 1];
+  const copy = {
+    pt: { title: "SEQUÊNCIA DA DEMO", progress: "concluído no fluxo principal", next: "Próxima tela", current: "Tela atual", done: "Fluxo principal completo" },
+    es: { title: "SECUENCIA DE LA DEMO", progress: "completado en el flujo principal", next: "Próxima pantalla", current: "Pantalla actual", done: "Flujo principal completo" },
+    en: { title: "DEMO FLOW", progress: "completed in the main flow", next: "Next screen", current: "Current screen", done: "Main flow complete" }
+  }[lang];
 
   return (
-    <section className="demo-journey-rail" aria-label="Sequ?ncia da demonstra??o">
+    <section className="demo-journey-rail" aria-label={copy.title}>
       <div className="demo-journey-head">
-        <small>SEQU?NCIA DA DEMO</small>
+        <small>{copy.title}</small>
         <div className="demo-journey-meta">
-          <b>{currentIndex + 1}/{demoJourney.length} conclu?do no fluxo principal</b>
-          {nextStep ? <button className="ghost" onClick={() => setActive(nextStep.id)}>Pr?xima tela: {nextStep.label}</button> : <span className="demo-journey-done">Fluxo principal completo</span>}
+          <b>{currentIndex + 1}/{demoJourney.length} {copy.progress}</b>
+          {nextStep ? <button className="ghost" onClick={() => setActive(nextStep.id)}>{copy.next}: {nextStep.label}</button> : <span className="demo-journey-done">{copy.done}</span>}
         </div>
       </div>
       <div className="demo-journey-track">
@@ -217,7 +255,7 @@ function DemoJourneyRail({ active, setActive }) {
               <i>{state === "done" ? <CheckCircle weight="fill" /> : index + 1}</i>
               <span>
                 <b>{step.label}</b>
-                <small>{state === "current" ? "Tela atual" : step.helper}</small>
+                <small>{state === "current" ? copy.current : step.helper}</small>
               </span>
             </div>
           );
@@ -457,6 +495,7 @@ function SettingsPage(){ const [settings,setSettings]=useState({p0:true,capacity
 export function App() {
   const [authenticated,setAuthenticated]=useState(()=>sessionStorage.getItem("inventops-demo-session")==="active");
   const [active,setActive]=useState("home");
+  const [lang,setLang]=useState(()=>sessionStorage.getItem("inventops-demo-lang")||"pt");
   const [role,setRole]=useState("Admin");
   const [theme,setTheme]=useState("Escuro");
   const [cockpitDept,setCockpitDept]=useState("INF");
@@ -472,6 +511,7 @@ export function App() {
   useEffect(()=>()=>window.clearTimeout(toastTimer.current),[]);
   useEffect(()=>{window.scrollTo(0,0)},[active]);
   useEffect(()=>{sessionStorage.setItem("inventops-projects-demo",JSON.stringify(projects))},[projects]);
+  useEffect(()=>{sessionStorage.setItem("inventops-demo-lang",lang)},[lang]);
   const updateProject=useCallback(updated=>{setProjects(current=>current.map(p=>p.code===updated.code?updated:p));setSelectedProject(updated)},[]);
   const openFullProject=()=>{setProjectModalOpen(false);setActive("project")};
   const login=()=>{sessionStorage.setItem("inventops-demo-session","active");setAuthenticated(true);setActive("home")};
@@ -487,7 +527,7 @@ export function App() {
   };
   const canAccess=allowed[role]==="*"||allowed[role].includes(active);
   const pages={
-    home:<ExecutiveDashboard projects={projects} setActive={setActive} openCockpitDept={openCockpitDept}/>,
+    home:<ExecutiveDashboard projects={projects} setActive={setActive} openCockpitDept={openCockpitDept} lang={lang}/>,
     action:<ActionCenter notify={notify}/>,management:<ManagementPage/>,analytics:<AnalyticsPage/>,
     executive:<ExecutiveOnePager projects={projects} notify={notify}/>,
     portfolio:<PortfolioPage projects={projects} setProjects={setProjects} setActive={setActive} setSelectedProject={setSelectedProject} setProjectModalOpen={setProjectModalOpen} setImportedDemands={setImportedDemands} notify={notify}/>,
@@ -501,5 +541,5 @@ export function App() {
     evidence:<EvidencePage/>,settings:<SettingsPage/>
   };
   const page=canAccess?pages[active]:<AccessDenied setActive={setActive}/>;
-  return <div className="app-shell" data-theme={theme}><Sidebar active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} setRole={setRole} theme={theme} setTheme={setTheme} onLogout={logout}/><main className="workspace"><Topbar active={active} role={role} onLogout={logout} notify={notify}/><DemoJourneyRail active={active} setActive={setActive} />{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
+  return <div className="app-shell" data-theme={theme}><Sidebar active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} setRole={setRole} theme={theme} setTheme={setTheme} onLogout={logout}/><main className="workspace"><Topbar active={active} role={role} onLogout={logout} notify={notify} lang={lang} setLang={setLang}/><DemoJourneyRail active={active} setActive={setActive} lang={lang} />{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
 }
