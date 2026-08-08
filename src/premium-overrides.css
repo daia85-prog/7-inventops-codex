@@ -408,11 +408,11 @@
 
 .ecosystem-orbit{
   position:relative;
-  width:min(660px,100%);
+  width:min(720px,100%);
   aspect-ratio:1/1;
-  margin:154px 0 0 108px;
-  max-height:392px;
-  transform:scale(.98);
+  margin:168px 0 0 96px;
+  max-height:430px;
+  transform:scale(1);
   transform-origin:center left;
   flex:0 0 auto;
   filter:drop-shadow(0 0 28px rgba(96,127,255,.22));
@@ -469,12 +469,12 @@
   position:absolute;
   left:50%;
   top:50%;
-  width:128px;
-  height:128px;
-  margin:-64px;
+  width:132px;
+  height:132px;
+  margin:-66px;
   transform:
     rotate(calc(var(--i) * 25.714deg))
-    translateY(-196px)
+    translateY(-214px)
     rotate(calc(var(--i) * -25.714deg));
   border:1px solid rgba(141,120,255,.46);
   border-radius:999px;
@@ -490,6 +490,15 @@
   animation:node-breathe 3.6s ease-in-out infinite;
   animation-delay:calc(var(--i) * .12s);
   gap:3px;
+}
+
+.ecosystem-orbit > span.is-long-department{
+  width:142px;
+  height:142px;
+  margin:-71px;
+  font-size:10px;
+  line-height:1.16;
+  letter-spacing:-.01em;
 }
 
 .ecosystem-orbit > span strong{
@@ -991,8 +1000,8 @@
 }
 
 @keyframes node-breathe{
-  0%,100%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-196px) rotate(calc(var(--i) * -25.714deg)) scale(1)}
-  50%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-196px) rotate(calc(var(--i) * -25.714deg)) scale(1.08)}
+  0%,100%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-214px) rotate(calc(var(--i) * -25.714deg)) scale(1)}
+  50%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-214px) rotate(calc(var(--i) * -25.714deg)) scale(1.08)}
 }
 
 @keyframes core-bloom{
@@ -1011,21 +1020,28 @@
   }
 
   .ecosystem-orbit{
-    max-height:278px;
-    transform:scale(.76);
-    margin:102px 0 0 72px;
+    max-height:308px;
+    transform:scale(.8);
+    margin:114px 0 0 64px;
   }
 
   .ecosystem-orbit > span{
-    width:100px;
-    height:100px;
-    margin:-50px;
+    width:108px;
+    height:108px;
+    margin:-54px;
     transform:
       rotate(calc(var(--i) * 25.714deg))
-      translateY(-148px)
+      translateY(-164px)
       rotate(calc(var(--i) * -25.714deg));
     font-size:9.4px;
     line-height:1.14;
+  }
+
+  .ecosystem-orbit > span.is-long-department{
+    width:118px;
+    height:118px;
+    margin:-59px;
+    font-size:8.8px;
   }
 
   .ecosystem-core{
@@ -1054,9 +1070,9 @@
   }
 
   .ecosystem-orbit{
-    max-height:248px;
-    transform:scale(.72);
-    margin:78px 0 0 68px;
+    max-height:270px;
+    transform:scale(.74);
+    margin:92px 0 0 60px;
   }
 
   .login-pulse.compact{
@@ -1079,9 +1095,9 @@
   }
 
   .ecosystem-orbit{
-    max-height:220px;
-    transform:scale(.66);
-    margin:66px 0 0 54px;
+    max-height:238px;
+    transform:scale(.68);
+    margin:78px 0 0 48px;
   }
 
   .login-pulse.compact{
