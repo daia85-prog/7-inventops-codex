@@ -7,7 +7,7 @@
 }
 
 .login-visual{
-  padding:42px 56px 34px;
+  padding:30px 56px 28px;
   background:linear-gradient(180deg,rgba(4,9,20,.36),rgba(4,9,20,.82)),linear-gradient(135deg,#071224,#050b15);
   border-right:0;
 }
@@ -178,13 +178,17 @@
   display:flex;
   flex-direction:column;
   justify-content:space-between;
-  gap:8px;
-  padding-bottom:10px;
+  gap:6px;
+  padding-bottom:6px;
   overflow:hidden;
 }
 
+.ecosystem-copy{
+  margin-top:-4px;
+}
+
 .ecosystem-copy h1{
-  margin:4px 0 6px;
+  margin:2px 0 6px;
   font:800 clamp(30px,3.15vw,52px)/1 Sora;
   letter-spacing:-1.6px;
   max-width:600px;
@@ -200,11 +204,11 @@
 
 .ecosystem-orbit{
   position:relative;
-  width:min(560px,100%);
+  width:min(590px,100%);
   aspect-ratio:1/1;
   margin:0 auto;
-  max-height:320px;
-  transform:scale(.92);
+  max-height:336px;
+  transform:scale(.98);
   transform-origin:center;
   flex:0 0 auto;
   filter:drop-shadow(0 0 22px rgba(96,127,255,.18));
@@ -261,12 +265,12 @@
   position:absolute;
   left:50%;
   top:50%;
-  width:96px;
-  height:96px;
-  margin:-48px;
+  width:102px;
+  height:102px;
+  margin:-51px;
   transform:
     rotate(calc(var(--i) * 25.714deg))
-    translateY(-172px)
+    translateY(-180px)
     rotate(calc(var(--i) * -25.714deg));
   border:1px solid rgba(141,120,255,.46);
   border-radius:999px;
@@ -277,7 +281,7 @@
   text-align:center;
   padding:10px;
   color:#d7e0ee;
-  font:700 11px/1.16 Inter;
+  font:700 11.4px/1.16 Inter;
   box-shadow:0 10px 30px rgba(0,0,0,.22),0 0 14px rgba(143,115,255,.12);
   animation:node-breathe 3.6s ease-in-out infinite;
   animation-delay:calc(var(--i) * .12s);
@@ -287,9 +291,9 @@
   position:absolute;
   left:50%;
   top:50%;
-  width:142px;
-  height:142px;
-  margin:-71px;
+  width:148px;
+  height:148px;
+  margin:-74px;
   border-radius:50%;
   background:radial-gradient(circle at 35% 30%,#8f73ff,#5f35d6 58%,#34146b 100%);
   display:flex;
@@ -316,6 +320,8 @@
   max-width:500px;
   border-radius:16px;
   flex:0 0 auto;
+  transform:scale(.95);
+  transform-origin:left bottom;
 }
 
 .login-pulse.compact > span{
@@ -426,8 +432,8 @@
 }
 
 @keyframes node-breathe{
-  0%,100%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-172px) rotate(calc(var(--i) * -25.714deg)) scale(1)}
-  50%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-172px) rotate(calc(var(--i) * -25.714deg)) scale(1.08)}
+  0%,100%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-180px) rotate(calc(var(--i) * -25.714deg)) scale(1)}
+  50%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-180px) rotate(calc(var(--i) * -25.714deg)) scale(1.08)}
 }
 
 @keyframes core-bloom{
@@ -442,24 +448,24 @@
 
   .ecosystem-orbit{
     max-height:278px;
-    transform:scale(.8);
+    transform:scale(.84);
   }
 
   .ecosystem-orbit > span{
-    width:82px;
-    height:82px;
-    margin:-41px;
+    width:88px;
+    height:88px;
+    margin:-44px;
     transform:
       rotate(calc(var(--i) * 25.714deg))
-      translateY(-146px)
+      translateY(-154px)
       rotate(calc(var(--i) * -25.714deg));
-    font-size:9.5px;
+    font-size:10px;
   }
 
   .ecosystem-core{
-    width:126px;
-    height:126px;
-    margin:-63px;
+    width:132px;
+    height:132px;
+    margin:-66px;
   }
 
   .ecosystem-copy h1{
@@ -469,7 +475,7 @@
 
 @media(max-height:900px){
   .login-visual{
-    padding:28px 42px 18px;
+    padding:22px 42px 16px;
   }
 
   .ecosystem-copy h1{
@@ -478,7 +484,7 @@
 
   .ecosystem-orbit{
     max-height:248px;
-    transform:scale(.74);
+    transform:scale(.8);
   }
 
   .login-pulse.compact{
@@ -489,7 +495,7 @@
 
 @media(max-height:820px){
   .login-visual{
-    padding:20px 34px 10px;
+    padding:16px 34px 8px;
   }
 
   .ecosystem-copy p{
@@ -498,7 +504,7 @@
 
   .ecosystem-orbit{
     max-height:220px;
-    transform:scale(.66);
+    transform:scale(.72);
   }
 
   .login-pulse.compact{
