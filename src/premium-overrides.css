@@ -408,14 +408,14 @@
 
 .ecosystem-orbit{
   position:relative;
-  width:min(590px,100%);
+  width:min(660px,100%);
   aspect-ratio:1/1;
-  margin:132px 0 0 118px;
-  max-height:336px;
-  transform:scale(.9);
+  margin:154px 0 0 108px;
+  max-height:392px;
+  transform:scale(.98);
   transform-origin:center left;
   flex:0 0 auto;
-  filter:drop-shadow(0 0 22px rgba(96,127,255,.18));
+  filter:drop-shadow(0 0 28px rgba(96,127,255,.22));
 }
 
 .ecosystem-orbit::before,
@@ -469,12 +469,12 @@
   position:absolute;
   left:50%;
   top:50%;
-  width:114px;
-  height:114px;
-  margin:-57px;
+  width:128px;
+  height:128px;
+  margin:-64px;
   transform:
     rotate(calc(var(--i) * 25.714deg))
-    translateY(-174px)
+    translateY(-196px)
     rotate(calc(var(--i) * -25.714deg));
   border:1px solid rgba(141,120,255,.46);
   border-radius:999px;
@@ -483,13 +483,13 @@
   align-items:center;
   justify-content:center;
   text-align:center;
-  padding:12px 10px;
+  padding:14px 12px;
   color:#d7e0ee;
-  font:700 10.2px/1.18 Inter;
-  box-shadow:0 10px 30px rgba(0,0,0,.22),0 0 14px rgba(143,115,255,.12);
+  font:700 11px/1.2 Inter;
+  box-shadow:0 14px 34px rgba(0,0,0,.24),0 0 18px rgba(143,115,255,.16);
   animation:node-breathe 3.6s ease-in-out infinite;
   animation-delay:calc(var(--i) * .12s);
-  gap:2px;
+  gap:3px;
 }
 
 .ecosystem-orbit > span strong{
@@ -502,9 +502,9 @@
   position:absolute;
   left:50%;
   top:50%;
-  width:148px;
-  height:148px;
-  margin:-74px;
+  width:164px;
+  height:164px;
+  margin:-82px;
   border-radius:50%;
   background:radial-gradient(circle at 35% 30%,#8f73ff,#5f35d6 58%,#34146b 100%);
   display:flex;
@@ -516,14 +516,14 @@
 }
 
 .ecosystem-core b{
-  font:800 18px Sora;
+  font:800 20px Sora;
 }
 
 .ecosystem-core small{
-  margin-top:3px;
+  margin-top:4px;
   color:#d8cfff;
-  font:700 8px Sora;
-  letter-spacing:1.8px;
+  font:700 8.4px Sora;
+  letter-spacing:2px;
 }
 
 .login-pulse.compact{
@@ -991,8 +991,8 @@
 }
 
 @keyframes node-breathe{
-  0%,100%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-174px) rotate(calc(var(--i) * -25.714deg)) scale(1)}
-  50%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-174px) rotate(calc(var(--i) * -25.714deg)) scale(1.08)}
+  0%,100%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-196px) rotate(calc(var(--i) * -25.714deg)) scale(1)}
+  50%{transform:rotate(calc(var(--i) * 25.714deg)) translateY(-196px) rotate(calc(var(--i) * -25.714deg)) scale(1.08)}
 }
 
 @keyframes core-bloom{
