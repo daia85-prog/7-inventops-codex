@@ -231,6 +231,8 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
   const [selectedTrack, setSelectedTrack] = useState("");
   const [handoffMap, setHandoffMap] = useState({});
   const [trackDoneMap, setTrackDoneMap] = useState({});
+  const [chargeMap, setChargeMap] = useState({});
+  const [readyMap, setReadyMap] = useState({});
   const area = AREAS.find((a) => a.code === dept);
   const pilotConfig = PILOT_DEPARTMENTS[dept];
   const isPilot = Boolean(pilotConfig);
@@ -301,6 +303,26 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
       return;
     }
     notify(`Cobrança registrada para destravar ${activeTrack.label}: ${pending[0] || "sem pendência aberta"}.`);
+  };
+
+  const pingWaiting = (waitingItem, index) => {
+    const now = new Date();
+    const hh = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+    const stamp = `hoje · ${hh}`;
+    const key = `${dept}-waiting-${index}`;
+    setChargeMap((current) => ({ ...current, [key]: stamp }));
+    setFeed((current) => [{ t: stamp, from: dept, to: waitingItem.from === "Cliente" ? "Cliente" : waitingItem.from, txt: `Cobrança registrada: ${waitingItem.what}` }, ...current]);
+    notify(`Cobrança enviada sobre ${waitingItem.project}.`);
+  };
+
+  const signalReady = (waitingItem, index) => {
+    const now = new Date();
+    const hh = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+    const stamp = `hoje · ${hh}`;
+    const key = `${dept}-waited-${index}`;
+    setReadyMap((current) => ({ ...current, [key]: stamp }));
+    setFeed((current) => [{ t: stamp, from: dept, to: waitingItem.dept, txt: `Área sinalizou prontidão: ${waitingItem.what}` }, ...current]);
+    notify(`Prontidão sinalizada para ${areaName(waitingItem.dept)}.`);
   };
 
   const advanceTrack = () => {
@@ -418,7 +440,8 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
                 <footer>
                   <span><Buildings />de: <b>{w.from === "Cliente" ? "Cliente" : areaName(w.from)}</b></span>
                   <span><Warning />{w.age} esperando</span>
-                  <button className="ghost-mini" onClick={() => notify(`Cobrança preparada para ${w.from === "Cliente" ? "o cliente" : areaName(w.from)} sobre: ${w.what}`)}><Envelope />Cobrar</button>
+                  {chargeMap[`${dept}-waiting-${i}`] ? <span className="mini-state done"><CheckCircle />{chargeMap[`${dept}-waiting-${i}`]}</span> : null}
+                  <button className="ghost-mini" onClick={() => pingWaiting(w, i)}><Envelope />Cobrar</button>
                 </footer>
               </div>
             ))}
@@ -432,7 +455,11 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
               <div key={i} className="hand-card waitedrow">
                 <header><small>{w.project}</small><span className="side-tag inv">{areaName(w.dept)}</span></header>
                 <h3>{w.what}</h3>
-                <footer><span><HandPalm />o bastão está com a gente</span></footer>
+                <footer>
+                  <span><HandPalm />o bastão está com a gente</span>
+                  {readyMap[`${dept}-waited-${i}`] ? <span className="mini-state done"><CheckCircle />{readyMap[`${dept}-waited-${i}`]}</span> : null}
+                  <button className="ghost-mini" onClick={() => signalReady(w, i)}><PaperPlaneTilt />Sinalizar prontidão</button>
+                </footer>
               </div>
             ))}
           </div>
