@@ -9,6 +9,9 @@ When implementing from a selected generated mock, treat that image as the source
 ## Product decisions
 
 - Approved visual target: `reference-approved.png`.
+- Baseline segura publicada em 2026-08-08: tag `baseline-segura-2026-08-08`.
+- Referências premium catalogadas para análise antes de qualquer substituição total: `https://velox-demo.pages.dev/inventops79/` e `https://velox-demo.pages.dev/inventops79/login-icones/`.
+- Preferência atual da Daia: `inventops79` é candidata premium forte para futura consolidação da home/login, sem trocar a baseline no escuro.
 - This repository is the independent **Codex product line**. Never push changes to the Claude repository; `upstream-claude` is reference-only.
 - Baseline imported from `daia85-prog/7-inventops` at commit `e5caccd`. All work after this point belongs to the Codex line.
 - Build one cohesive product with three first-class modules: Simulador de Impacto, Comissionamento and Sala de Decisão.
