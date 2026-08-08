@@ -60,11 +60,38 @@ function Metric({icon:Icon,label,value,note,tone="cyan"}){
 
 export function ExecutiveDashboard({projects,setActive}){
   const health=Math.round(projects.reduce((sum,p)=>sum+p.health,0)/projects.length);
+  const hotAreas=departments.filter(area=>area.load>=100).slice(0,3);
+  const decisionPulse=[
+    {label:"Operação viva",value:"14 áreas conectadas",tone:"cyan"},
+    {label:"Decisões hoje",value:"3 críticas",tone:"gold"},
+    {label:"Risco imediato",value:"PLC + Infra + Compras",tone:"red"}
+  ];
   return <section className="page foundation-page">
+    <div className="executive-command-strip">
+      {decisionPulse.map(item=><span key={item.label} className={item.tone}><small>{item.label}</small><b>{item.value}</b></span>)}
+    </div>
     <div className="executive-hero">
       <div className="health-visual"><ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={[{v:health},{v:100-health}]} dataKey="v" startAngle={90} endAngle={-270} innerRadius={55} outerRadius={67} stroke="none"><Cell fill="#f5c300"/><Cell fill="#18263a"/></Pie></PieChart></ResponsiveContainer><span><small>HEALTH SCORE</small><b>{health}</b><em>/100</em></span></div>
       <div className="executive-brief"><small>BRIEFING EXECUTIVO Â· 11 JUL 2026</small><h2>Hoje, a operaÃ§Ã£o precisa de trÃªs decisÃµes.</h2><p>O portfÃ³lio estÃ¡ estÃ¡vel, mas <b>Infraestrutura, Compras e PLC</b> concentram os riscos que podem deslocar os prÃ³ximos Go Lives. Priorize Market Peru, estabilize o Sensor X do TITANO e confirme as VMs do Navepark.</p><div><button className="primary" onClick={()=>setActive("action")}><CheckSquare/>Abrir plano de aÃ§Ã£o</button><button className="ghost" onClick={()=>setActive("executive")}><FileText/>Ver one-page</button></div></div>
       <div className="countdown"><small>PRÃ“XIMO GO LIVE</small><b>9</b><span>dias</span><strong>TITANO Â· 20 JUL</strong><em>78% de confianÃ§a</em></div>
+    </div>
+    <div className="executive-signal-grid">
+      <article className="signal-panel priority">
+        <small>ÁREAS SOB PRESSÃO</small>
+        <b>Onde agir antes do atraso virar custo</b>
+        <div className="signal-list">
+          {hotAreas.map(area=><button key={area.code} type="button" onClick={()=>setActive("areas")}><span>{area.code}</span><div><strong>{area.name}</strong><small>{area.owner}</small></div><em>{area.load}%</em></button>)}
+        </div>
+      </article>
+      <article className="signal-panel synopsis">
+        <small>LEITURA DO INVENTOPS</small>
+        <b>A carteira está controlada, mas o sistema já aponta a próxima pressão.</b>
+        <p>O InventOps cruza capacidade, bloqueios e datas de marco para mostrar onde a coordenação precisa acontecer antes do problema aparecer no cronograma executivo.</p>
+        <div className="synopsis-actions">
+          <button className="ghost" onClick={()=>setActive("pmo")}><ChartLineUp/>Abrir PMO Control Tower</button>
+          <button className="ghost" onClick={()=>setActive("decision")}><Sparkle/>Ver Decision Room</button>
+        </div>
+      </article>
     </div>
     <div className="foundation-metrics"><Metric icon={Buildings} label="CARTEIRA" value={`${projects.length} projetos`} note="2 bloqueados"/><Metric icon={Warning} label="RISCO MATERIAL" value="R$ 1,8 mi" note="exposiÃ§Ã£o estimada" tone="red"/><Metric icon={UsersThree} label="CAPACIDADE" value="117% PLC" note="pico em setembro" tone="yellow"/><Metric icon={FlagCheckered} label="GO LIVES" value="4 em 90d" note="2 confirmados" tone="green"/></div>
     <div className="foundation-grid two-one"><Panel title="Quem o COO deve cobrar hoje" subtitle="PriorizaÃ§Ã£o calculada por impacto, prazo e SLA"><div className="charge-list">{blockers.map((b,i)=><button key={b.project} onClick={()=>setActive(i===2?"alerts":"action")}><strong>0{i+1}</strong><span><b>{b.project}</b><small>{b.action}</small></span><em>{b.owner}</em><ArrowRight/></button>)}</div></Panel><Panel title="Pulso do portfÃ³lio" subtitle="TendÃªncia dos Ãºltimos 30 dias"><div className="foundation-chart"><ResponsiveContainer><AreaChart data={trend}><defs><linearGradient id="healthFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#28c5e7" stopOpacity=".35"/><stop offset="1" stopColor="#28c5e7" stopOpacity="0"/></linearGradient></defs><CartesianGrid stroke="#17243a" vertical={false}/><XAxis dataKey="day" tick={{fontSize:9}} stroke="#66758c"/><YAxis domain={[40,100]} tick={{fontSize:9}} stroke="#66758c"/><Tooltip/><Area dataKey="health" stroke="#28c5e7" fill="url(#healthFill)" strokeWidth={2}/></AreaChart></ResponsiveContainer></div></Panel></div>
