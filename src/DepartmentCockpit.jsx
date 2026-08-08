@@ -5,6 +5,7 @@ import {
   CalendarBlank,
   CheckCircle,
   ClockCountdown,
+  ClipboardText,
   Envelope,
   HandPalm,
   PaperPlaneTilt,
@@ -268,6 +269,13 @@ export function DepartmentCockpit({ notify, imported = [] }) {
     notify(`${areaName(item.to)} notificada: ${item.title} do ${item.project} está pronto. ✓ ${hh}`);
   };
 
+  const copyTrackSummary = async () => {
+    if (!activeTrack) return;
+    const text = `${area.nome} · ${activeTrack.label}\n${activeTrack.summary}\n${activeTrack.items.map((item)=>`${item.done ? "✓" : "•"} ${item.label}`).join("\n")}\nHandoff: ${activeTrack.handoff}`;
+    try { await navigator.clipboard.writeText(text); } catch {}
+    notify(`Resumo de ${activeTrack.label} preparado para Daniel/Thomas revisar.`);
+  };
+
   return (
     <section className="page cockpit-page">
       <div className="cockpit-picker" role="tablist" aria-label="Escolha o departamento">
@@ -413,6 +421,7 @@ export function DepartmentCockpit({ notify, imported = [] }) {
               <h3>{activeTrack.label}</h3>
               <p>{activeTrack.summary}</p>
               <span>{activeTrack.handoff}</span>
+              <button className="ghost cockpit-track-action" type="button" onClick={copyTrackSummary}><ClipboardText />Copiar resumo do projeto</button>
             </div>
             <div className="cockpit-track-list">
               {activeTrack.items.map((item) => (

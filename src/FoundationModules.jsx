@@ -205,6 +205,11 @@ export function AdminGovernance({role,setRole,notify}){
     ["Sessões auditáveis","100%","Toda ação crítica deixa trilha"],
     ["Regra central","RBAC + evidência","Capacidade correta para cada contexto"]
   ];
+  const pilotUsers=[
+    {name:"Douglas Alves", profile:"Gestor", area:"Infraestrutura / Implantação", status:"Ativo"},
+    {name:"Daniel", profile:"Gestor", area:"Implantação", status:"Piloto real"},
+    {name:"Thomas", profile:"Analista", area:"Espec. Software / DevOps", status:"Piloto real"},
+  ];
   const adminPrinciples=[
     ["Permissão por capacidade","Cada perfil vê e faz só o que precisa."],
     ["Acessível de nascença","Contraste forte, leitura clara e navegação sem susto."],
@@ -249,6 +254,17 @@ export function AdminGovernance({role,setRole,notify}){
         <div className="admin-theme-state"><ShieldCheck/><span><small>TEMA ATIVO</small><b>{theme}</b></span></div>
       </Panel>
     </div>
+    <Panel title="Usuários válidos do piloto" subtitle="Escopo atual vindo das áreas e do inventops79">
+      <div className="admin-pilot-users">
+        {pilotUsers.map((user)=><article key={user.name}>
+          <small>{user.profile}</small>
+          <b>{user.name}</b>
+          <p>{user.area}</p>
+          <span>{user.status}</span>
+          <button className="ghost" type="button" onClick={()=>notify(`${user.name} está registrado como usuário válido do piloto em ${user.area}.`)}>Validar usuário</button>
+        </article>)}
+      </div>
+    </Panel>
     <Panel title="Matriz de permissões" subtitle="Rotas e ações por perfil"><div className="permission-table"><header><span>Permissão</span>{Object.keys(roles).map(r=><span key={r}>{r==="Diretoria"?"DIREX":r}</span>)}</header>{permissions.map((p,i)=><div key={p}><b>{p}</b>{Object.keys(roles).map(r=><span key={r}>{roles[r][i]?<CheckCircle/>:<XCircle/>}</span>)}</div>)}</div></Panel>
     <Panel title="Trilha de auditoria" subtitle="Quem fez o quê, quando e sobre qual registro"><div className="audit-log">{[["21:38","Douglas","Alterou prazo do Go Live","TITANO"],["20:54","Daiana Costa","Anexou evidência REV4","QUELUZ"],["19:42","Sistema IoT","Criou alerta P0","TITANO"],["18:17","Ivan","Atualizou bloqueio de VPN","MARKET PERU"]].map(x=><div key={x.join()}><span>{x[0]}</span><b>{x[1]}</b><p>{x[2]}</p><em>{x[3]}</em></div>)}</div></Panel></section>;
 }
