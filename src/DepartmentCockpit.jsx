@@ -197,6 +197,7 @@ const FEED_SEED = [
 ];
 
 const SAMPLE_PROJECTS = ["TITANO", "QUELUZ", "MARKET PERU", "NAVEPARK", "BP", "MARKET CHILE"];
+const PRIORITY_DEPTS = ["INF", "IMP", "ESP"];
 
 function sampleFor(code) {
   const i = AREAS.findIndex((a) => a.code === code);
@@ -241,6 +242,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
     () => (isPilot ? pilotConfig : sampleFor(dept)),
     [dept, isPilot, pilotConfig]
   );
+  const priorityAreas = AREAS.filter((item) => PRIORITY_DEPTS.includes(item.code));
 
   const importedHere = imported.filter((d) => d.dept === dept).map((d, i) => ({
     id: `imp-${dept}-${i}`,
@@ -293,6 +295,9 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
 
   const trackCompleted = activeTrack ? activeTrack.items.every((item) => item.done) : false;
   const trackHandoffDone = activeTrack ? Boolean(handoffMap[activeTrack.id]) : false;
+  const nextDependency = base.waiting[0];
+  const nextConsumer = base.waitedBy[0];
+  const nextDelivery = open[0] || deliveries[0];
 
   const registerCharge = () => {
     if (!activeTrack) return;
@@ -348,6 +353,21 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
 
   return (
     <section className="page cockpit-page">
+      <div className="pilot-focus-strip">
+        {priorityAreas.map((item) => {
+          const activePilot = dept === item.code;
+          const pilotData = PILOT_DEPARTMENTS[item.code];
+          return (
+            <button key={item.code} className={activePilot ? "active" : ""} onClick={() => { setDept(item.code); setSelectedTrack(""); }}>
+              <small>ÁREA PILOTO</small>
+              <b>{item.nome}</b>
+              <p>{pilotData?.focal || item.gestor} · {pilotData ? "fluxo real validado" : "em preparação"}</p>
+              <span>{activePilot ? "visão ativa" : "abrir área"}</span>
+            </button>
+          );
+        })}
+      </div>
+
       <div className="cockpit-picker" role="tablist" aria-label="Escolha o departamento">
         {AREAS.map((a) => (
           <button key={a.code} role="tab" aria-selected={dept === a.code} className={dept === a.code ? "active" : ""} onClick={() => { setDept(a.code); setSelectedTrack(""); }}>
@@ -378,6 +398,24 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
           <span><b>{base.waitedBy.length}</b><small>esperam por mim</small></span>
           <span><b>{feed.filter((f) => f.t.startsWith("hoje")).length}</b><small>handoffs hoje</small></span>
         </div>
+      </div>
+
+      <div className="cockpit-priority-row">
+        <article>
+          <small>PRÓXIMO DESBLOQUEIO</small>
+          <b>{nextDependency ? nextDependency.what : "Sem bloqueio crítico aberto"}</b>
+          <p>{nextDependency ? `${nextDependency.project} · aguardando ${nextDependency.from === "Cliente" ? "cliente" : areaName(nextDependency.from)}` : "A área está livre para seguir com a próxima etapa."}</p>
+        </article>
+        <article>
+          <small>PRÓXIMO HANDOFF</small>
+          <b>{nextDelivery ? nextDelivery.title : "Nenhuma entrega pendente"}</b>
+          <p>{nextDelivery ? `${nextDelivery.project} · destino ${areaName(nextDelivery.to)}` : "Todas as entregas atuais já estão concluídas."}</p>
+        </article>
+        <article>
+          <small>QUEM ESTÁ ESPERANDO</small>
+          <b>{nextConsumer ? areaName(nextConsumer.dept) : "Sem fila de espera"}</b>
+          <p>{nextConsumer ? `${nextConsumer.project} · ${nextConsumer.what}` : "Nenhuma outra área depende deste módulo agora."}</p>
+        </article>
       </div>
 
       <article className="journey-checklist cockpit-journey">
