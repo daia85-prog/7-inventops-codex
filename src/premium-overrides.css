@@ -284,9 +284,9 @@
   position:absolute;
   left:50%;
   top:50%;
-  width:98px;
-  height:98px;
-  margin:-49px;
+  width:104px;
+  height:104px;
+  margin:-52px;
   transform:
     rotate(calc(var(--i) * 25.714deg))
     translateY(-174px)
@@ -298,9 +298,9 @@
   align-items:center;
   justify-content:center;
   text-align:center;
-  padding:8px;
+  padding:10px;
   color:#d7e0ee;
-  font:700 11.4px/1.16 Inter;
+  font:700 10.8px/1.12 Inter;
   box-shadow:0 10px 30px rgba(0,0,0,.22),0 0 14px rgba(143,115,255,.12);
   animation:node-breathe 3.6s ease-in-out infinite;
   animation-delay:calc(var(--i) * .12s);
@@ -486,9 +486,9 @@
   }
 
   .ecosystem-orbit > span{
-    width:88px;
-    height:88px;
-    margin:-44px;
+    width:92px;
+    height:92px;
+    margin:-46px;
     transform:
       rotate(calc(var(--i) * 25.714deg))
       translateY(-148px)
