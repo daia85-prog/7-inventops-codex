@@ -398,7 +398,43 @@ function AlertsPage({alerts,setAlerts}) { const [filter,setFilter]=useState("Tod
 
 function EvidencePage(){ const rows=[{project:"TITANO",progress:73,infra:"4/5",dev:"12",tests:"18/20",confidence:"Alta"},{project:"QUELUZ",progress:68,infra:"5/5",dev:"9",tests:"10/20",confidence:"Média"},{project:"MARKET PERU",progress:42,infra:"3/5",dev:"6",tests:"4/20",confidence:"Média"}]; return <section className="page evidence-page"><div className="evidence-hero"><div><small>FAROL DE PRODUTIVIDADE</small><h2>Progresso que explica a si mesmo</h2><p>O percentual combina entregáveis aceitos, checklists, atividade válida em base homologada e testes de comissionamento.</p></div><div className="formula"><span>35%</span><b>Entregáveis</b><span>25%</span><b>Checklists</b><span>20%</span><b>Commits válidos</b><span>20%</span><b>Testes aprovados</b></div></div><div className="evidence-table"><header><span>Projeto</span><span>Progresso</span><span>Infra</span><span>Dev</span><span>Comissionamento</span><span>Confiança</span></header>{rows.map(r=><div key={r.project}><b>{r.project}</b><span className="progress-cell"><span className="evidence-progress" aria-hidden="true"><i style={{width:`${r.progress}%`}}/></span><strong>{r.progress}%</strong></span><span>{r.infra} checklists</span><span>{r.dev} commits</span><span>{r.tests} testes</span><em>{r.confidence}</em></div>)}</div></section>; }
 
-function Home({setActive}) { return <section className="page home-page"><div className="home-hero"><small>CENTRO DE INTELIGÊNCIA OPERACIONAL</small><h2>Controle o projeto hoje. Antecipe o gargalo de amanhã.</h2><p>Planeje fases e atividades, cobre responsáveis, reúna evidências e use a mesma base para prever impactos antes que eles parem a operação.</p><button className="primary" onClick={()=>setActive("portfolio")}><FolderOpen/>Abrir Controle de Projetos</button></div><div className="module-list"><button onClick={()=>setActive("portfolio")}><FolderOpen/><span><b>Controle de Projetos</b><small>Portfólio, fases, atividades, marcos e riscos.</small></span><ArrowRight/></button><button onClick={()=>setActive("simulator")}><Sparkle/><span><b>Simulador de Impacto</b><small>Antecipe atrasos e sobrecarga de equipes.</small></span><ArrowRight/></button><button onClick={()=>setActive("commissioning")}><Factory/><span><b>Comissionamento</b><small>Conecte a telemetria física ao Smart Triage.</small></span><ArrowRight/></button></div></section>; }
+function Home({setActive}) {
+  const spotlight = [
+    { value: "14", label: "áreas coordenadas", tone: "cyan" },
+    { value: "6", label: "projetos críticos no radar", tone: "purple" },
+    { value: "3", label: "decisões do dia", tone: "gold" },
+  ];
+  const modules = [
+    { id: "portfolio", icon: FolderOpen, title: "Controle de Projetos", body: "Portfólio, fases, atividades, marcos, evidências e riscos em uma única linha de execução.", note: "Espinha operacional" },
+    { id: "simulator", icon: Sparkle, title: "Simulador de Impacto", body: "Antecipe atrasos, sobrecarga e conflito de capacidade antes que virem custo ou atraso real.", note: "Leitura preditiva" },
+    { id: "commissioning", icon: Factory, title: "Comissionamento", body: "Conecte a telemetria física ao Smart Triage e transforme falha de campo em priorização imediata.", note: "Chão de fábrica vivo" },
+  ];
+  const decisionCards = [
+    ["TITANO", "Sensor X exige decisão hoje", "Go Live protegido se o plano físico for fechado até 18:00."],
+    ["MARKET PERU", "VPN e range IP seguem críticos", "Infraestrutura ainda dita a janela real de homologação."],
+    ["NAVEPARK", "Topologia HML continua no centro", "A decisão técnica destrava DEV sem paralisar as outras áreas."],
+  ];
+  return <section className="page home-page premium-home">
+    <div className="home-hero">
+      <small>PILOTO DE IMPLANTAÇÃO & DEVOPS</small>
+      <h2>Conecte pessoas, evidências e decisões antes que o atraso vire operação.</h2>
+      <p>O InventOps organiza a carteira inteira em uma única verdade operacional. Você enxerga o que destravar agora, quem está esperando e qual impacto cada decisão provoca nos próximos marcos.</p>
+      <div className="home-spotlight">
+        {spotlight.map(item => <span key={item.label} className={item.tone}><b>{item.value}</b><small>{item.label}</small></span>)}
+      </div>
+      <div className="home-cta-row">
+        <button className="primary" onClick={()=>setActive("portfolio")}><FolderOpen/>Abrir Controle de Projetos</button>
+        <button className="ghost" onClick={()=>setActive("executive")}><ChartLineUp/>Ver leitura executiva</button>
+      </div>
+      <div className="home-decision-cards">
+        {decisionCards.map(([tag,title,body])=><article key={tag}><small>{tag}</small><b>{title}</b><p>{body}</p></article>)}
+      </div>
+    </div>
+    <div className="module-list premium-module-list">
+      {modules.map(item=>{const Icon=item.icon;return <button key={item.id} onClick={()=>setActive(item.id)}><Icon/><span><small>{item.note}</small><b>{item.title}</b><p>{item.body}</p></span><ArrowRight/></button>})}
+    </div>
+  </section>;
+}
 
 function SettingsPage(){ const [settings,setSettings]=useState({p0:true,capacity:true,evidence:true}); return <section className="page settings-page"><div className="settings-card"><h2>Regras de governança</h2><p>Controles da demonstração. Nenhuma chave externa é armazenada no navegador.</p>{[["p0","Criar P0 automaticamente","Falhas críticas de sensores abrem um alerta com SLA."],["capacity","Monitorar sobrecarga de capacidade","Avise quando uma equipe ultrapassar 100% de alocação."],["evidence","Exigir evidência para progresso","Percentuais só avançam com entregáveis verificáveis."]].map(([k,t,d])=><label key={k}><span><b>{t}</b><small>{d}</small></span><input type="checkbox" checked={settings[k]} onChange={()=>setSettings({...settings,[k]:!settings[k]})}/><i/></label>)}</div><div className="settings-card"><h2>Fontes conectadas</h2><p>Estado simulado para a apresentação.</p><ul className="sources"><li><Circuitry/><span><b>CLP · Linha 01</b><small>Última leitura há 2s</small></span><em>Conectado</em></li><li><Database/><span><b>Base homologada</b><small>Commits e builds válidos</small></span><em>Conectado</em></li><li><LinkSimple/><span><b>Planejamento</b><small>Projetos e dependências</small></span><em>Conectado</em></li></ul></div></section>; }
 

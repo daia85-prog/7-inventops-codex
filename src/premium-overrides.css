@@ -1,0 +1,159 @@
+.login-screen{
+  grid-template-columns:1.12fr .88fr;
+  background:
+    radial-gradient(circle at 20% 15%,rgba(116,77,255,.18),transparent 25%),
+    radial-gradient(circle at 85% 80%,rgba(40,197,231,.08),transparent 22%),
+    #040914;
+}
+
+.login-visual{
+  padding:42px 56px 34px;
+  background:linear-gradient(180deg,rgba(4,9,20,.36),rgba(4,9,20,.82)),linear-gradient(135deg,#071224,#050b15);
+  border-right:1px solid rgba(124,145,173,.12);
+}
+
+.login-visual::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 38% 48%,rgba(95,76,255,.24),transparent 17%),
+    radial-gradient(circle at 48% 48%,rgba(84,217,255,.18),transparent 30%),
+    url("../assets/conveyor-twin.png") center/cover no-repeat;
+  opacity:.28;
+  mix-blend-mode:screen;
+  pointer-events:none;
+}
+
+.login-brand img{width:54px;filter:drop-shadow(0 0 18px rgba(108,106,255,.35))}
+.login-brand b{font-size:24px}
+.login-brand small{font-size:8px;letter-spacing:3px;color:#5de1ff}
+.login-message{max-width:720px}
+.login-message>small{
+  display:inline-flex;
+  padding:10px 18px;
+  border:1px solid rgba(83,228,255,.28);
+  border-radius:999px;
+  background:rgba(8,23,37,.68);
+  backdrop-filter:blur(10px);
+  font-size:10px;
+  letter-spacing:1.8px;
+}
+.login-message h1{margin:26px 0 18px;font-size:clamp(56px,5.8vw,88px);line-height:.96}
+.login-message h1 span{background:linear-gradient(90deg,#8c6bff,#53d8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.login-message p{font-size:16px;line-height:1.8;color:#c0cedd;max-width:620px}
+.login-pulse{
+  margin-top:22px;
+  max-width:720px;
+  background:rgba(9,22,37,.84);
+  border:1px solid rgba(101,119,145,.28);
+  border-radius:18px;
+  box-shadow:0 24px 60px rgba(0,0,0,.24);
+}
+.login-pulse>span{padding:18px 18px 18px 14px;grid-template-columns:34px 1fr;gap:5px 10px}
+.login-pulse svg{width:20px;height:20px;padding:7px;border-radius:10px;background:#102439;color:#63ddff;box-sizing:content-box}
+.login-pulse b{font-size:22px}
+.login-pulse small{font-size:9px;color:#90a3ba}
+.login-lang{
+  margin-top:18px;
+  display:inline-flex;
+  padding:5px;
+  border:1px solid rgba(125,142,170,.22);
+  border-radius:999px;
+  background:rgba(8,23,37,.76);
+}
+.login-lang button{min-width:54px;height:38px;border:0;border-radius:999px;background:transparent;color:#96a7bb;font-weight:700;cursor:pointer}
+.login-lang button.active{background:linear-gradient(90deg,#f3c413,#ffdd55);color:#111827}
+.login-visual>footer{margin-top:18px;font-size:10px;color:#71839c}
+.login-panel{
+  background:radial-gradient(circle at 50% 0%,rgba(131,87,255,.1),transparent 28%),linear-gradient(180deg,#091321,#07101d);
+}
+.login-panel form{
+  width:min(470px,100%);
+  padding:34px;
+  border:1px solid rgba(107,127,155,.2);
+  border-radius:28px;
+  background:linear-gradient(180deg,rgba(10,22,38,.95),rgba(8,18,31,.98));
+  box-shadow:0 30px 80px rgba(0,0,0,.34);
+}
+.login-panel form>small{font-size:10px;letter-spacing:1.8px}
+.login-panel h2{margin:12px 0 10px;font-size:38px;line-height:1.08}
+.login-panel form>p{margin-bottom:28px;color:#9eb0c4;font-size:13px;line-height:1.7}
+.login-panel form>label{gap:10px;margin-top:16px;font-size:11px}
+.login-panel form>label input{height:58px;padding:0 16px;border-radius:14px;background:#0b1727;border-color:#314862}
+.login-options{margin:16px 0 20px}
+.login-options label,.login-options button{font-size:10px}
+.demo-credentials{padding:14px;border-radius:12px}
+.demo-credentials b,.demo-credentials span,.demo-credentials small{font-size:10px}
+.login-panel .primary,.sso-button{height:56px;border-radius:14px}
+.login-panel .primary{font-size:17px}
+.sso-divider{font-size:9px;margin:20px 0}
+.sso-button{font-size:12px}
+.sso-button span{width:28px;height:28px}
+.login-panel form>footer{margin-top:20px;font-size:9px}
+
+.premium-home.home-page{grid-template-columns:minmax(0,1.28fr) minmax(340px,.72fr);gap:18px}
+.premium-home .home-hero{
+  min-height:620px;
+  padding:34px;
+  justify-content:space-between;
+  background:
+    radial-gradient(circle at 20% 18%,rgba(102,86,255,.16),transparent 20%),
+    radial-gradient(circle at 82% 82%,rgba(40,197,231,.11),transparent 26%),
+    linear-gradient(135deg,#081321,#07101b 56%,#0a1825);
+  position:relative;
+  overflow:hidden;
+}
+.premium-home .home-hero::after{
+  content:"";
+  position:absolute;
+  inset:auto -8% -24% auto;
+  width:420px;
+  height:420px;
+  background:radial-gradient(circle,rgba(97,217,255,.18),transparent 54%);
+  filter:blur(18px);
+  pointer-events:none;
+}
+.premium-home .home-hero>*{position:relative;z-index:1}
+.premium-home .home-hero small{font-size:10px;letter-spacing:2px}
+.premium-home .home-hero h2{font-size:56px;line-height:1.02;max-width:860px;margin:0}
+.premium-home .home-hero p{font-size:15px;max-width:700px;line-height:1.8;color:#b0c0d0;margin:0}
+.home-spotlight{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:740px}
+.home-spotlight span{padding:16px 18px;border:1px solid rgba(97,122,150,.24);border-radius:18px;background:rgba(10,24,39,.82);display:flex;flex-direction:column;gap:4px}
+.home-spotlight span b{font:800 34px Sora}
+.home-spotlight span small{font-size:10px;letter-spacing:.4px;color:#9bb0c7}
+.home-spotlight span.cyan b{color:#53d8ff}
+.home-spotlight span.purple b{color:#8f73ff}
+.home-spotlight span.gold b{color:#f5c300}
+.home-cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.home-cta-row .primary,.home-cta-row .ghost{height:52px;border-radius:14px}
+.home-decision-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.home-decision-cards article{padding:18px;border:1px solid rgba(97,122,150,.22);border-radius:18px;background:linear-gradient(180deg,rgba(10,23,37,.92),rgba(8,18,30,.92))}
+.home-decision-cards small{display:block;color:#f5c300;font-size:9px;letter-spacing:1.4px}
+.home-decision-cards b{display:block;margin:10px 0 8px;font:700 17px/1.28 Sora}
+.home-decision-cards p{margin:0;color:#92a5bb;font-size:12px;line-height:1.7}
+.premium-module-list{gap:14px}
+.premium-module-list button{padding:24px 22px;border-radius:18px;background:linear-gradient(180deg,#0b1625,#081321);grid-template-columns:50px 1fr 22px;gap:12px}
+.premium-module-list button>svg:first-child{width:22px;height:22px;padding:12px;border-radius:14px;background:#102439;box-sizing:content-box}
+.premium-module-list button span{gap:8px}
+.premium-module-list button span small{font-size:9px;letter-spacing:1.1px;color:#7dd3fc;text-transform:uppercase}
+.premium-module-list button b{font-size:18px}
+.premium-module-list button p{margin:0;color:#93a4b8;font-size:12px;line-height:1.7}
+.premium-module-list button:hover{border-color:#5c7392;transform:translateY(-3px)}
+
+@media(max-width:1180px){
+  .premium-home .home-hero h2{font-size:44px}
+  .home-decision-cards{grid-template-columns:1fr}
+}
+
+@media(max-width:760px){
+  .login-screen{display:block}
+  .login-visual{display:none}
+  .login-panel{min-height:100vh;padding:25px}
+  .login-panel form{padding:26px;border-radius:22px}
+  .login-panel h2{font-size:31px}
+  .premium-home.home-page{grid-template-columns:1fr}
+  .premium-home .home-hero{min-height:auto;padding:24px;gap:18px}
+  .premium-home .home-hero h2{font-size:34px}
+  .home-spotlight,.home-decision-cards{grid-template-columns:1fr}
+}
