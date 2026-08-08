@@ -216,6 +216,60 @@ function LangSwitch({ lang, setLang, notify }) {
   </span>;
 }
 
+function SidebarEnhanced({ active, setActive, alertCount, notify, role, setRole, theme, setTheme, onLogout }) {
+  const themeOptions = ["Escuro","Claro","Contraste"];
+  const roleOptions = ["Analista","Gestor","Diretoria","Admin"];
+  const [openGroups,setOpenGroups]=useState({
+    "EXECUTIVO":true,
+    "OPERAÇÃO":true,
+    "INTELIGÊNCIA":false,
+    "GOVERNANÇA":false,
+  });
+
+  return <aside className="sidebar">
+    <Logo/>
+    <div className="sidebar-controls">
+      <section className="sidebar-card">
+        <small>TEMA</small>
+        <div className="sidebar-segmented">
+          {themeOptions.map(option=><button key={option} className={theme===option?"active":""} onClick={()=>{setTheme(option);notify(`Tema alterado para ${option}.`)}}>{option}</button>)}
+        </div>
+      </section>
+      <section className="sidebar-card">
+        <small>VER COMO</small>
+        <div className="sidebar-role-switch">
+          {roleOptions.map(option=><button key={option} title={option} className={role===option?"active":""} onClick={()=>{setRole(option);notify(`Visualização alterada para ${option}.`)}}>{option==="Diretoria"?"Direx":option}</button>)}
+        </div>
+      </section>
+    </div>
+    <nav>
+      {navGroups.map(group=><div className={`nav-group ${openGroups[group.label]?"open":"collapsed"}`} key={group.label}>
+        <button type="button" className="nav-group-toggle" aria-expanded={!!openGroups[group.label]} onClick={()=>setOpenGroups(current=>({...current,[group.label]:!current[group.label]}))}>
+          <small>{group.label}</small>
+          <CaretDown size={12} className={openGroups[group.label]?"open":""}/>
+        </button>
+        <div className="nav-group-items">
+          {group.items.map(({id,label,icon:Icon,mobile,adminOnly}) => {
+            const isActive=active===id||(active==="project"&&id==="portfolio");
+            const restricted=adminOnly&&role!=="Admin";
+            return <button data-mobile={mobile?"true":"false"} key={id} aria-label={label} className={`${isActive?"active":""} ${restricted?"restricted":""}`} onClick={()=>restricted?notify("Acesso restrito ao perfil Admin."):setActive(id)}>
+              <Icon size={19} weight={isActive?"fill":"regular"}/>
+              <span>{label}</span>
+              {restricted?<LockKey size={12}/>:null}
+              {id==="alerts"&&alertCount>0?<b>{alertCount}</b>:null}
+            </button>
+          })}
+        </div>
+      </div>)}
+    </nav>
+    <div className="sidebar-bottom">
+      <button className="profile" onClick={()=>setActive("admin")}><span className="avatar">D</span><span><strong>Douglas</strong><small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><CaretDown size={15}/></button>
+      <button className="logout-button" onClick={onLogout}><SignOut/><span>Sair com segurança</span></button>
+      <div className="credit"><Sparkle size={15} weight="fill"/><span>Desenvolvido por <b>Daiana Costa</b></span></div>
+    </div>
+  </aside>;
+}
+
 function Topbar({ active, role, onLogout, notify, lang, setLang }) {
   const localizedMeta = pageMetaIntl[lang]?.[active] || pageMeta[active];
   const roadmapTitle = {
@@ -541,5 +595,5 @@ export function App() {
     evidence:<EvidencePage/>,settings:<SettingsPage/>
   };
   const page=canAccess?pages[active]:<AccessDenied setActive={setActive}/>;
-  return <div className="app-shell" data-theme={theme}><Sidebar active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} setRole={setRole} theme={theme} setTheme={setTheme} onLogout={logout}/><main className="workspace"><Topbar active={active} role={role} onLogout={logout} notify={notify} lang={lang} setLang={setLang}/><DemoJourneyRail active={active} setActive={setActive} lang={lang} />{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
+  return <div className="app-shell" data-theme={theme}><SidebarEnhanced active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} setRole={setRole} theme={theme} setTheme={setTheme} onLogout={logout}/><main className="workspace"><Topbar active={active} role={role} onLogout={logout} notify={notify} lang={lang} setLang={setLang}/><DemoJourneyRail active={active} setActive={setActive} lang={lang} />{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
 }
