@@ -475,6 +475,11 @@ export function LoginScreen({onLogin}){
   const [syncMessage,setSyncMessage]=useState("");
   const copy=LOGIN_TEXT[lang];
   const syncCopy=LOGIN_SYNC_TEXT[lang];
+  const trustSignals=[
+    {value:"14",label:copy.pulseA},
+    {value:"342",label:copy.pulseB},
+    {value:"1.247",label:copy.pulseC}
+  ];
   const runLogin=async(nextEmail)=>{
     if(isSubmitting)return;
     setIsSubmitting(true);
@@ -499,7 +504,60 @@ export function LoginScreen({onLogin}){
     await onLogin(nextEmail);
   };
   const submit=async e=>{e.preventDefault();if(email&&password)await runLogin(email)};
-  return <main className={`login-screen premium-login-grid ${isSubmitting?"is-authenticating":""}`}><div className="login-global-topbar"><div className="lang-switch login-lang global" role="group" aria-label="Idioma">{["pt","es","en"].map(option=><button key={option} className={lang===option?"active":""} aria-pressed={lang===option} onClick={()=>setLang(option)} disabled={isSubmitting}>{option==="pt"?"PT-BR":option.toUpperCase()}</button>)}</div></div><div className="login-visual ecosystem-visual"><div className="login-brand"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt="InventOps"/><span><b>Invent<span>Ops</span></b><small>OPERATIONS INTELLIGENCE</small></span></div><div className="ecosystem-copy"><small>{copy.eyebrow}</small><h1><span>{copy.titleTop}</span><span>{copy.titleBottom}</span></h1><p>{copy.subtitle}</p></div><div className="ecosystem-orbit" aria-hidden="true">{LOGIN_DEPARTMENTS.map((department,index)=><span key={department} style={{"--i":index}}>{department.split("\n").map((part,partIndex)=><strong key={`${department}-${partIndex}`}>{part}</strong>)}</span>)}<div className="ecosystem-core"><b>InventOps</b><small>ENTERPRISE</small></div></div><div className="login-pulse compact"><span><Factory/><b>128</b><small>{copy.pulseA}</small></span><span><ClipboardText/><b>342</b><small>{copy.pulseB}</small></span><span><UsersThree/><b>1.247</b><small>{copy.pulseC}</small></span><span><MonitorPlay/><b>23</b><small>{copy.pulseD}</small></span></div></div><section className="login-panel premium-panel"><form onSubmit={submit}><div className="login-mobile-brand"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt=""/><b>Invent<span>Ops</span></b></div><small>{copy.secure}</small><p>{copy.welcome}</p><h3>InventOps Enterprise</h3><p>{copy.body}</p><label>{copy.email}<input type="email" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus disabled={isSubmitting}/></label><label>{copy.password}<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required disabled={isSubmitting}/></label><div className="login-options"><label><input type="checkbox" disabled={isSubmitting}/> {copy.keep}</label><button type="button" onClick={()=>setShowDemo(!showDemo)} disabled={isSubmitting}>{copy.demo}</button></div>{showDemo?<div className="demo-credentials"><b>{copy.demoTitle}</b><span>{copy.demoBody}</span><small>{copy.demoFoot}</small></div>:null}<div className="login-support-row"><span>{copy.forgot}</span></div><button className="primary" type="submit" disabled={isSubmitting}>{isSubmitting?<><MonitorPlay/>Conectando...</>:<>{copy.enter}<ArrowRight/></>}</button><div className="sso-divider"><span>{copy.or}</span></div><button className="sso-button" type="button" onClick={()=>runLogin("douglas.alves@invent-corp.com")} disabled={isSubmitting}><span>M</span>{copy.microsoft}</button><footer><ShieldCheck/>{copy.footer}</footer></form></section>{isSubmitting?<div className="login-transition-layer" role="status" aria-live="polite"><div className="login-transition-card"><div className="login-transition-mark"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt=""/><span><b>InventOps</b><small>ENTERPRISE</small></span></div><h3>{syncCopy.preparing}</h3><p>{syncMessage||syncCopy.subtitle}</p><div className="login-transition-progress"><i style={{width:`${progress}%`}}/></div><strong>{progress}%</strong><ul>{syncCopy.steps.map((step,index)=><li key={step} className={index<=syncStep?"done":""}><span>{index+1}</span><b>{step}</b></li>)}</ul></div></div>:null}</main>;
+  return <main className={`login-screen premium-login-grid ${isSubmitting?"is-authenticating":""}`}>
+    <div className="login-global-topbar">
+      <div className="lang-switch login-lang global" role="group" aria-label="Idioma">
+        {["pt","es","en"].map(option=><button key={option} className={lang===option?"active":""} aria-pressed={lang===option} onClick={()=>setLang(option)} disabled={isSubmitting}>{option==="pt"?"PT-BR":option.toUpperCase()}</button>)}
+      </div>
+    </div>
+    <div className="login-visual ecosystem-visual">
+      <div className="login-brand"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt="InventOps"/><span><b>Invent<span>Ops</span></b><small>OPERATIONS INTELLIGENCE</small></span></div>
+      <div className="ecosystem-copy">
+        <small>{copy.eyebrow}</small>
+        <h1><span>{copy.titleTop}</span><span>{copy.titleBottom}</span></h1>
+        <p>{copy.subtitle}</p>
+      </div>
+      <div className="ecosystem-orbit" aria-hidden="true">
+        {LOGIN_DEPARTMENTS.map((department,index)=><span key={department} style={{"--i":index}}>{department.split("\n").map((part,partIndex)=><strong key={`${department}-${partIndex}`}>{part}</strong>)}</span>)}
+        <div className="ecosystem-core"><b>InventOps</b><small>ENTERPRISE</small></div>
+      </div>
+      <div className="login-pulse compact">
+        <span><Factory/><b>128</b><small>{copy.pulseA}</small></span>
+        <span><ClipboardText/><b>342</b><small>{copy.pulseB}</small></span>
+        <span><UsersThree/><b>1.247</b><small>{copy.pulseC}</small></span>
+        <span><MonitorPlay/><b>23</b><small>{copy.pulseD}</small></span>
+      </div>
+    </div>
+    <section className="login-panel premium-panel">
+      <form onSubmit={submit}>
+        <div className="login-mobile-brand"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt=""/><b>Invent<span>Ops</span></b></div>
+        <small>{copy.secure}</small>
+        <div className="login-headline-block">
+          <span>{copy.welcome}</span>
+          <h2>InventOps Enterprise</h2>
+          <p>{copy.body}</p>
+        </div>
+        <div className="login-trust-strip" aria-label="Indicadores da operação">
+          {trustSignals.map(signal=><article key={signal.label}><b>{signal.value}</b><small>{signal.label}</small></article>)}
+        </div>
+        <label>{copy.email}<input type="email" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus disabled={isSubmitting}/></label>
+        <label>{copy.password}<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required disabled={isSubmitting}/></label>
+        <div className="login-options"><label><input type="checkbox" disabled={isSubmitting}/> {copy.keep}</label><button type="button" onClick={()=>setShowDemo(!showDemo)} disabled={isSubmitting}>{copy.demo}</button></div>
+        {showDemo?<div className="demo-credentials"><b>{copy.demoTitle}</b><span>{copy.demoBody}</span><small>{copy.demoFoot}</small></div>:null}
+        <div className="login-support-row"><span>{copy.forgot}</span></div>
+        <button className="primary" type="submit" disabled={isSubmitting}>{isSubmitting?<><MonitorPlay/>Conectando...</>:<>{copy.enter}<ArrowRight/></>}</button>
+        <div className="sso-divider"><span>{copy.or}</span></div>
+        <button className="sso-button" type="button" onClick={()=>runLogin("douglas.alves@invent-corp.com")} disabled={isSubmitting}><span>M</span>{copy.microsoft}</button>
+        <div className="login-assurance-row">
+          <span><ShieldCheck/>SSO corporativo</span>
+          <span><UsersThree/>Perfis validados</span>
+          <span><MonitorPlay/>Acesso auditável</span>
+        </div>
+        <footer><ShieldCheck/>{copy.footer}</footer>
+      </form>
+    </section>
+    {isSubmitting?<div className="login-transition-layer" role="status" aria-live="polite"><div className="login-transition-card"><div className="login-transition-mark"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt=""/><span><b>InventOps</b><small>ENTERPRISE</small></span></div><h3>{syncCopy.preparing}</h3><p>{syncMessage||syncCopy.subtitle}</p><div className="login-transition-progress"><i style={{width:`${progress}%`}}/></div><strong>{progress}%</strong><ul>{syncCopy.steps.map((step,index)=><li key={step} className={index<=syncStep?"done":""}><span>{index+1}</span><b>{step}</b></li>)}</ul></div></div>:null}
+  </main>;
 }
 
 export function StatusReportModal({project,onClose,notify}){

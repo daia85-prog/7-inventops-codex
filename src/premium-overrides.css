@@ -754,10 +754,6 @@
   font-size:9px;
 }
 
-.premium-panel form>p{
-  margin-bottom:14px;
-}
-
 .premium-panel form>label{
   margin-top:10px;
 }
@@ -781,6 +777,95 @@
 
 .login-panel form>footer{
   margin-top:10px;
+}
+
+.premium-panel form{
+  background:
+    radial-gradient(circle at 50% 0%,rgba(131,87,255,.08),transparent 30%),
+    linear-gradient(180deg,rgba(10,22,38,.97),rgba(8,18,31,.99));
+  box-shadow:0 30px 80px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.03);
+}
+
+.login-headline-block{
+  display:grid;
+  gap:10px;
+  margin:10px 0 18px;
+}
+
+.login-headline-block>span{
+  color:#aab8cb;
+  font-size:12px;
+  line-height:1.3;
+}
+
+.login-headline-block h2{
+  margin:0;
+  font:800 38px/1.02 Sora;
+  letter-spacing:-1.2px;
+}
+
+.login-headline-block p{
+  margin:0;
+  color:#9eb0c4;
+  font-size:14px;
+  line-height:1.65;
+}
+
+.login-trust-strip{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  margin:0 0 10px;
+}
+
+.login-trust-strip article{
+  min-width:0;
+  padding:12px 11px;
+  border-radius:15px;
+  border:1px solid rgba(59,84,111,.74);
+  background:linear-gradient(180deg,rgba(11,26,42,.92),rgba(8,18,30,.92));
+}
+
+.login-trust-strip b{
+  display:block;
+  font:800 18px/1 Sora;
+  color:#f4f7fb;
+}
+
+.login-trust-strip small{
+  display:block;
+  margin-top:7px;
+  color:#87a1bd;
+  font-size:9px;
+  line-height:1.35;
+  letter-spacing:.4px;
+}
+
+.login-assurance-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:14px;
+}
+
+.login-assurance-row span{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  min-height:34px;
+  padding:0 12px;
+  border-radius:999px;
+  border:1px solid rgba(55,78,104,.78);
+  background:rgba(9,21,34,.86);
+  color:#adc0d2;
+  font-size:10px;
+  font-weight:700;
+}
+
+.login-assurance-row svg{
+  width:14px;
+  height:14px;
+  color:#66d5ff;
 }
 
 @keyframes orbit-spin{
@@ -898,13 +983,11 @@
     right:18px;
   }
 
-  .premium-panel form h3{
-    margin:0 0 8px;
-    font-size:20px;
+  .login-headline-block h2{
+    font-size:30px;
   }
 
-  .premium-panel form>p{
-    margin-bottom:10px;
+  .login-headline-block p{
     font-size:12px;
     line-height:1.55;
   }
@@ -924,5 +1007,9 @@
   .login-lang.strong{
     margin-left:0;
     justify-content:flex-start;
+  }
+
+  .login-trust-strip{
+    grid-template-columns:1fr;
   }
 }
