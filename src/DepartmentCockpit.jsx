@@ -253,6 +253,11 @@ export function DepartmentCockpit({ notify, imported = [] }) {
   const open = deliveries.filter((d) => d.status !== "done");
   const tracks = base.tracks || [];
   const activeTrack = tracks.find((track) => track.id === selectedTrack) || tracks[0] || null;
+  const pilotSummary = useMemo(() => tracks.map((track) => {
+    const done = track.items.filter((item) => item.done).length;
+    const total = track.items.length;
+    return { id: track.id, label: track.label, handoff: track.handoff, done, total, percent: total ? Math.round((done / total) * 100) : 0 };
+  }), [tracks]);
 
   const conclude = (item) => {
     const now = new Date();
@@ -383,6 +388,16 @@ export function DepartmentCockpit({ notify, imported = [] }) {
           <div className="section-heading">
             <b><Sparkle /> Esteira operacional real</b>
             <span>Checklist do projeto piloto trazido do Planner, sem alterar a regra do time.</span>
+          </div>
+          <div className="cockpit-track-pulse">
+            {pilotSummary.map((item) => (
+              <article key={item.id} className={activeTrack.id === item.id ? "active" : ""}>
+                <small>PROJETO</small>
+                <b>{item.label}</b>
+                <span>{item.done}/{item.total} checkpoints</span>
+                <em>{item.percent}% da esteira</em>
+              </article>
+            ))}
           </div>
           <div className="cockpit-track-tabs">
             {tracks.map((track) => (

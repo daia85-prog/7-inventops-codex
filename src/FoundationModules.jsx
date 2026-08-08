@@ -205,6 +205,12 @@ export function AdminGovernance({role,setRole,notify}){
     ["Sessões auditáveis","100%","Toda ação crítica deixa trilha"],
     ["Regra central","RBAC + evidência","Capacidade correta para cada contexto"]
   ];
+  const adminPrinciples=[
+    ["Permissão por capacidade","Cada perfil vê e faz só o que precisa."],
+    ["Acessível de nascença","Contraste forte, leitura clara e navegação sem susto."],
+    ["Trilíngue de nascença","PT, ES e EN seguem juntos no mesmo fluxo."],
+    ["Auditoria viva","Toda ação crítica fica explicável depois."]
+  ];
   const sendInvite=(event)=>{
     event.preventDefault();
     notify(`Acesso preparado para ${invite.name||"novo usuário"} · perfil ${invite.profile} · área ${invite.area}.`);
@@ -214,6 +220,9 @@ export function AdminGovernance({role,setRole,notify}){
     <div className="admin-banner"><ShieldCheck/><div><small>GOVERNANÇA DE ACESSO</small><h2>Permissão clara, ação auditável</h2><p>A demonstração aplica perfis na interface. Em produção, a mesma regra será validada novamente no servidor.</p></div><span><LockKey/>Sessão ativa</span></div>
     <div className="executive-command-strip">
       {governancePulse.map(item=><span key={item[0]}><small>{item[0]}</small><b>{item[1]}</b><em>{item[2]}</em></span>)}
+    </div>
+    <div className="admin-principles">
+      {adminPrinciples.map(([title,body])=><article key={title}><small>PRINCÍPIO</small><b>{title}</b><p>{body}</p></article>)}
     </div>
     <div className="foundation-grid equal">
       <Panel title="Simular perfil de acesso" subtitle="Use na apresentação para demonstrar o RBAC"><div className="role-selector">{Object.keys(roles).map(r=><button className={role===r?"active":""} key={r} onClick={()=>{setRole(r);notify(`Perfil alterado para ${roleMeta[r].label}. A navegação foi recalculada.`)}}><UserGear/><span><b>{roleMeta[r].label}</b><small>{roleMeta[r].helper}</small></span></button>)}</div></Panel>
