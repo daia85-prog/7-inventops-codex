@@ -230,6 +230,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
   const [feed, setFeed] = useState(FEED_SEED);
   const [selectedTrack, setSelectedTrack] = useState("");
   const [handoffMap, setHandoffMap] = useState({});
+  const [trackDoneMap, setTrackDoneMap] = useState({});
   const area = AREAS.find((a) => a.code === dept);
   const pilotConfig = PILOT_DEPARTMENTS[dept];
   const isPilot = Boolean(pilotConfig);
@@ -253,7 +254,13 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
     doneMap[x.id] ? { ...x, status: "done", doneAt: doneMap[x.id] } : x
   );
   const open = deliveries.filter((d) => d.status !== "done");
-  const tracks = base.tracks || [];
+  const tracks = useMemo(() => (base.tracks || []).map((track) => ({
+    ...track,
+    items: track.items.map((item) => ({
+      ...item,
+      done: trackDoneMap[`${track.id}::${item.label}`] ?? item.done,
+    })),
+  })), [base.tracks, trackDoneMap]);
   const activeTrack = tracks.find((track) => track.id === selectedTrack) || tracks[0] || null;
   const pilotSummary = useMemo(() => tracks.map((track) => {
     const done = track.items.filter((item) => item.done).length;
@@ -294,6 +301,17 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
       return;
     }
     notify(`Cobrança registrada para destravar ${activeTrack.label}: ${pending[0] || "sem pendência aberta"}.`);
+  };
+
+  const advanceTrack = () => {
+    if (!activeTrack) return;
+    const nextItem = activeTrack.items.find((item) => !item.done);
+    if (!nextItem) {
+      notify(`${activeTrack.label} já está com todos os checkpoints concluídos.`);
+      return;
+    }
+    setTrackDoneMap((current) => ({ ...current, [`${activeTrack.id}::${nextItem.label}`]: true }));
+    notify(`Checkpoint concluído em ${activeTrack.label}: ${nextItem.label}.`);
   };
 
   const confirmHandoff = () => {
@@ -453,6 +471,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
               <span>{activeTrack.handoff}</span>
               <div className="cockpit-track-actions">
                 <button className="ghost cockpit-track-action" type="button" onClick={copyTrackSummary}><ClipboardText />Copiar resumo</button>
+                <button className="ghost cockpit-track-action" type="button" onClick={advanceTrack} disabled={trackCompleted}><CheckCircle />Concluir próximo checkpoint</button>
                 <button className="ghost cockpit-track-action" type="button" onClick={registerCharge}><Envelope />Registrar cobrança</button>
                 <button className="ghost cockpit-track-action" type="button" onClick={confirmHandoff} disabled={!trackCompleted || trackHandoffDone}><PaperPlaneTilt />{trackHandoffDone ? "Handoff confirmado" : "Confirmar handoff"}</button>
               </div>
