@@ -480,6 +480,11 @@ export function LoginScreen({onLogin}){
     {value:"342",label:copy.pulseB},
     {value:"1.247",label:copy.pulseC}
   ];
+  const valueHighlights=[
+    {icon:ShieldCheck,title:"Acesso governado",body:"Perfis, visões e ações alinhadas à responsabilidade de cada pessoa."},
+    {icon:ClipboardText,title:"Operação rastreável",body:"Solicitações, projetos, decisões e evidências conectados na mesma linha."},
+    {icon:Factory,title:"Leitura executiva viva",body:"O que mudou, o que trava e qual é a próxima ação entram já no primeiro acesso."}
+  ];
   const runLogin=async(nextEmail)=>{
     if(isSubmitting)return;
     setIsSubmitting(true);
@@ -517,6 +522,12 @@ export function LoginScreen({onLogin}){
         <h1><span>{copy.titleTop}</span><span>{copy.titleBottom}</span></h1>
         <p>{copy.subtitle}</p>
       </div>
+      <div className="login-value-highlights">
+        {valueHighlights.map(item=>{
+          const Icon=item.icon;
+          return <article key={item.title}><Icon/><span><b>{item.title}</b><small>{item.body}</small></span></article>;
+        })}
+      </div>
       <div className="ecosystem-orbit" aria-hidden="true">
         {LOGIN_DEPARTMENTS.map((department,index)=><span key={department} style={{"--i":index}}>{department.split("\n").map((part,partIndex)=><strong key={`${department}-${partIndex}`}>{part}</strong>)}</span>)}
         <div className="ecosystem-core"><b>InventOps</b><small>ENTERPRISE</small></div>
@@ -537,6 +548,12 @@ export function LoginScreen({onLogin}){
           <h2>InventOps Enterprise</h2>
           <p>{copy.body}</p>
         </div>
+        <div className="login-role-pills">
+          <span>Admin</span>
+          <span>Direx</span>
+          <span>Gestor</span>
+          <span>Analista</span>
+        </div>
         <div className="login-trust-strip" aria-label="Indicadores da operação">
           {trustSignals.map(signal=><article key={signal.label}><b>{signal.value}</b><small>{signal.label}</small></article>)}
         </div>
@@ -556,7 +573,7 @@ export function LoginScreen({onLogin}){
         <footer><ShieldCheck/>{copy.footer}</footer>
       </form>
     </section>
-    {isSubmitting?<div className="login-transition-layer" role="status" aria-live="polite"><div className="login-transition-card"><div className="login-transition-mark"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt=""/><span><b>InventOps</b><small>ENTERPRISE</small></span></div><h3>{syncCopy.preparing}</h3><p>{syncMessage||syncCopy.subtitle}</p><div className="login-transition-progress"><i style={{width:`${progress}%`}}/></div><strong>{progress}%</strong><ul>{syncCopy.steps.map((step,index)=><li key={step} className={index<=syncStep?"done":""}><span>{index+1}</span><b>{step}</b></li>)}</ul></div></div>:null}
+    {isSubmitting?<div className="login-transition-layer" role="status" aria-live="polite"><div className="login-transition-card"><div className="login-transition-mark"><img src={`${import.meta.env.BASE_URL}assets/icon.svg`} alt=""/><span><b>InventOps</b><small>ENTERPRISE</small></span></div><div className="login-transition-orb" aria-hidden="true"><i/><i/><i/></div><h3>{syncCopy.preparing}</h3><p>{syncMessage||syncCopy.subtitle}</p><div className="login-transition-progress"><i style={{width:`${progress}%`}}/></div><strong>{progress}%</strong><ul>{syncCopy.steps.map((step,index)=><li key={step} className={index<=syncStep?"done":""}><span>{index+1}</span><b>{step}</b></li>)}</ul></div></div>:null}
   </main>;
 }
 

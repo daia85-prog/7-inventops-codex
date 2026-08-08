@@ -359,6 +359,53 @@
   max-width:540px;
 }
 
+.login-value-highlights{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  width:min(720px,100%);
+  margin-top:8px;
+}
+
+.login-value-highlights article{
+  min-width:0;
+  display:grid;
+  grid-template-columns:36px 1fr;
+  gap:10px;
+  padding:14px 14px 13px;
+  border:1px solid rgba(69,90,118,.62);
+  border-radius:16px;
+  background:linear-gradient(180deg,rgba(10,21,34,.84),rgba(8,18,30,.92));
+}
+
+.login-value-highlights article svg{
+  width:18px;
+  height:18px;
+  padding:9px;
+  border-radius:12px;
+  background:#102439;
+  color:#64d8ff;
+  box-sizing:content-box;
+}
+
+.login-value-highlights span{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  min-width:0;
+}
+
+.login-value-highlights b{
+  font:700 12px/1.2 Sora;
+  color:#f3f6fb;
+}
+
+.login-value-highlights small{
+  color:#91a4ba;
+  font-size:10px;
+  line-height:1.5;
+}
+
 .ecosystem-orbit{
   position:relative;
   width:min(590px,100%);
@@ -811,6 +858,26 @@
   line-height:1.65;
 }
 
+.login-role-pills{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:0 0 12px;
+}
+
+.login-role-pills span{
+  display:inline-flex;
+  align-items:center;
+  min-height:30px;
+  padding:0 11px;
+  border-radius:999px;
+  border:1px solid rgba(60,81,106,.84);
+  background:rgba(10,22,37,.76);
+  color:#b7c5d4;
+  font-size:10px;
+  font-weight:700;
+}
+
 .login-trust-strip{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
@@ -866,6 +933,40 @@
   width:14px;
   height:14px;
   color:#66d5ff;
+}
+
+.login-transition-orb{
+  position:relative;
+  width:118px;
+  height:118px;
+  margin:4px auto 10px;
+}
+
+.login-transition-orb i{
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  border:1px solid rgba(118,113,255,.18);
+}
+
+.login-transition-orb i:nth-child(1){
+  border-top-color:#64d8ff;
+  border-right-color:#64d8ff;
+  animation:orbit-spin 2.8s linear infinite;
+}
+
+.login-transition-orb i:nth-child(2){
+  inset:14px;
+  border-bottom-color:#8f73ff;
+  border-left-color:#8f73ff;
+  animation:orbit-spin 3.6s linear infinite reverse;
+}
+
+.login-transition-orb i:nth-child(3){
+  inset:34px;
+  background:radial-gradient(circle,#8f73ff 0,#6e83ff 58%,rgba(111,131,255,0) 72%);
+  border:0;
+  box-shadow:0 0 34px rgba(124,94,255,.34);
 }
 
 @keyframes orbit-spin{
@@ -929,6 +1030,11 @@
   .ecosystem-copy h1{
     font-size:clamp(27px,3vw,42px);
   }
+
+  .login-value-highlights{
+    grid-template-columns:1fr;
+    max-width:400px;
+  }
 }
 
 @media(max-height:900px){
@@ -959,6 +1065,10 @@
 
   .ecosystem-copy p{
     font-size:12px;
+  }
+
+  .login-value-highlights{
+    display:none;
   }
 
   .ecosystem-orbit{
@@ -1010,6 +1120,14 @@
   }
 
   .login-trust-strip{
+    grid-template-columns:1fr;
+  }
+
+  .login-role-pills{
+    gap:6px;
+  }
+
+  .login-value-highlights{
     grid-template-columns:1fr;
   }
 }
