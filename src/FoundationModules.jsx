@@ -19,13 +19,13 @@ const trend = [
 ];
 
 const departments = [
-  ["COM","Comercial / Concept","AndrÃ© Mota",74,66,1],["PMO","PMO","Rodrigo Baruco",91,78,2],
-  ["PCP","PCP","Weslley Silva",86,72,2],["CMP","Compras / ImportaÃ§Ã£o","Claudia Duarte",103,61,3],
-  ["EMC","Eng. MecÃ¢nica","Gustavo Pereira",94,69,2],["EEL","Eng. ElÃ©trica","Gustavo Pereira",88,64,1],
-  ["PRD","ProduÃ§Ã£o","Flavio Moreno",82,70,1],["MON","Montagem","Rojekson Souza",83,57,1],
+  ["COM","Comercial / Concept","André Mota",74,66,1],["PMO","PMO","Rodrigo Baruco",91,78,2],
+  ["PCP","PCP","Weslley Silva",86,72,2],["CMP","Compras / Importação","Claudia Duarte",103,61,3],
+  ["EMC","Eng. Mecânica","Gustavo Pereira",94,69,2],["EEL","Eng. Elétrica","Gustavo Pereira",88,64,1],
+  ["PRD","Produção","Flavio Moreno",82,70,1],["MON","Montagem","Rojekson Souza",83,57,1],
   ["INF","Infraestrutura","Douglas Alves",112,65,4],["ESP","Espec. de Software","Douglas Alves",78,62,1],
-  ["WCS","WCS Velox","Marcelo Sanches",98,73,2],["IMP","ImplantaÃ§Ã£o","Douglas Alves",108,68,3],
-  ["PLC","PLC","Gustavo Pereira",117,71,4],["PÃ“S","PÃ³s-vendas","Caique Fracaro",63,82,0]
+  ["WCS","WCS Velox","Marcelo Sanches",98,73,2],["IMP","Implantação","Douglas Alves",108,68,3],
+  ["PLC","PLC","Gustavo Pereira",117,71,4],["PÓS","Pós-vendas","Caique Fracaro",63,82,0]
 ].map(([code,name,owner,load,progress,blocked])=>({code,name,owner,load,progress,blocked}));
 
 const actionsSeed = [
@@ -37,9 +37,9 @@ const actionsSeed = [
 ];
 
 const blockers = [
-  {project:"MARKET PERU",area:"INF Â· Cliente",age:"12 dias",impact:"Infra de testes sem condiÃ§Ã£o de homologaÃ§Ã£o",owner:"Ivan",action:"Escalar arquitetura e fechar IP/VPN atÃ© 12/07."},
-  {project:"NAVEPARK",area:"EMC Â· INF",age:"8 dias",impact:"Ambiente HML ameaÃ§a o Go Live de setembro",owner:"Daiana",action:"Validar VMs e registrar decisÃ£o tÃ©cnica atÃ© 14/07."},
-  {project:"TITANO",area:"CMP Â· PLC",age:"2 horas",impact:"Sensor fÃ­sico interrompe sequÃªncia de testes",owner:"Baruco",action:"Trocar sensor, testar 20 ciclos e anexar evidÃªncia."}
+  {project:"MARKET PERU",area:"INF · Cliente",age:"12 dias",impact:"Infra de testes sem condição de homologação",owner:"Ivan",action:"Escalar arquitetura e fechar IP/VPN até 12/07."},
+  {project:"NAVEPARK",area:"EMC · INF",age:"8 dias",impact:"Ambiente HML ameaça o Go Live de setembro",owner:"Daiana",action:"Validar VMs e registrar decisão técnica até 14/07."},
+  {project:"TITANO",area:"CMP · PLC",age:"2 horas",impact:"Sensor físico interrompe sequência de testes",owner:"Baruco",action:"Trocar sensor, testar 20 ciclos e anexar evidência."}
 ];
 
 const riskItems = [
@@ -72,8 +72,8 @@ export function ExecutiveDashboard({projects,setActive}){
     </div>
     <div className="executive-hero">
       <div className="health-visual"><ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={[{v:health},{v:100-health}]} dataKey="v" startAngle={90} endAngle={-270} innerRadius={55} outerRadius={67} stroke="none"><Cell fill="#f5c300"/><Cell fill="#18263a"/></Pie></PieChart></ResponsiveContainer><span><small>HEALTH SCORE</small><b>{health}</b><em>/100</em></span></div>
-      <div className="executive-brief"><small>BRIEFING EXECUTIVO Â· 11 JUL 2026</small><h2>Hoje, a operaÃ§Ã£o precisa de trÃªs decisÃµes.</h2><p>O portfÃ³lio estÃ¡ estÃ¡vel, mas <b>Infraestrutura, Compras e PLC</b> concentram os riscos que podem deslocar os prÃ³ximos Go Lives. Priorize Market Peru, estabilize o Sensor X do TITANO e confirme as VMs do Navepark.</p><div><button className="primary" onClick={()=>setActive("action")}><CheckSquare/>Abrir plano de aÃ§Ã£o</button><button className="ghost" onClick={()=>setActive("executive")}><FileText/>Ver one-page</button></div></div>
-      <div className="countdown"><small>PRÃ“XIMO GO LIVE</small><b>9</b><span>dias</span><strong>TITANO Â· 20 JUL</strong><em>78% de confianÃ§a</em></div>
+      <div className="executive-brief"><small>BRIEFING EXECUTIVO · 11 JUL 2026</small><h2>Hoje, a operação precisa de três decisões.</h2><p>O portfólio está estável, mas <b>Infraestrutura, Compras e PLC</b> concentram os riscos que podem deslocar os próximos Go Lives. Priorize Market Peru, estabilize o Sensor X do TITANO e confirme as VMs do Navepark.</p><div><button className="primary" onClick={()=>setActive("action")}><CheckSquare/>Abrir plano de ação</button><button className="ghost" onClick={()=>setActive("executive")}><FileText/>Ver one-page</button></div></div>
+      <div className="countdown"><small>PRÓXIMO GO LIVE</small><b>9</b><span>dias</span><strong>TITANO · 20 JUL</strong><em>78% de confiança</em></div>
     </div>
     <div className="executive-signal-grid">
       <article className="signal-panel priority">
@@ -93,8 +93,8 @@ export function ExecutiveDashboard({projects,setActive}){
         </div>
       </article>
     </div>
-    <div className="foundation-metrics"><Metric icon={Buildings} label="CARTEIRA" value={`${projects.length} projetos`} note="2 bloqueados"/><Metric icon={Warning} label="RISCO MATERIAL" value="R$ 1,8 mi" note="exposiÃ§Ã£o estimada" tone="red"/><Metric icon={UsersThree} label="CAPACIDADE" value="117% PLC" note="pico em setembro" tone="yellow"/><Metric icon={FlagCheckered} label="GO LIVES" value="4 em 90d" note="2 confirmados" tone="green"/></div>
-    <div className="foundation-grid two-one"><Panel title="Quem o COO deve cobrar hoje" subtitle="PriorizaÃ§Ã£o calculada por impacto, prazo e SLA"><div className="charge-list">{blockers.map((b,i)=><button key={b.project} onClick={()=>setActive(i===2?"alerts":"action")}><strong>0{i+1}</strong><span><b>{b.project}</b><small>{b.action}</small></span><em>{b.owner}</em><ArrowRight/></button>)}</div></Panel><Panel title="Pulso do portfÃ³lio" subtitle="TendÃªncia dos Ãºltimos 30 dias"><div className="foundation-chart"><ResponsiveContainer><AreaChart data={trend}><defs><linearGradient id="healthFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#28c5e7" stopOpacity=".35"/><stop offset="1" stopColor="#28c5e7" stopOpacity="0"/></linearGradient></defs><CartesianGrid stroke="#17243a" vertical={false}/><XAxis dataKey="day" tick={{fontSize:9}} stroke="#66758c"/><YAxis domain={[40,100]} tick={{fontSize:9}} stroke="#66758c"/><Tooltip/><Area dataKey="health" stroke="#28c5e7" fill="url(#healthFill)" strokeWidth={2}/></AreaChart></ResponsiveContainer></div></Panel></div>
+    <div className="foundation-metrics"><Metric icon={Buildings} label="CARTEIRA" value={`${projects.length} projetos`} note="2 bloqueados"/><Metric icon={Warning} label="RISCO MATERIAL" value="R$ 1,8 mi" note="exposição estimada" tone="red"/><Metric icon={UsersThree} label="CAPACIDADE" value="117% PLC" note="pico em setembro" tone="yellow"/><Metric icon={FlagCheckered} label="GO LIVES" value="4 em 90d" note="2 confirmados" tone="green"/></div>
+    <div className="foundation-grid two-one"><Panel title="Quem o COO deve cobrar hoje" subtitle="Priorização calculada por impacto, prazo e SLA"><div className="charge-list">{blockers.map((b,i)=><button key={b.project} onClick={()=>setActive(i===2?"alerts":"action")}><strong>0{i+1}</strong><span><b>{b.project}</b><small>{b.action}</small></span><em>{b.owner}</em><ArrowRight/></button>)}</div></Panel><Panel title="Pulso do portfólio" subtitle="Tendência dos últimos 30 dias"><div className="foundation-chart"><ResponsiveContainer><AreaChart data={trend}><defs><linearGradient id="healthFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#28c5e7" stopOpacity=".35"/><stop offset="1" stopColor="#28c5e7" stopOpacity="0"/></linearGradient></defs><CartesianGrid stroke="#17243a" vertical={false}/><XAxis dataKey="day" tick={{fontSize:9}} stroke="#66758c"/><YAxis domain={[40,100]} tick={{fontSize:9}} stroke="#66758c"/><Tooltip/><Area dataKey="health" stroke="#28c5e7" fill="url(#healthFill)" strokeWidth={2}/></AreaChart></ResponsiveContainer></div></Panel></div>
   </section>;
 }
 
