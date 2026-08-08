@@ -18,7 +18,7 @@ export const AREAS = [
   { code:"WCS", nome:"WCS Velox", gestor:"Marcelo Sanches" },
   { code:"IMP", nome:"Implantação", gestor:"Douglas Alves" },
   { code:"PLC", nome:"PLC", gestor:"Gustavo Pereira" },
-  { code:"PÓS", nome:"Pós-vendas", gestor:"Caique Fracaro" },
+  { code:"POS", nome:"Pós-vendas", gestor:"Caique Fracaro" },
 ];
 
 const areaName = (code) => (AREAS.find((a) => a.code === code) || {}).nome || code;
@@ -27,33 +27,63 @@ const cockpitJourney = [
   { id:"login", label:"Login", state:"done", detail:"Experiência inicial já validada." },
   { id:"home", label:"Home", state:"done", detail:"Panorama corporativo já elevado." },
   { id:"pmo", label:"PMO", state:"done", detail:"Fila única e briefing já publicados." },
-  { id:"infra", label:"Infra", state:"active", detail:"Camada operacional do departamento em fechamento." },
+  { id:"infra", label:"active", state:"active", detail:"Camada operacional do departamento em fechamento." },
   { id:"executive", label:"Executive", state:"next", detail:"Próxima etapa: fechamento final da visão diretiva." },
 ];
 
-const DELIVERIES = {
-  INF: [
-    { id:"inf-1", project:"QUELUZ", title:"Ambiente HML liberado para o GL1", to:"WCS", due:"hoje", status:"pronto" },
-    { id:"inf-2", project:"NAVEPARK", title:"VMs Oracle KVM + topologia de rede", to:"IMP", due:"14/08", status:"andamento" },
-    { id:"inf-3", project:"MARKET PERU", title:"VPN site-to-site + range IP /24", to:"WCS", due:"12/08", status:"aguardando" },
-    { id:"inf-4", project:"TITANO", title:"Servidor SaaS AWS provisionado", to:"WCS", due:"09/08", status:"done", doneAt:"09/08 · 16:12" },
-  ],
-};
-
-const WAITING = {
-  INF: [
-    { from:"CMP", project:"TITANO", what:"Hardware do Sensor X (pedido #4411)", side:"Invent", age:"2 dias" },
-    { from:"Cliente", project:"MARKET PERU", what:"Confirmação do range IP /24 e VPN", side:"Cliente", age:"12 dias" },
-    { from:"COM", project:"BR SUPPLY", what:"Data firme do kickoff técnico", side:"Invent", age:"1 dia" },
-  ],
-};
-
-const WAITED_BY = {
-  INF: [
-    { dept:"IMP", project:"NAVEPARK", what:"Acessos e VMs para montar o ambiente HML" },
-    { dept:"WCS", project:"QUELUZ", what:"Ambiente HML para iniciar os testes do GL1" },
-    { dept:"ESP", project:"BR SUPPLY", what:"Definição de servidor (cliente × Invent)" },
-  ],
+const PILOT_DEPARTMENTS = {
+  INF: {
+    source:"dados reais do P1",
+    focal:"Douglas Alves",
+    deliveries: [
+      { id:"inf-1", project:"QUELUZ", title:"Ambiente HML liberado para o GL1", to:"WCS", due:"hoje", status:"pronto" },
+      { id:"inf-2", project:"NAVEPARK", title:"VMs Oracle KVM + topologia de rede", to:"IMP", due:"14/08", status:"andamento" },
+      { id:"inf-3", project:"MARKET PERU", title:"VPN site-to-site + range IP /24", to:"WCS", due:"12/08", status:"aguardando" },
+      { id:"inf-4", project:"TITANO", title:"Servidor SaaS AWS provisionado", to:"WCS", due:"09/08", status:"done", doneAt:"09/08 · 16:12" },
+    ],
+    waiting: [
+      { from:"CMP", project:"TITANO", what:"Hardware do Sensor X (pedido #4411)", side:"Invent", age:"2 dias" },
+      { from:"Cliente", project:"MARKET PERU", what:"Confirmação do range IP /24 e VPN", side:"Cliente", age:"12 dias" },
+      { from:"COM", project:"BR SUPPLY", what:"Data firme do kickoff técnico", side:"Invent", age:"1 dia" },
+    ],
+    waitedBy: [
+      { dept:"IMP", project:"NAVEPARK", what:"Acessos e VMs para montar o ambiente HML" },
+      { dept:"WCS", project:"QUELUZ", what:"Ambiente HML para iniciar os testes do GL1" },
+      { dept:"ESP", project:"BR SUPPLY", what:"Definição de servidor (cliente × Invent)" },
+    ],
+  },
+  IMP: {
+    source:"extraído do Planner dos times",
+    focal:"Daniel",
+    deliveries: [
+      { id:"imp-peter2", project:"PROJETO PETER 2", title:"Passagem de bastão ao time de Pós-Vendas — Final", to:"POS", due:"22/06/2026", status:"andamento", progress:"6/10", origin:"Planner · piloto real" },
+      { id:"imp-queluz", project:"PROJETO QUELUZ — Fase 1", title:"Passagem de bastão ao time de Pós-Vendas — Final", to:"POS", due:"30/07/2026", status:"andamento", progress:"8/10", origin:"Planner · piloto real" },
+    ],
+    waiting: [
+      { from:"ESP", project:"QUELUZ — Fase 1", what:"Descritivo funcional aprovado e alinhamento final DEV + Implantação", side:"Invent", age:"3 dias" },
+      { from:"Cliente", project:"PROJETO PETER 2", what:"Validação final do ambiente para concluir a esteira de implantação", side:"Cliente", age:"5 dias" },
+    ],
+    waitedBy: [
+      { dept:"POS", project:"PROJETO PETER 2", what:"Receber o bastão final após fechamento da esteira" },
+      { dept:"POS", project:"QUELUZ — Fase 1", what:"Receber o bastão final após conferência e go-live" },
+    ],
+  },
+  ESP: {
+    source:"extraído do Planner dos times",
+    focal:"Thomas",
+    deliveries: [
+      { id:"esp-peter2", project:"PETER 2", title:"Passagem de Bastão (DEV + Implantação)", to:"IMP", due:"20/07/2026", status:"done", doneAt:"20/07 · 09:00", progress:"6/6", origin:"Planner · piloto real" },
+      { id:"esp-queluz", project:"QUELUZ — Fase 2", title:"Passagem de Bastão (DEV + Implantação)", to:"IMP", due:"28/08/2026", status:"andamento", progress:"4/6", origin:"Planner · piloto real" },
+    ],
+    waiting: [
+      { from:"Cliente", project:"QUELUZ — Fase 2", what:"Aprovação do descritivo funcional apresentado", side:"Cliente", age:"4 dias" },
+      { from:"EMC", project:"QUELUZ — Fase 2", what:"Alinhamento final de layout para fechar a especificação", side:"Invent", age:"2 dias" },
+    ],
+    waitedBy: [
+      { dept:"IMP", project:"QUELUZ — Fase 2", what:"Receber o bastão DEV para seguir com a implantação" },
+      { dept:"WCS", project:"QUELUZ — Fase 2", what:"Regras funcionais aprovadas para continuar a configuração" },
+    ],
+  },
 };
 
 const FEED_SEED = [
@@ -94,13 +124,14 @@ export function DepartmentCockpit({ notify, imported = [] }) {
   const [doneMap, setDoneMap] = useState({});
   const [feed, setFeed] = useState(FEED_SEED);
   const area = AREAS.find((a) => a.code === dept);
-  const isPilot = dept === "INF";
+  const pilotConfig = PILOT_DEPARTMENTS[dept];
+  const isPilot = Boolean(pilotConfig);
 
   const base = useMemo(
     () => isPilot
-      ? { deliveries: DELIVERIES.INF, waiting: WAITING.INF, waitedBy: WAITED_BY.INF }
+      ? { deliveries: pilotConfig.deliveries, waiting: pilotConfig.waiting, waitedBy: pilotConfig.waitedBy }
       : sampleFor(dept),
-    [dept, isPilot]
+    [dept, isPilot, pilotConfig]
   );
 
   const importedHere = imported.filter((d) => d.dept === dept).map((d, i) => ({
@@ -138,7 +169,7 @@ export function DepartmentCockpit({ notify, imported = [] }) {
         <p>
           Gestor: <b>{area.gestor}</b>
           {isPilot
-            ? <span className="pilot-tag"><Sparkle size={13} weight="fill"/> área piloto · dados reais do P1</span>
+            ? <span className="pilot-tag"><Sparkle size={13} weight="fill"/> área piloto · {pilotConfig.source} · ponto focal {pilotConfig.focal}</span>
             : <span className="sample-tag">dados de exemplo — área entra no piloto na Era 2</span>}
         </p>
       </div>
@@ -156,7 +187,7 @@ export function DepartmentCockpit({ notify, imported = [] }) {
           <small>SEQUÊNCIA DE ENTREGA</small>
           <h3>Onde estamos na jornada do produto</h3>
         </div>
-        <span>Infra é a frente piloto ativa agora</span>
+        <span>{isPilot ? `${area.nome} está usando a regra real do piloto` : "Infra é a frente piloto ativa agora"}</span>
       </header>
       <div>
         {cockpitJourney.map((step) => <section key={step.id} className={step.state}>
@@ -174,7 +205,7 @@ export function DepartmentCockpit({ notify, imported = [] }) {
       <article>
         <div className="section-heading"><b><CheckCircle/> Minhas entregas</b><span>O que este departamento deve ao fluxo.</span></div>
         <div className="cockpit-list">{deliveries.map((d) => <div key={d.id} className={`hand-card ${d.status}`}>
-          <header><small>{d.project}</small>{d.origin?<em className="origin-tag">⇪ {d.origin}</em>:null}<span className={`hstatus ${d.status}`}>{STATUS_LABEL[d.status]}{d.status==="done"&&d.doneAt?` ✓ ${d.doneAt}`:""}</span></header>
+          <header><small>{d.project}</small>{d.origin?<em className="origin-tag">⇪ {d.origin}</em>:null}<span className={`hstatus ${d.status}`}>{STATUS_LABEL[d.status]}{d.progress?` · ${d.progress}`:""}{d.status==="done"&&d.doneAt?` ✓ ${d.doneAt}`:""}</span></header>
           <h3>{d.title}</h3>
           <footer>
             <span><CalendarBlank/>{d.due}</span>
