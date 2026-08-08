@@ -177,18 +177,18 @@
 .ecosystem-visual{
   display:flex;
   flex-direction:column;
-  justify-content:space-between;
+  justify-content:flex-start;
   gap:6px;
   padding-bottom:6px;
   overflow:hidden;
 }
 
 .ecosystem-copy{
-  margin-top:-4px;
+  margin-top:0;
 }
 
 .ecosystem-copy h1{
-  margin:2px 0 6px;
+  margin:0 0 6px;
   font:800 clamp(30px,3.15vw,52px)/1 Sora;
   letter-spacing:-1.6px;
   max-width:600px;
@@ -206,7 +206,7 @@
   position:relative;
   width:min(590px,100%);
   aspect-ratio:1/1;
-  margin:0 auto;
+  margin:8px auto 0;
   max-height:336px;
   transform:scale(.98);
   transform-origin:center;
@@ -279,12 +279,19 @@
   align-items:center;
   justify-content:center;
   text-align:center;
-  padding:10px;
+  padding:8px;
   color:#d7e0ee;
   font:700 11.4px/1.16 Inter;
   box-shadow:0 10px 30px rgba(0,0,0,.22),0 0 14px rgba(143,115,255,.12);
   animation:node-breathe 3.6s ease-in-out infinite;
   animation-delay:calc(var(--i) * .12s);
+  gap:1px;
+}
+
+.ecosystem-orbit > span strong{
+  display:block;
+  font:inherit;
+  font-weight:700;
 }
 
 .ecosystem-core{
@@ -316,7 +323,7 @@
 }
 
 .login-pulse.compact{
-  margin-top:0;
+  margin-top:auto;
   max-width:500px;
   border-radius:16px;
   flex:0 0 auto;
