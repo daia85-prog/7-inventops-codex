@@ -168,30 +168,34 @@ const VISION_PAGES = ["simulator", "commissioning"];
 function LangSwitch({ notify }) {
   return <span className="lang-switch" role="group" aria-label="Idioma">
     <button className="active" aria-pressed="true">PT</button>
-    <button onClick={()=>notify("Español · em breve — chega na próxima versão do InventOps.")} title="Em breve · disponível na próxima versão">ES</button>
-    <button onClick={()=>notify("English · em breve — chega na próxima versão do InventOps.")} title="Em breve · disponível na próxima versão">EN</button>
+    <button onClick={() => notify("Espa?ol ? em breve ? chega na pr?xima vers?o do InventOps.")} title="Em breve ? dispon?vel na pr?xima vers?o">ES</button>
+    <button onClick={() => notify("English ? em breve ? chega na pr?xima vers?o do InventOps.")} title="Em breve ? dispon?vel na pr?xima vers?o">EN</button>
   </span>;
 }
 
 function Topbar({ active, role, onLogout, notify }) {
-  return <header className="topbar"><div><div className="title-line"><h1>{pageMeta[active][0]}</h1>{VISION_PAGES.includes(active)?<span className="vision-badge" title="Este módulo mostra aonde o produto vai — faz parte do roadmap (Eras 4-5) e ainda não está em operação. Os dados são simulados.">✦ VISÃO · ROADMAP</span>:null}</div><p>{pageMeta[active][1]}</p></div><div className="top-actions">
-    <LangSwitch notify={notify}/><span className="date"><CalendarBlank size={18}/>11 jul 2026</span><span className="avatar">D</span><span className="top-user">Douglas<small>{role}</small></span><button className="top-logout" onClick={onLogout} aria-label="Sair"><SignOut/></button>
+  return <header className="topbar"><div><div className="title-line"><h1>{pageMeta[active][0]}</h1>{VISION_PAGES.includes(active) ? <span className="vision-badge" title="Este m?dulo mostra aonde o produto vai ? faz parte do roadmap (Eras 4-5) e ainda n?o est? em opera??o. Os dados s?o simulados.">? VIS?O ? ROADMAP</span> : null}</div><p>{pageMeta[active][1]}</p></div><div className="top-actions">
+    <LangSwitch notify={notify} /><span className="date"><CalendarBlank size={18} />11 jul 2026</span><span className="avatar">D</span><span className="top-user">Douglas<small>{role}</small></span><button className="top-logout" onClick={onLogout} aria-label="Sair"><SignOut /></button>
   </div></header>;
 }
 
-function DemoJourneyRail({ active }) {
+function DemoJourneyRail({ active, setActive }) {
   const currentIndex = demoJourney.findIndex(step => step.id === active);
   if (currentIndex === -1) return null;
+  const nextStep = demoJourney[currentIndex + 1];
 
   return (
-    <section className="demo-journey-rail" aria-label="Sequência da demonstração">
+    <section className="demo-journey-rail" aria-label="Sequ?ncia da demonstra??o">
       <div className="demo-journey-head">
-        <small>SEQUÊNCIA DA DEMO</small>
-        <b>{currentIndex + 1}/{demoJourney.length} concluído no fluxo principal</b>
+        <small>SEQU?NCIA DA DEMO</small>
+        <div className="demo-journey-meta">
+          <b>{currentIndex + 1}/{demoJourney.length} conclu?do no fluxo principal</b>
+          {nextStep ? <button className="ghost" onClick={() => setActive(nextStep.id)}>Pr?xima tela: {nextStep.label}</button> : <span className="demo-journey-done">Fluxo principal completo</span>}
+        </div>
       </div>
       <div className="demo-journey-track">
         {demoJourney.map((step, index) => {
-          const state = index < currentIndex ? "done" : index === currentIndex ? "current" : "future";
+          const state = index < currentIndex ? "done" : index == currentIndex ? "current" : "future";
           return (
             <div key={step.id} className={`demo-journey-step ${state}`}>
               <i>{state === "done" ? <CheckCircle weight="fill" /> : index + 1}</i>
@@ -441,5 +445,5 @@ export function App() {
     evidence:<EvidencePage/>,settings:<SettingsPage/>
   };
   const page=canAccess?pages[active]:<AccessDenied setActive={setActive}/>;
-  return <div className="app-shell"><Sidebar active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} onLogout={logout}/><main className="workspace"><Topbar active={active} role={role} onLogout={logout} notify={notify}/><DemoJourneyRail active={active}/>{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
+  return <div className="app-shell"><Sidebar active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} onLogout={logout}/><main className="workspace"><Topbar active={active} role={role} onLogout={logout} notify={notify}/><DemoJourneyRail active={active} setActive={setActive} />{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
 }
