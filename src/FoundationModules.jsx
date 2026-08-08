@@ -417,6 +417,16 @@ export function AdminGovernance({role,setRole,notify,onOpenPilotUser}){
     ["Trilíngue de nascença","PT, ES e EN seguem juntos no mesmo fluxo."],
     ["Auditoria viva","Toda ação crítica fica explicável depois."]
   ];
+  const jumpTo=(target,label)=>{
+    document.getElementById(target)?.scrollIntoView({behavior:"smooth",block:"start"});
+    notify(`Navegando para ${label}.`);
+  };
+  const adminModules=[
+    ["admin-access","Acessos","Criar, revisar e preparar usuários válidos."],
+    ["admin-themes","Perfis & tema","Simular RBAC e validar a interface."],
+    ["admin-pilots","Piloto real","Abrir Daniel, Thomas e Douglas no contexto certo."],
+    ["admin-audit","Auditoria","Conferir trilha, permissões e regra aplicada."]
+  ];
   const sendInvite=(event)=>{
     event.preventDefault();
     const deptMap={Infraestrutura:"INF","Implantação":"IMP","Espec. de Software":"ESP","WCS Velox":"WCS","PMO":"PMO"};
@@ -434,6 +444,9 @@ export function AdminGovernance({role,setRole,notify,onOpenPilotUser}){
   };
   return <section className="page foundation-page">
     <div className="admin-banner"><ShieldCheck/><div><small>GOVERNANÇA DE ACESSO</small><h2>Permissão clara, ação auditável</h2><p>A demonstração aplica perfis na interface. Em produção, a mesma regra será validada novamente no servidor.</p></div><span><LockKey/>Sessão ativa</span></div>
+    <div className="admin-module-strip">
+      {adminModules.map(([id,title,body])=><button key={id} onClick={()=>jumpTo(id,title)}><small>MÓDULO</small><b>{title}</b><p>{body}</p><span>abrir</span></button>)}
+    </div>
     <div className="executive-command-strip">
       {governancePulse.map(item=><span key={item[0]}><small>{item[0]}</small><b>{item[1]}</b><em>{item[2]}</em></span>)}
     </div>
@@ -441,12 +454,12 @@ export function AdminGovernance({role,setRole,notify,onOpenPilotUser}){
       {adminPrinciples.map(([title,body])=><article key={title}><small>PRINCÍPIO</small><b>{title}</b><p>{body}</p></article>)}
     </div>
     <div className="foundation-grid equal">
-      <Panel title="Simular perfil de acesso" subtitle="Use na apresentação para demonstrar o RBAC"><div className="role-selector">{Object.keys(roles).map(r=><button className={role===r?"active":""} key={r} onClick={()=>{setRole(r);notify(`Perfil alterado para ${roleMeta[r].label}. A navegação foi recalculada.`)}}><UserGear/><span><b>{roleMeta[r].label}</b><small>{roleMeta[r].helper}</small></span></button>)}</div></Panel>
+      <div id="admin-themes"><Panel title="Simular perfil de acesso" subtitle="Use na apresentação para demonstrar o RBAC"><div className="role-selector">{Object.keys(roles).map(r=><button className={role===r?"active":""} key={r} onClick={()=>{setRole(r);notify(`Perfil alterado para ${roleMeta[r].label}. A navegação foi recalculada.`)}}><UserGear/><span><b>{roleMeta[r].label}</b><small>{roleMeta[r].helper}</small></span></button>)}</div></Panel></div>
       <Panel title="Regras obrigatórias" subtitle="Validações que protegem a qualidade do dado"><ul className="governance-rules"><li><CheckCircle/><span><b>Concluído = 100%</b><small>Sem atraso pendente ou atividade aberta.</small></span></li><li><CheckCircle/><span><b>Bloqueado exige plano</b><small>Categoria, responsável, próxima ação e data.</small></span></li><li><CheckCircle/><span><b>Importação transacional</b><small>Arquivo inválido não altera a base.</small></span></li><li><CheckCircle/><span><b>Link seguro do analista</b><small>Token expirável vinculado a e-mail e tarefa.</small></span></li></ul></Panel>
     </div>
     <div className="admin-role-overview">{Object.entries(roleMeta).map(([key,item])=><article key={key} className={role===key?"active":""}><small>VER COMO</small><b>{item.label}</b><p>{item.scope}</p><span>{role===key?"Perfil ativo":"Capacidade disponível"}</span></article>)}</div>
     <div className="foundation-grid equal">
-      <Panel title="Novo acesso" subtitle="Quem entra e o que cada perfil pode fazer">
+      <div id="admin-access"><Panel title="Novo acesso" subtitle="Quem entra e o que cada perfil pode fazer">
         <form className="admin-access-form" onSubmit={sendInvite}>
           <label><span>Nome</span><input value={invite.name} onChange={e=>setInvite({...invite,name:e.target.value})} placeholder="Ex.: Daniel Souza" required/></label>
           <label><span>E-mail corporativo</span><input type="email" value={invite.email} onChange={e=>setInvite({...invite,email:e.target.value})} placeholder="nome@invent-corp.com" required/></label>
@@ -457,7 +470,7 @@ export function AdminGovernance({role,setRole,notify,onOpenPilotUser}){
           <div className="admin-access-note"><b>Permissão por capacidade</b><p>Cada perfil enxerga e faz só o que precisa. O usuário recebe o acesso conforme o papel e a área definidos acima.</p></div>
           <button className="primary" type="submit"><Envelope/>Preparar acesso</button>
         </form>
-      </Panel>
+      </Panel></div>
       <Panel title="Tema da interface" subtitle="Modelo vindo do inventops79">
         <div className="admin-theme-picker">
           {["Escuro","Claro","Alto contraste"].map(option=><button key={option} className={theme===option?"active":""} onClick={()=>{setTheme(option);notify(`Tema visual alterado para ${option}.`)}}><b>{option}</b><small>{option==="Escuro"?"Padrão corporativo":option==="Claro"?"Ambiente claro para leitura":"Máximo contraste para validação"}</small></button>)}
@@ -465,7 +478,7 @@ export function AdminGovernance({role,setRole,notify,onOpenPilotUser}){
         <div className="admin-theme-state"><ShieldCheck/><span><small>TEMA ATIVO</small><b>{theme}</b></span></div>
       </Panel>
     </div>
-    <Panel title="Usuários válidos do piloto" subtitle="Escopo atual vindo das áreas e do inventops79">
+    <div id="admin-pilots"><Panel title="Usuários válidos do piloto" subtitle="Escopo atual vindo das áreas e do inventops79">
       <div className="admin-pilot-users">
         {users.map((user)=><article key={`${user.name}-${user.area}`}>
           <small>{user.profile}</small>
@@ -483,9 +496,9 @@ export function AdminGovernance({role,setRole,notify,onOpenPilotUser}){
           </div>
         </article>)}
       </div>
-    </Panel>
+    </Panel></div>
     <Panel title="Matriz de permissões" subtitle="Rotas e ações por perfil"><div className="permission-table"><header><span>Permissão</span>{Object.keys(roles).map(r=><span key={r}>{r==="Diretoria"?"DIREX":r}</span>)}</header>{permissions.map((p,i)=><div key={p}><b>{p}</b>{Object.keys(roles).map(r=><span key={r}>{roles[r][i]?<CheckCircle/>:<XCircle/>}</span>)}</div>)}</div></Panel>
-    <Panel title="Trilha de auditoria" subtitle="Quem fez o quê, quando e sobre qual registro"><div className="audit-log">{[["21:38","Douglas","Alterou prazo do Go Live","TITANO"],["20:54","Daiana Costa","Anexou evidência REV4","QUELUZ"],["19:42","Sistema IoT","Criou alerta P0","TITANO"],["18:17","Ivan","Atualizou bloqueio de VPN","MARKET PERU"]].map(x=><div key={x.join()}><span>{x[0]}</span><b>{x[1]}</b><p>{x[2]}</p><em>{x[3]}</em></div>)}</div></Panel></section>;
+    <div id="admin-audit"><Panel title="Trilha de auditoria" subtitle="Quem fez o quê, quando e sobre qual registro"><div className="audit-log">{[["21:38","Douglas","Alterou prazo do Go Live","TITANO"],["20:54","Daiana Costa","Anexou evidência REV4","QUELUZ"],["19:42","Sistema IoT","Criou alerta P0","TITANO"],["18:17","Ivan","Atualizou bloqueio de VPN","MARKET PERU"]].map(x=><div key={x.join()}><span>{x[0]}</span><b>{x[1]}</b><p>{x[2]}</p><em>{x[3]}</em></div>)}</div></Panel></div></section>;
 }
 
 export function LifecyclePage(){
