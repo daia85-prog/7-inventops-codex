@@ -4,7 +4,6 @@ import {
   Envelope, HandPalm, PaperPlaneTilt, Sparkle, UsersThree, Warning
 } from "@phosphor-icons/react";
 
-/* Os 14 departamentos reais (mesma fonte do transplante E1.1) */
 export const AREAS = [
   { code:"COM", nome:"Comercial / Concept", gestor:"André Mota" },
   { code:"PMO", nome:"PMO", gestor:"Rodrigo Baruco" },
@@ -21,17 +20,26 @@ export const AREAS = [
   { code:"PLC", nome:"PLC", gestor:"Gustavo Pereira" },
   { code:"PÓS", nome:"Pós-vendas", gestor:"Caique Fracaro" },
 ];
-const areaName = code => (AREAS.find(a=>a.code===code)||{}).nome || code;
 
-/* Entregas por departamento — INF é o piloto (espelha a realidade do P1); demais = exemplo */
+const areaName = (code) => (AREAS.find((a) => a.code === code) || {}).nome || code;
+
+const cockpitJourney = [
+  { id:"login", label:"Login", state:"done", detail:"Experiência inicial já validada." },
+  { id:"home", label:"Home", state:"done", detail:"Panorama corporativo já elevado." },
+  { id:"pmo", label:"PMO", state:"done", detail:"Fila única e briefing já publicados." },
+  { id:"infra", label:"Infra", state:"active", detail:"Camada operacional do departamento em fechamento." },
+  { id:"executive", label:"Executive", state:"next", detail:"Próxima etapa: fechamento final da visão diretiva." },
+];
+
 const DELIVERIES = {
   INF: [
     { id:"inf-1", project:"QUELUZ", title:"Ambiente HML liberado para o GL1", to:"WCS", due:"hoje", status:"pronto" },
-    { id:"inf-2", project:"NAVEPARK", title:"VMs Oracle KVM + topologia de rede", to:"IMP", due:"14/07", status:"andamento" },
-    { id:"inf-3", project:"MARKET PERU", title:"VPN site-to-site + range IP /24", to:"WCS", due:"12/07", status:"aguardando" },
-    { id:"inf-4", project:"TITANO", title:"Servidor SaaS AWS provisionado", to:"WCS", due:"09/07", status:"done", doneAt:"09/07 · 16:12" },
+    { id:"inf-2", project:"NAVEPARK", title:"VMs Oracle KVM + topologia de rede", to:"IMP", due:"14/08", status:"andamento" },
+    { id:"inf-3", project:"MARKET PERU", title:"VPN site-to-site + range IP /24", to:"WCS", due:"12/08", status:"aguardando" },
+    { id:"inf-4", project:"TITANO", title:"Servidor SaaS AWS provisionado", to:"WCS", due:"09/08", status:"done", doneAt:"09/08 · 16:12" },
   ],
 };
+
 const WAITING = {
   INF: [
     { from:"CMP", project:"TITANO", what:"Hardware do Sensor X (pedido #4411)", side:"Invent", age:"2 dias" },
@@ -39,6 +47,7 @@ const WAITING = {
     { from:"COM", project:"BR SUPPLY", what:"Data firme do kickoff técnico", side:"Invent", age:"1 dia" },
   ],
 };
+
 const WAITED_BY = {
   INF: [
     { dept:"IMP", project:"NAVEPARK", what:"Acessos e VMs para montar o ambiente HML" },
@@ -46,92 +55,153 @@ const WAITED_BY = {
     { dept:"ESP", project:"BR SUPPLY", what:"Definição de servidor (cliente × Invent)" },
   ],
 };
+
 const FEED_SEED = [
-  { t:"09/07 · 16:12", from:"INF", to:"WCS", txt:"Servidor SaaS AWS do TITANO liberado — dev pode iniciar a instalação" },
-  { t:"08/07 · 11:47", from:"CMP", to:"PRD", txt:"Materiais do QUELUZ entregues na produção" },
-  { t:"05/07 · 09:20", from:"COM", to:"PMO", txt:"BR SUPPLY assinado — kickoff autorizado" },
+  { t:"09/08 · 16:12", from:"INF", to:"WCS", txt:"Servidor SaaS AWS do TITANO liberado — DEV pode iniciar a instalação" },
+  { t:"08/08 · 11:47", from:"CMP", to:"PRD", txt:"Materiais do QUELUZ entregues na produção" },
+  { t:"05/08 · 09:20", from:"COM", to:"PMO", txt:"BR SUPPLY assinado — kickoff autorizado" },
 ];
-/* Gerador de dados de exemplo pros departamentos ainda não pilotos */
+
 const SAMPLE_PROJECTS = ["TITANO","QUELUZ","MARKET PERU","NAVEPARK","BP","MARKET CHILE"];
+
 function sampleFor(code){
-  const i = AREAS.findIndex(a=>a.code===code);
-  const next = AREAS[(i+1)%AREAS.length].code, prev = AREAS[(i+13)%AREAS.length].code;
+  const i = AREAS.findIndex((a) => a.code === code);
+  const next = AREAS[(i + 1) % AREAS.length].code;
+  const prev = AREAS[(i + AREAS.length - 1) % AREAS.length].code;
   return {
     deliveries: [
-      { id:`${code}-1`, project:SAMPLE_PROJECTS[i%6], title:`Entrega da etapa de ${areaName(code)}`, to:next, due:"18/07", status:"andamento" },
-      { id:`${code}-2`, project:SAMPLE_PROJECTS[(i+2)%6], title:`Checklist de handoff para ${areaName(next)}`, to:next, due:"25/07", status:"pronto" },
+      { id:`${code}-1`, project:SAMPLE_PROJECTS[i % 6], title:`Entrega da etapa de ${areaName(code)}`, to:next, due:"18/08", status:"andamento" },
+      { id:`${code}-2`, project:SAMPLE_PROJECTS[(i + 2) % 6], title:`Checklist de handoff para ${areaName(next)}`, to:next, due:"25/08", status:"pronto" },
     ],
-    waiting: [ { from:prev, project:SAMPLE_PROJECTS[(i+1)%6], what:`Conclusão da etapa de ${areaName(prev)}`, side:"Invent", age:"3 dias" } ],
-    waitedBy: [ { dept:next, project:SAMPLE_PROJECTS[i%6], what:`Insumos da etapa de ${areaName(code)}` } ],
+    waiting: [
+      { from:prev, project:SAMPLE_PROJECTS[(i + 1) % 6], what:`Conclusão da etapa de ${areaName(prev)}`, side:"Invent", age:"3 dias" }
+    ],
+    waitedBy: [
+      { dept:next, project:SAMPLE_PROJECTS[i % 6], what:`Insumos da etapa de ${areaName(code)}` }
+    ],
   };
 }
 
-const STATUS_LABEL = { pronto:"Pronto p/ concluir", andamento:"Em andamento", aguardando:"Aguardando terceiro", done:"Concluído" };
+const STATUS_LABEL = {
+  pronto:"Pronto p/ concluir",
+  andamento:"Em andamento",
+  aguardando:"Aguardando terceiro",
+  done:"Concluído"
+};
 
 export function DepartmentCockpit({ notify, imported = [] }) {
   const [dept, setDept] = useState("INF");
   const [doneMap, setDoneMap] = useState({});
   const [feed, setFeed] = useState(FEED_SEED);
-  const area = AREAS.find(a=>a.code===dept);
+  const area = AREAS.find((a) => a.code === dept);
   const isPilot = dept === "INF";
 
-  const base = useMemo(()=> isPilot
-    ? { deliveries: DELIVERIES.INF, waiting: WAITING.INF, waitedBy: WAITED_BY.INF }
-    : sampleFor(dept), [dept, isPilot]);
+  const base = useMemo(
+    () => isPilot
+      ? { deliveries: DELIVERIES.INF, waiting: WAITING.INF, waitedBy: WAITED_BY.INF }
+      : sampleFor(dept),
+    [dept, isPilot]
+  );
 
-  const importedHere = imported.filter(d=>d.dept===dept).map((d,i)=>({
-    id:`imp-${dept}-${i}`, project:d.project, title:d.title, to:d.to||"PMO", due:d.due||"a definir", status:"andamento", origin:"Kickoff Nexus"
+  const importedHere = imported.filter((d) => d.dept === dept).map((d, i) => ({
+    id:`imp-${dept}-${i}`,
+    project:d.project,
+    title:d.title,
+    to:d.to || "PMO",
+    due:d.due || "a definir",
+    status:"andamento",
+    origin:"Kickoff Nexus"
   }));
-  const deliveries = [...importedHere, ...base.deliveries].map(x=>doneMap[x.id]?{...x,status:"done",doneAt:doneMap[x.id]}:x);
-  const open = deliveries.filter(d=>d.status!=="done");
+
+  const deliveries = [...importedHere, ...base.deliveries].map((x) =>
+    doneMap[x.id] ? { ...x, status:"done", doneAt:doneMap[x.id] } : x
+  );
+  const open = deliveries.filter((d) => d.status !== "done");
 
   const conclude = (item) => {
     const now = new Date();
     const hh = `${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
     const stamp = `hoje · ${hh}`;
-    setDoneMap(m=>({ ...m, [item.id]: stamp }));
-    setFeed(f=>[{ t:stamp, from:dept, to:item.to, txt:`${item.title} (${item.project}) — liberado` }, ...f]);
+    setDoneMap((m) => ({ ...m, [item.id]: stamp }));
+    setFeed((f) => [{ t:stamp, from:dept, to:item.to, txt:`${item.title} (${item.project}) — liberado` }, ...f]);
     notify(`${areaName(item.to)} notificada: ${item.title} do ${item.project} está pronto. ✓ ${hh}`);
   };
 
   return <section className="page cockpit-page">
     <div className="cockpit-picker" role="tablist" aria-label="Escolha o departamento">
-      {AREAS.map(a=><button key={a.code} role="tab" aria-selected={dept===a.code} className={dept===a.code?"active":""} onClick={()=>setDept(a.code)}><b>{a.code}</b><small>{a.nome}</small></button>)}
+      {AREAS.map((a) => <button key={a.code} role="tab" aria-selected={dept===a.code} className={dept===a.code?"active":""} onClick={() => setDept(a.code)}><b>{a.code}</b><small>{a.nome}</small></button>)}
     </div>
 
     <div className="cockpit-head">
-      <div><h2>{area.nome}</h2><p>Gestor: <b>{area.gestor}</b>{isPilot?<span className="pilot-tag"><Sparkle size={13} weight="fill"/> área piloto · dados reais do P1</span>:<span className="sample-tag">dados de exemplo — área entra no piloto na Era 2</span>}</p></div>
+      <div>
+        <h2>{area.nome}</h2>
+        <p>
+          Gestor: <b>{area.gestor}</b>
+          {isPilot
+            ? <span className="pilot-tag"><Sparkle size={13} weight="fill"/> área piloto · dados reais do P1</span>
+            : <span className="sample-tag">dados de exemplo — área entra no piloto na Era 2</span>}
+        </p>
+      </div>
       <div className="cockpit-kpis">
         <span><b>{open.length}</b><small>entregas abertas</small></span>
         <span><b>{base.waiting.length}</b><small>aguardando de outros</small></span>
         <span><b>{base.waitedBy.length}</b><small>esperam por mim</small></span>
-        <span><b>{feed.filter(f=>f.t.startsWith("hoje")).length}</b><small>handoffs hoje</small></span>
+        <span><b>{feed.filter((f) => f.t.startsWith("hoje")).length}</b><small>handoffs hoje</small></span>
       </div>
     </div>
 
+    <article className="journey-checklist cockpit-journey">
+      <header>
+        <div>
+          <small>SEQUÊNCIA DE ENTREGA</small>
+          <h3>Onde estamos na jornada do produto</h3>
+        </div>
+        <span>Infra é a frente piloto ativa agora</span>
+      </header>
+      <div>
+        {cockpitJourney.map((step) => <section key={step.id} className={step.state}>
+          <i>{step.state==="done"?<CheckCircle weight="fill"/>:step.state==="active"?<Sparkle weight="fill"/>:<ClockCountdown weight="fill"/>}</i>
+          <div>
+            <small>{step.state==="done"?"CHECK":step.state==="active"?"ATUAL":"PRÓXIMO"}</small>
+            <b>{step.label}</b>
+            <p>{step.detail}</p>
+          </div>
+        </section>)}
+      </div>
+    </article>
+
     <div className="cockpit-grid">
-      <article><div className="section-heading"><b><CheckCircle/> Minhas entregas</b><span>O que este departamento deve ao fluxo.</span></div>
-        <div className="cockpit-list">{deliveries.map(d=><div key={d.id} className={`hand-card ${d.status}`}>
+      <article>
+        <div className="section-heading"><b><CheckCircle/> Minhas entregas</b><span>O que este departamento deve ao fluxo.</span></div>
+        <div className="cockpit-list">{deliveries.map((d) => <div key={d.id} className={`hand-card ${d.status}`}>
           <header><small>{d.project}</small>{d.origin?<em className="origin-tag">⇪ {d.origin}</em>:null}<span className={`hstatus ${d.status}`}>{STATUS_LABEL[d.status]}{d.status==="done"&&d.doneAt?` ✓ ${d.doneAt}`:""}</span></header>
           <h3>{d.title}</h3>
-          <footer><span><CalendarBlank/>{d.due}</span><span><ArrowRight/> próxima área: <b>{areaName(d.to)}</b></span>
-            {d.status!=="done"?<button className="conclude" onClick={()=>conclude(d)} disabled={d.status==="aguardando"} title={d.status==="aguardando"?"Aguardando terceiro — não dá pra concluir ainda":"Marca como concluído e avisa a próxima área com carimbo de hora"}><PaperPlaneTilt/>Concluir e notificar</button>:<span className="done-stamp"><CheckCircle weight="fill"/>bastão passado</span>}
+          <footer>
+            <span><CalendarBlank/>{d.due}</span>
+            <span><ArrowRight/> próxima área: <b>{areaName(d.to)}</b></span>
+            {d.status!=="done"
+              ? <button className="conclude" onClick={() => conclude(d)} disabled={d.status==="aguardando"} title={d.status==="aguardando"?"Aguardando terceiro — não dá pra concluir ainda":"Marca como concluído e avisa a próxima área com carimbo de hora"}><PaperPlaneTilt/>Concluir e notificar</button>
+              : <span className="done-stamp"><CheckCircle weight="fill"/>bastão passado</span>}
           </footer>
         </div>)}</div>
       </article>
 
-      <article><div className="section-heading"><b><ClockCountdown/> Aguardando de outros</b><span>De quem é a bola que me trava.</span></div>
-        <div className="cockpit-list">{base.waiting.map((w,i)=><div key={i} className="hand-card waitrow">
+      <article>
+        <div className="section-heading"><b><ClockCountdown/> Aguardando de outros</b><span>De quem é a bola que me trava.</span></div>
+        <div className="cockpit-list">{base.waiting.map((w, i) => <div key={i} className="hand-card waitrow">
           <header><small>{w.project}</small><span className={`side-tag ${w.side==="Cliente"?"cli":"inv"}`}>{w.side}</span></header>
           <h3>{w.what}</h3>
-          <footer><span><Buildings/>de: <b>{w.from==="Cliente"?"Cliente":areaName(w.from)}</b></span><span><Warning/>{w.age} esperando</span>
-            <button className="ghost-mini" onClick={()=>notify(`Cobrança preparada para ${w.from==="Cliente"?"o cliente":areaName(w.from)} sobre: ${w.what}`)}><Envelope/>Cobrar</button>
+          <footer>
+            <span><Buildings/>de: <b>{w.from==="Cliente"?"Cliente":areaName(w.from)}</b></span>
+            <span><Warning/>{w.age} esperando</span>
+            <button className="ghost-mini" onClick={() => notify(`Cobrança preparada para ${w.from==="Cliente"?"o cliente":areaName(w.from)} sobre: ${w.what}`)}><Envelope/>Cobrar</button>
           </footer>
         </div>)}</div>
       </article>
 
-      <article><div className="section-heading"><b><UsersThree/> Esperam por mim</b><span>Quem depende deste departamento agora.</span></div>
-        <div className="cockpit-list">{base.waitedBy.map((w,i)=><div key={i} className="hand-card waitedrow">
+      <article>
+        <div className="section-heading"><b><UsersThree/> Esperam por mim</b><span>Quem depende deste departamento agora.</span></div>
+        <div className="cockpit-list">{base.waitedBy.map((w, i) => <div key={i} className="hand-card waitedrow">
           <header><small>{w.project}</small><span className="side-tag inv">{areaName(w.dept)}</span></header>
           <h3>{w.what}</h3>
           <footer><span><HandPalm/>o bastão está com a gente</span></footer>
@@ -139,8 +209,9 @@ export function DepartmentCockpit({ notify, imported = [] }) {
       </article>
     </div>
 
-    <article className="cockpit-feed"><div className="section-heading"><b>Linha do tempo dos handoffs</b><span>Quem passou o bastão, pra quem e QUANDO — o fim do "alguém sabe se ficou pronto?"</span></div>
-      <div className="feed-list">{feed.map((f,i)=><div key={i} className={i===0&&f.t.startsWith("hoje")?"fresh":""}>
+    <article className="cockpit-feed">
+      <div className="section-heading"><b>Linha do tempo dos handoffs</b><span>Quem passou o bastão, para quem e quando — o fim do “alguém sabe se ficou pronto?”</span></div>
+      <div className="feed-list">{feed.map((f, i) => <div key={i} className={i===0&&f.t.startsWith("hoje")?"fresh":""}>
         <span className="feed-time">{f.t}</span><span className="feed-route"><b>{f.from}</b><ArrowRight/><b>{f.to}</b></span><p>{f.txt}</p>
       </div>)}</div>
     </article>
