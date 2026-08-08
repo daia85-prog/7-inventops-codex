@@ -194,6 +194,11 @@ export function AdminGovernance({role,setRole,notify,onOpenPilotUser}){
   const permissions=["Visualizar","Editar operação","Gerenciar projetos","Administrar acessos","Configurar integrações"];
   const [theme,setTheme]=useState("Escuro");
   const [invite,setInvite]=useState({name:"",email:"",profile:"Analista",area:"Infraestrutura"});
+  const [users,setUsers]=useState([
+    {name:"Douglas Alves", profile:"Gestor", area:"Infraestrutura / Implantação", status:"Ativo", dept:"INF", source:"Piloto"},
+    {name:"Daniel", profile:"Gestor", area:"Implantação", status:"Piloto real", dept:"IMP", source:"Piloto"},
+    {name:"Thomas", profile:"Analista", area:"Espec. Software / DevOps", status:"Piloto real", dept:"ESP", source:"Piloto"},
+  ]);
   const roleMeta={
     Admin:{label:"Enterprise Admin",helper:"Controle total da plataforma e das integrações.",scope:"Administração, governança, acessos e regras centrais."},
     Diretoria:{label:"Diretoria · DIREX",helper:"Leitura executiva, decisão e priorização.",scope:"Visão consolidada, indicadores, riscos e decisões."},
@@ -205,11 +210,6 @@ export function AdminGovernance({role,setRole,notify,onOpenPilotUser}){
     ["Sessões auditáveis","100%","Toda ação crítica deixa trilha"],
     ["Regra central","RBAC + evidência","Capacidade correta para cada contexto"]
   ];
-  const pilotUsers=[
-    {name:"Douglas Alves", profile:"Gestor", area:"Infraestrutura / Implantação", status:"Ativo", dept:"INF"},
-    {name:"Daniel", profile:"Gestor", area:"Implantação", status:"Piloto real", dept:"IMP"},
-    {name:"Thomas", profile:"Analista", area:"Espec. Software / DevOps", status:"Piloto real", dept:"ESP"},
-  ];
   const adminPrinciples=[
     ["Permissão por capacidade","Cada perfil vê e faz só o que precisa."],
     ["Acessível de nascença","Contraste forte, leitura clara e navegação sem susto."],
@@ -218,6 +218,16 @@ export function AdminGovernance({role,setRole,notify,onOpenPilotUser}){
   ];
   const sendInvite=(event)=>{
     event.preventDefault();
+    const deptMap={Infraestrutura:"INF","Implantação":"IMP","Espec. de Software":"ESP","WCS Velox":"WCS","PMO":"PMO"};
+    const newUser={
+      name:invite.name,
+      profile:invite.profile,
+      area:invite.area,
+      status:"Acesso preparado",
+      dept:deptMap[invite.area]||"INF",
+      source:"Administração"
+    };
+    setUsers(current=>[newUser,...current.filter(item=>item.name!==newUser.name)]);
     notify(`Acesso preparado para ${invite.name||"novo usuário"} · perfil ${invite.profile} · área ${invite.area}.`);
     setInvite({name:"",email:"",profile:"Analista",area:"Infraestrutura"});
   };
@@ -256,11 +266,12 @@ export function AdminGovernance({role,setRole,notify,onOpenPilotUser}){
     </div>
     <Panel title="Usuários válidos do piloto" subtitle="Escopo atual vindo das áreas e do inventops79">
       <div className="admin-pilot-users">
-        {pilotUsers.map((user)=><article key={user.name}>
+        {users.map((user)=><article key={`${user.name}-${user.area}`}>
           <small>{user.profile}</small>
           <b>{user.name}</b>
           <p>{user.area}</p>
           <span>{user.status}</span>
+          <em>{user.source}</em>
           <div className="admin-pilot-actions">
             <button className="ghost" type="button" onClick={()=>notify(`${user.name} está registrado como usuário válido do piloto em ${user.area}.`)}>Validar usuário</button>
             <button className="ghost" type="button" onClick={()=>{
