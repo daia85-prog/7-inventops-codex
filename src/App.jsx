@@ -460,6 +460,7 @@ export function App() {
   const login=()=>{sessionStorage.setItem("inventops-demo-session","active");setAuthenticated(true);setActive("home")};
   const logout=()=>{sessionStorage.removeItem("inventops-demo-session");setAuthenticated(false);setRole("Admin");setActive("home")};
   const openPilotContext=(user)=>{setCockpitDept(user.dept||"INF");setActive("cockpit")};
+  const openCockpitDept=(dept)=>{setCockpitDept(dept||"INF");setActive("cockpit")};
   if(!authenticated)return <LoginScreen onLogin={login}/>;
   const allowed={
     Admin:"*",
@@ -469,7 +470,7 @@ export function App() {
   };
   const canAccess=allowed[role]==="*"||allowed[role].includes(active);
   const pages={
-    home:<ExecutiveDashboard projects={projects} setActive={setActive}/>,
+    home:<ExecutiveDashboard projects={projects} setActive={setActive} openCockpitDept={openCockpitDept}/>,
     action:<ActionCenter notify={notify}/>,management:<ManagementPage/>,analytics:<AnalyticsPage/>,
     executive:<ExecutiveOnePager projects={projects} notify={notify}/>,
     portfolio:<PortfolioPage projects={projects} setProjects={setProjects} setActive={setActive} setSelectedProject={setSelectedProject} setProjectModalOpen={setProjectModalOpen} setImportedDemands={setImportedDemands} notify={notify}/>,

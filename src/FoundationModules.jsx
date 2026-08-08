@@ -58,9 +58,29 @@ function Metric({icon:Icon,label,value,note,tone="cyan"}){
   return <article className={`foundation-metric ${tone}`}><Icon/><span><small>{label}</small><b>{value}</b><em>{note}</em></span></article>;
 }
 
-export function ExecutiveDashboard({projects,setActive}){
+export function ExecutiveDashboard({projects,setActive,openCockpitDept}){
   const health=Math.round(projects.reduce((sum,p)=>sum+p.health,0)/projects.length);
   const hotAreas=departments.filter(area=>area.load>=100).slice(0,3);
+  const pilotAreas = [
+    {
+      code: "IMP",
+      title: "Implantação",
+      eyebrow: "Piloto pronto para teste",
+      summary: "Campo, readiness, handoff e execução do Go Live em uma leitura única.",
+      metric: "7 handoffs vivos",
+      detail: "Daniel e time já conseguem navegar pela operação real da área.",
+      cta: "Abrir cockpit de Implantação"
+    },
+    {
+      code: "ESP",
+      title: "Especificação + DevOps",
+      eyebrow: "Piloto pronto para teste",
+      summary: "Especificação, checkpoint, dependências e prontidão técnica sem planilha paralela.",
+      metric: "5 checkpoints ativos",
+      detail: "Thomas e time já entram num fluxo orientado por evidência e bloqueio real.",
+      cta: "Abrir cockpit de DevOps"
+    }
+  ];
   const coordinationNodes=[
     {label:"Infraestrutura",className:"infra"},
     {label:"Compras",className:"compras"},
@@ -78,14 +98,37 @@ export function ExecutiveDashboard({projects,setActive}){
     {label:"Decisões hoje",value:"3 críticas",tone:"gold"},
     {label:"Risco imediato",value:"PLC + Infra + Compras",tone:"red"}
   ];
+  const directorialReading = [
+    ["Pilotos ativos", "2 áreas em validação real", "Implantação + Especificação/DevOps"],
+    ["Próxima meta", "Semana de uso assistido", "subir confiança com usuários reais"],
+    ["Sinal do sistema", "A mesma base alimenta direção e execução", "sem narrativa paralela"]
+  ];
   return <section className="page foundation-page">
     <div className="executive-command-strip">
       {decisionPulse.map(item=><span key={item.label} className={item.tone}><small>{item.label}</small><b>{item.value}</b></span>)}
     </div>
-    <div className="executive-hero">
+    <div className="executive-world-strip">
+      {directorialReading.map(([label,value,detail])=><article key={label}><small>{label}</small><b>{value}</b><span>{detail}</span></article>)}
+    </div>
+    <div className="executive-hero executive-world-hero">
       <div className="health-visual"><ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={[{v:health},{v:100-health}]} dataKey="v" startAngle={90} endAngle={-270} innerRadius={55} outerRadius={67} stroke="none"><Cell fill="#f5c300"/><Cell fill="#18263a"/></Pie></PieChart></ResponsiveContainer><span><small>HEALTH SCORE</small><b>{health}</b><em>/100</em></span></div>
-      <div className="executive-brief"><small>BRIEFING EXECUTIVO · 11 JUL 2026</small><h2>Hoje, a operação precisa de três decisões.</h2><p>O portfólio está estável, mas <b>Infraestrutura, Compras e PLC</b> concentram os riscos que podem deslocar os próximos Go Lives. Priorize Market Peru, estabilize o Sensor X do TITANO e confirme as VMs do Navepark.</p><div><button className="primary" onClick={()=>setActive("action")}><CheckSquare/>Abrir plano de ação</button><button className="ghost" onClick={()=>setActive("executive")}><FileText/>Ver one-page</button></div></div>
+      <div className="executive-brief"><small>BRIEFING EXECUTIVO · 11 JUL 2026</small><h2>A operação já tem onde começar a usar de verdade.</h2><p>O InventOps já saiu do conceito básico: <b>Implantação</b> e <b>Especificação/DevOps</b> entram na próxima semana como pilotos reais, enquanto a diretoria acompanha a mesma verdade operacional sem precisar de relatório paralelo.</p><div><button className="primary" onClick={()=>setActive("action")}><CheckSquare/>Abrir plano de ação</button><button className="ghost" onClick={()=>setActive("executive")}><FileText/>Ver one-page</button></div></div>
       <div className="countdown"><small>PRÓXIMO GO LIVE</small><b>9</b><span>dias</span><strong>TITANO · 20 JUL</strong><em>78% de confiança</em></div>
+    </div>
+    <div className="pilot-launch-grid">
+      {pilotAreas.map(area=><article key={area.code} className="pilot-launch-card">
+        <header>
+          <small>{area.eyebrow}</small>
+          <span>{area.code}</span>
+        </header>
+        <b>{area.title}</b>
+        <p>{area.summary}</p>
+        <div className="pilot-launch-metric">
+          <strong>{area.metric}</strong>
+          <small>{area.detail}</small>
+        </div>
+        <button className="ghost" onClick={()=>openCockpitDept(area.code)}><ArrowRight/>{area.cta}</button>
+      </article>)}
     </div>
     <div className="executive-signal-grid">
       <article className="signal-panel priority">
