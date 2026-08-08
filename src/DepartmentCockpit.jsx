@@ -224,8 +224,8 @@ const STATUS_LABEL = {
   done: "Concluído",
 };
 
-export function DepartmentCockpit({ notify, imported = [] }) {
-  const [dept, setDept] = useState("INF");
+export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }) {
+  const [dept, setDept] = useState(initialDept);
   const [doneMap, setDoneMap] = useState({});
   const [feed, setFeed] = useState(FEED_SEED);
   const [selectedTrack, setSelectedTrack] = useState("");
@@ -259,6 +259,11 @@ export function DepartmentCockpit({ notify, imported = [] }) {
     const total = track.items.length;
     return { id: track.id, label: track.label, handoff: track.handoff, done, total, percent: total ? Math.round((done / total) * 100) : 0 };
   }), [tracks]);
+
+  useEffect(() => {
+    setDept(initialDept);
+    setSelectedTrack("");
+  }, [initialDept]);
 
   const conclude = (item) => {
     const now = new Date();

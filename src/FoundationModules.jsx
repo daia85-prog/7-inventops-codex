@@ -189,7 +189,7 @@ export function RaidPage(){
   return <section className="page foundation-page"><div className="foundation-metrics"><Metric icon={Warning} label="SCORE CRÃTICO" value="20â€“25" note="2 itens" tone="red"/><Metric icon={ChartLineUp} label="RAID ATIVO" value="24 itens" note="5 exigem aÃ§Ã£o" tone="yellow"/><Metric icon={ShieldCheck} label="COM RESPOSTA" value="92%" note="meta â‰¥ 95%" tone="green"/><Metric icon={ClockCountdown} label="VENCIDOS" value="1" note="Market Peru" tone="red"/></div><div className="foundation-grid raid-layout"><Panel title="Matriz de risco 5 Ã— 5" subtitle="Probabilidade Ã— impacto Â· clique em um item para abrir"><div className="raid-axis"><span>IMPACTO â†’</span><div className="raid-matrix">{matrix.map(cell=>{const item=riskItems.find(r=>r.prob===cell.prob&&r.impact===cell.impact);const score=cell.prob*cell.impact;return <button key={`${cell.prob}-${cell.impact}`} className={score>=16?"critical":score>=9?"warning":"low"} onClick={()=>item&&setSelected(item)}><small>{score}</small>{item?<b>{item.id}</b>:null}</button>})}</div><em>PROBABILIDADE â†’</em></div></Panel><Panel title="RAID prioritÃ¡rio" subtitle="Risco, premissa, impedimento e dependÃªncia"><div className="raid-list">{riskItems.map(r=><button key={r.id} onClick={()=>setSelected(r)}><span>{r.id}</span><div><b>{r.title}</b><small>{r.project} Â· {r.owner}</small></div><em>{r.prob*r.impact}</em></button>)}</div></Panel></div>{selected?<div className="modal-layer" onMouseDown={e=>e.target===e.currentTarget&&setSelected(null)}><article className="raid-modal" role="dialog" aria-modal="true"><header><span>{selected.id}</span><button onClick={()=>setSelected(null)} aria-label="Fechar"><XCircle/></button></header><small>{selected.kind} Â· {selected.project}</small><h2>{selected.title}</h2><div><span><small>PROBABILIDADE</small><b>{selected.prob}/5</b></span><span><small>IMPACTO</small><b>{selected.impact}/5</b></span><span><small>SCORE</small><b>{selected.prob*selected.impact}/25</b></span></div><dl><div><dt>ResponsÃ¡vel</dt><dd>{selected.owner}</dd></div><div><dt>EstratÃ©gia</dt><dd>{selected.response}</dd></div><div><dt>Prazo</dt><dd>{selected.due}</dd></div></dl><button className="primary" onClick={()=>setSelected(null)}>Abrir plano de resposta</button></article></div>:null}</section>;
 }
 
-export function AdminGovernance({role,setRole,notify}){
+export function AdminGovernance({role,setRole,notify,onOpenPilotUser}){
   const roles={Admin:[1,1,1,1,1],Diretoria:[1,0,1,0,0],Gestor:[1,1,1,0,0],Analista:[1,1,0,0,0]};
   const permissions=["Visualizar","Editar operação","Gerenciar projetos","Administrar acessos","Configurar integrações"];
   const [theme,setTheme]=useState("Escuro");
@@ -206,9 +206,9 @@ export function AdminGovernance({role,setRole,notify}){
     ["Regra central","RBAC + evidência","Capacidade correta para cada contexto"]
   ];
   const pilotUsers=[
-    {name:"Douglas Alves", profile:"Gestor", area:"Infraestrutura / Implantação", status:"Ativo"},
-    {name:"Daniel", profile:"Gestor", area:"Implantação", status:"Piloto real"},
-    {name:"Thomas", profile:"Analista", area:"Espec. Software / DevOps", status:"Piloto real"},
+    {name:"Douglas Alves", profile:"Gestor", area:"Infraestrutura / Implantação", status:"Ativo", dept:"INF"},
+    {name:"Daniel", profile:"Gestor", area:"Implantação", status:"Piloto real", dept:"IMP"},
+    {name:"Thomas", profile:"Analista", area:"Espec. Software / DevOps", status:"Piloto real", dept:"ESP"},
   ];
   const adminPrinciples=[
     ["Permissão por capacidade","Cada perfil vê e faz só o que precisa."],
@@ -261,7 +261,14 @@ export function AdminGovernance({role,setRole,notify}){
           <b>{user.name}</b>
           <p>{user.area}</p>
           <span>{user.status}</span>
-          <button className="ghost" type="button" onClick={()=>notify(`${user.name} está registrado como usuário válido do piloto em ${user.area}.`)}>Validar usuário</button>
+          <div className="admin-pilot-actions">
+            <button className="ghost" type="button" onClick={()=>notify(`${user.name} está registrado como usuário válido do piloto em ${user.area}.`)}>Validar usuário</button>
+            <button className="ghost" type="button" onClick={()=>{
+              setRole(user.profile);
+              onOpenPilotUser?.(user);
+              notify(`Abrindo ${user.name} no contexto de ${user.area}.`);
+            }}>Abrir contexto</button>
+          </div>
         </article>)}
       </div>
     </Panel>

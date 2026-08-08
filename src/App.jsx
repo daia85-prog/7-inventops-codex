@@ -442,6 +442,7 @@ export function App() {
   const [authenticated,setAuthenticated]=useState(()=>sessionStorage.getItem("inventops-demo-session")==="active");
   const [active,setActive]=useState("home");
   const [role,setRole]=useState("Admin");
+  const [cockpitDept,setCockpitDept]=useState("INF");
   const [projects,setProjects]=useState(()=>{try{const saved=sessionStorage.getItem("inventops-projects-demo");return saved?JSON.parse(saved):portfolioData}catch{return portfolioData}});
   const [selectedProject,setSelectedProject]=useState(()=>projects[0]);
   const [projectModalOpen,setProjectModalOpen]=useState(false);
@@ -458,6 +459,7 @@ export function App() {
   const openFullProject=()=>{setProjectModalOpen(false);setActive("project")};
   const login=()=>{sessionStorage.setItem("inventops-demo-session","active");setAuthenticated(true);setActive("home")};
   const logout=()=>{sessionStorage.removeItem("inventops-demo-session");setAuthenticated(false);setRole("Admin");setActive("home")};
+  const openPilotContext=(user)=>{setCockpitDept(user.dept||"INF");setActive("cockpit")};
   if(!authenticated)return <LoginScreen onLogin={login}/>;
   const allowed={
     Admin:"*",
@@ -473,8 +475,8 @@ export function App() {
     portfolio:<PortfolioPage projects={projects} setProjects={setProjects} setActive={setActive} setSelectedProject={setSelectedProject} setProjectModalOpen={setProjectModalOpen} setImportedDemands={setImportedDemands} notify={notify}/>,
     pmo:<PmoControlTower projects={projects} onOpenProject={project=>{setSelectedProject(project);setProjectModalOpen(true)}} notify={notify}/>,
     project:<ProjectWorkspace key={selectedProject.name} project={selectedProject} setActive={setActive} notify={notify}/>,
-    cockpit:<DepartmentCockpit notify={notify} imported={importedDemands}/>,
-    areas:<AreasPage/>,raid:<RaidPage/>,admin:<AdminGovernance role={role} setRole={setRole} notify={notify}/>,
+    cockpit:<DepartmentCockpit notify={notify} imported={importedDemands} initialDept={cockpitDept}/>,
+    areas:<AreasPage/>,raid:<RaidPage/>,admin:<AdminGovernance role={role} setRole={setRole} notify={notify} onOpenPilotUser={openPilotContext}/>,
     presentation:<PresentationPage notify={notify}/>,lifecycle:<LifecyclePage/>,simulator:<Simulator scenario={scenario} setScenario={setScenario} notify={notify}/>,
     commissioning:<Commissioning fault={fault} setFault={setFault} alerts={alerts} setAlerts={setAlerts} setActive={setActive} notify={notify}/>,
     decision:<DecisionRoom setActive={setActive} notify={notify}/>,alerts:<AlertsPage alerts={alerts} setAlerts={setAlerts}/>,
