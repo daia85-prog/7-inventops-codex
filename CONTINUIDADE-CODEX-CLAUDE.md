@@ -767,3 +767,36 @@ Se Claude continuar:
 3. Atualizar a página.
 4. Confirmar que o estado validado continua visível.
 5. Se falhar, corrigir antes de qualquer nova tela.
+
+## 2026-08-09 - Code health Bloco B.12: Links diretos por tela e area
+
+Aplicado pelo Codex:
+
+- O produto agora entende links diretos por hash.
+- Isso evita perda de tempo navegando manualmente e permite validar tela por tela.
+- O link direto continua valido antes e depois do login.
+- Ao navegar pelo menu, o endereco tambem e atualizado para refletir a tela atual.
+
+Links principais:
+
+- Home: `/#home`
+- Administracao: `/#administracao`
+- Operacao Assistida - Implantacao / Daniel: `/#operacao-implantacao`
+- Operacao Assistida - Especificacao/DevOps / Thomas: `/#operacao-devops`
+- Operacao Assistida - Infraestrutura: `/#operacao-infra`
+- Roadmap visual: `/#roadmap`
+
+Arquivo de apoio criado:
+
+- `qa/LINKS-DIRETOS-VALIDACAO-2026-08-09.md`
+
+Validacao automatica:
+
+- `tools/check-operational-flow.cjs` agora reprova se as rotas diretas forem removidas.
+
+Se Claude continuar:
+
+1. Usar os links diretos para validar Home, Administracao e Operacao Assistida.
+2. Nao reabrir estrategia de produto.
+3. Se os links quebrarem, corrigir primeiro `src/App.jsx`.
+4. Depois seguir para aprofundar Daniel/Thomas com historico, chat, passagem de bastao, aceite/devolucao e leitura por area.

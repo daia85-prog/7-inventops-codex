@@ -198,6 +198,48 @@ function resolveSessionProfile(email = "") {
   return profile ? { ...DEFAULT_USER, ...profile, email: normalized || profile.email } : { ...DEFAULT_USER, email: normalized || DEFAULT_USER.email };
 }
 
+const ROUTE_ALIASES = {
+  "": { active: "home" },
+  home: { active: "home" },
+  inicio: { active: "home" },
+  administracao: { active: "admin" },
+  admin: { active: "admin" },
+  operacao: { active: "cockpit", dept: "IMP" },
+  cockpit: { active: "cockpit", dept: "IMP" },
+  "operacao-implantacao": { active: "cockpit", dept: "IMP" },
+  "implantacao": { active: "cockpit", dept: "IMP" },
+  "daniel": { active: "cockpit", dept: "IMP" },
+  "operacao-devops": { active: "cockpit", dept: "ESP" },
+  "devops": { active: "cockpit", dept: "ESP" },
+  "especificacao": { active: "cockpit", dept: "ESP" },
+  "thomas": { active: "cockpit", dept: "ESP" },
+  "operacao-infra": { active: "cockpit", dept: "INF" },
+  "infra": { active: "cockpit", dept: "INF" },
+  pmo: { active: "pmo" },
+  projetos: { active: "portfolio" },
+  evidencias: { active: "evidence" },
+  roadmap: { active: "presentation" },
+};
+
+function readRouteFromHash() {
+  if (typeof window === "undefined") return { active: "home" };
+  const token = window.location.hash.replace(/^#\/?/, "").trim().toLowerCase();
+  return ROUTE_ALIASES[token] || { active: pageMeta[token] ? token : "home" };
+}
+
+function routeTokenFor(active, dept) {
+  if (active === "cockpit") {
+    if (dept === "ESP") return "operacao-devops";
+    if (dept === "INF") return "operacao-infra";
+    return "operacao-implantacao";
+  }
+  if (active === "admin") return "administracao";
+  if (active === "portfolio") return "projetos";
+  if (active === "evidence") return "evidencias";
+  if (active === "presentation") return "roadmap";
+  return active || "home";
+}
+
 function SidebarEnhanced({ active, setActive, alertCount, notify, role, currentUser, onLogout }) {
   const [openGroups,setOpenGroups]=useState({
     "EXECUTIVO":true,
@@ -531,13 +573,14 @@ function Home({setActive}) {
 function SettingsPage(){ const [settings,setSettings]=useState({p0:true,capacity:true,evidence:true}); return <section className="page settings-page"><div className="settings-card"><h2>Regras de governança</h2><p>Controles ativos do produto. Nenhuma chave externa é armazenada no navegador.</p>{[["p0","Criar P0 automaticamente","Falhas críticas de sensores abrem um alerta com SLA."],["capacity","Monitorar sobrecarga de capacidade","Avise quando uma equipe ultrapassar 100% de alocação."],["evidence","Exigir evidência para progresso","Percentuais só avançam com entregáveis verificáveis."]].map(([k,t,d])=><label key={k}><span><b>{t}</b><small>{d}</small></span><input type="checkbox" checked={settings[k]} onChange={()=>setSettings({...settings,[k]:!settings[k]})}/><i/></label>)}</div><div className="settings-card"><h2>Fontes conectadas</h2><p>Estado operacional atual das integrações e leituras ativas.</p><ul className="sources"><li><Circuitry/><span><b>CLP · Linha 01</b><small>Última leitura há 2s</small></span><em>Conectado</em></li><li><Database/><span><b>Base homologada</b><small>Commits e builds válidos</small></span><em>Conectado</em></li><li><LinkSimple/><span><b>Planejamento</b><small>Projetos e dependências</small></span><em>Conectado</em></li></ul></div></section>; }
 
 export function App() {
+  const initialRoute=readRouteFromHash();
   const [authenticated,setAuthenticated]=useState(()=>sessionStorage.getItem("inventops-session")==="active");
   const [currentUser,setCurrentUser]=useState(()=>{try{return JSON.parse(sessionStorage.getItem("inventops-user"))||DEFAULT_USER}catch{return DEFAULT_USER}});
-  const [active,setActive]=useState("home");
+  const [active,setActive]=useState(()=>initialRoute.active||"home");
   const [lang,setLang]=useState(()=>sessionStorage.getItem("inventops-lang")||"pt");
   const [role,setRole]=useState(()=>currentUser.role||"Admin");
   const [theme,setTheme]=useState("Escuro");
-  const [cockpitDept,setCockpitDept]=useState("IMP");
+  const [cockpitDept,setCockpitDept]=useState(()=>initialRoute.dept||currentUser.dept||"IMP");
   const [projects,setProjects]=useState(()=>{try{const saved=sessionStorage.getItem("inventops-projects");return saved?JSON.parse(saved):portfolioData}catch{return portfolioData}});
   const [selectedProject,setSelectedProject]=useState(()=>projects[0]);
   const [projectModalOpen,setProjectModalOpen]=useState(false);
@@ -551,10 +594,23 @@ export function App() {
   useEffect(()=>{window.scrollTo(0,0)},[active]);
   useEffect(()=>{sessionStorage.setItem("inventops-projects",JSON.stringify(projects))},[projects]);
   useEffect(()=>{sessionStorage.setItem("inventops-lang",lang)},[lang]);
+  useEffect(()=>{
+    const token=routeTokenFor(active,cockpitDept);
+    if(window.location.hash!==`#${token}`) window.history.replaceState(null,"",`#${token}`);
+  },[active,cockpitDept]);
+  useEffect(()=>{
+    const handleHashChange=()=>{
+      const route=readRouteFromHash();
+      setActive(route.active||"home");
+      if(route.dept) setCockpitDept(route.dept);
+    };
+    window.addEventListener("hashchange",handleHashChange);
+    return()=>window.removeEventListener("hashchange",handleHashChange);
+  },[]);
   const updateProject=useCallback(updated=>{setProjects(current=>current.map(p=>p.code===updated.code?updated:p));setSelectedProject(updated)},[]);
   const openFullProject=()=>{setProjectModalOpen(false);setActive("project")};
-  const login=(email)=>{const profile=resolveSessionProfile(email);sessionStorage.setItem("inventops-session","active");sessionStorage.setItem("inventops-user",JSON.stringify(profile));setCurrentUser(profile);setRole(profile.role);setCockpitDept(profile.dept);setAuthenticated(true);setActive("home")};
-  const logout=()=>{sessionStorage.removeItem("inventops-session");sessionStorage.removeItem("inventops-user");setCurrentUser(DEFAULT_USER);setAuthenticated(false);setRole("Admin");setCockpitDept("IMP");setActive("home")};
+  const login=(email)=>{const profile=resolveSessionProfile(email);const requested=readRouteFromHash();sessionStorage.setItem("inventops-session","active");sessionStorage.setItem("inventops-user",JSON.stringify(profile));setCurrentUser(profile);setRole(profile.role);setCockpitDept(requested.dept||profile.dept);setAuthenticated(true);setActive(requested.active||"home")};
+  const logout=()=>{sessionStorage.removeItem("inventops-session");sessionStorage.removeItem("inventops-user");setCurrentUser(DEFAULT_USER);setAuthenticated(false);setRole("Admin");setCockpitDept("IMP");setActive("home");window.history.replaceState(null,"","#home")};
   const openPilotContext=(user)=>{setCockpitDept(user.dept||"INF");setActive("cockpit")};
   const openCockpitDept=(dept)=>{setCockpitDept(dept||"INF");setActive("cockpit")};
   if(!authenticated)return <LoginScreen onLogin={login}/>;

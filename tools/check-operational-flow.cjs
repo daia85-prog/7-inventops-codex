@@ -37,6 +37,10 @@ const checks = [
     ok: app.includes("<DepartmentCockpit key={cockpitDept}") && app.includes("currentUser={currentUser}"),
   },
   {
+    name: "Rotas diretas preservam Home/Admin/Operação por departamento",
+    ok: app.includes("readRouteFromHash") && app.includes("routeTokenFor(active,cockpitDept)") && app.includes("operacao-devops") && app.includes("operacao-implantacao") && app.includes("administracao"),
+  },
+  {
     name: "Operação Assistida recebe a sessão ativa",
     ok: cockpit.includes("currentUser") && cockpit.includes("sessão {currentUser.name}"),
   },
