@@ -20,10 +20,10 @@ const directory = {
   EEL: ["Engenharia Elétrica", "Gustavo Pereira"],
   PRD: ["Produção", "Flavio Moreno"],
   MON: ["Montagem", "Rojekson Souza"],
-  INF: ["Infraestrutura de TI", "Douglas Alves"],
-  ESP: ["Especificação de Software", "Douglas Alves"],
+  INF: ["Infraestrutura de TI", "Admin Invent"],
+  ESP: ["Especificação de Software", "Thomas"],
   WCS: ["WCS Velox", "Marcelo Sanches"],
-  IMP: ["Implantação", "Douglas Alves"],
+  IMP: ["Implantação", "Daniel"],
   PLC: ["Automação / PLC", "Gustavo Pereira"],
   POS: ["Pós-vendas", "Caique Fracaro"],
 };

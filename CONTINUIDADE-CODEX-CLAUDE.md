@@ -32,7 +32,7 @@ Foco imediato:
 1. Login
 2. Carregamento / transição
 3. Home
-4. Cockpit operacional Daniel + Thomas
+4. Operação Assistida Daniel + Thomas
 5. Administração
 6. Implantação
 7. DevOps / Especificação de Software
@@ -43,12 +43,13 @@ Objetivo:
 - subir o nível premium com base em `inventops79`
 - manter tudo funcional
 - garantir PT / ES / EN
-- permitir uso real já na próxima semana com os perfis e áreas piloto
+- permitir uso real já na próxima semana com os perfis e áreas em operação assistida
 
 Bloco crítico incorporado:
 
-- `cockpit-piloto` do `inventops79` agora entra na análise oficial como referência de produto real para Daniel + Thomas
-- deve ser convertido para cockpit operacional permanente, não apenas área de piloto visual
+- `cockpit-piloto` do `inventops79` entra na análise oficial como referência funcional para Daniel + Thomas
+- decisão de produto: só manter o termo “Cockpit” se ele virar um padrão permanente para todos os departamentos; caso contrário, adaptar para “Operação Assistida”, “Meu Departamento” ou “Esteira Operacional”
+- Daniel e Thomas devem aparecer como usuários reais de área, não como “demo” nem “piloto visual”
 
 ## 4. Regra de execução
 
@@ -117,6 +118,43 @@ Tudo que vier do Claude ou de outra referência externa entra em 3 grupos:
 - cria segunda verdade
 - aumenta complexidade sem ganho imediato
 - compete com a linha principal
+
+## 8. Rastro atual — 9 de agosto de 2026
+
+Decisão mais recente da Daiana:
+
+- o P7 não deve mais ser tratado como demo;
+- a referência `inventops79` pode redesenhar o P7 tela por tela, inclusive substituindo o que já existe se ficar melhor;
+- Daniel e Thomas devem entrar como usuários reais das áreas;
+- “Cockpit” só deve permanecer se virar padrão de produto para todos os departamentos;
+- se não for padrão amplo, usar linguagem de produto: Operação Assistida, Meu Departamento, Esteira Operacional ou Painel da Área;
+- prioridade de entrega: Login → Carregamento → Home → Operação Assistida Daniel/Thomas → Administração → Implantação → Especificação/DevOps.
+
+Implementado nesta rodada:
+
+- navegação principal renomeada para “Operação Assistida”;
+- page meta da rota de departamento ajustada para esteira real de área;
+- Daniel e Thomas entram como usuários reais das áreas, e o acesso administrativo passa a ser Admin InventOps;
+- textos visíveis deixaram de falar “piloto visual” e passaram a falar operação assistida, projeto operacional e checklist do Planner;
+- login passa a falar “perfis corporativos”, não acesso de demonstração.
+
+Pendente intencional:
+
+- órbita de departamentos do login ainda corta alguns nomes em alguns tamanhos de tela. Não bloquear o avanço funcional por isso. Quando voltar ao acabamento final, redesenhar a órbita ou pedir apoio do Claude.
+
+Se o crédito do Codex acabar:
+
+1. Claude deve continuar pela experiência de produto real, não por demo.
+2. Primeiro validar a Operação Assistida Daniel/Thomas:
+   - Daniel abre Implantação;
+   - Thomas abre Especificação/DevOps;
+   - ações de concluir checkpoint, cobrar, sinalizar prontidão e confirmar handoff funcionam;
+   - textos não usam “piloto” como produto final.
+3. Depois consolidar Administração:
+   - perfis Admin, Direx, Gestor e Analista;
+   - abrir contexto correto por usuário;
+   - esconder controles que poluem a sidebar se já estiverem em Administração.
+4. Em seguida comparar cada tela com `inventops79` e aplicar o que estiver melhor, mantendo o P7 como produto oficial.
 
 ## 8. Ordem técnica realista
 

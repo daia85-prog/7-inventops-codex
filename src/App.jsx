@@ -88,7 +88,7 @@ const navGroups = [
   { label: "OPERAÃ‡ÃƒO", items: [
     { id: "portfolio", label: "Projetos", icon: FolderOpen, mobile: true },
     { id: "pmo", label: "Central PMO", icon: BellRinging, mobile: true },
-    { id: "cockpit", label: "Meu Departamento", icon: HandWaving, mobile: true },
+    { id: "cockpit", label: "Operação Assistida", icon: HandWaving, mobile: true },
     { id: "areas", label: "Ãreas TÃ©cnicas", icon: UsersThree },
     { id: "alerts", label: "Smart Triage", icon: Warning },
     { id: "raid", label: "Matriz RAID", icon: ShieldCheck },
@@ -115,7 +115,7 @@ const pageMeta = {
   executive: ["RelatÃ³rio Executivo", "O portfÃ³lio consolidado em uma pÃ¡gina."],
   portfolio: ["Controle de Projetos", "Planeje, acompanhe e cobre entregas em uma visÃ£o operacional."],
   pmo: ["Central PMO", "A carteira inteira organizada por decisÃµes, dependÃªncias e handoffs."],
-  cockpit: ["Meu Departamento", "O bastÃ£o de cada Ã¡rea: entregas, esperas e handoffs com carimbo de hora."],
+  cockpit: ["Operação Assistida", "A esteira real de cada área: entregas, esperas e handoffs com carimbo de hora."],
   project: ["Central do Projeto", "Fases, atividades, marcos, riscos e evidÃªncias em um Ãºnico lugar."],
   simulator: ["Simulador de Impacto", "Antecipe riscos. Decida com confianÃ§a."],
   commissioning: ["Comissionamento em Tempo Real", "Telemetria da operaÃ§Ã£o conectada Ã  governanÃ§a."],
@@ -438,7 +438,7 @@ function PortfolioPage({projects,setProjects,setActive,setSelectedProject,setPro
   const applyImport=()=>{
     setProjects([preview.project,...projects]);
     setImportedDemands(d=>[...d,...preview.demands]);
-    notify(`${preview.name} importado: ${preview.demands.length} pendÃªncias distribuÃ­das para ${Object.keys(preview.byDept).length} Ã¡reas. Veja no Meu Departamento.`);
+    notify(`${preview.name} importado: ${preview.demands.length} pendÃªncias distribuÃ­das para ${Object.keys(preview.byDept).length} Ã¡reas. Veja em Operação Assistida.`);
     setPreview(null);
   };
   useEffect(()=>{if(!creating)return;const close=event=>event.key==="Escape"&&setCreating(false);document.addEventListener("keydown",close);return()=>document.removeEventListener("keydown",close)},[creating]);
@@ -468,7 +468,7 @@ function PortfolioPage({projects,setProjects,setActive,setSelectedProject,setPro
       <div><span className="project-symbol">â‡ª</span><div><h2 id="imp-title">Importar kickoff Â· {preview.name}</h2><p>{preview.code} Â· Go Live {preview.golive} Â· kickoff {preview.totalPct}% preenchido no Nexus</p></div><button type="button" aria-label="Fechar" onClick={()=>setPreview(null)}><XCircle/></button></div>
       <div className="imp-depts"><b>{preview.demands.length} pendÃªncias serÃ£o distribuÃ­das:</b><div>{Object.entries(preview.byDept).map(([d,n])=><span key={d}><b>{d}</b>{n}</span>)}</div></div>
       <div className="imp-secs">{preview.secs.map(s=><div key={s.k}><span>{s.title}</span><i><em style={{width:`${s.pct}%`}}/></i><small>{s.pct}%{s.pend?` Â· ${s.pend} pend.`:""}</small></div>)}</div>
-      <p className="imp-note">PrÃ©via â€” nada Ã© aplicado antes de confirmar. Cada pendÃªncia aparece no Cockpit da Ã¡rea responsÃ¡vel.</p>
+      <p className="imp-note">Prévia — nada é aplicado antes de confirmar. Cada pendência aparece na Operação Assistida da área responsável.</p>
       <div className="modal-actions"><button type="button" className="ghost" onClick={()=>setPreview(null)}>Cancelar</button><button className="primary" type="button" onClick={applyImport}><UploadSimple/>Confirmar import</button></div>
     </div></div>:null}
     {creating?<div className="modal-layer" role="presentation" onMouseDown={e=>e.target===e.currentTarget&&setCreating(false)}><form className="project-modal" role="dialog" aria-modal="true" aria-labelledby="new-project-title" onSubmit={createProject}><div><span className="project-symbol">NP</span><div><h2 id="new-project-title">Novo projeto</h2><p>Crie a estrutura mÃ­nima. Fases e atividades entram em seguida.</p></div><button type="button" aria-label="Fechar" onClick={()=>setCreating(false)}><XCircle/></button></div><label>Nome do projeto<input autoFocus value={draft.name} onChange={e=>setDraft({...draft,name:e.target.value})} placeholder="Ex.: EXPANSÃƒO CD SUL" required/></label><label>Cliente<input value={draft.client} onChange={e=>setDraft({...draft,client:e.target.value})} placeholder="Empresa ou unidade"/></label><label>ResponsÃ¡vel<select value={draft.owner} onChange={e=>setDraft({...draft,owner:e.target.value})}><option>Daiana Costa</option><option>Rodrigo Baruco</option><option>Admin</option></select></label><div className="modal-actions"><button type="button" className="ghost" onClick={()=>setCreating(false)}>Cancelar</button><button className="primary" type="submit"><Plus/>Criar projeto</button></div></form></div>:null}
@@ -526,7 +526,7 @@ function Home({setActive}) {
   ];
   return <section className="page home-page premium-home">
     <div className="home-hero">
-      <small>PILOTO DE IMPLANTAÃ‡ÃƒO & DEVOPS</small>
+      <small>OPERAÇÃO ASSISTIDA · IMPLANTAÇÃO & DEVOPS</small>
       <h2>Conecte pessoas, evidÃªncias e decisÃµes antes que o atraso vire operaÃ§Ã£o.</h2>
       <p>O InventOps organiza a carteira inteira em uma Ãºnica verdade operacional. VocÃª enxerga o que destravar agora, quem estÃ¡ esperando e qual impacto cada decisÃ£o provoca nos prÃ³ximos marcos.</p>
       <div className="home-spotlight">

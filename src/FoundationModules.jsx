@@ -2,10 +2,10 @@
 import {
   ArrowRight, BellRinging, Buildings, CalendarBlank, ChartLineUp,
   CheckCircle, CheckSquare, ClipboardText, ClockCountdown, Database, Envelope,
-  Eye, Factory, FileText, FlagCheckered, Gauge, GitCommit, LockKey, MonitorPlay, Moon,
+  Cpu, Eye, Factory, FileText, FlagCheckered, Gauge, GitCommit, HardDrives, LockKey, MonitorPlay, Moon,
   Play, Printer, Sun,
   RocketLaunch, ShieldCheck, Sparkle, TrendUp, UserGear, UsersThree, Warning,
-  WhatsappLogo, XCircle
+  Waveform, WhatsappLogo, XCircle
 } from "@phosphor-icons/react";
 import {
   Area, AreaChart, Bar, BarChart, CartesianGrid, Cell, Pie, PieChart,
@@ -24,8 +24,8 @@ const departments = [
   ["PCP","PCP","Weslley Silva",86,72,2],["CMP","Compras / Importação","Claudia Duarte",103,61,3],
   ["EMC","Eng. Mecânica","Gustavo Pereira",94,69,2],["EEL","Eng. Elétrica","Gustavo Pereira",88,64,1],
   ["PRD","Produção","Flavio Moreno",82,70,1],["MON","Montagem","Rojekson Souza",83,57,1],
-  ["INF","Infraestrutura","Douglas Alves",112,65,4],["ESP","Espec. de Software","Douglas Alves",78,62,1],
-  ["WCS","WCS Velox","Marcelo Sanches",98,73,2],["IMP","Implantação","Douglas Alves",108,68,3],
+  ["INF","Infraestrutura","Admin Invent",112,65,4],["ESP","Espec. de Software","Thomas",78,62,1],
+  ["WCS","WCS Velox","Marcelo Sanches",98,73,2],["IMP","Implantação","Daniel",108,68,3],
   ["PLC","PLC","Gustavo Pereira",117,71,4],["PÓS","Pós-vendas","Caique Fracaro",63,82,0]
 ].map(([code,name,owner,load,progress,blocked])=>({code,name,owner,load,progress,blocked}));
 
@@ -70,32 +70,32 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept,lang="pt"
         {label:"Risco imediato",value:"PLC + Infra + Compras",tone:"red"}
       ],
       directorial:[
-        ["Pilotos ativos","2 áreas em validação real","Implantação + Especificação/DevOps"],
+        ["Operações ativas","2 áreas em uso real","Implantação + Especificação/DevOps"],
         ["Próxima meta","Semana de uso assistido","subir confiança com usuários reais"],
         ["Sinal do sistema","A mesma base alimenta direção e execução","sem narrativa paralela"]
       ],
       briefing:"BRIEFING EXECUTIVO · 11 JUL 2026",
       heroTitle:"A operação já tem onde começar a usar de verdade.",
-      heroBody:"O InventOps já saiu do conceito básico: Implantação e Especificação/DevOps entram na próxima semana como pilotos reais, enquanto a diretoria acompanha a mesma verdade operacional sem precisar de relatório paralelo.",
+      heroBody:"O InventOps já saiu do conceito básico: Implantação e Especificação/DevOps entram na próxima semana em uso assistido real, enquanto a diretoria acompanha a mesma verdade operacional sem precisar de relatório paralelo.",
       openPlan:"Abrir plano de ação",
       viewOnePager:"Ver one-page",
       nextGoLive:"PRÓXIMO GO LIVE",
       confidence:"78% de confiança",
-      pilotEyebrow:"Piloto pronto para teste",
+      pilotEyebrow:"Operação pronta para uso",
       pilotCards:{
         IMP:{
           title:"Implantação",
           summary:"Campo, readiness, handoff e execução do Go Live em uma leitura única.",
           metric:"7 handoffs vivos",
           detail:"Daniel e time já conseguem navegar pela operação real da área.",
-          cta:"Abrir cockpit de Implantação"
+          cta:"Abrir operação de Implantação"
         },
         ESP:{
           title:"Especificação + DevOps",
           summary:"Especificação, checkpoint, dependências e prontidão técnica sem planilha paralela.",
           metric:"5 checkpoints ativos",
           detail:"Thomas e time já entram num fluxo orientado por evidência e bloqueio real.",
-          cta:"Abrir cockpit de DevOps"
+          cta:"Abrir operação de DevOps"
         }
       },
       pressureTitle:"ÁREAS SOB PRESSÃO",
@@ -127,32 +127,32 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept,lang="pt"
         {label:"Riesgo inmediato",value:"PLC + Infra + Compras",tone:"red"}
       ],
       directorial:[
-        ["Pilotos activos","2 áreas en validación real","Implantación + Especificación/DevOps"],
+        ["Operaciones activas","2 áreas en uso real","Implantación + Especificación/DevOps"],
         ["Próxima meta","Semana de uso asistido","subir confianza con usuarios reales"],
         ["Señal del sistema","La misma base alimenta dirección y ejecución","sin narrativa paralela"]
       ],
       briefing:"BRIEFING EJECUTIVO · 11 JUL 2026",
       heroTitle:"La operación ya tiene por dónde empezar a usarse de verdad.",
-      heroBody:"InventOps ya salió del concepto básico: Implantación y Especificación/DevOps entran la próxima semana como pilotos reales, mientras la dirección acompaña la misma verdad operacional sin depender de informes paralelos.",
+      heroBody:"InventOps ya salió del concepto básico: Implantación y Especificación/DevOps entran la próxima semana en uso asistido real, mientras la dirección acompaña la misma verdad operacional sin depender de informes paralelos.",
       openPlan:"Abrir plan de acción",
       viewOnePager:"Ver one-page",
       nextGoLive:"PRÓXIMO GO LIVE",
       confidence:"78% de confianza",
-      pilotEyebrow:"Piloto listo para prueba",
+      pilotEyebrow:"Operación lista para uso",
       pilotCards:{
         IMP:{
           title:"Implantación",
           summary:"Campo, readiness, handoff y ejecución del Go Live en una sola lectura.",
           metric:"7 handoffs vivos",
           detail:"Daniel y el equipo ya pueden navegar la operación real del área.",
-          cta:"Abrir cockpit de Implantación"
+          cta:"Abrir operación de Implantación"
         },
         ESP:{
           title:"Especificación + DevOps",
           summary:"Especificación, checkpoints, dependencias y preparación técnica sin planillas paralelas.",
           metric:"5 checkpoints activos",
           detail:"Thomas y el equipo ya entran en un flujo guiado por evidencia y bloqueo real.",
-          cta:"Abrir cockpit de DevOps"
+          cta:"Abrir operación de DevOps"
         }
       },
       pressureTitle:"ÁREAS BAJO PRESIÓN",
@@ -184,32 +184,32 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept,lang="pt"
         {label:"Immediate risk",value:"PLC + Infra + Purchasing",tone:"red"}
       ],
       directorial:[
-        ["Active pilots","2 areas in real validation","Implementation + Specification/DevOps"],
+        ["Active operations","2 areas in real use","Implementation + Specification/DevOps"],
         ["Next goal","Assisted usage week","raise confidence with real users"],
         ["System signal","The same base feeds leadership and execution","no parallel narrative"]
       ],
       briefing:"EXECUTIVE BRIEFING · 11 JUL 2026",
       heroTitle:"The operation now has a real place to start being used.",
-      heroBody:"InventOps has moved beyond the basic concept: Implementation and Specification/DevOps enter next week as real pilots, while leadership follows the same operational truth without relying on parallel reporting.",
+      heroBody:"InventOps has moved beyond the basic concept: Implementation and Specification/DevOps enter next week in real assisted use, while leadership follows the same operational truth without relying on parallel reporting.",
       openPlan:"Open action plan",
       viewOnePager:"View one-page",
       nextGoLive:"NEXT GO LIVE",
       confidence:"78% confidence",
-      pilotEyebrow:"Pilot ready for testing",
+      pilotEyebrow:"Operation ready for use",
       pilotCards:{
         IMP:{
           title:"Implementation",
           summary:"Field work, readiness, handoff, and Go Live execution in a single reading.",
           metric:"7 live handoffs",
           detail:"Daniel and team can already navigate the area's real operation.",
-          cta:"Open Implementation cockpit"
+          cta:"Open Implementation operations"
         },
         ESP:{
           title:"Specification + DevOps",
           summary:"Specification, checkpoints, dependencies, and technical readiness without parallel spreadsheets.",
           metric:"5 active checkpoints",
           detail:"Thomas and the team already enter a flow guided by evidence and real blockers.",
-          cta:"Open DevOps cockpit"
+          cta:"Open DevOps operations"
         }
       },
       pressureTitle:"AREAS UNDER PRESSURE",
@@ -396,9 +396,9 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
   const permissions=["Visualizar","Editar operação","Gerenciar projetos","Administrar acessos","Configurar integrações"];
   const [invite,setInvite]=useState({name:"",email:"",profile:"Analista",area:"Infraestrutura"});
   const [users,setUsers]=useState([
-    {name:"Admin Teste", profile:"Admin", area:"Administração / Piloto", status:"Ativo", dept:"INF", source:"Piloto"},
-    {name:"Daniel", profile:"Gestor", area:"Implantação", status:"Piloto real", dept:"IMP", source:"Piloto"},
-    {name:"Thomas", profile:"Analista", area:"Espec. Software / DevOps", status:"Piloto real", dept:"ESP", source:"Piloto"},
+    {name:"Admin InventOps", profile:"Admin", area:"Administração", status:"Ativo", dept:"INF", source:"Plataforma"},
+    {name:"Daniel", profile:"Gestor", area:"Implantação", status:"Operação ativa", dept:"IMP", source:"Planner"},
+    {name:"Thomas", profile:"Analista", area:"Espec. Software / DevOps", status:"Operação ativa", dept:"ESP", source:"Planner"},
   ]);
   const roleMeta={
     Admin:{label:"Enterprise Admin",helper:"Controle total da plataforma e das integrações.",scope:"Administração, governança, acessos e regras centrais."},
@@ -424,7 +424,7 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
   const adminModules=[
     ["admin-access","Acessos","Criar, revisar e preparar usuários válidos."],
     ["admin-themes","Perfis & experiência","Simular RBAC e validar a interface."],
-    ["admin-pilots","Piloto real","Abrir Daniel, Thomas e o contexto admin no lugar certo."],
+    ["admin-pilots","Operação assistida","Abrir Daniel, Thomas e o contexto de administração no lugar certo."],
     ["admin-audit","Auditoria","Conferir trilha, permissões e regra aplicada."]
   ];
   const themeOptions=[
@@ -489,7 +489,7 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
         <div className="admin-theme-state"><ShieldCheck/><span><small>TEMA ATIVO</small><b>{theme}</b></span></div>
       </Panel>
     </div>
-    <div id="admin-pilots"><Panel title="Usuários válidos do piloto" subtitle="Escopo atual vindo das áreas e do inventops79">
+    <div id="admin-pilots"><Panel title="Usuários válidos da operação" subtitle="Escopo atual vindo das áreas e do inventops79">
       <div className="admin-pilot-users">
         {users.map((user)=><article key={`${user.name}-${user.area}`}>
           <small>{user.profile}</small>
@@ -498,7 +498,7 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
           <span>{user.status}</span>
           <em>{user.source}</em>
           <div className="admin-pilot-actions">
-            <button className="ghost" type="button" onClick={()=>notify(`${user.name} está registrado como usuário válido do piloto em ${user.area}.`)}>Validar usuário</button>
+            <button className="ghost" type="button" onClick={()=>notify(`${user.name} está registrado como usuário válido em ${user.area}.`)}>Validar usuário</button>
             <button className="ghost" type="button" onClick={()=>{
               setRole(user.profile);
               onOpenPilotUser?.(user);
@@ -509,28 +509,28 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
       </div>
     </Panel></div>
     <Panel title="Matriz de permissões" subtitle="Rotas e ações por perfil"><div className="permission-table"><header><span>Permissão</span>{Object.keys(roles).map(r=><span key={r}>{r==="Diretoria"?"DIREX":r}</span>)}</header>{permissions.map((p,i)=><div key={p}><b>{p}</b>{Object.keys(roles).map(r=><span key={r}>{roles[r][i]?<CheckCircle/>:<XCircle/>}</span>)}</div>)}</div></Panel>
-    <div id="admin-audit"><Panel title="Trilha de auditoria" subtitle="Quem fez o quê, quando e sobre qual registro"><div className="audit-log">{[["21:38","Admin Teste","Alterou prazo do Go Live","TITANO"],["20:54","Daiana Costa","Anexou evidência REV4","QUELUZ"],["19:42","Sistema IoT","Criou alerta P0","TITANO"],["18:17","Ivan","Atualizou bloqueio de VPN","MARKET PERU"]].map(x=><div key={x.join()}><span>{x[0]}</span><b>{x[1]}</b><p>{x[2]}</p><em>{x[3]}</em></div>)}</div></Panel></div></section>;
+    <div id="admin-audit"><Panel title="Trilha de auditoria" subtitle="Quem fez o quê, quando e sobre qual registro"><div className="audit-log">{[["21:38","Admin InventOps","Alterou prazo do Go Live","TITANO"],["20:54","Daiana Costa","Anexou evidência REV4","QUELUZ"],["19:42","Sistema IoT","Criou alerta P0","TITANO"],["18:17","Ivan","Atualizou bloqueio de VPN","MARKET PERU"]].map(x=><div key={x.join()}><span>{x[0]}</span><b>{x[1]}</b><p>{x[2]}</p><em>{x[3]}</em></div>)}</div></Panel></div></section>;
 }
 
 export function LifecyclePage(){
   const [horizon,setHorizon]=useState("12 meses");
   const milestones=[
-    {version:"V17.9",period:"JUL Â· 2026",status:"ATUAL",title:"GovernanÃ§a operacional",owner:"PMO + Tecnologia",progress:98,tone:"yellow",value:"Uma carteira Ãºnica, auditÃ¡vel e explicÃ¡vel.",scope:["Central PMO e plano integrado","Sete fases com gates formais","DependÃªncias, evidÃªncias e handoffs"],gate:"Piloto operacional validado pelo PMO"},
-    {version:"V18",period:"AGOâ€“SET Â· 2026",status:"PRÃ“XIMO",title:"OperaÃ§Ã£o conectada",owner:"TI + Dados",progress:24,tone:"cyan",value:"Fim das planilhas paralelas e atualizaÃ§Ã£o manual.",scope:["PostgreSQL e APIs reais","SSO Microsoft 365 + RBAC","ImportaÃ§Ã£o segura e notificaÃ§Ãµes"],gate:"Base integrada com 3 projetos-piloto"},
+    {version:"V17.9",period:"JUL Â· 2026",status:"ATUAL",title:"GovernanÃ§a operacional",owner:"PMO + Tecnologia",progress:98,tone:"yellow",value:"Uma carteira Ãºnica, auditÃ¡vel e explicÃ¡vel.",scope:["Central PMO e plano integrado","Sete fases com gates formais","DependÃªncias, evidÃªncias e handoffs"],gate:"Operação assistida validada pelo PMO"},
+    {version:"V18",period:"AGOâ€“SET Â· 2026",status:"PRÃ“XIMO",title:"OperaÃ§Ã£o conectada",owner:"TI + Dados",progress:24,tone:"cyan",value:"Fim das planilhas paralelas e atualizaÃ§Ã£o manual.",scope:["PostgreSQL e APIs reais","SSO Microsoft 365 + RBAC","ImportaÃ§Ã£o segura e notificaÃ§Ãµes"],gate:"Base integrada com 3 projetos reais"},
     {version:"V19",period:"OUTâ€“DEZ Â· 2026",status:"PLANEJADO",title:"InteligÃªncia preditiva",owner:"PMO + Genius AI",progress:8,tone:"purple",value:"Decidir antes que o atraso vire custo.",scope:["Simulador de impacto IA","PrevisÃ£o de gargalos e capacidade","Briefing executivo recomendado"],gate:"AcurÃ¡cia preditiva â‰¥ 80%"},
-    {version:"V20",period:"JANâ€“MAR Â· 2027",status:"VISÃƒO",title:"ChÃ£o de fÃ¡brica vivo",owner:"AutomaÃ§Ã£o + IoT",progress:0,tone:"green",value:"TI e TA conectadas ao mesmo projeto.",scope:["Telemetria de CLPs e sensores","GÃªmeo digital de comissionamento","Falha fÃ­sica gera alerta P0"],gate:"Uma esteira piloto em produÃ§Ã£o"},
+    {version:"V20",period:"JANâ€“MAR Â· 2027",status:"VISÃƒO",title:"ChÃ£o de fÃ¡brica vivo",owner:"AutomaÃ§Ã£o + IoT",progress:0,tone:"green",value:"TI e TA conectadas ao mesmo projeto.",scope:["Telemetria de CLPs e sensores","GÃªmeo digital de comissionamento","Falha fÃ­sica gera alerta P0"],gate:"Uma esteira real em produção assistida"},
     {version:"V21",period:"ABRâ€“JUN Â· 2027",status:"NORTH STAR",title:"OperaÃ§Ã£o autÃ´noma assistida",owner:"Diretoria + OperaÃ§Ãµes",progress:0,tone:"blue",value:"O sistema recomenda, orquestra e aprende.",scope:["Workflows automÃ¡ticos","Playbooks de recuperaÃ§Ã£o","Benchmark de projetos e squads"],gate:"ReduÃ§Ã£o mensurÃ¡vel de atraso e retrabalho"}
   ];
   const visible=horizon==="90 dias"?milestones.slice(0,2):horizon==="6 meses"?milestones.slice(0,3):milestones;
   return <section className="page foundation-page lifecycle-page">
     <div className="release-hero roadmap-hero"><div><small>RELEASE ATUAL</small><span>V17.9</span></div><div><small>INVENTOPS Â· PRODUCT ROADMAP</small><h2>Da verdade operacional Ã  prevenÃ§Ã£o automÃ¡tica</h2><p>Um Ãºnico produto em cinco estÃ¡gios de maturidade. Primeiro tornamos a operaÃ§Ã£o confiÃ¡vel; depois conectamos dados, prevemos impacto e fechamos o ciclo com o chÃ£o de fÃ¡brica.</p></div><div className="roadmap-health"><RocketLaunch/><span><b>98%</b><small>ciclo atual</small></span></div></div>
-    <div className="roadmap-command"><div><small>HORIZONTE DE DECISÃƒO</small><div>{["90 dias","6 meses","12 meses"].map(x=><button key={x} className={horizon===x?"active":""} onClick={()=>setHorizon(x)}>{x}</button>)}</div></div><span><CalendarBlank/><small>ÃšLTIMA REVISÃƒO</small><b>12 jul 2026</b></span><span><FlagCheckered/><small>PRÃ“XIMO GATE</small><b>Demo com diretoria</b></span><span><ShieldCheck/><small>TESE DO PRODUTO</small><b>Controlar â†’ Prever â†’ Agir</b></span></div>
+    <div className="roadmap-command"><div><small>HORIZONTE DE DECISÃƒO</small><div>{["90 dias","6 meses","12 meses"].map(x=><button key={x} className={horizon===x?"active":""} onClick={()=>setHorizon(x)}>{x}</button>)}</div></div><span><CalendarBlank/><small>ÃšLTIMA REVISÃƒO</small><b>12 jul 2026</b></span><span><FlagCheckered/><small>PRÃ“XIMO GATE</small><b>Validação com diretoria</b></span><span><ShieldCheck/><small>TESE DO PRODUTO</small><b>Controlar â†’ Prever â†’ Agir</b></span></div>
     <div className="roadmap-board">{visible.map((m,i)=><article className={`roadmap-card ${m.tone}`} key={m.version}>
       <header><span>{String(i+1).padStart(2,"0")}</span><div><small>{m.period}</small><b>{m.version}</b></div><em>{m.status}</em></header>
       <div className="roadmap-card-body"><small>ERA ESTRATÃ‰GICA</small><h3>{m.title}</h3><p>{m.value}</p><div className="roadmap-owner"><UsersThree/><span><small>RESPONSÃVEL</small><b>{m.owner}</b></span></div><ul>{m.scope.map(x=><li key={x}><CheckCircle/>{x}</li>)}</ul></div>
       <footer><div><span><small>MATURIDADE</small><b>{m.progress}%</b></span><i><em style={{width:`${m.progress}%`}}/></i></div><p><FlagCheckered/><span><small>CRITÃ‰RIO DE SAÃDA</small><b>{m.gate}</b></span></p></footer>
     </article>)}</div>
-    <div className="foundation-grid two-one roadmap-bottom"><Panel title="Valor liberado por etapa" subtitle="O roadmap mede resultado, nÃ£o apenas funcionalidades"><div className="value-ladder">{[["AGORA","Confiabilidade","Uma fonte oficial para projetos e decisÃµes"],["V18","EficiÃªncia","Menos cobranÃ§a manual e retrabalho de relatÃ³rio"],["V19","AntecipaÃ§Ã£o","Risco traduzido em prazo, capacidade e custo"],["V20+","Autonomia","Falha detectada, priorizada e tratada no fluxo"]].map((x,i)=><div key={x[0]}><span>{i+1}</span><small>{x[0]}</small><b>{x[1]}</b><p>{x[2]}</p></div>)}</div></Panel><Panel title="GovernanÃ§a do roadmap" subtitle="Como uma etapa avanÃ§a"><div className="roadmap-governance"><p><ShieldCheck/><span><b>Gate executivo</b><small>PatrocÃ­nio, prioridade e valor aprovados.</small></span></p><p><Database/><span><b>Gate tÃ©cnico</b><small>Dados, seguranÃ§a e integraÃ§Ã£o validados.</small></span></p><p><CheckSquare/><span><b>Gate operacional</b><small>Piloto aceito com evidÃªncia e responsÃ¡vel.</small></span></p><button className="primary" onClick={()=>setHorizon("12 meses")}>Ver visÃ£o completa<ArrowRight/></button></div></Panel></div>
+    <div className="foundation-grid two-one roadmap-bottom"><Panel title="Valor liberado por etapa" subtitle="O roadmap mede resultado, nÃ£o apenas funcionalidades"><div className="value-ladder">{[["AGORA","Confiabilidade","Uma fonte oficial para projetos e decisÃµes"],["V18","EficiÃªncia","Menos cobranÃ§a manual e retrabalho de relatÃ³rio"],["V19","AntecipaÃ§Ã£o","Risco traduzido em prazo, capacidade e custo"],["V20+","Autonomia","Falha detectada, priorizada e tratada no fluxo"]].map((x,i)=><div key={x[0]}><span>{i+1}</span><small>{x[0]}</small><b>{x[1]}</b><p>{x[2]}</p></div>)}</div></Panel><Panel title="GovernanÃ§a do roadmap" subtitle="Como uma etapa avanÃ§a"><div className="roadmap-governance"><p><ShieldCheck/><span><b>Gate executivo</b><small>PatrocÃ­nio, prioridade e valor aprovados.</small></span></p><p><Database/><span><b>Gate tÃ©cnico</b><small>Dados, seguranÃ§a e integraÃ§Ã£o validados.</small></span></p><p><CheckSquare/><span><b>Gate operacional</b><small>Operação aceita com evidÃªncia e responsÃ¡vel.</small></span></p><button className="primary" onClick={()=>setHorizon("12 meses")}>Ver visÃ£o completa<ArrowRight/></button></div></Panel></div>
     <Panel title="Plano futuro pÃ³s-implantaÃ§Ã£o" subtitle="A prÃ³xima ambiÃ§Ã£o do InventOps depois do nÃºcleo operacional consolidado"><div className="roadmap-governance"><p><Sparkle/><span><b>SimulaÃ§Ã£o da linha inteira</b><small>O sistema passa a simular a operaÃ§Ã£o ponta a ponta e nÃ£o apenas tarefas isoladas.</small></span></p><p><Cpu/><span><b>Esteira, PLC e sensores</b><small>Leitura operacional conectada ao chÃ£o de fÃ¡brica com contexto real de falha e impacto.</small></span></p><p><HardDrives/><span><b>Servidores + WCS Velox</b><small>Infraestrutura, telemetria e lÃ³gica do WCS entram no mesmo contexto decisÃ³rio.</small></span></p><p><Waveform/><span><b>Sala de decisÃ£o operacional</b><small>CenÃ¡rios, alertas e recomendaÃ§Ãµes para agir antes do problema explodir.</small></span></p></div></Panel>
   </section>;
 }
@@ -560,8 +560,8 @@ const LOGIN_TEXT={
     email:"E-mail corporativo",
     password:"Senha",
     keep:"Manter sessão neste dispositivo",
-    demo:"Perfis de acesso",
-    demoTitle:"Perfis disponíveis neste ambiente",
+    demo:"Perfis corporativos",
+    demoTitle:"Perfis disponíveis",
     demoBody:"Admin · Diretoria · Gestor · Analista",
     demoFoot:"Ambiente corporativo controlado — acesso validado por perfil.",
     forgot:"Esqueci minha senha",
@@ -585,8 +585,8 @@ const LOGIN_TEXT={
     email:"Correo corporativo",
     password:"Contraseña",
     keep:"Mantener la sesión en este dispositivo",
-    demo:"Perfiles de acceso",
-    demoTitle:"Perfiles disponibles en este entorno",
+    demo:"Perfiles corporativos",
+    demoTitle:"Perfiles disponibles",
     demoBody:"Admin · Directoria · Gestor · Analista",
     demoFoot:"Entorno corporativo controlado — acceso validado por perfil.",
     forgot:"Olvidé mi contraseña",
@@ -610,8 +610,8 @@ const LOGIN_TEXT={
     email:"Corporate email",
     password:"Password",
     keep:"Keep me signed in on this device",
-    demo:"Access profiles",
-    demoTitle:"Profiles available in this environment",
+    demo:"Corporate profiles",
+    demoTitle:"Available profiles",
     demoBody:"Admin · Executive · Manager · Analyst",
     demoFoot:"Controlled corporate environment — access validated by role.",
     forgot:"Forgot my password",

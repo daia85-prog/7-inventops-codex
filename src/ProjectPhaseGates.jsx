@@ -40,7 +40,7 @@ function initialGates(project){
       expected,
       status:phaseIndex+1<project.phase?"Aprovado":phaseIndex+1===project.phase&&criterionIndex<2?"Aprovado":phaseIndex+1===project.phase?"Pendente":"Planejado",
       evidence:phaseIndex+1<project.phase||phaseIndex+1===project.phase&&criterionIndex<2?expected:"Pendente",
-      owner:area==="PMO"?"Rodrigo Baruco":area==="INF"||area==="IMP"?"Douglas Alves":area==="WCS"?"Marcelo Sanches":"Gestor da área"
+      owner:area==="PMO"?"Rodrigo Baruco":area==="INF"?"Admin Invent":area==="IMP"?"Daniel":area==="ESP"?"Thomas":area==="WCS"?"Marcelo Sanches":"Gestor da área"
     }))
   }));
 }

@@ -79,17 +79,17 @@ Status em 9 ago 2026:
 
 ---
 
-### Fase C — Cockpit operacional Daniel + Thomas
+### Fase C — Operação Assistida Daniel + Thomas
 
 Escopo:
 
-- cockpit de Implantação
-- cockpit de Especificação / DevOps
+- esteira operacional de Implantação
+- esteira operacional de Especificação / DevOps
 - handoff / esteira / responsável / status
 
 Objetivo:
 
-- materializar o uso real do InventOps com as áreas piloto;
+- materializar o uso real do InventOps com as áreas em operação assistida;
 - colocar Daniel e Thomas no centro da operação assistida.
 
 Critérios de pronto:
@@ -98,7 +98,7 @@ Critérios de pronto:
 - abrir corretamente contexto de Thomas;
 - mostrar esteira por projeto;
 - mostrar bloqueios, andamento e handoffs;
-- ligar cockpit com Home e Administração.
+- ligar Operação Assistida com Home e Administração.
 
 Status em 9 ago 2026:
 
@@ -123,10 +123,10 @@ Objetivo:
 
 Critérios de pronto:
 
-- Admin Teste, Daniel e Thomas funcionais;
+- Admin InventOps, Daniel e Thomas funcionais;
 - perfis sem poluir a navegação principal;
 - leitura mais limpa;
-- abertura correta dos contextos piloto;
+- abertura correta dos contextos de operação assistida;
 - consistência trilíngue.
 
 Status em 9 ago 2026:
@@ -146,7 +146,7 @@ Escopo:
 
 Objetivo:
 
-- sustentar o cockpit e a home com módulos de trabalho reais;
+- sustentar a Operação Assistida e a Home com módulos de trabalho reais;
 - mostrar que o InventOps não é só painel, mas sistema operacional de execução.
 
 Critérios de pronto:
@@ -158,7 +158,7 @@ Critérios de pronto:
 
 Status em 9 ago 2026:
 
-- planejado após cockpit e administração
+- planejado após Operação Assistida e Administração
 
 ---
 
@@ -173,7 +173,7 @@ Escopo:
 
 Objetivo:
 
-- expandir o que foi validado nas áreas piloto para a camada executiva e demais áreas.
+- expandir o que foi validado nas áreas em operação assistida para a camada executiva e demais áreas.
 
 Critérios de pronto:
 
@@ -192,7 +192,7 @@ Status em 9 ago 2026:
 1. Login
 2. Carregamento
 3. Home
-4. Cockpit Daniel + Thomas
+4. Operação Assistida Daniel + Thomas
 5. Administração
 6. Implantação
 7. Especificação / DevOps
@@ -238,7 +238,7 @@ Para considerar esse marco atingido:
 - transição pronta;
 - home pronta;
 - administração pronta;
-- cockpit Daniel/Thomas funcional;
+- Operação Assistida Daniel/Thomas funcional;
 - navegação principal coerente.
 
 ---

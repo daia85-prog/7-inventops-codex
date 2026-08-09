@@ -23,10 +23,10 @@ export const AREAS = [
   { code: "EEL", nome: "Eng. Elétrica", gestor: "Gustavo Pereira" },
   { code: "PRD", nome: "Produção", gestor: "Flavio Moreno" },
   { code: "MON", nome: "Montagem", gestor: "Rojekson Souza" },
-  { code: "INF", nome: "Infraestrutura", gestor: "Douglas Alves" },
-  { code: "ESP", nome: "Espec. de Software", gestor: "Douglas Alves" },
+  { code: "INF", nome: "Infraestrutura", gestor: "Admin Invent" },
+  { code: "ESP", nome: "Espec. de Software", gestor: "Thomas" },
   { code: "WCS", nome: "WCS Velox", gestor: "Marcelo Sanches" },
-  { code: "IMP", nome: "Implantação", gestor: "Douglas Alves" },
+  { code: "IMP", nome: "Implantação", gestor: "Daniel" },
   { code: "PLC", nome: "PLC", gestor: "Gustavo Pereira" },
   { code: "POS", nome: "Pós-vendas", gestor: "Caique Fracaro" },
 ];
@@ -34,17 +34,17 @@ export const AREAS = [
 const areaName = (code) => (AREAS.find((a) => a.code === code) || {}).nome || code;
 
 const cockpitJourney = [
-  { id: "login", label: "Login", state: "done", detail: "Experiência inicial já validada." },
-  { id: "home", label: "Home", state: "done", detail: "Panorama corporativo já elevado." },
-  { id: "pmo", label: "PMO", state: "done", detail: "Fila única e briefing já publicados." },
-  { id: "departamentos", label: "Departamentos", state: "active", detail: "Fluxo real dos times em fechamento." },
-  { id: "executive", label: "Executive", state: "next", detail: "Próxima etapa: fechamento final da visão diretiva." },
+  { id: "login", label: "Login", state: "done", detail: "Acesso corporativo e perfis validados." },
+  { id: "home", label: "Home", state: "done", detail: "Panorama executivo conectado às áreas reais." },
+  { id: "pmo", label: "PMO", state: "done", detail: "Fila única e briefing operacional publicados." },
+  { id: "departamentos", label: "Departamentos", state: "active", detail: "Esteiras reais de Implantação e DevOps em operação assistida." },
+  { id: "executive", label: "Diretoria", state: "next", detail: "Próxima etapa: leitura consolidada para decisão." },
 ];
 
 const PILOT_DEPARTMENTS = {
   INF: {
-    source: "dados reais do P1",
-    focal: "Douglas Alves",
+    source: "base operacional InventOps",
+    focal: "Admin Invent",
     deliveries: [
       { id: "inf-1", project: "QUELUZ", title: "Ambiente HML liberado para o GL1", to: "WCS", due: "hoje", status: "pronto" },
       { id: "inf-2", project: "NAVEPARK", title: "VMs Oracle KVM + topologia de rede", to: "IMP", due: "14/08", status: "andamento" },
@@ -92,8 +92,8 @@ const PILOT_DEPARTMENTS = {
     source: "extraído do Planner dos times",
     focal: "Daniel",
     deliveries: [
-      { id: "imp-peter2", project: "PROJETO PETER 2", title: "Passagem de bastão ao time de Pós-Vendas — Final", to: "POS", due: "22/06/2026", status: "andamento", progress: "6/10", origin: "Planner · piloto real" },
-      { id: "imp-queluz", project: "PROJETO QUELUZ — Fase 1", title: "Passagem de bastão ao time de Pós-Vendas — Final", to: "POS", due: "30/07/2026", status: "andamento", progress: "8/10", origin: "Planner · piloto real" },
+      { id: "imp-peter2", project: "PROJETO PETER 2", title: "Passagem de bastão ao time de Pós-Vendas — Final", to: "POS", due: "22/06/2026", status: "andamento", progress: "6/10", origin: "Planner" },
+      { id: "imp-queluz", project: "PROJETO QUELUZ — Fase 1", title: "Passagem de bastão ao time de Pós-Vendas — Final", to: "POS", due: "30/07/2026", status: "andamento", progress: "8/10", origin: "Planner" },
     ],
     waiting: [
       { from: "ESP", project: "QUELUZ — Fase 1", what: "Descritivo funcional aprovado e alinhamento final DEV + Implantação", side: "Invent", age: "3 dias" },
@@ -146,8 +146,8 @@ const PILOT_DEPARTMENTS = {
     source: "extraído do Planner dos times",
     focal: "Thomas",
     deliveries: [
-      { id: "esp-peter2", project: "PETER 2", title: "Passagem de Bastão (DEV + Implantação)", to: "IMP", due: "20/07/2026", status: "done", doneAt: "20/07 · 09:00", progress: "6/6", origin: "Planner · piloto real" },
-      { id: "esp-queluz", project: "QUELUZ — Fase 2", title: "Passagem de Bastão (DEV + Implantação)", to: "IMP", due: "28/08/2026", status: "andamento", progress: "4/6", origin: "Planner · piloto real" },
+      { id: "esp-peter2", project: "PETER 2", title: "Passagem de Bastão (DEV + Implantação)", to: "IMP", due: "20/07/2026", status: "done", doneAt: "20/07 · 09:00", progress: "6/6", origin: "Planner" },
+      { id: "esp-queluz", project: "QUELUZ — Fase 2", title: "Passagem de Bastão (DEV + Implantação)", to: "IMP", due: "28/08/2026", status: "andamento", progress: "4/6", origin: "Planner" },
     ],
     waiting: [
       { from: "Cliente", project: "QUELUZ — Fase 2", what: "Aprovação do descritivo funcional apresentado", side: "Cliente", age: "4 dias" },
@@ -359,9 +359,9 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
           const pilotData = PILOT_DEPARTMENTS[item.code];
           return (
             <button key={item.code} className={activePilot ? "active" : ""} onClick={() => { setDept(item.code); setSelectedTrack(""); }}>
-              <small>ÁREA PILOTO</small>
+              <small>ÁREA EM OPERAÇÃO</small>
               <b>{item.nome}</b>
-              <p>{pilotData?.focal || item.gestor} · {pilotData ? "fluxo real validado" : "em preparação"}</p>
+              <p>{pilotData?.focal || item.gestor} · {pilotData ? "esteira ativa" : "preparando entrada"}</p>
               <span>{activePilot ? "visão ativa" : "abrir área"}</span>
             </button>
           );
@@ -385,10 +385,10 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
             {isPilot ? (
               <span className="pilot-tag">
                 <Sparkle size={13} weight="fill" />
-                área piloto · {pilotConfig.source} · ponto focal {pilotConfig.focal}
+                operação assistida · {pilotConfig.source} · ponto focal {pilotConfig.focal}
               </span>
             ) : (
-              <span className="sample-tag">dados de exemplo — área entra no piloto na Era 2</span>
+              <span className="sample-tag">área aguardando ativação operacional</span>
             )}
           </p>
         </div>
@@ -424,7 +424,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
             <small>SEQUÊNCIA DE ENTREGA</small>
             <h3>Onde estamos na jornada do produto</h3>
           </div>
-          <span>{isPilot ? `${area.nome} está usando a regra real do piloto` : "Infra é a frente piloto ativa agora"}</span>
+          <span>{isPilot ? `${area.nome} está usando a regra real da área` : "Área aguardando ativação operacional"}</span>
         </header>
         <div>
           {cockpitJourney.map((step) => (
@@ -508,7 +508,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
         <article className="cockpit-track">
           <div className="section-heading">
             <b><Sparkle /> Esteira operacional real</b>
-            <span>Checklist do projeto piloto trazido do Planner, sem alterar a regra do time.</span>
+            <span>Checklist do Planner incorporado sem alterar a regra do time.</span>
           </div>
           <div className="cockpit-track-pulse">
             {pilotSummary.map((item) => (
@@ -530,7 +530,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }
           </div>
           <div className="cockpit-track-body">
             <div className="cockpit-track-summary">
-              <small>PROJETO PILOTO</small>
+              <small>PROJETO OPERACIONAL</small>
               <h3>{activeTrack.label}</h3>
               <p>{activeTrack.summary}</p>
               <span>{activeTrack.handoff}</span>

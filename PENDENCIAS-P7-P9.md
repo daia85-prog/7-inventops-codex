@@ -19,22 +19,22 @@
   - validar com apoio do Claude se necessário
   - só depois voltar ao polimento premium final do login
 
-## Home / Administração / áreas piloto
+## Home / Administração / áreas em operação assistida
 
 - Status: prioridade funcional imediata
 - Contexto:
   - a usuária sinalizou que não quer mais somente lapidação visual
   - quer funcionamento real para mostrar ao time
-  - Login, Home, Administração e áreas piloto precisam ser tratados como produto real
+  - Login, Home, Administração e áreas em operação assistida precisam ser tratados como produto real
 - Regra:
   - primeiro trazer e consolidar o que `inventops79` já possui dessas áreas
   - depois agregar melhorias novas
 - Próximo passo sugerido:
   - validar navegação real por perfil
-  - abrir corretamente Daniel / Thomas / Admin Teste
+  - abrir corretamente Daniel / Thomas / Admin InventOps
   - garantir leitura e ação nas áreas de Implantação e Especificação/DevOps
 
-## Cockpit operacional Daniel + Thomas
+## Operação Assistida Daniel + Thomas
 
 - Status: entra agora como prioridade de análise e incorporação
 - Referência:
@@ -42,13 +42,15 @@
 - Leitura:
   - a ideia foi aprovada como forte pelo produto
   - não deve ficar restrita a “piloto” visual
-  - deve virar cockpit real das áreas focais
+  - só manter o termo “Cockpit” se isso virar um padrão permanente para todos os departamentos
+  - se não for padrão amplo, adaptar para “Operação Assistida”, “Meu Departamento” ou “Esteira Operacional”
+  - deve virar módulo real das áreas focais
 - Objetivo:
   - conectar Daniel / Implantação
   - conectar Thomas / Especificação / DevOps
   - mostrar esteira, handoff, projeto, responsável e status em uma mesma camada operacional
 - Próximo passo sugerido:
-  - incluir esse cockpit no mapa oficial `inventops79` x `P7`
+  - incluir essa experiência no mapa oficial `inventops79` x `P7`
   - avaliar como ele conversa com Home + Administração + DepartmentCockpit atual
   - transformar a ideia em módulo real do P7
 
@@ -58,14 +60,14 @@
 - Última entrega concluída:
   - remoção de linguagem principal de demo
   - centralização de perfis/temas em Administração
-  - substituição do acesso legado “Douglas” por “Admin Teste”
+  - substituição do acesso legado por “Admin InventOps”
   - alinhamento documental P7 ↔ P9 com `inventops79` como referência oficial
 - Em andamento agora:
   - reorganizar o sistema com base no `inventops79`
   - sair de lapidação superficial e entrar em funcionalidade real
 - Próximo passo imediato:
   - estruturar Home + Administração + acessos dos perfis reais
-  - abrir corretamente Daniel / Thomas / Admin Teste nos contextos piloto
+  - abrir corretamente Daniel / Thomas / Admin InventOps nos contextos de operação assistida
 - Próximo passo estrutural:
   - fazer análise 100% do `inventops79`
   - produzir equivalência tela por tela com o P7
