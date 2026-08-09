@@ -617,10 +617,6 @@ const LOGIN_TEXT={
     email:"E-mail corporativo",
     password:"Senha",
     keep:"Manter sessão neste dispositivo",
-    demo:"Perfis corporativos",
-    demoTitle:"Perfis disponíveis",
-    demoBody:"Admin · Diretoria · Gestor · Analista",
-    demoFoot:"Ambiente corporativo controlado — acesso validado por perfil.",
     forgot:"Esqueci minha senha",
     enter:"Entrar no InventOps",
     or:"ou",
@@ -642,10 +638,6 @@ const LOGIN_TEXT={
     email:"Correo corporativo",
     password:"Contraseña",
     keep:"Mantener la sesión en este dispositivo",
-    demo:"Perfiles corporativos",
-    demoTitle:"Perfiles disponibles",
-    demoBody:"Admin · Directoria · Gestor · Analista",
-    demoFoot:"Entorno corporativo controlado — acceso validado por perfil.",
     forgot:"Olvidé mi contraseña",
     enter:"Entrar en InventOps",
     or:"o",
@@ -667,10 +659,6 @@ const LOGIN_TEXT={
     email:"Corporate email",
     password:"Password",
     keep:"Keep me signed in on this device",
-    demo:"Corporate profiles",
-    demoTitle:"Available profiles",
-    demoBody:"Admin · Executive · Manager · Analyst",
-    demoFoot:"Controlled corporate environment — access validated by role.",
     forgot:"Forgot my password",
     enter:"Enter InventOps",
     or:"or",
@@ -722,7 +710,6 @@ const LOGIN_SYNC_TEXT={
 export function LoginScreen({onLogin}){
   const [email,setEmail]=useState("admin.teste@invent-corp.com");
   const [password,setPassword]=useState("inventops2026");
-  const [showDemo,setShowDemo]=useState(false);
   const [lang,setLang]=useState("pt");
   const [isSubmitting,setIsSubmitting]=useState(false);
   const [syncStep,setSyncStep]=useState(0);
@@ -736,11 +723,6 @@ export function LoginScreen({onLogin}){
     indicators:ChartLineUp,
     dashboard:Gauge
   };
-  const trustSignals=[
-    {value:"14",label:copy.pulseA},
-    {value:"342",label:copy.pulseB},
-    {value:"1.247",label:copy.pulseC}
-  ];
   const valueHighlights=[
     {icon:ShieldCheck,title:"Acesso governado",body:"Perfis, visões e ações alinhadas à responsabilidade de cada pessoa."},
     {icon:ClipboardText,title:"Operação rastreável",body:"Solicitações, projetos, decisões e evidências conectados na mesma linha."},
@@ -815,7 +797,6 @@ export function LoginScreen({onLogin}){
         <label>{copy.email}<input type="email" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus disabled={isSubmitting}/></label>
         <label>{copy.password}<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required disabled={isSubmitting}/></label>
         <div className="login-options"><label><input type="checkbox" disabled={isSubmitting}/> {copy.keep}</label></div>
-        {showDemo?<div className="demo-credentials"><b>{copy.demoTitle}</b><span>{copy.demoBody}</span><small>{copy.demoFoot}</small></div>:null}
         <div className="login-support-row"><span>{copy.forgot}</span></div>
         <button className="primary" type="submit" disabled={isSubmitting}>{isSubmitting?<><MonitorPlay/>Conectando...</>:<>{copy.enter}<ArrowRight/></>}</button>
         <div className="sso-divider"><span>{copy.or}</span></div>

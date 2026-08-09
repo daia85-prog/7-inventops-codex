@@ -393,6 +393,7 @@ Aplicado no P7:
   - Proxima acao esperada.
 - Daniel e Thomas deixam de ser apenas nomes de teste e passam a aparecer como usuarios operacionais com contexto.
 - O botao `Validar usuario` na Administracao agora altera estado real do usuario, grava horario e define proxima acao.
+- Login teve as sobras internas de `demo/perfis disponiveis` removidas para evitar regressao visual ou conceitual.
 
 Por que isso existe:
 
