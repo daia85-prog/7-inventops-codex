@@ -392,6 +392,7 @@ Aplicado no P7:
   - Ultima acao;
   - Proxima acao esperada.
 - Daniel e Thomas deixam de ser apenas nomes de teste e passam a aparecer como usuarios operacionais com contexto.
+- O botao `Validar usuario` na Administracao agora altera estado real do usuario, grava horario e define proxima acao.
 
 Por que isso existe:
 
@@ -404,4 +405,5 @@ Pendente para validar:
 - Abrir Home em PT/ES/EN e confirmar que os bastoes traduzem corretamente.
 - Clicar em cada bastao e confirmar abertura da Operacao Assistida na area correta.
 - Abrir Administracao e clicar em Daniel/Thomas para confirmar contexto correto.
+- Clicar em `Validar usuario` e confirmar troca de status/gate/ultima acao/proxima acao.
 - Ajustar visual se a nova secao ocupar espaco demais em telas menores.

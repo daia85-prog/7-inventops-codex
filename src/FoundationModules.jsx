@@ -485,6 +485,20 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
     notify(`Acesso preparado para ${invite.name||"novo usuário"} · perfil ${invite.profile} · área ${invite.area}.`);
     setInvite({name:"",email:"",profile:"Analista",area:"Infraestrutura"});
   };
+  const validateOperationalUser=(user)=>{
+    const stamped=`Validado pela Administração · ${new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}`;
+    setUsers(current=>current.map(item=>{
+      if(item.name!==user.name||item.area!==user.area) return item;
+      return {
+        ...item,
+        status:"Usuário validado",
+        gate:"Acesso operacional confirmado",
+        lastAction:stamped,
+        nextAction:item.dept==="IMP"?"Abrir Implantação e concluir ou devolver bastão.":item.dept==="ESP"?"Abrir Especificação/DevOps e fechar checkpoints.":"Acompanhar operação assistida e auditoria."
+      };
+    }));
+    notify(`${user.name} validado em ${user.area}. Próxima ação registrada.`);
+  };
   return <section className="page foundation-page">
     <div className="admin-banner"><ShieldCheck/><div><small>GOVERNANÇA DE ACESSO</small><h2>Permissão clara, ação auditável</h2><p>Os perfis já governam a experiência do produto e seguem a mesma regra operacional aplicada no ambiente real.</p></div><span><LockKey/>Sessão ativa</span></div>
     <div className="admin-module-strip">
@@ -541,7 +555,7 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
             <div><dt>Próxima ação</dt><dd>{user.nextAction}</dd></div>
           </dl>
           <div className="admin-pilot-actions">
-            <button className="ghost" type="button" onClick={()=>notify(`${user.name} está registrado como usuário válido em ${user.area}.`)}>Validar usuário</button>
+            <button className="ghost" type="button" onClick={()=>validateOperationalUser(user)}>Validar usuário</button>
             <button className="ghost" type="button" onClick={()=>{
               setRole(user.profile);
               onOpenPilotUser?.(user);

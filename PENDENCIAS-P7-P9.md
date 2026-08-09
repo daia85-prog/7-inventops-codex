@@ -120,6 +120,7 @@ Obrigatorio antes de dizer "pronto":
 - [x] Chat operacional/contexto fica na mesma tela da area.
 - [x] Home mostra bastoes em movimento com atalho para a area correta.
 - [x] Administracao mostra Gate, ultima acao e proxima acao para Daniel/Thomas.
+- [x] Validar usuario na Administracao altera estado e registra proxima acao.
 - [ ] Validar visualmente com Daia em janela limpa.
 - [ ] Claude revisar se a paridade com inventops79 ficou completa.
 - [ ] Refinar login/orbita de departamentos em ciclo separado, sem bloquear uso real.
