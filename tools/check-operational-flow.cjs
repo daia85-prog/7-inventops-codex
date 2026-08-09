@@ -49,6 +49,10 @@ const checks = [
     ok: cockpit.includes("inventops-cockpit-state-") && cockpit.includes("window.localStorage.setItem(storageKey") && cockpit.includes("readStoredCockpitState(storageKey)"),
   },
   {
+    name: "Operação Assistida exporta evidência operacional",
+    ok: cockpit.includes("exportOperationalEvidence") && cockpit.includes("inventops-evidencia-") && cockpit.includes("Exportar evidência"),
+  },
+  {
     name: "Login não volta para usuários antigos de teste",
     ok: !app.includes("admin.teste") && !app.includes("douglas.alves") && !foundation.includes("admin.teste") && !foundation.includes("douglas.alves"),
   },

@@ -449,6 +449,45 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
     notify(`Mensagem registrada no histórico de ${area.nome}.`);
   };
 
+  const exportOperationalEvidence = () => {
+    if (!activeTrack) return;
+    const pending = activeTrack.items.filter((item) => !item.done).map((item) => item.label);
+    const done = activeTrack.items.filter((item) => item.done).map((item) => item.label);
+    const evidence = [
+      `InventOps - Evidência operacional`,
+      `Área: ${area.nome}`,
+      `Responsável: ${pilotConfig?.focal || area.gestor}`,
+      `Projeto: ${activeTrack.label}`,
+      `Handoff: ${activeTrack.handoff}`,
+      `Status do aceite: ${trackHandoffDone ? `aceito em ${handoffMap[activeTrack.id]}` : handoffReview?.status === "adjustment" ? `ajuste solicitado em ${handoffReview.stamp}` : "aguardando checklist completo"}`,
+      ``,
+      `Checkpoints concluídos:`,
+      ...(done.length ? done.map((item) => `- ${item}`) : ["- Nenhum checkpoint concluído nesta sessão"]),
+      ``,
+      `Pendências:`,
+      ...(pending.length ? pending.map((item) => `- ${item}`) : ["- Sem pendências abertas"]),
+      ``,
+      `Últimos registros do chat:`,
+      ...chatLog.slice(0, 5).map((msg) => `- ${msg.t} | ${msg.author}: ${msg.txt}`),
+      ``,
+      `Últimos handoffs:`,
+      ...feed.slice(0, 5).map((item) => `- ${item.t} | ${item.from} -> ${item.to}: ${item.txt}`),
+    ].join("\n");
+    const fileName = `inventops-evidencia-${dept}-${activeTrack.id}.txt`.toLowerCase();
+    try {
+      const blob = new Blob([evidence], { type: "text/plain;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName;
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch {}
+    const { stamp } = makeStamp();
+    setFeed((current) => [{ t: stamp, from: dept, to: "Evidências", txt: `Evidência exportada: ${activeTrack.label}` }, ...current]);
+    notify(`Evidência de ${activeTrack.label} exportada.`);
+  };
+
   return (
     <section className="page cockpit-page">
       <div className="pilot-focus-strip">
@@ -646,6 +685,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
                 <button className="ghost cockpit-track-action" type="button" onClick={registerCharge}><Envelope />Registrar cobrança</button>
                 <button className="ghost cockpit-track-action" type="button" onClick={requestHandoffAdjustment} disabled={trackHandoffDone}><XCircle />Solicitar ajuste</button>
                 <button className="ghost cockpit-track-action" type="button" onClick={confirmHandoff} disabled={!trackCompleted || trackHandoffDone}><PaperPlaneTilt />{trackHandoffDone ? "Handoff confirmado" : "Confirmar handoff"}</button>
+                <button className="ghost cockpit-track-action" type="button" onClick={exportOperationalEvidence}><ShieldCheck />Exportar evidência</button>
               </div>
             </div>
             <div className="cockpit-track-list">

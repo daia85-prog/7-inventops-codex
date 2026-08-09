@@ -800,3 +800,24 @@ Se Claude continuar:
 2. Nao reabrir estrategia de produto.
 3. Se os links quebrarem, corrigir primeiro `src/App.jsx`.
 4. Depois seguir para aprofundar Daniel/Thomas com historico, chat, passagem de bastao, aceite/devolucao e leitura por area.
+
+## 2026-08-09 - Produto real Bloco B.13: Evidencia operacional exportavel
+
+Aplicado pelo Codex:
+
+- A Operacao Assistida agora exporta um arquivo de evidencia da esteira selecionada.
+- O arquivo inclui area, responsavel, projeto, handoff, status de aceite, checkpoints concluidos, pendencias, ultimos chats e ultimos handoffs.
+- Ao exportar, a linha do tempo recebe novo registro de evidencia.
+- A trava `tools/check-operational-flow.cjs` reprova se a funcao de exportacao sair do fluxo.
+
+Arquivo de aceite criado:
+
+- `qa/ACEITE-EVIDENCIA-OPERACIONAL-2026-08-09.md`
+
+Se Claude continuar:
+
+1. Abrir `/#operacao-implantacao` e testar Daniel/Implantacao.
+2. Abrir `/#operacao-devops` e testar Thomas/Especificacao-DevOps.
+3. Clicar em `Exportar evidencia`.
+4. Confirmar download do arquivo `inventops-evidencia-*.txt`.
+5. Se nao baixar, corrigir `exportOperationalEvidence` em `src/DepartmentCockpit.jsx`.
