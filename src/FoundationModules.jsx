@@ -2,7 +2,8 @@
 import {
   ArrowRight, BellRinging, Buildings, CalendarBlank, ChartLineUp,
   CheckCircle, CheckSquare, ClipboardText, ClockCountdown, Database, Envelope,
-  Factory, FileText, FlagCheckered, Gauge, GitCommit, LockKey, MonitorPlay, Play, Printer,
+  Eye, Factory, FileText, FlagCheckered, Gauge, GitCommit, LockKey, MonitorPlay, Moon,
+  Play, Printer, Sun,
   RocketLaunch, ShieldCheck, Sparkle, TrendUp, UserGear, UsersThree, Warning,
   WhatsappLogo, XCircle
 } from "@phosphor-icons/react";
@@ -390,10 +391,9 @@ export function RaidPage(){
   return <section className="page foundation-page"><div className="foundation-metrics"><Metric icon={Warning} label="SCORE CRÃTICO" value="20â€“25" note="2 itens" tone="red"/><Metric icon={ChartLineUp} label="RAID ATIVO" value="24 itens" note="5 exigem aÃ§Ã£o" tone="yellow"/><Metric icon={ShieldCheck} label="COM RESPOSTA" value="92%" note="meta â‰¥ 95%" tone="green"/><Metric icon={ClockCountdown} label="VENCIDOS" value="1" note="Market Peru" tone="red"/></div><div className="foundation-grid raid-layout"><Panel title="Matriz de risco 5 Ã— 5" subtitle="Probabilidade Ã— impacto Â· clique em um item para abrir"><div className="raid-axis"><span>IMPACTO â†’</span><div className="raid-matrix">{matrix.map(cell=>{const item=riskItems.find(r=>r.prob===cell.prob&&r.impact===cell.impact);const score=cell.prob*cell.impact;return <button key={`${cell.prob}-${cell.impact}`} className={score>=16?"critical":score>=9?"warning":"low"} onClick={()=>item&&setSelected(item)}><small>{score}</small>{item?<b>{item.id}</b>:null}</button>})}</div><em>PROBABILIDADE â†’</em></div></Panel><Panel title="RAID prioritÃ¡rio" subtitle="Risco, premissa, impedimento e dependÃªncia"><div className="raid-list">{riskItems.map(r=><button key={r.id} onClick={()=>setSelected(r)}><span>{r.id}</span><div><b>{r.title}</b><small>{r.project} Â· {r.owner}</small></div><em>{r.prob*r.impact}</em></button>)}</div></Panel></div>{selected?<div className="modal-layer" onMouseDown={e=>e.target===e.currentTarget&&setSelected(null)}><article className="raid-modal" role="dialog" aria-modal="true"><header><span>{selected.id}</span><button onClick={()=>setSelected(null)} aria-label="Fechar"><XCircle/></button></header><small>{selected.kind} Â· {selected.project}</small><h2>{selected.title}</h2><div><span><small>PROBABILIDADE</small><b>{selected.prob}/5</b></span><span><small>IMPACTO</small><b>{selected.impact}/5</b></span><span><small>SCORE</small><b>{selected.prob*selected.impact}/25</b></span></div><dl><div><dt>ResponsÃ¡vel</dt><dd>{selected.owner}</dd></div><div><dt>EstratÃ©gia</dt><dd>{selected.response}</dd></div><div><dt>Prazo</dt><dd>{selected.due}</dd></div></dl><button className="primary" onClick={()=>setSelected(null)}>Abrir plano de resposta</button></article></div>:null}</section>;
 }
 
-export function AdminGovernance({role,setRole,notify,onOpenPilotUser}){
+export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotUser}){
   const roles={Admin:[1,1,1,1,1],Diretoria:[1,0,1,0,0],Gestor:[1,1,1,0,0],Analista:[1,1,0,0,0]};
   const permissions=["Visualizar","Editar operação","Gerenciar projetos","Administrar acessos","Configurar integrações"];
-  const [theme,setTheme]=useState("Escuro");
   const [invite,setInvite]=useState({name:"",email:"",profile:"Analista",area:"Infraestrutura"});
   const [users,setUsers]=useState([
     {name:"Douglas Alves", profile:"Gestor", area:"Infraestrutura / Implantação", status:"Ativo", dept:"INF", source:"Piloto"},
@@ -423,9 +423,14 @@ export function AdminGovernance({role,setRole,notify,onOpenPilotUser}){
   };
   const adminModules=[
     ["admin-access","Acessos","Criar, revisar e preparar usuários válidos."],
-    ["admin-themes","Perfis & tema","Simular RBAC e validar a interface."],
+    ["admin-themes","Perfis & experiência","Simular RBAC e validar a interface."],
     ["admin-pilots","Piloto real","Abrir Daniel, Thomas e Douglas no contexto certo."],
     ["admin-audit","Auditoria","Conferir trilha, permissões e regra aplicada."]
+  ];
+  const themeOptions=[
+    {id:"Escuro",label:"Escuro",helper:"Padrão corporativo",icon:Moon},
+    {id:"Claro",label:"Claro",helper:"Leitura clara",icon:Sun},
+    {id:"Contraste",label:"Contraste",helper:"Máxima legibilidade",icon:Eye}
   ];
   const sendInvite=(event)=>{
     event.preventDefault();
@@ -471,9 +476,15 @@ export function AdminGovernance({role,setRole,notify,onOpenPilotUser}){
           <button className="primary" type="submit"><Envelope/>Preparar acesso</button>
         </form>
       </Panel></div>
-      <Panel title="Tema da interface" subtitle="Modelo vindo do inventops79">
+      <Panel title="Experiência visual" subtitle="Tema controlado aqui, não na lateral">
         <div className="admin-theme-picker">
-          {["Escuro","Claro","Alto contraste"].map(option=><button key={option} className={theme===option?"active":""} onClick={()=>{setTheme(option);notify(`Tema visual alterado para ${option}.`)}}><b>{option}</b><small>{option==="Escuro"?"Padrão corporativo":option==="Claro"?"Ambiente claro para leitura":"Máximo contraste para validação"}</small></button>)}
+          {themeOptions.map(option=>{
+            const Icon=option.icon;
+            return <button key={option.id} className={theme===option.id?"active":""} onClick={()=>{setTheme(option.id);notify(`Tema visual alterado para ${option.label}.`)}}>
+              <span className="theme-icon-chip"><Icon size={18} weight={theme===option.id?"fill":"regular"}/></span>
+              <span><b>{option.label}</b><small>{option.helper}</small></span>
+            </button>;
+          })}
         </div>
         <div className="admin-theme-state"><ShieldCheck/><span><small>TEMA ATIVO</small><b>{theme}</b></span></div>
       </Panel>

@@ -216,9 +216,7 @@ function LangSwitch({ lang, setLang, notify }) {
   </span>;
 }
 
-function SidebarEnhanced({ active, setActive, alertCount, notify, role, setRole, theme, setTheme, onLogout }) {
-  const themeOptions = ["Escuro","Claro","Contraste"];
-  const roleOptions = ["Analista","Gestor","Diretoria","Admin"];
+function SidebarEnhanced({ active, setActive, alertCount, notify, role, onLogout }) {
   const [openGroups,setOpenGroups]=useState({
     "EXECUTIVO":true,
     "OPERAÇÃO":true,
@@ -228,20 +226,6 @@ function SidebarEnhanced({ active, setActive, alertCount, notify, role, setRole,
 
   return <aside className="sidebar">
     <Logo/>
-    <div className="sidebar-controls">
-      <section className="sidebar-card">
-        <small>TEMA</small>
-        <div className="sidebar-segmented">
-          {themeOptions.map(option=><button key={option} className={theme===option?"active":""} onClick={()=>{setTheme(option);notify(`Tema alterado para ${option}.`)}}>{option}</button>)}
-        </div>
-      </section>
-      <section className="sidebar-card">
-        <small>VER COMO</small>
-        <div className="sidebar-role-switch">
-          {roleOptions.map(option=><button key={option} title={option} className={role===option?"active":""} onClick={()=>{setRole(option);notify(`Visualização alterada para ${option}.`)}}>{option==="Diretoria"?"Direx":option}</button>)}
-        </div>
-      </section>
-    </div>
     <nav>
       {navGroups.map(group=><div className={`nav-group ${openGroups[group.label]?"open":"collapsed"}`} key={group.label}>
         <button type="button" className="nav-group-toggle" aria-expanded={!!openGroups[group.label]} onClick={()=>setOpenGroups(current=>({...current,[group.label]:!current[group.label]}))}>
@@ -263,7 +247,7 @@ function SidebarEnhanced({ active, setActive, alertCount, notify, role, setRole,
       </div>)}
     </nav>
     <div className="sidebar-bottom">
-      <button className="profile" onClick={()=>setActive("admin")}><span className="avatar">D</span><span><strong>Douglas</strong><small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><CaretDown size={15}/></button>
+      <button className="profile" onClick={()=>{setActive("admin");notify("Administração aberta para controlar perfil, tema e acessos.")}}><span className="avatar">D</span><span><strong>Douglas</strong><small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><CaretDown size={15}/></button>
       <button className="logout-button" onClick={onLogout}><SignOut/><span>Sair com segurança</span></button>
       <div className="credit"><Sparkle size={15} weight="fill"/><span>Desenvolvido por <b>Daiana Costa</b></span></div>
     </div>
@@ -588,12 +572,12 @@ export function App() {
     pmo:<PmoControlTower projects={projects} onOpenProject={project=>{setSelectedProject(project);setProjectModalOpen(true)}} notify={notify}/>,
     project:<ProjectWorkspace key={selectedProject.name} project={selectedProject} setActive={setActive} notify={notify}/>,
     cockpit:<DepartmentCockpit notify={notify} imported={importedDemands} initialDept={cockpitDept}/>,
-    areas:<AreasPage/>,raid:<RaidPage/>,admin:<AdminGovernance role={role} setRole={setRole} notify={notify} onOpenPilotUser={openPilotContext}/>,
+    areas:<AreasPage/>,raid:<RaidPage/>,admin:<AdminGovernance role={role} setRole={setRole} theme={theme} setTheme={setTheme} notify={notify} onOpenPilotUser={openPilotContext}/>,
     presentation:<PresentationPage notify={notify}/>,lifecycle:<LifecyclePage/>,simulator:<Simulator scenario={scenario} setScenario={setScenario} notify={notify}/>,
     commissioning:<Commissioning fault={fault} setFault={setFault} alerts={alerts} setAlerts={setAlerts} setActive={setActive} notify={notify}/>,
     decision:<DecisionRoom setActive={setActive} notify={notify}/>,alerts:<AlertsPage alerts={alerts} setAlerts={setAlerts}/>,
     evidence:<EvidencePage/>,settings:<SettingsPage/>
   };
   const page=canAccess?pages[active]:<AccessDenied setActive={setActive}/>;
-  return <div className="app-shell" data-theme={theme}><SidebarEnhanced active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} setRole={setRole} theme={theme} setTheme={setTheme} onLogout={logout}/><main className="workspace"><Topbar active={active} role={role} onLogout={logout} notify={notify} lang={lang} setLang={setLang}/><DemoJourneyRail active={active} setActive={setActive} lang={lang} />{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
+  return <div className="app-shell" data-theme={theme}><SidebarEnhanced active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} onLogout={logout}/><main className="workspace"><Topbar active={active} role={role} onLogout={logout} notify={notify} lang={lang} setLang={setLang}/><DemoJourneyRail active={active} setActive={setActive} lang={lang} />{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
 }
