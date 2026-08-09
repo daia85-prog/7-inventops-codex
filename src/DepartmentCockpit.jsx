@@ -13,6 +13,7 @@ import {
   Sparkle,
   UsersThree,
   Warning,
+  XCircle,
 } from "@phosphor-icons/react";
 
 export const AREAS = [
@@ -244,6 +245,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP" }
   const [feed, setFeed] = useState(FEED_SEED);
   const [selectedTrack, setSelectedTrack] = useState("");
   const [handoffMap, setHandoffMap] = useState({});
+  const [handoffReviewMap, setHandoffReviewMap] = useState({});
   const [trackDoneMap, setTrackDoneMap] = useState({});
   const [chargeMap, setChargeMap] = useState({});
   const [readyMap, setReadyMap] = useState({});
@@ -313,6 +315,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP" }
 
   const trackCompleted = activeTrack ? activeTrack.items.every((item) => item.done) : false;
   const trackHandoffDone = activeTrack ? Boolean(handoffMap[activeTrack.id]) : false;
+  const handoffReview = activeTrack ? handoffReviewMap[activeTrack.id] : null;
   const nextDependency = base.waiting[0];
   const nextConsumer = base.waitedBy[0];
   const nextDelivery = open[0] || deliveries[0];
@@ -375,9 +378,21 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP" }
     const hh = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
     const stamp = `hoje · ${hh}`;
     setHandoffMap((current) => ({ ...current, [activeTrack.id]: stamp }));
+    setHandoffReviewMap((current) => ({ ...current, [activeTrack.id]: { status: "accepted", stamp } }));
     setChatLog((current) => [{ t: stamp, author: "InventAI", role: "Governanca", txt: `Handoff confirmado com checklist completo: ${activeTrack.label}. Evidencia vinculada a linha do tempo.` }, ...current]);
     setFeed((current) => [{ t: stamp, from: dept, to: activeTrack.handoff.replace("Passagem para ", "").replace("Passagem de bastão ao time de ", ""), txt: `${activeTrack.label} confirmou ${activeTrack.handoff}` }, ...current]);
     notify(`Handoff confirmado em ${activeTrack.label}.`);
+  };
+
+  const requestHandoffAdjustment = () => {
+    if (!activeTrack || trackHandoffDone) return;
+    const { stamp } = makeStamp();
+    const pending = activeTrack.items.filter((item) => !item.done).map((item) => item.label);
+    const reason = pending[0] || "validacao manual solicitada antes do aceite final";
+    setHandoffReviewMap((current) => ({ ...current, [activeTrack.id]: { status: "adjustment", stamp, reason } }));
+    setChatLog((current) => [{ t: stamp, author: pilotConfig?.focal || area.gestor, role: area.nome, txt: `Solicitei ajuste antes do handoff de ${activeTrack.label}: ${reason}.` }, ...current]);
+    setFeed((current) => [{ t: stamp, from: dept, to: "PMO", txt: `Ajuste solicitado antes do aceite: ${activeTrack.label} - ${reason}` }, ...current]);
+    notify(`Ajuste registrado para ${activeTrack.label}. O handoff ainda nao foi aceito.`);
   };
 
   const sendChatMessage = (event) => {
@@ -575,10 +590,19 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP" }
               <h3>{activeTrack.label}</h3>
               <p>{activeTrack.summary}</p>
               <span>{activeTrack.handoff}</span>
+              <div className={`handoff-gate ${trackHandoffDone ? "accepted" : handoffReview?.status === "adjustment" ? "adjustment" : "open"}`}>
+                {trackHandoffDone ? <CheckCircle weight="fill" /> : handoffReview?.status === "adjustment" ? <XCircle weight="fill" /> : <ClockCountdown weight="fill" />}
+                <div>
+                  <small>GATE DE ACEITE</small>
+                  <b>{trackHandoffDone ? `Aceito em ${handoffMap[activeTrack.id]}` : handoffReview?.status === "adjustment" ? `Ajuste solicitado em ${handoffReview.stamp}` : "Aguardando checklist completo"}</b>
+                  <p>{trackHandoffDone ? "Bastao liberado com evidencia e historico." : handoffReview?.status === "adjustment" ? handoffReview.reason : "O sistema nao considera a passagem concluida apenas porque esta visivel."}</p>
+                </div>
+              </div>
               <div className="cockpit-track-actions">
                 <button className="ghost cockpit-track-action" type="button" onClick={copyTrackSummary}><ClipboardText />Copiar resumo</button>
                 <button className="ghost cockpit-track-action" type="button" onClick={advanceTrack} disabled={trackCompleted}><CheckCircle />Concluir próximo checkpoint</button>
                 <button className="ghost cockpit-track-action" type="button" onClick={registerCharge}><Envelope />Registrar cobrança</button>
+                <button className="ghost cockpit-track-action" type="button" onClick={requestHandoffAdjustment} disabled={trackHandoffDone}><XCircle />Solicitar ajuste</button>
                 <button className="ghost cockpit-track-action" type="button" onClick={confirmHandoff} disabled={!trackCompleted || trackHandoffDone}><PaperPlaneTilt />{trackHandoffDone ? "Handoff confirmado" : "Confirmar handoff"}</button>
               </div>
             </div>

@@ -357,3 +357,25 @@ Quando o Codex voltar:
 4. Rodar build.
 5. Publicar.
 6. So entao seguir para o proximo modulo.
+
+## 2026-08-09 - Avanco funcional: gate de aceite na Operacao Assistida
+
+Aplicado no P7:
+
+- A esteira operacional agora tem um `GATE DE ACEITE` visivel por projeto.
+- O handoff confirmado registra estado aceito, horario, chat e linha do tempo.
+- Antes do aceite final, Daniel/Thomas podem usar `Solicitar ajuste`.
+- Solicitar ajuste registra motivo, alimenta chat operacional e linha do tempo.
+- Isso reforca o Principio 12: exibido nao significa aplicado.
+
+Por que isso existe:
+
+- Em `inventops79`, a passagem de bastao nao era apenas visual; ela precisava ser controlada.
+- Agora o P7 comeca a reproduzir esse comportamento como produto real.
+
+Pendente para validar:
+
+- Abrir Operacao Assistida como Daniel/Implantacao.
+- Concluir checkpoints ate liberar handoff.
+- Confirmar handoff e conferir chat/historico.
+- Em outro projeto, solicitar ajuste e conferir que o aceite nao e concluido.

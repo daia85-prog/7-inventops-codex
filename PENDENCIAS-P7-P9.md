@@ -115,6 +115,8 @@ Obrigatorio antes de dizer "pronto":
 - [x] Cobranca vira registro operacional.
 - [x] Checkpoint concluido vira historico.
 - [x] Handoff confirmado exige checklist completo.
+- [x] Gate de aceite aparece na esteira e diferencia aberto / ajuste solicitado / aceito.
+- [x] Solicitar ajuste antes do aceite gera chat e linha do tempo.
 - [x] Chat operacional/contexto fica na mesma tela da area.
 - [ ] Validar visualmente com Daia em janela limpa.
 - [ ] Claude revisar se a paridade com inventops79 ficou completa.
