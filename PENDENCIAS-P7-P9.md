@@ -121,3 +121,32 @@ Obrigatorio antes de dizer "pronto":
 - [ ] Refinar login/orbita de departamentos em ciclo separado, sem bloquear uso real.
 
 Regra: nao abrir outro grande redesenho antes de Daniel/Thomas conseguirem operar o fluxo basico ponta a ponta.
+
+## Decisao operacional atual - 2026-08-09
+
+Direcao aprovada pela Daia:
+
+- `inventops79` e a referencia principal para elevar o P7.
+- O P7 atual pode ser redesenhado quando necessario; nao fazer remendo se a estrutura impedir produto real.
+- Nada de "demo" como narrativa principal.
+- Home, Administracao e Operacao Assistida precisam deixar claro que o InventOps ja e produto real em construcao, com Daniel e Thomas como usuarios/validadores reais.
+
+Prioridade imediata:
+
+1. Garantir fluxo funcional para Implantacao/Daniel.
+2. Garantir fluxo funcional para Especificacao-DevOps/Thomas.
+3. Garantir Administracao com perfis, areas e contexto corporativo.
+4. Manter Home como ponto de entrada executivo-operacional.
+5. Registrar e publicar cada bloco antes de seguir.
+
+Pendencias que nao devem travar o proximo bloco:
+
+- Orbita de departamentos no login ainda corta alguns nomes em certas resolucoes.
+- Refinar esta orbita com apoio do Claude, se necessario.
+- Revisar acentuacao quebrada herdada em alguns textos internos do P7.
+
+Regra de continuidade:
+
+- Se Codex parar por credito, Claude deve primeiro ler `CONTINUIDADE-CODEX-CLAUDE.md` e este arquivo.
+- Claude deve estruturar mapa `inventops79` x `P7`, nao criar outra linha paralela.
+- Quando Codex voltar, consolida o que Claude adiantou na linha principal.

@@ -305,3 +305,55 @@ Diretriz obrigatoria: nao trazer como "demo" nem como enfeite. Tudo que veio de 
 Aplicado neste bloco: a Operacao Assistida recebeu chat operacional e as acoes principais passaram a alimentar historico/chat: concluir entrega, copiar resumo, registrar cobranca, sinalizar prontidao, concluir checkpoint e confirmar handoff.
 
 Se o credito do Codex acabar: Claude deve validar a Operacao Assistida contra esta lista antes de continuar novos modulos. Prioridade de validacao: Daniel/Thomas conseguem abrir suas areas, registrar cobranca/prontidao, concluir checkpoints e enxergar o historico resultante.
+
+## 2026-08-09 - Rastro atual do Codex para continuidade P7/P9
+
+Estado do bloco atual:
+
+- P7 continua como linha principal do produto.
+- `inventops79` passa a ser referencia visual e funcional obrigatoria para reorganizar o P7 tela por tela.
+- A regra agora e produto real: nao chamar de demo, nao maquiar, nao manter telas apenas apresentaveis.
+- Se uma tela precisar ser reescrita para virar produto de verdade, pode reescrever.
+- Home, Administracao, Operacao Assistida, Implantacao e Especificacao/DevOps sao prioridade por causa dos testes com usuarios.
+
+Aplicado pelo Codex neste bloco:
+
+- Home deixou de usar "Fluxo Principal" e passou a usar "Jornada Operacional".
+- Portfolio deixou de usar "Portfolio Demo" e passou a usar "Carteira Operacional".
+- Areas deixaram de usar "Foco de Teste" e passaram a usar "Area Prioritaria".
+- Operacao Assistida abre por padrao em Implantacao/Daniel, porque Daniel e Thomas sao os primeiros validadores reais.
+
+Pendente consciente:
+
+- Login ainda tem pendencia visual na orbita de departamentos: alguns nomes podem cortar em certas larguras.
+- Nao bloquear a evolucao por isso; registrar e pedir ajuda do Claude depois, se necessario.
+- Fazer uma revisao visual fina posterior com foco em login/orbita, sem desviar do objetivo de produto funcional.
+
+Se o credito do Codex acabar agora, Claude deve:
+
+1. Nao abrir arquitetura nova.
+2. Usar `inventops79` como referencia principal.
+3. Mapear tela por tela:
+   - Login
+   - Carregamento
+   - Home
+   - Administracao
+   - Operacao Assistida
+   - Implantacao
+   - Especificacao/DevOps
+4. Validar paridade funcional com `inventops79`, especialmente:
+   - passagem de bastao
+   - sinalizar prontidao
+   - historico por acao
+   - chat/contexto da area
+   - Daniel e Thomas como usuarios reais
+5. Registrar no mesmo formato: o que fez, o que falta, o que o Codex deve consolidar quando voltar.
+
+Quando o Codex voltar:
+
+1. Ler este arquivo antes de mexer em codigo.
+2. Ler tambem `PENDENCIAS-P7-P9.md`.
+3. Consolidar o que Claude adiantou no P7.
+4. Rodar build.
+5. Publicar.
+6. So entao seguir para o proximo modulo.

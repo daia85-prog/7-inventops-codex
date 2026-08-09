@@ -271,9 +271,9 @@ function DemoJourneyRail({ active, setActive, lang }) {
   if (currentIndex === -1) return null;
   const nextStep = productJourney[currentIndex + 1];
   const copy = {
-    pt: { title: "FLUXO PRINCIPAL", progress: "concluÃ­do na jornada principal", next: "PrÃ³xima tela", current: "Tela atual", done: "Jornada principal completa" },
-    es: { title: "FLUJO PRINCIPAL", progress: "completado en la jornada principal", next: "PrÃ³xima pantalla", current: "Pantalla actual", done: "Jornada principal completa" },
-    en: { title: "CORE JOURNEY", progress: "completed in the core journey", next: "Next screen", current: "Current screen", done: "Core journey complete" }
+    pt: { title: "JORNADA OPERACIONAL", progress: "concluÃ­do na jornada do produto", next: "PrÃ³xima etapa", current: "Etapa atual", done: "Jornada operacional completa" },
+    es: { title: "JORNADA OPERACIONAL", progress: "completado en la jornada del producto", next: "PrÃ³xima etapa", current: "Etapa actual", done: "Jornada operacional completa" },
+    en: { title: "OPERATIONAL JOURNEY", progress: "completed in the product journey", next: "Next stage", current: "Current stage", done: "Operational journey complete" }
   }[lang];
 
   return (
@@ -447,7 +447,7 @@ function PortfolioPage({projects,setProjects,setActive,setSelectedProject,setPro
   const createProject=(event)=>{event.preventDefault();const name=draft.name.trim().toUpperCase();if(!name)return;const project={name,code:`I26.${String(projects.length+4100)}`,client:draft.client.trim()||"Cliente a definir",location:"Local a definir",owner:draft.owner,pmo:"A definir",status:"Em andamento",risk:"Baixo",phase:1,progress:0,next:"Kickoff",date:"A definir",health:75,blocker:"Sem bloqueio registrado.",nextAction:"Definir escopo, responsÃ¡veis e data do kickoff.",milestones:["Kickoff Â· A definir","Baseline Â· A definir","Go Live Â· A definir"]};setProjects([project,...projects]);setCreating(false);setDraft({name:"",client:"",owner:"Daiana Costa"});notify(`Projeto ${name} criado no portfÃ³lio.`)};
   return <section className="page portfolio-page">
     <div className="portfolio-kpis">
-      <article><FolderOpen/><span><small>PORTFÃ“LIO DEMO</small><b>{projects.length} projetos</b><em>Base operacional priorizada</em></span></article>
+      <article><FolderOpen/><span><small>CARTEIRA OPERACIONAL</small><b>{projects.length} projetos</b><em>Base operacional priorizada</em></span></article>
       <article><TrendUp/><span><small>SAÃšDE MÃ‰DIA</small><b>68/100</b><em>2 projetos pedem aÃ§Ã£o</em></span></article>
       <article><Warning/><span><small>RISCO ALTO</small><b>2 projetos</b><em>Market Peru e Navepark</em></span></article>
       <article><FlagCheckered/><span><small>PRÃ“XIMOS 30 DIAS</small><b>4 marcos</b><em>2 Go Lives confirmados</em></span></article>
@@ -554,7 +554,7 @@ export function App() {
   const [lang,setLang]=useState(()=>sessionStorage.getItem("inventops-lang")||"pt");
   const [role,setRole]=useState("Admin");
   const [theme,setTheme]=useState("Escuro");
-  const [cockpitDept,setCockpitDept]=useState("INF");
+  const [cockpitDept,setCockpitDept]=useState("IMP");
   const [projects,setProjects]=useState(()=>{try{const saved=sessionStorage.getItem("inventops-projects");return saved?JSON.parse(saved):portfolioData}catch{return portfolioData}});
   const [selectedProject,setSelectedProject]=useState(()=>projects[0]);
   const [projectModalOpen,setProjectModalOpen]=useState(false);

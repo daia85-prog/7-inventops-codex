@@ -238,7 +238,7 @@ function makeStamp() {
   return { hh, stamp: `hoje - ${hh}` };
 }
 
-export function DepartmentCockpit({ notify, imported = [], initialDept = "INF" }) {
+export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP" }) {
   const [dept, setDept] = useState(initialDept);
   const [doneMap, setDoneMap] = useState({});
   const [feed, setFeed] = useState(FEED_SEED);
