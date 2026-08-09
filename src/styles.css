@@ -26,7 +26,7 @@ button:focus-visible,textarea:focus-visible,select:focus-visible,input:focus-vis
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 @media(max-width:760px){.toast{right:12px;bottom:78px;left:12px;max-width:none}}
 
-/* Barra de progresso confinada Ã  coluna da tabela de evidÃªncias */
+/* Barra de progresso confinada à coluna da tabela de evidências */
 .evidence-table>div>.progress-cell{display:grid;grid-template-columns:minmax(76px,1fr) 38px;align-items:center;gap:10px;min-width:0}
 
 /* Sidebar refinement */

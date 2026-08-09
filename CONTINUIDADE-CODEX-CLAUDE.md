@@ -287,24 +287,24 @@ Depois disso, quando o Codex voltar, a retomada deve ser:
 Não ganhar por quantidade de telas.
 
 Ganhar por clareza, confiança, evidência e continuidade.
-## 2026-08-09 - Regra de absorcao inventops79 para Operacao Assistida
+## 2026-08-09 - Regra de absorcao inventops79 para Operação Assistida
 
 Estado atual: P7 e a linha principal. `inventops79` virou referencia forte de produto, principalmente para as areas que vao testar primeiro: Implantacao/Daniel e Especificacao-DevOps/Thomas.
 
-Diretriz obrigatoria: nao trazer como "demo" nem como enfeite. Tudo que veio de `inventops79` precisa entrar como comportamento de produto:
+Diretriz obrigatoria: não trazer como "demo" nem como enfeite. Tudo que veio de `inventops79` precisa entrar como comportamento de produto:
 
 - passagem de bastao com checklist e confirmacao;
-- sinalizar prontidao para a proxima area;
+- sinalizar prontidao para a próxima area;
 - registrar cobranca quando uma dependencia travar o fluxo;
-- historico/linha do tempo por acao relevante;
-- chat operacional/contexto ligado a area e ao historico;
+- histórico/linha do tempo por acao relevante;
+- chat operacional/contexto ligado a area e ao histórico;
 - copia de resumo da esteira para alinhamento;
-- Thomas e Daniel como usuarios reais de validacao inicial;
-- termos de produto real: evitar "demo" e evitar "cockpit piloto" se nao for modulo permanente.
+- Thomas e Daniel como usuários reais de validação inicial;
+- termos de produto real: evitar "demo" e evitar "cockpit piloto" se não for modulo permanente.
 
-Aplicado neste bloco: a Operacao Assistida recebeu chat operacional e as acoes principais passaram a alimentar historico/chat: concluir entrega, copiar resumo, registrar cobranca, sinalizar prontidao, concluir checkpoint e confirmar handoff.
+Aplicado neste bloco: a Operação Assistida recebeu chat operacional e as acoes principais passaram a alimentar histórico/chat: concluir entrega, copiar resumo, registrar cobranca, sinalizar prontidao, concluir checkpoint e confirmar handoff.
 
-Se o credito do Codex acabar: Claude deve validar a Operacao Assistida contra esta lista antes de continuar novos modulos. Prioridade de validacao: Daniel/Thomas conseguem abrir suas areas, registrar cobranca/prontidao, concluir checkpoints e enxergar o historico resultante.
+Se o credito do Codex acabar: Claude deve validar a Operação Assistida contra esta lista antes de continuar novos modulos. Prioridade de validação: Daniel/Thomas conseguem abrir suas areas, registrar cobranca/prontidao, concluir checkpoints e enxergar o histórico resultante.
 
 ## 2026-08-09 - Rastro atual do Codex para continuidade P7/P9
 
@@ -312,16 +312,16 @@ Estado do bloco atual:
 
 - P7 continua como linha principal do produto.
 - `inventops79` passa a ser referencia visual e funcional obrigatoria para reorganizar o P7 tela por tela.
-- A regra agora e produto real: nao chamar de demo, nao maquiar, nao manter telas apenas apresentaveis.
+- A regra agora e produto real: não chamar de demo, não maquiar, não manter telas apenas apresentaveis.
 - Se uma tela precisar ser reescrita para virar produto de verdade, pode reescrever.
-- Home, Administracao, Operacao Assistida, Implantacao e Especificacao/DevOps sao prioridade por causa dos testes com usuarios.
+- Home, Administração, Operação Assistida, Implantacao e Especificacao/DevOps sao prioridade por causa dos testes com usuários.
 
 Aplicado pelo Codex neste bloco:
 
 - Home deixou de usar "Fluxo Principal" e passou a usar "Jornada Operacional".
 - Portfolio deixou de usar "Portfolio Demo" e passou a usar "Carteira Operacional".
 - Areas deixaram de usar "Foco de Teste" e passaram a usar "Area Prioritaria".
-- Operacao Assistida abre por padrao em Implantacao/Daniel, porque Daniel e Thomas sao os primeiros validadores reais.
+- Operação Assistida abre por padrao em Implantacao/Daniel, porque Daniel e Thomas sao os primeiros validadores reais.
 
 Pendente consciente:
 
@@ -337,16 +337,16 @@ Se o credito do Codex acabar agora, Claude deve:
    - Login
    - Carregamento
    - Home
-   - Administracao
-   - Operacao Assistida
+   - Administração
+   - Operação Assistida
    - Implantacao
    - Especificacao/DevOps
 4. Validar paridade funcional com `inventops79`, especialmente:
    - passagem de bastao
    - sinalizar prontidao
-   - historico por acao
+   - histórico por acao
    - chat/contexto da area
-   - Daniel e Thomas como usuarios reais
+   - Daniel e Thomas como usuários reais
 5. Registrar no mesmo formato: o que fez, o que falta, o que o Codex deve consolidar quando voltar.
 
 Quando o Codex voltar:
@@ -356,9 +356,9 @@ Quando o Codex voltar:
 3. Consolidar o que Claude adiantou no P7.
 4. Rodar build.
 5. Publicar.
-6. So entao seguir para o proximo modulo.
+6. Só então seguir para o proximo modulo.
 
-## 2026-08-09 - Avanco funcional: gate de aceite na Operacao Assistida
+## 2026-08-09 - Avanco funcional: gate de aceite na Operação Assistida
 
 Aplicado no P7:
 
@@ -366,45 +366,78 @@ Aplicado no P7:
 - O handoff confirmado registra estado aceito, horario, chat e linha do tempo.
 - Antes do aceite final, Daniel/Thomas podem usar `Solicitar ajuste`.
 - Solicitar ajuste registra motivo, alimenta chat operacional e linha do tempo.
-- Isso reforca o Principio 12: exibido nao significa aplicado.
+- Isso reforca o Principio 12: exibido não significa aplicado.
 
 Por que isso existe:
 
-- Em `inventops79`, a passagem de bastao nao era apenas visual; ela precisava ser controlada.
+- Em `inventops79`, a passagem de bastao não era apenas visual; ela precisava ser controlada.
 - Agora o P7 comeca a reproduzir esse comportamento como produto real.
 
 Pendente para validar:
 
-- Abrir Operacao Assistida como Daniel/Implantacao.
+- Abrir Operação Assistida como Daniel/Implantacao.
 - Concluir checkpoints ate liberar handoff.
-- Confirmar handoff e conferir chat/historico.
-- Em outro projeto, solicitar ajuste e conferir que o aceite nao e concluido.
+- Confirmar handoff e conferir chat/histórico.
+- Em outro projeto, solicitar ajuste e conferir que o aceite não e concluido.
 
-## 2026-08-09 - Home e Administracao conectadas ao fluxo real
+## 2026-08-09 - Home e Administração conectadas ao fluxo real
 
 Aplicado no P7:
 
 - Home passou a mostrar `Bastoes em movimento` em PT/ES/EN.
 - Os cards de bastao apontam para Implantacao/Daniel e Especificacao-DevOps/Thomas.
-- Cada bastao mostra projeto, responsavel, estado e proxima leitura operacional.
-- Administracao passou a mostrar para cada usuario valido:
+- Cada bastao mostra projeto, responsavel, estado e próxima leitura operacional.
+- Administração passou a mostrar para cada usuário valido:
   - Gate atual;
   - Ultima acao;
   - Proxima acao esperada.
-- Daniel e Thomas deixam de ser apenas nomes de teste e passam a aparecer como usuarios operacionais com contexto.
-- O botao `Validar usuario` na Administracao agora altera estado real do usuario, grava horario e define proxima acao.
+- Daniel e Thomas deixam de ser apenas nomes de teste e passam a aparecer como usuários operacionais com contexto.
+- O botao `Validar usuário` na Administração agora altera estado real do usuário, grava horario e define próxima acao.
 - Login teve as sobras internas de `demo/perfis disponiveis` removidas para evitar regressao visual ou conceitual.
 
 Por que isso existe:
 
-- O usuario precisa entender na Home onde agir sem depender de explicacao externa.
-- Administracao precisa governar usuario e capacidade, nao apenas cadastrar perfil.
-- O P7 deve absorver o que o `inventops79` ja tinha de bom em passagem de bastao, historico e acao por area.
+- O usuário precisa entender na Home onde agir sem depender de explicacao externa.
+- Administração precisa governar usuário e capacidade, não apenas cadastrar perfil.
+- O P7 deve absorver o que o `inventops79` ja tinha de bom em passagem de bastao, histórico e acao por area.
 
 Pendente para validar:
 
 - Abrir Home em PT/ES/EN e confirmar que os bastoes traduzem corretamente.
-- Clicar em cada bastao e confirmar abertura da Operacao Assistida na area correta.
-- Abrir Administracao e clicar em Daniel/Thomas para confirmar contexto correto.
-- Clicar em `Validar usuario` e confirmar troca de status/gate/ultima acao/proxima acao.
-- Ajustar visual se a nova secao ocupar espaco demais em telas menores.
+- Clicar em cada bastao e confirmar abertura da Operação Assistida na area correta.
+- Abrir Administração e clicar em Daniel/Thomas para confirmar contexto correto.
+- Clicar em `Validar usuário` e confirmar troca de status/gate/ultima acao/próxima acao.
+- Ajustar visual se a nova seção ocupar espaco demais em telas menores.
+
+## 2026-08-09 - Bloqueio crítico: qualidade de texto e produto real
+
+Daia apontou um problema que bloqueia apresentação: textos quebrados por encoding/mojibake no menu e em telas internas, exemplo `Minha OperaÃ§Ã£o`, `AnÃ¡lise / BI`, `RelatÃ³rio Executivo`.
+
+Status aplicado pelo Codex:
+
+- Corrigidos textos visíveis do menu principal no P7.
+- Corrigido bloco antigo do Roadmap com dupla codificação.
+- Criada trava automática em `tools/check-text-quality.cjs`.
+- Criado documento `QUALIDADE-TEXTO-I18N.md`.
+
+Antes de continuar Daniel/Thomas ou qualquer nova tela, Claude deve:
+
+1. Rodar `node tools/check-text-quality.cjs`.
+2. Fazer pente-fino visual em janela limpa de:
+   - Login;
+   - Carregamento;
+   - Home;
+   - Administração;
+   - Operação Assistida;
+   - Implantação/Daniel;
+   - Especificação-DevOps/Thomas.
+3. Remover narrativa visível de demo/protótipo/mockup/dados ilustrativos.
+4. Corrigir textos PT/ES/EN quando mexer em qualquer tela.
+5. Registrar toda dificuldade visual que não conseguir resolver.
+
+Autonomia de Claude:
+
+- Pode corrigir textos, layout, navegação e leitura das telas.
+- Pode usar `inventops79` como referência principal e redesenhar partes do P7 quando isso melhorar o produto.
+- Não deve abrir arquitetura nova nem criar linha paralela.
+- Deve priorizar produto real para Daniel/Thomas e Administração, não lapidação superficial.

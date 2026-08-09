@@ -102,57 +102,60 @@ Devolver para o Codex com:
 1. mapa estruturado `inventops79` x `P7`
 2. backlog reorganizado por prioridade real
 3. lista objetiva do que o Codex deve consolidar, implementar e publicar
-## Operacao Assistida - checklist de aceite inventops79
+## Operação Assistida - checklist de aceite inventops79
 
 Status em 2026-08-09: em consolidacao no P7.
 
 Obrigatorio antes de dizer "pronto":
 
-- [x] Daniel e Thomas aparecem como usuarios/validadores reais.
+- [x] Daniel e Thomas aparecem como usuários/validadores reais.
 - [x] Implantacao e Especificacao/DevOps usam esteiras reais herdadas do inventops79.
 - [x] Passagem de bastao existe como acao de produto.
 - [x] Sinalizar prontidao existe como acao de produto.
 - [x] Cobranca vira registro operacional.
-- [x] Checkpoint concluido vira historico.
+- [x] Checkpoint concluido vira histórico.
 - [x] Handoff confirmado exige checklist completo.
 - [x] Gate de aceite aparece na esteira e diferencia aberto / ajuste solicitado / aceito.
 - [x] Solicitar ajuste antes do aceite gera chat e linha do tempo.
 - [x] Chat operacional/contexto fica na mesma tela da area.
 - [x] Home mostra bastoes em movimento com atalho para a area correta.
-- [x] Administracao mostra Gate, ultima acao e proxima acao para Daniel/Thomas.
-- [x] Validar usuario na Administracao altera estado e registra proxima acao.
+- [x] Administração mostra Gate, ultima acao e próxima acao para Daniel/Thomas.
+- [x] Validar usuário na Administração altera estado e registra próxima acao.
 - [x] Login sem bloco de perfis/estatisticas de acesso no painel corporativo.
 - [ ] Validar visualmente com Daia em janela limpa.
 - [ ] Claude revisar se a paridade com inventops79 ficou completa.
 - [ ] Refinar login/orbita de departamentos em ciclo separado, sem bloquear uso real.
 
-Regra: nao abrir outro grande redesenho antes de Daniel/Thomas conseguirem operar o fluxo basico ponta a ponta.
+Regra: não abrir outro grande redesenho antes de Daniel/Thomas conseguirem operar o fluxo basico ponta a ponta.
 
 ## Decisao operacional atual - 2026-08-09
 
 Direcao aprovada pela Daia:
 
 - `inventops79` e a referencia principal para elevar o P7.
-- O P7 atual pode ser redesenhado quando necessario; nao fazer remendo se a estrutura impedir produto real.
+- O P7 atual pode ser redesenhado quando necessario; não fazer remendo se a estrutura impedir produto real.
 - Nada de "demo" como narrativa principal.
-- Home, Administracao e Operacao Assistida precisam deixar claro que o InventOps ja e produto real em construcao, com Daniel e Thomas como usuarios/validadores reais.
+- Home, Administração e Operação Assistida precisam deixar claro que o InventOps ja e produto real em construcao, com Daniel e Thomas como usuários/validadores reais.
 
 Prioridade imediata:
 
 1. Garantir fluxo funcional para Implantacao/Daniel.
 2. Garantir fluxo funcional para Especificacao-DevOps/Thomas.
-3. Garantir Administracao com perfis, areas e contexto corporativo.
+3. Garantir Administração com perfis, areas e contexto corporativo.
 4. Manter Home como ponto de entrada executivo-operacional.
 5. Registrar e publicar cada bloco antes de seguir.
 
-Pendencias que nao devem travar o proximo bloco:
+Pendencias que não devem travar o proximo bloco:
 
 - Orbita de departamentos no login ainda corta alguns nomes em certas resolucoes.
 - Refinar esta orbita com apoio do Claude, se necessario.
 - Revisar acentuacao quebrada herdada em alguns textos internos do P7.
+- Rodar varredura de texto antes de qualquer apresentação: `node tools/check-text-quality.cjs`.
+- Fazer pente-fino de copy e i18n em PT/ES/EN antes de continuar novas funções.
+- Se aparecer `demo`, `protótipo`, `mockup`, `dados ilustrativos` ou texto quebrado em tela final, tratar como bloqueio.
 
 Regra de continuidade:
 
 - Se Codex parar por credito, Claude deve primeiro ler `CONTINUIDADE-CODEX-CLAUDE.md` e este arquivo.
-- Claude deve estruturar mapa `inventops79` x `P7`, nao criar outra linha paralela.
+- Claude deve estruturar mapa `inventops79` x `P7`, não criar outra linha paralela.
 - Quando Codex voltar, consolida o que Claude adiantou na linha principal.
