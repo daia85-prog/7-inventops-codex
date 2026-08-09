@@ -30,7 +30,7 @@ button:focus-visible,textarea:focus-visible,select:focus-visible,input:focus-vis
 .evidence-table>div>.progress-cell{display:grid;grid-template-columns:minmax(76px,1fr) 38px;align-items:center;gap:10px;min-width:0}
 
 /* Sidebar refinement */
-.app-shell{grid-template-columns:364px minmax(0,1fr)}
+.app-shell{grid-template-columns:334px minmax(0,1fr)}
 .sidebar{padding:16px 14px 16px}
 .sidebar-controls{padding:16px 10px 10px}
 .sidebar-card{padding:16px}
