@@ -1,6 +1,6 @@
 # Diretrizes operacionais P7 ↔ P9
 
-Atualizado em: 8 de agosto de 2026
+Atualizado em: 9 de agosto de 2026
 
 ## Objetivo
 
@@ -11,6 +11,7 @@ Garantir que Codex (P7) e Claude (P9) evoluam o InventOps na mesma direção, co
 1. Trabalhar por blocos curtos e validáveis.
    - Exemplo: login → carregamento → home → administração → departamentos.
    - Ao fechar um bloco, parar e pedir validação da Daia antes de abrir um bloco grande novo.
+   - Cada bloco deve ser comparado com `inventops79` antes de ser considerado maduro.
 
 2. Não insistir em looping.
    - Se uma melhoria entrar em ciclo de tentativa sem ganho visível, parar.
@@ -38,12 +39,13 @@ Garantir que Codex (P7) e Claude (P9) evoluam o InventOps na mesma direção, co
      - funcional;
      - validado;
      - refinado.
+   - Mas nesta fase o refinamento premium deve mirar o padrão do `inventops79`, não apenas pequenos ajustes locais.
 
 6. Tudo novo nasce em PT / ES / EN.
    - Nenhuma tela ou fluxo novo pode ficar só em um idioma.
 
 7. Se existir referência melhor já validada, absorver antes de reinventar.
-   - Especialmente ativos vindos de `inventops79`, quando aprovados pela Daia e compatíveis com o P7.
+   - Especialmente ativos vindos de `inventops79`, agora tratado como referência principal desta fase, quando compatíveis com o P7.
 
 8. Claude apoia, Codex consolida.
    - P7 é a linha principal.
@@ -66,6 +68,22 @@ Garantir que Codex (P7) e Claude (P9) evoluam o InventOps na mesma direção, co
     - Não gastar alto esforço em detalhe pequeno sem impacto.
     - Subir esforço/modelo só quando houver bloqueio real ou ganho relevante.
 
+11. Produto real, não narrativa de demo.
+    - O P7 deve ser tratado como produto real.
+    - Evitar textos visíveis de “demo”, “simulado” ou “protótipo” nas jornadas principais.
+    - O que ainda não estiver operacional deve ser descrito como:
+      - expansão do produto;
+      - roadmap;
+      - próxima camada;
+      - módulo em incorporação.
+
+12. Regra de absorção do inventops79.
+    - Tela por tela, sempre responder:
+      - o que `inventops79` faz melhor?
+      - o que ele já tem e o P7 ainda não?
+      - o que o P7 já faz melhor e deve ser mantido?
+    - A decisão final deve levar o melhor dos dois para a linha principal.
+
 ## Formato padrão para registrar travas
 
 ### Pendente
@@ -78,7 +96,7 @@ Garantir que Codex (P7) e Claude (P9) evoluam o InventOps na mesma direção, co
 
 ## Estado atual combinado
 
-- Login: funcional, premium, trilíngue, com uma pendência visual identificada na órbita dos departamentos.
-- Segunda tela de carregamento: evoluída, manter como base.
+- Login: funcional, trilíngue e com base premium; ainda possui pendência visual na órbita dos departamentos.
+- Segunda tela de carregamento: funcional e evoluída; pode absorver mais elementos do `inventops79`.
+- Home/Admin/áreas piloto: devem agora sair do modo “lapidação” e entrar em funcionalidade real para uso com usuários.
 - Próximos blocos: seguir por validação incremental, sem abrir frentes demais ao mesmo tempo.
-
