@@ -29,6 +29,10 @@ const checks = [
     ok: foundation.includes("session-operational-card") && foundation.includes("sessionArea") && app.includes("currentUser={currentUser} lang={lang}"),
   },
   {
+    name: "Administração persiste validação de usuários operacionais",
+    ok: foundation.includes("inventops-admin-users") && foundation.includes("readStoredAdminUsers") && foundation.includes("Validar usuário"),
+  },
+  {
     name: "Operação Assistida remonta ao trocar IMP/ESP",
     ok: app.includes("<DepartmentCockpit key={cockpitDept}") && app.includes("currentUser={currentUser}"),
   },

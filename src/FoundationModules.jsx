@@ -442,15 +442,31 @@ export function RaidPage(){
   return <section className="page foundation-page"><div className="foundation-metrics"><Metric icon={Warning} label="SCORE CRÍTICO" value="20–25" note="2 itens" tone="red"/><Metric icon={ChartLineUp} label="RAID ATIVO" value="24 itens" note="5 exigem ação" tone="yellow"/><Metric icon={ShieldCheck} label="COM RESPOSTA" value="92%" note="meta ≥ 95%" tone="green"/><Metric icon={ClockCountdown} label="VENCIDOS" value="1" note="Market Peru" tone="red"/></div><div className="foundation-grid raid-layout"><Panel title="Matriz de risco 5 × 5" subtitle="Probabilidade × impacto · clique em um item para abrir"><div className="raid-axis"><span>IMPACTO →</span><div className="raid-matrix">{matrix.map(cell=>{const item=riskItems.find(r=>r.prob===cell.prob&&r.impact===cell.impact);const score=cell.prob*cell.impact;return <button key={`${cell.prob}-${cell.impact}`} className={score>=16?"critical":score>=9?"warning":"low"} onClick={()=>item&&setSelected(item)}><small>{score}</small>{item?<b>{item.id}</b>:null}</button>})}</div><em>PROBABILIDADE →</em></div></Panel><Panel title="RAID prioritário" subtitle="Risco, premissa, impedimento e dependência"><div className="raid-list">{riskItems.map(r=><button key={r.id} onClick={()=>setSelected(r)}><span>{r.id}</span><div><b>{r.title}</b><small>{r.project} · {r.owner}</small></div><em>{r.prob*r.impact}</em></button>)}</div></Panel></div>{selected?<div className="modal-layer" onMouseDown={e=>e.target===e.currentTarget&&setSelected(null)}><article className="raid-modal" role="dialog" aria-modal="true"><header><span>{selected.id}</span><button onClick={()=>setSelected(null)} aria-label="Fechar"><XCircle/></button></header><small>{selected.kind} · {selected.project}</small><h2>{selected.title}</h2><div><span><small>PROBABILIDADE</small><b>{selected.prob}/5</b></span><span><small>IMPACTO</small><b>{selected.impact}/5</b></span><span><small>SCORE</small><b>{selected.prob*selected.impact}/25</b></span></div><dl><div><dt>Responsável</dt><dd>{selected.owner}</dd></div><div><dt>Estratégia</dt><dd>{selected.response}</dd></div><div><dt>Prazo</dt><dd>{selected.due}</dd></div></dl><button className="primary" onClick={()=>setSelected(null)}>Abrir plano de resposta</button></article></div>:null}</section>;
 }
 
+const DEFAULT_ADMIN_USERS = [
+  {name:"Admin InventOps", profile:"Admin", area:"Administração", status:"Ativo", dept:"INF", source:"Plataforma", gate:"Governança liberada", lastAction:"Revisão de acesso e permissões por capacidade", nextAction:"Acompanhar Daniel e Thomas na operação assistida"},
+  {name:"Daniel", profile:"Gestor", area:"Implantação", status:"Operação ativa", dept:"IMP", source:"Planner", gate:"2 bastões em aceite", lastAction:"PETER 2 com ajuste solicitado após 5 dias sem retorno", nextAction:"Registrar aceite ou devolver bastão com motivo"},
+  {name:"Thomas", profile:"Analista", area:"Espec. Software / DevOps", status:"Operação ativa", dept:"ESP", source:"Planner", gate:"4/6 checkpoints", lastAction:"QUELUZ Fase 2 em validação técnica antes de Implantação", nextAction:"Fechar checkpoints e liberar passagem para Daniel"},
+];
+
+function readStoredAdminUsers() {
+  try {
+    const raw = window.localStorage.getItem("inventops-admin-users");
+    return raw ? JSON.parse(raw) : DEFAULT_ADMIN_USERS;
+  } catch {
+    return DEFAULT_ADMIN_USERS;
+  }
+}
+
 export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotUser}){
   const roles={Admin:[1,1,1,1,1],Diretoria:[1,0,1,0,0],Gestor:[1,1,1,0,0],Analista:[1,1,0,0,0]};
   const permissions=["Visualizar","Editar operação","Gerenciar projetos","Administrar acessos","Configurar integrações"];
   const [invite,setInvite]=useState({name:"",email:"",profile:"Analista",area:"Infraestrutura"});
-  const [users,setUsers]=useState([
-    {name:"Admin InventOps", profile:"Admin", area:"Administração", status:"Ativo", dept:"INF", source:"Plataforma", gate:"Governança liberada", lastAction:"Revisão de acesso e permissões por capacidade", nextAction:"Acompanhar Daniel e Thomas na operação assistida"},
-    {name:"Daniel", profile:"Gestor", area:"Implantação", status:"Operação ativa", dept:"IMP", source:"Planner", gate:"2 bastões em aceite", lastAction:"PETER 2 com ajuste solicitado após 5 dias sem retorno", nextAction:"Registrar aceite ou devolver bastão com motivo"},
-    {name:"Thomas", profile:"Analista", area:"Espec. Software / DevOps", status:"Operação ativa", dept:"ESP", source:"Planner", gate:"4/6 checkpoints", lastAction:"QUELUZ Fase 2 em validação técnica antes de Implantação", nextAction:"Fechar checkpoints e liberar passagem para Daniel"},
-  ]);
+  const [users,setUsers]=useState(readStoredAdminUsers);
+  useEffect(()=>{
+    try {
+      window.localStorage.setItem("inventops-admin-users", JSON.stringify(users));
+    } catch {}
+  },[users]);
   const roleMeta={
     Admin:{label:"Enterprise Admin",helper:"Controle total da plataforma e das integrações.",scope:"Administração, governança, acessos e regras centrais."},
     Diretoria:{label:"Diretoria · DIREX",helper:"Leitura executiva, decisão e priorização.",scope:"Visão consolidada, indicadores, riscos e decisões."},

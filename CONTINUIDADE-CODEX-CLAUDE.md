@@ -743,3 +743,27 @@ Se Claude continuar:
    - confirmar que o estado permanece em Implantação.
 2. Repetir para Thomas em Especificação/DevOps.
 3. Se algo não persistir, corrigir em `src/DepartmentCockpit.jsx` antes de avançar telas novas.
+## 2026-08-09 - Code health Bloco B.11: Administração com usuários operacionais persistidos
+
+Aplicado pelo Codex:
+
+- A Administração agora persiste a lista de usuários e validações no navegador.
+- Chave usada: `inventops-admin-users`.
+- Validar Daniel/Thomas, criar novo acesso ou alterar o estado do usuário permanece após atualização da página.
+- A regra reforça que Daniel e Thomas são usuários operacionais reais do fluxo assistido, não cartões estáticos.
+- A trava `tools/check-operational-flow.cjs` agora reprova se a persistência de usuários da Administração for removida.
+
+Validação:
+
+- `pnpm check:quality` passou:
+  - sem texto quebrado ou marcador de demo visível em `src`;
+  - fluxo Daniel/Thomas/Home/Cockpit preservado;
+  - build de produção verde.
+
+Se Claude continuar:
+
+1. Entrar na Administração.
+2. Validar Daniel e Thomas.
+3. Atualizar a página.
+4. Confirmar que o estado validado continua visível.
+5. Se falhar, corrigir antes de qualquer nova tela.
