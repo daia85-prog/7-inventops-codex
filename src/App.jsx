@@ -185,7 +185,7 @@ function Sidebar({ active, setActive, alertCount, notify, role, setRole, theme, 
       <Icon size={19} weight={isActive?"fill":"regular"}/><span>{label}</span>{restricted?<LockKey size={12}/>:null}{id==="alerts"&&alertCount>0?<b>{alertCount}</b>:null}
     </button>})}</div>)}</nav>
     <div className="sidebar-bottom">
-      <button className="profile" onClick={()=>setActive("admin")}><span className="avatar">D</span><span><strong>Douglas</strong><small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><CaretDown size={15}/></button>
+      <button className="profile" onClick={()=>setActive("admin")}><span className="avatar">A</span><span><strong>Admin</strong><small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><CaretDown size={15}/></button>
       <button className="logout-button" onClick={onLogout}><SignOut/><span>Sair com segurança</span></button>
       <div className="credit"><Sparkle size={15} weight="fill"/><span>Desenvolvido por <b>Daiana Costa</b></span></div>
     </div>
@@ -247,7 +247,7 @@ function SidebarEnhanced({ active, setActive, alertCount, notify, role, onLogout
       </div>)}
     </nav>
     <div className="sidebar-bottom">
-      <button className="profile" onClick={()=>{setActive("admin");notify("Administração aberta para controlar perfil, tema e acessos.")}}><span className="avatar">D</span><span><strong>Douglas</strong><small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><CaretDown size={15}/></button>
+      <button className="profile" onClick={()=>{setActive("admin");notify("Administração aberta para controlar perfil, tema e acessos.")}}><span className="avatar">A</span><span><strong>Admin</strong><small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><CaretDown size={15}/></button>
       <button className="logout-button" onClick={onLogout}><SignOut/><span>Sair com segurança</span></button>
       <div className="credit"><Sparkle size={15} weight="fill"/><span>Desenvolvido por <b>Daiana Costa</b></span></div>
     </div>
@@ -262,7 +262,7 @@ function Topbar({ active, role, onLogout, notify, lang, setLang }) {
     en: "This module shows where the product is heading — it is part of the roadmap (Eras 4-5) and is not yet in operation. The data is simulated."
   };
   return <header className="topbar"><div><div className="title-line"><h1>{localizedMeta[0]}</h1>{VISION_PAGES.includes(active) ? <span className="vision-badge" title={roadmapTitle[lang]}>↗ VISÃO · ROADMAP</span> : null}</div><p>{localizedMeta[1]}</p></div><div className="top-actions">
-    <LangSwitch lang={lang} setLang={setLang} notify={notify} /><span className="date"><CalendarBlank size={18} />11 jul 2026</span><span className="avatar">D</span><span className="top-user">Douglas<small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><button className="top-logout" onClick={onLogout} aria-label="Sair"><SignOut /></button>
+    <LangSwitch lang={lang} setLang={setLang} notify={notify} /><span className="date"><CalendarBlank size={18} />11 jul 2026</span><span className="avatar">A</span><span className="top-user">Admin<small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><button className="top-logout" onClick={onLogout} aria-label="Sair"><SignOut /></button>
   </div></header>;
 }
 
@@ -453,7 +453,7 @@ function PortfolioPage({projects,setProjects,setActive,setSelectedProject,setPro
       <p className="imp-note">Prévia — nada é aplicado antes de confirmar. Cada pendência aparece no Cockpit da área responsável.</p>
       <div className="modal-actions"><button type="button" className="ghost" onClick={()=>setPreview(null)}>Cancelar</button><button className="primary" type="button" onClick={applyImport}><UploadSimple/>Confirmar import</button></div>
     </div></div>:null}
-    {creating?<div className="modal-layer" role="presentation" onMouseDown={e=>e.target===e.currentTarget&&setCreating(false)}><form className="project-modal" role="dialog" aria-modal="true" aria-labelledby="new-project-title" onSubmit={createProject}><div><span className="project-symbol">NP</span><div><h2 id="new-project-title">Novo projeto</h2><p>Crie a estrutura mínima. Fases e atividades entram em seguida.</p></div><button type="button" aria-label="Fechar" onClick={()=>setCreating(false)}><XCircle/></button></div><label>Nome do projeto<input autoFocus value={draft.name} onChange={e=>setDraft({...draft,name:e.target.value})} placeholder="Ex.: EXPANSÃO CD SUL" required/></label><label>Cliente<input value={draft.client} onChange={e=>setDraft({...draft,client:e.target.value})} placeholder="Empresa ou unidade"/></label><label>Responsável<select value={draft.owner} onChange={e=>setDraft({...draft,owner:e.target.value})}><option>Daiana Costa</option><option>Rodrigo Baruco</option><option>Douglas</option></select></label><div className="modal-actions"><button type="button" className="ghost" onClick={()=>setCreating(false)}>Cancelar</button><button className="primary" type="submit"><Plus/>Criar projeto</button></div></form></div>:null}
+    {creating?<div className="modal-layer" role="presentation" onMouseDown={e=>e.target===e.currentTarget&&setCreating(false)}><form className="project-modal" role="dialog" aria-modal="true" aria-labelledby="new-project-title" onSubmit={createProject}><div><span className="project-symbol">NP</span><div><h2 id="new-project-title">Novo projeto</h2><p>Crie a estrutura mínima. Fases e atividades entram em seguida.</p></div><button type="button" aria-label="Fechar" onClick={()=>setCreating(false)}><XCircle/></button></div><label>Nome do projeto<input autoFocus value={draft.name} onChange={e=>setDraft({...draft,name:e.target.value})} placeholder="Ex.: EXPANSÃO CD SUL" required/></label><label>Cliente<input value={draft.client} onChange={e=>setDraft({...draft,client:e.target.value})} placeholder="Empresa ou unidade"/></label><label>Responsável<select value={draft.owner} onChange={e=>setDraft({...draft,owner:e.target.value})}><option>Daiana Costa</option><option>Rodrigo Baruco</option><option>Admin</option></select></label><div className="modal-actions"><button type="button" className="ghost" onClick={()=>setCreating(false)}>Cancelar</button><button className="primary" type="submit"><Plus/>Criar projeto</button></div></form></div>:null}
   </section>;
 }
 

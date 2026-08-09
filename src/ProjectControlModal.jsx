@@ -69,7 +69,7 @@ const defaultAudit = project => [
   {
     id: 1,
     time: "11 jul · 21:38",
-    actor: "Douglas",
+    actor: "Admin Teste",
     action: "Atualizou o próximo marco",
     detail: `${project.next} · ${project.date}`,
     type: "alteração",
@@ -149,7 +149,7 @@ export function ProjectControlModal({ project, onClose, onUpdate, onOpenFull, no
   }, [onClose]);
 
   const record = (action, detail, type = "alteração") =>
-    setAudit(current => [{ id: Date.now(), time: "Agora", actor: "Douglas", action, detail, type }, ...current]);
+    setAudit(current => [{ id: Date.now(), time: "Agora", actor: "Admin Teste", action, detail, type }, ...current]);
 
   const validate = () => {
     const next = {};
@@ -182,7 +182,7 @@ export function ProjectControlModal({ project, onClose, onUpdate, onOpenFull, no
         {
           id: Date.now(),
           time: "Agora",
-          actor: "Douglas",
+          actor: "Admin Teste",
           action: "Atualizou a ficha do projeto",
           detail: `Status: ${draft.status} · Risco: ${draft.risk}`,
           type: "alteração",
@@ -289,7 +289,7 @@ export function ProjectControlModal({ project, onClose, onUpdate, onOpenFull, no
                       <select value={draft.owner} onChange={event => setDraft({ ...draft, owner: event.target.value })}>
                         <option>Daiana Costa</option>
                         <option>Rodrigo Baruco</option>
-                        <option>Douglas</option>
+                        <option>Admin Teste</option>
                         <option>Ivan</option>
                       </select>
                       <small>{errors.owner}</small>

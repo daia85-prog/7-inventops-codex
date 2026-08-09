@@ -396,7 +396,7 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
   const permissions=["Visualizar","Editar operação","Gerenciar projetos","Administrar acessos","Configurar integrações"];
   const [invite,setInvite]=useState({name:"",email:"",profile:"Analista",area:"Infraestrutura"});
   const [users,setUsers]=useState([
-    {name:"Douglas Alves", profile:"Gestor", area:"Infraestrutura / Implantação", status:"Ativo", dept:"INF", source:"Piloto"},
+    {name:"Admin Teste", profile:"Admin", area:"Administração / Piloto", status:"Ativo", dept:"INF", source:"Piloto"},
     {name:"Daniel", profile:"Gestor", area:"Implantação", status:"Piloto real", dept:"IMP", source:"Piloto"},
     {name:"Thomas", profile:"Analista", area:"Espec. Software / DevOps", status:"Piloto real", dept:"ESP", source:"Piloto"},
   ]);
@@ -424,7 +424,7 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
   const adminModules=[
     ["admin-access","Acessos","Criar, revisar e preparar usuários válidos."],
     ["admin-themes","Perfis & experiência","Simular RBAC e validar a interface."],
-    ["admin-pilots","Piloto real","Abrir Daniel, Thomas e Douglas no contexto certo."],
+    ["admin-pilots","Piloto real","Abrir Daniel, Thomas e o contexto admin no lugar certo."],
     ["admin-audit","Auditoria","Conferir trilha, permissões e regra aplicada."]
   ];
   const themeOptions=[
@@ -509,7 +509,7 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
       </div>
     </Panel></div>
     <Panel title="Matriz de permissões" subtitle="Rotas e ações por perfil"><div className="permission-table"><header><span>Permissão</span>{Object.keys(roles).map(r=><span key={r}>{r==="Diretoria"?"DIREX":r}</span>)}</header>{permissions.map((p,i)=><div key={p}><b>{p}</b>{Object.keys(roles).map(r=><span key={r}>{roles[r][i]?<CheckCircle/>:<XCircle/>}</span>)}</div>)}</div></Panel>
-    <div id="admin-audit"><Panel title="Trilha de auditoria" subtitle="Quem fez o quê, quando e sobre qual registro"><div className="audit-log">{[["21:38","Douglas","Alterou prazo do Go Live","TITANO"],["20:54","Daiana Costa","Anexou evidência REV4","QUELUZ"],["19:42","Sistema IoT","Criou alerta P0","TITANO"],["18:17","Ivan","Atualizou bloqueio de VPN","MARKET PERU"]].map(x=><div key={x.join()}><span>{x[0]}</span><b>{x[1]}</b><p>{x[2]}</p><em>{x[3]}</em></div>)}</div></Panel></div></section>;
+    <div id="admin-audit"><Panel title="Trilha de auditoria" subtitle="Quem fez o quê, quando e sobre qual registro"><div className="audit-log">{[["21:38","Admin Teste","Alterou prazo do Go Live","TITANO"],["20:54","Daiana Costa","Anexou evidência REV4","QUELUZ"],["19:42","Sistema IoT","Criou alerta P0","TITANO"],["18:17","Ivan","Atualizou bloqueio de VPN","MARKET PERU"]].map(x=><div key={x.join()}><span>{x[0]}</span><b>{x[1]}</b><p>{x[2]}</p><em>{x[3]}</em></div>)}</div></Panel></div></section>;
 }
 
 export function LifecyclePage(){
@@ -662,7 +662,7 @@ const LOGIN_SYNC_TEXT={
 };
 
 export function LoginScreen({onLogin}){
-  const [email,setEmail]=useState("douglas.alves@invent-corp.com");
+  const [email,setEmail]=useState("admin.teste@invent-corp.com");
   const [password,setPassword]=useState("inventops2026");
   const [showDemo,setShowDemo]=useState(false);
   const [lang,setLang]=useState("pt");
@@ -770,7 +770,7 @@ export function LoginScreen({onLogin}){
         <div className="login-support-row"><span>{copy.forgot}</span></div>
         <button className="primary" type="submit" disabled={isSubmitting}>{isSubmitting?<><MonitorPlay/>Conectando...</>:<>{copy.enter}<ArrowRight/></>}</button>
         <div className="sso-divider"><span>{copy.or}</span></div>
-        <button className="sso-button" type="button" onClick={()=>runLogin("douglas.alves@invent-corp.com")} disabled={isSubmitting}><span>M</span>{copy.microsoft}</button>
+        <button className="sso-button" type="button" onClick={()=>runLogin("admin.teste@invent-corp.com")} disabled={isSubmitting}><span>M</span>{copy.microsoft}</button>
         <div className="login-assurance-row">
           <span><ShieldCheck/>SSO corporativo</span>
           <span><UsersThree/>Perfis validados</span>
