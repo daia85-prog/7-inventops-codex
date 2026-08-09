@@ -31,6 +31,11 @@ const suspiciousFragments = [
   "administra??o",
   "evid?ncia",
   "respons?vel",
+  "admin.teste",
+  "douglas.alves",
+  "daiana soares",
+  "demo-credentials",
+  "demo-journey",
 ];
 
 function listFiles(dir) {

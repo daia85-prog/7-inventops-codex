@@ -708,7 +708,7 @@ const LOGIN_SYNC_TEXT={
 };
 
 export function LoginScreen({onLogin}){
-  const [email,setEmail]=useState("admin.teste@invent-corp.com");
+  const [email,setEmail]=useState("daniel.almeida@invent-corp.com");
   const [password,setPassword]=useState("inventops2026");
   const [lang,setLang]=useState("pt");
   const [isSubmitting,setIsSubmitting]=useState(false);
@@ -800,7 +800,7 @@ export function LoginScreen({onLogin}){
         <div className="login-support-row"><span>{copy.forgot}</span></div>
         <button className="primary" type="submit" disabled={isSubmitting}>{isSubmitting?<><MonitorPlay/>Conectando...</>:<>{copy.enter}<ArrowRight/></>}</button>
         <div className="sso-divider"><span>{copy.or}</span></div>
-        <button className="sso-button" type="button" onClick={()=>runLogin("admin.teste@invent-corp.com")} disabled={isSubmitting}><span>M</span>{copy.microsoft}</button>
+        <button className="sso-button" type="button" onClick={()=>runLogin("daniel.almeida@invent-corp.com")} disabled={isSubmitting}><span>M</span>{copy.microsoft}</button>
         <div className="login-assurance-row">
           <span><ShieldCheck/>SSO corporativo</span>
           <span><UsersThree/>Perfis validados</span>

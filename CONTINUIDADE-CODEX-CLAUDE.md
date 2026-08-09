@@ -501,3 +501,28 @@ Próximo ponto se Claude continuar:
 2. Fazer varredura visual em janela limpa.
 3. Priorizar correção de texto/código antigo antes de aprofundar Daniel/Thomas.
 4. Só depois retomar o fluxo funcional: histórico, chat, passagem de bastão, aceite/devolução e leitura por área.
+
+## 2026-08-09 - Code health Bloco B.2: remover usuário de teste do login
+
+Aplicado pelo Codex:
+
+- Login deixou de iniciar com `admin.teste@invent-corp.com`.
+- SSO corporativo agora entra com `daniel.almeida@invent-corp.com`, alinhado ao fluxo real de Implantação/Daniel.
+- Trava de qualidade ampliada para bloquear retorno de:
+  - `admin.teste`;
+  - `douglas.alves`;
+  - `daiana soares`;
+  - `demo-credentials`;
+  - `demo-journey`.
+
+Validação:
+
+- `node tools/check-text-quality.cjs` passou.
+- `pnpm build` passou.
+
+Próximo ponto se Claude continuar:
+
+1. Validar visualmente login em janela limpa.
+2. Confirmar que a entrada do sistema não mostra usuários antigos, demo ou métricas de demonstração.
+3. Se necessário, trocar o acesso padrão para Thomas quando a próxima validação for Especificação/DevOps.
+4. Seguir para Home/Admin/Operação Assistida com Daniel e Thomas como produto real.
