@@ -236,6 +236,20 @@ button.ghost-mini:hover{color:#eef3fb;border-color:#3d4d6e}
 @media(max-width:1100px){.cockpit-grid,.pilot-focus-strip,.cockpit-priority-row{grid-template-columns:1fr}}
 @media(max-width:1100px){.cockpit-track-body{grid-template-columns:1fr}.cockpit-track-pulse{grid-template-columns:1fr}.admin-pilot-users{grid-template-columns:1fr}}
 
+.cockpit-chat{background:linear-gradient(180deg,#0e1420,#0a1321);border:1px solid #17233b;border-radius:16px;padding:16px}
+.chat-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
+.chat-list>div{min-height:128px;border:1px solid #1d2a44;border-radius:14px;background:rgba(10,19,33,.78);padding:14px;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)}
+.chat-list>div.ai{border-color:rgba(124,58,237,.46);background:linear-gradient(180deg,rgba(91,67,190,.18),rgba(10,19,33,.86))}
+.chat-list header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:8px}
+.chat-list b{font-size:14px;color:#edf5ff}
+.chat-list span{font-size:11px;color:#7e90a8;text-align:right}
+.chat-list p{margin:0;color:#b8c9dc;font-size:13px;line-height:1.55}
+.chat-compose{display:grid;grid-template-columns:1fr auto;gap:10px;margin-top:12px}
+.chat-compose input{min-height:48px;border:1px solid #243653;border-radius:12px;background:#091524;color:#f4f8ff;padding:0 14px;font-weight:700;outline:none}
+.chat-compose input:focus{border-color:#25d8ff;box-shadow:0 0 0 3px rgba(37,216,255,.12)}
+.chat-compose button{min-height:48px;border:0;border-radius:12px;background:#f5c400;color:#06101d;font-weight:900;padding:0 16px;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer}
+@media(max-width:1100px){.chat-list{grid-template-columns:1fr}.chat-compose{grid-template-columns:1fr}}
+
 /* ===== Uplift premium do login ===== */
 .premium-login-grid{grid-template-columns:minmax(0,1.08fr) minmax(520px,.92fr);background:linear-gradient(90deg,#06101d 0%,#081321 56%,#0a1323 100%)}
 .login-global-topbar{position:absolute;top:22px;right:28px;z-index:4}

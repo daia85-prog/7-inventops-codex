@@ -102,3 +102,22 @@ Devolver para o Codex com:
 1. mapa estruturado `inventops79` x `P7`
 2. backlog reorganizado por prioridade real
 3. lista objetiva do que o Codex deve consolidar, implementar e publicar
+## Operacao Assistida - checklist de aceite inventops79
+
+Status em 2026-08-09: em consolidacao no P7.
+
+Obrigatorio antes de dizer "pronto":
+
+- [x] Daniel e Thomas aparecem como usuarios/validadores reais.
+- [x] Implantacao e Especificacao/DevOps usam esteiras reais herdadas do inventops79.
+- [x] Passagem de bastao existe como acao de produto.
+- [x] Sinalizar prontidao existe como acao de produto.
+- [x] Cobranca vira registro operacional.
+- [x] Checkpoint concluido vira historico.
+- [x] Handoff confirmado exige checklist completo.
+- [x] Chat operacional/contexto fica na mesma tela da area.
+- [ ] Validar visualmente com Daia em janela limpa.
+- [ ] Claude revisar se a paridade com inventops79 ficou completa.
+- [ ] Refinar login/orbita de departamentos em ciclo separado, sem bloquear uso real.
+
+Regra: nao abrir outro grande redesenho antes de Daniel/Thomas conseguirem operar o fluxo basico ponta a ponta.

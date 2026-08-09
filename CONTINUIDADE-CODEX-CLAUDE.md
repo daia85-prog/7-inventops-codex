@@ -287,3 +287,21 @@ Depois disso, quando o Codex voltar, a retomada deve ser:
 Não ganhar por quantidade de telas.
 
 Ganhar por clareza, confiança, evidência e continuidade.
+## 2026-08-09 - Regra de absorcao inventops79 para Operacao Assistida
+
+Estado atual: P7 e a linha principal. `inventops79` virou referencia forte de produto, principalmente para as areas que vao testar primeiro: Implantacao/Daniel e Especificacao-DevOps/Thomas.
+
+Diretriz obrigatoria: nao trazer como "demo" nem como enfeite. Tudo que veio de `inventops79` precisa entrar como comportamento de produto:
+
+- passagem de bastao com checklist e confirmacao;
+- sinalizar prontidao para a proxima area;
+- registrar cobranca quando uma dependencia travar o fluxo;
+- historico/linha do tempo por acao relevante;
+- chat operacional/contexto ligado a area e ao historico;
+- copia de resumo da esteira para alinhamento;
+- Thomas e Daniel como usuarios reais de validacao inicial;
+- termos de produto real: evitar "demo" e evitar "cockpit piloto" se nao for modulo permanente.
+
+Aplicado neste bloco: a Operacao Assistida recebeu chat operacional e as acoes principais passaram a alimentar historico/chat: concluir entrega, copiar resumo, registrar cobranca, sinalizar prontidao, concluir checkpoint e confirmar handoff.
+
+Se o credito do Codex acabar: Claude deve validar a Operacao Assistida contra esta lista antes de continuar novos modulos. Prioridade de validacao: Daniel/Thomas conseguem abrir suas areas, registrar cobranca/prontidao, concluir checkpoints e enxergar o historico resultante.
