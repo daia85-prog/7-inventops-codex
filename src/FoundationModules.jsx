@@ -755,18 +755,9 @@ export function LoginScreen({onLogin}){
           <h2>InventOps Enterprise</h2>
           <p>{copy.body}</p>
         </div>
-        <div className="login-role-pills">
-          <span>Admin</span>
-          <span>Direx</span>
-          <span>Gestor</span>
-          <span>Analista</span>
-        </div>
-        <div className="login-trust-strip" aria-label="Indicadores da operação">
-          {trustSignals.map(signal=><article key={signal.label}><b>{signal.value}</b><small>{signal.label}</small></article>)}
-        </div>
         <label>{copy.email}<input type="email" value={email} onChange={e=>setEmail(e.target.value)} required autoFocus disabled={isSubmitting}/></label>
         <label>{copy.password}<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required disabled={isSubmitting}/></label>
-        <div className="login-options"><label><input type="checkbox" disabled={isSubmitting}/> {copy.keep}</label><button type="button" onClick={()=>setShowDemo(!showDemo)} disabled={isSubmitting}>{copy.demo}</button></div>
+        <div className="login-options"><label><input type="checkbox" disabled={isSubmitting}/> {copy.keep}</label></div>
         {showDemo?<div className="demo-credentials"><b>{copy.demoTitle}</b><span>{copy.demoBody}</span><small>{copy.demoFoot}</small></div>:null}
         <div className="login-support-row"><span>{copy.forgot}</span></div>
         <button className="primary" type="submit" disabled={isSubmitting}>{isSubmitting?<><MonitorPlay/>Conectando...</>:<>{copy.enter}<ArrowRight/></>}</button>
