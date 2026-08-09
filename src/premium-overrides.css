@@ -1,4 +1,4 @@
-.login-screen{
+﻿.login-screen{
   grid-template-columns:1.12fr .88fr;
   background:
     radial-gradient(circle at 20% 15%,rgba(116,77,255,.18),transparent 25%),
@@ -83,8 +83,8 @@
 .login-panel form>label input{height:58px;padding:0 16px;border-radius:14px;background:#0b1727;border-color:#314862}
 .login-options{margin:16px 0 20px}
 .login-options label,.login-options button{font-size:10px}
-.demo-credentials{padding:14px;border-radius:12px}
-.demo-credentials b,.demo-credentials span,.demo-credentials small{font-size:10px}
+.corporate-credentials{padding:14px;border-radius:12px}
+.corporate-credentials b,.corporate-credentials span,.corporate-credentials small{font-size:10px}
 .login-panel .primary,.sso-button{height:56px;border-radius:14px}
 .login-panel .primary{font-size:17px}
 .sso-divider{font-size:9px;margin:20px 0}

@@ -482,3 +482,22 @@ Próximo ponto se Claude continuar:
 1. Validar visualmente a lateral em janela limpa.
 2. Confirmar que perfis/temas ficam concentrados em Administração, não na lateral.
 3. Continuar saneamento de Home/Admin/Operação Assistida antes de novas features.
+## 2026-08-09 - Code health Bloco B.1: limpeza de linguagem antiga no login
+
+Aplicado pelo Codex:
+
+- Classes antigas `demo-credentials` renomeadas para `corporate-credentials`.
+- Mantida a decisão de produto real: nada visível deve sugerir demo, protótipo ou mockup.
+- Confirmado que o próximo foco continua sendo saneamento antes de novas telas: Home, Administração e Operação Assistida Daniel/Thomas.
+
+Validação:
+
+- `node tools/check-text-quality.cjs` deve passar antes de qualquer novo bloco.
+- `pnpm build` deve passar antes de publicar.
+
+Próximo ponto se Claude continuar:
+
+1. Rodar a trava de texto e o build.
+2. Fazer varredura visual em janela limpa.
+3. Priorizar correção de texto/código antigo antes de aprofundar Daniel/Thomas.
+4. Só depois retomar o fluxo funcional: histórico, chat, passagem de bastão, aceite/devolução e leitura por área.
