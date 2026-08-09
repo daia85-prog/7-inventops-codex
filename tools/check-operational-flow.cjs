@@ -25,6 +25,10 @@ const checks = [
     ok: foundation.includes("openCockpitDept(area.code)") && foundation.includes("openCockpitDept(item.dept)"),
   },
   {
+    name: "Home destaca contexto operacional da sessão ativa",
+    ok: foundation.includes("session-operational-card") && foundation.includes("sessionArea") && app.includes("currentUser={currentUser} lang={lang}"),
+  },
+  {
     name: "Operação Assistida remonta ao trocar IMP/ESP",
     ok: app.includes("<DepartmentCockpit key={cockpitDept}") && app.includes("currentUser={currentUser}"),
   },

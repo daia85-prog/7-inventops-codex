@@ -59,7 +59,7 @@ function Metric({icon:Icon,label,value,note,tone="cyan"}){
   return <article className={`foundation-metric ${tone}`}><Icon/><span><small>{label}</small><b>{value}</b><em>{note}</em></span></article>;
 }
 
-export function ExecutiveDashboard({projects,setActive,openCockpitDept,lang="pt"}){
+export function ExecutiveDashboard({projects,setActive,openCockpitDept,currentUser={dept:"ADM",name:"Admin"},lang="pt"}){
   const health=Math.round(projects.reduce((sum,p)=>sum+p.health,0)/projects.length);
   const hotAreas=departments.filter(area=>area.load>=100).slice(0,3);
   const copyByLang={
@@ -82,6 +82,8 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept,lang="pt"
       nextGoLive:"PRÓXIMO GO LIVE",
       confidence:"78% de confiança",
       pilotEyebrow:"Operação pronta para uso",
+      sessionEyebrow:"Seu contexto operacional",
+      sessionCta:"Abrir minha operação",
       pilotCards:{
         IMP:{
           title:"Implantação",
@@ -146,6 +148,8 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept,lang="pt"
       nextGoLive:"PRÓXIMO GO LIVE",
       confidence:"78% de confianza",
       pilotEyebrow:"Operación lista para uso",
+      sessionEyebrow:"Tu contexto operacional",
+      sessionCta:"Abrir mi operación",
       pilotCards:{
         IMP:{
           title:"Implantación",
@@ -210,6 +214,8 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept,lang="pt"
       nextGoLive:"NEXT GO LIVE",
       confidence:"78% confidence",
       pilotEyebrow:"Operation ready for use",
+      sessionEyebrow:"Your operational context",
+      sessionCta:"Open my operation",
       pilotCards:{
         IMP:{
           title:"Implementation",
@@ -257,6 +263,8 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept,lang="pt"
     }
   };
   const copy=copyByLang[lang]||copyByLang.pt;
+  const sessionDept = currentUser?.dept==="IMP" || currentUser?.dept==="ESP" ? currentUser.dept : null;
+  const sessionArea = sessionDept ? { code: sessionDept, ...copy.pilotCards[sessionDept] } : null;
   const pilotAreas = [
     {
       code: "IMP",
@@ -290,6 +298,14 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept,lang="pt"
       <div className="executive-world-strip">
       {directorialReading.map(([label,value,detail])=><article key={label}><small>{label}</small><b>{value}</b><span>{detail}</span></article>)}
     </div>
+    {sessionArea?<div className="session-operational-card">
+      <div>
+        <small>{copy.sessionEyebrow}</small>
+        <b>{currentUser.name}: {sessionArea.title}</b>
+        <p>{sessionArea.summary}</p>
+      </div>
+      <button className="ghost" onClick={()=>openCockpitDept(sessionArea.code)}><ArrowRight/>{copy.sessionCta}</button>
+    </div>:null}
     <div className="executive-hero executive-world-hero">
       <div className="health-visual"><ResponsiveContainer width="100%" height="100%"><PieChart><Pie data={[{v:health},{v:100-health}]} dataKey="v" startAngle={90} endAngle={-270} innerRadius={55} outerRadius={67} stroke="none"><Cell fill="#f5c300"/><Cell fill="#18263a"/></Pie></PieChart></ResponsiveContainer><span><small>HEALTH SCORE</small><b>{health}</b><em>/100</em></span></div>
       <div className="executive-brief"><small>{copy.briefing}</small><h2>{copy.heroTitle}</h2><p>{copy.heroBody}</p><div><button className="primary" onClick={()=>setActive("action")}><CheckSquare/>{copy.openPlan}</button><button className="ghost" onClick={()=>setActive("executive")}><FileText/>{copy.viewOnePager}</button></div></div>

@@ -624,3 +624,35 @@ Se Claude continuar:
 1. Antes de declarar qualquer bloco pronto, rodar `pnpm check:quality`.
 2. Se o check falhar, corrigir primeiro; não avançar funcionalidade em cima de regressão.
 3. Próximo bloco recomendado: revisar visualmente o fluxo em navegador limpo e, depois, aprofundar Operação Assistida com histórico/chat/aceite/devolução por Daniel e Thomas.
+
+## 2026-08-09 - Code health Bloco B.7: Home sensível à sessão Daniel/Thomas
+
+Aplicado pelo Codex:
+
+- A Home agora recebe `currentUser`.
+- Quando o usuário logado é Daniel (`dept: IMP`) ou Thomas (`dept: ESP`), a Home exibe um card de contexto operacional da sessão.
+- O card mostra nome do usuário, área vinculada e resumo da operação correspondente.
+- O CTA do card abre diretamente a Operação Assistida correta, sem depender de o usuário procurar a área no menu.
+- O recurso nasceu em PT/ES/EN:
+  - PT: "Seu contexto operacional" / "Abrir minha operação";
+  - ES: "Tu contexto operacional" / "Abrir mi operación";
+  - EN: "Your operational context" / "Open my operation".
+- A trava `tools/check-operational-flow.cjs` agora verifica que esse card e a passagem de `currentUser` continuam existindo.
+
+Validação:
+
+- `pnpm check:quality` passou:
+  - sem texto quebrado ou marcador de demo visível em `src`;
+  - fluxo Daniel/Thomas/Home/Cockpit preservado;
+  - build de produção verde.
+
+Se Claude continuar:
+
+1. Validar visualmente em navegador limpo:
+   - login Daniel -> Home deve mostrar card de contexto de Implantação;
+   - login Thomas -> Home deve mostrar card de contexto de Especificação/DevOps;
+   - clicar no card deve abrir a Operação Assistida correta.
+2. Próximo bloco recomendado:
+   - aprofundar Operação Assistida com histórico, chat, passagem de bastão, aceite/devolução e leitura por área;
+   - manter inventops79 como referência principal, mas transformar em produto real, não tela isolada.
+3. Antes de qualquer novo bloco, rodar `pnpm check:quality`.

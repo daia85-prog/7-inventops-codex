@@ -404,3 +404,10 @@ button.ghost-mini:hover{color:#eef3fb;border-color:#3d4d6e}
 .admin-user-state dt{color:#6f8198;font-size:6px;text-transform:uppercase;letter-spacing:.7px}
 .admin-user-state dd{margin:0;color:#c4d1df;font-size:7px;line-height:1.45}
 @media(max-width:1180px){.home-handoff-board>div{grid-template-columns:1fr}.home-handoff-board>header{align-items:flex-start;flex-direction:column}}
+
+.session-operational-card{display:flex;align-items:center;justify-content:space-between;gap:18px;margin:14px 0 18px;padding:16px 18px;border:1px solid rgba(124,92,255,.48);border-radius:18px;background:linear-gradient(135deg,rgba(30,24,74,.74),rgba(6,20,35,.92));box-shadow:0 22px 60px rgba(77,64,217,.2),inset 0 1px 0 rgba(255,255,255,.04)}
+.session-operational-card small{display:block;color:#ffcc14;font-size:8px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}
+.session-operational-card b{display:block;margin-top:5px;color:#f7fbff;font:800 18px Sora}
+.session-operational-card p{max-width:760px;margin:6px 0 0;color:#a9c6e6;font-size:12px;line-height:1.55}
+.session-operational-card button{min-width:205px}
+@media(max-width:900px){.session-operational-card{align-items:flex-start;flex-direction:column}.session-operational-card button{width:100%}}

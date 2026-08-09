@@ -566,7 +566,7 @@ export function App() {
   };
   const canAccess=allowed[role]==="*"||allowed[role].includes(active);
   const pages={
-    home:<ExecutiveDashboard projects={projects} setActive={setActive} openCockpitDept={openCockpitDept} lang={lang}/>,
+    home:<ExecutiveDashboard projects={projects} setActive={setActive} openCockpitDept={openCockpitDept} currentUser={currentUser} lang={lang}/>,
     action:<ActionCenter notify={notify}/>,management:<ManagementPage/>,analytics:<AnalyticsPage/>,
     executive:<ExecutiveOnePager projects={projects} notify={notify}/>,
     portfolio:<PortfolioPage projects={projects} setProjects={setProjects} setActive={setActive} setSelectedProject={setSelectedProject} setProjectModalOpen={setProjectModalOpen} setImportedDemands={setImportedDemands} notify={notify}/>,
