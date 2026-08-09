@@ -107,8 +107,11 @@ Objetivo: parar de quebrar lateral/topbar/login quando mexer no produto.
 
 Fazer:
 
-- Separar menu por módulos reais.
-- Remover seletores que não precisam ficar visíveis na lateral.
+- [x] Separar menu por módulos reais.
+- [x] Remover Sidebar antiga não usada, que ainda carregava tema/perfil na lateral.
+- [x] Renomear jornada interna de demo para jornada de produto.
+- [x] Corrigir textos quebrados no Topbar de módulos de visão/roadmap.
+- [ ] Remover seletores que não precisam ficar visíveis na lateral se reaparecerem em nova composição.
 - Garantir que Administração concentre perfis/temas/acessos.
 - Validar navegação Home → Operação Assistida → Administração.
 

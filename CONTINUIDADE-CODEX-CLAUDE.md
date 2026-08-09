@@ -461,3 +461,24 @@ Se o crédito do Codex acabar, Claude deve seguir este plano antes de implementa
 Regra nova:
 
 > Não avançar funcionalidade nova se a base ainda estiver gerando texto quebrado, navegação confusa ou regressão visual fácil.
+
+## 2026-08-09 - Code health Bloco B iniciado: shell/navegação
+
+Aplicado pelo Codex:
+
+- Removida a Sidebar antiga que não era mais usada, mas ainda continha controles legados de tema/perfil.
+- Jornada interna renomeada de demo para produto (`ProductJourneyRail`).
+- Classes CSS da jornada renomeadas para `product-journey-*`.
+- Corrigidos textos do Topbar que ainda tinham `?` no lugar de acentos.
+- Trava `tools/check-text-quality.cjs` ampliada para detectar fragmentos como `m?dulo`, `expans?o`, `usu?rio`, `opera??o`.
+
+Validação:
+
+- `node tools/check-text-quality.cjs` passou.
+- `pnpm build` passou.
+
+Próximo ponto se Claude continuar:
+
+1. Validar visualmente a lateral em janela limpa.
+2. Confirmar que perfis/temas ficam concentrados em Administração, não na lateral.
+3. Continuar saneamento de Home/Admin/Operação Assistida antes de novas features.

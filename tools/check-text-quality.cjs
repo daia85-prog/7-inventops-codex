@@ -18,6 +18,21 @@ const suspiciousPairs = [
   [0x00e2, 0x2020, 0x2022], // â† / arrows/bullets mojibake
 ];
 
+const suspiciousFragments = [
+  "m?dulo",
+  "expans?o",
+  "pr?xima",
+  "usu?rio",
+  "comunica??o",
+  "opera??o",
+  "vis?o",
+  "decis?o",
+  "relat?rio",
+  "administra??o",
+  "evid?ncia",
+  "respons?vel",
+];
+
 function listFiles(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const full = path.join(dir, entry.name);
@@ -45,7 +60,9 @@ const hits = [];
 for (const file of listFiles(src)) {
   const text = fs.readFileSync(file, "utf8");
   text.split(/\r?\n/).forEach((line, index) => {
-    if (hasSuspiciousText(line)) {
+    const lower = line.toLowerCase();
+    const hasSuspiciousFragment = suspiciousFragments.some((fragment) => lower.includes(fragment));
+    if (hasSuspiciousText(line) || hasSuspiciousFragment) {
       hits.push(`${path.relative(root, file)}:${index + 1}: ${line.trim()}`);
     }
   });

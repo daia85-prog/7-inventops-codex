@@ -162,36 +162,6 @@ function Logo() {
   return <div className="brand"><img src={assetPath("icon.svg")} alt="InventOps"/><div><strong>Invent<span>Ops</span></strong><small>ENTERPRISE</small></div></div>;
 }
 
-function Sidebar({ active, setActive, alertCount, notify, role, setRole, theme, setTheme, onLogout }) {
-  const themeOptions = ["Escuro","Claro","Contraste"];
-  const roleOptions = ["Analista","Gestor","Diretoria","Admin"];
-  return <aside className="sidebar">
-    <Logo/>
-    <div className="sidebar-controls">
-      <section className="sidebar-card">
-        <small>TEMA</small>
-        <div className="sidebar-segmented">
-          {themeOptions.map(option=><button key={option} className={theme===option?"active":""} onClick={()=>{setTheme(option);notify(`Tema alterado para ${option}.`)}}>{option}</button>)}
-        </div>
-      </section>
-      <section className="sidebar-card">
-        <small>VER COMO</small>
-        <div className="sidebar-role-switch">
-          {roleOptions.map(option=><button key={option} className={role===option?"active":""} onClick={()=>{setRole(option);notify(`Visualização alterada para ${option}.`)}}>{option==="Diretoria"?"Direx":option}</button>)}
-        </div>
-      </section>
-    </div>
-    <nav>{navGroups.map(group=><div className="nav-group" key={group.label}><small>{group.label}</small>{group.items.map(({id,label,icon:Icon,mobile,adminOnly}) => {const isActive=active===id||(active==="project"&&id==="portfolio");const restricted=adminOnly&&role!=="Admin";return <button data-mobile={mobile?"true":"false"} key={id} aria-label={label} className={`${isActive?"active":""} ${restricted?"restricted":""}`} onClick={()=>restricted?notify("Acesso restrito ao perfil Admin."):setActive(id)}>
-      <Icon size={19} weight={isActive?"fill":"regular"}/><span>{label}</span>{restricted?<LockKey size={12}/>:null}{id==="alerts"&&alertCount>0?<b>{alertCount}</b>:null}
-    </button>})}</div>)}</nav>
-    <div className="sidebar-bottom">
-      <button className="profile" onClick={()=>setActive("admin")}><span className="avatar">A</span><span><strong>Admin</strong><small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><CaretDown size={15}/></button>
-      <button className="logout-button" onClick={onLogout}><SignOut/><span>Sair com segurança</span></button>
-      <div className="credit"><Sparkle size={15} weight="fill"/><span>Desenvolvido por <b>Daiana Costa</b></span></div>
-    </div>
-  </aside>;
-}
-
 const VISION_PAGES = ["simulator", "commissioning"];
 
 function LangSwitch({ lang, setLang, notify }) {
@@ -257,8 +227,8 @@ function SidebarEnhanced({ active, setActive, alertCount, notify, role, onLogout
 function Topbar({ active, role, onLogout, notify, lang, setLang }) {
   const localizedMeta = pageMetaIntl[lang]?.[active] || pageMeta[active];
   const roadmapTitle = {
-    pt: "Este m?dulo pertence ? expans?o do produto e mostra a pr?xima camada operacional que ser? incorporada ao InventOps.",
-    es: "Este m?dulo pertenece a la expansi?n del producto y muestra la siguiente capa operacional que se incorporar? al InventOps.",
+    pt: "Este módulo pertence à expansão do produto e mostra a próxima camada operacional que será incorporada ao InventOps.",
+    es: "Este módulo pertenece a la expansión del producto y muestra la siguiente capa operacional que se incorporará al InventOps.",
     en: "This module belongs to the product expansion and shows the next operational layer that will be incorporated into InventOps."
   };
   return <header className="topbar"><div><div className="title-line"><h1>{localizedMeta[0]}</h1>{VISION_PAGES.includes(active) ? <span className="vision-badge" title={roadmapTitle[lang]}>↗ VISÃO · ROADMAP</span> : null}</div><p>{localizedMeta[1]}</p></div><div className="top-actions">
@@ -266,7 +236,7 @@ function Topbar({ active, role, onLogout, notify, lang, setLang }) {
   </div></header>;
 }
 
-function DemoJourneyRail({ active, setActive, lang }) {
+function ProductJourneyRail({ active, setActive, lang }) {
   const currentIndex = productJourney.findIndex(step => step.id === active);
   if (currentIndex === -1) return null;
   const nextStep = productJourney[currentIndex + 1];
@@ -277,19 +247,19 @@ function DemoJourneyRail({ active, setActive, lang }) {
   }[lang];
 
   return (
-    <section className="demo-journey-rail" aria-label={copy.title}>
-      <div className="demo-journey-head">
+    <section className="product-journey-rail" aria-label={copy.title}>
+      <div className="product-journey-head">
         <small>{copy.title}</small>
-        <div className="demo-journey-meta">
+        <div className="product-journey-meta">
           <b>{currentIndex + 1}/{productJourney.length} {copy.progress}</b>
-          {nextStep ? <button className="ghost" onClick={() => setActive(nextStep.id)}>{copy.next}: {nextStep.label}</button> : <span className="demo-journey-done">{copy.done}</span>}
+          {nextStep ? <button className="ghost" onClick={() => setActive(nextStep.id)}>{copy.next}: {nextStep.label}</button> : <span className="product-journey-done">{copy.done}</span>}
         </div>
       </div>
-      <div className="demo-journey-track">
+      <div className="product-journey-track">
         {productJourney.map((step, index) => {
           const state = index < currentIndex ? "done" : index == currentIndex ? "current" : "future";
           return (
-            <div key={step.id} className={`demo-journey-step ${state}`}>
+            <div key={step.id} className={`product-journey-step ${state}`}>
               <i>{state === "done" ? <CheckCircle weight="fill" /> : index + 1}</i>
               <span>
                 <b>{step.label}</b>
@@ -597,6 +567,6 @@ export function App() {
     evidence:<EvidencePage/>,settings:<SettingsPage/>
   };
   const page=canAccess?pages[active]:<AccessDenied setActive={setActive}/>;
-  return <div className="app-shell" data-theme={theme}><SidebarEnhanced active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} onLogout={logout}/><main className="workspace"><Topbar active={active} role={role} onLogout={logout} notify={notify} lang={lang} setLang={setLang}/><DemoJourneyRail active={active} setActive={setActive} lang={lang} />{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
+  return <div className="app-shell" data-theme={theme}><SidebarEnhanced active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} onLogout={logout}/><main className="workspace"><Topbar active={active} role={role} onLogout={logout} notify={notify} lang={lang} setLang={setLang}/><ProductJourneyRail active={active} setActive={setActive} lang={lang} />{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
 }
 
