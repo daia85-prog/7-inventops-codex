@@ -40,6 +40,10 @@ const checks = [
     name: "Login não volta para usuários antigos de teste",
     ok: !app.includes("admin.teste") && !app.includes("douglas.alves") && !foundation.includes("admin.teste") && !foundation.includes("douglas.alves"),
   },
+  {
+    name: "Login não vem com credenciais pré-preenchidas",
+    ok: !foundation.includes('useState("daniel.almeida@invent-corp.com")') && !foundation.includes('useState("inventops2026")') && foundation.includes('runLogin(email || "admin@invent-corp.com")'),
+  },
 ];
 
 const failed = checks.filter((check) => !check.ok);

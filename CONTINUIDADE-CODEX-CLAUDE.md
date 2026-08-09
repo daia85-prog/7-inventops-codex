@@ -683,3 +683,30 @@ Se Claude continuar:
 3. Próximo bloco recomendado:
    - aprofundar regras da Operação Assistida;
    - garantir que Daniel e Thomas conseguem executar: cobrar pendência, sinalizar prontidão, concluir checkpoint, aceitar/devolver handoff e consultar histórico/chat sem texto antigo.
+## 2026-08-09 - Code health Bloco B.9: login sem credenciais de teste prontas
+
+Aplicado pelo Codex:
+
+- O login deixou de abrir preenchido com Daniel ou senha padrão.
+- O acesso com Microsoft/Azure AD agora usa o e-mail digitado; se estiver vazio, cai no usuário institucional `admin@invent-corp.com`.
+- Textos auxiliares do login foram trazidos para PT/ES/EN:
+  - estado "Conectando...";
+  - selos de segurança;
+  - mensagens de valor do painel esquerdo.
+- A trava `tools/check-operational-flow.cjs` agora reprova se o login voltar com credenciais pré-preenchidas antigas.
+
+Validação:
+
+- `pnpm check:quality` passou:
+  - sem texto quebrado ou marcador de demo visível em `src`;
+  - fluxo Daniel/Thomas/Home/Cockpit preservado;
+  - build de produção verde.
+
+Se Claude continuar:
+
+1. Validar manualmente login em janela limpa:
+   - e-mail vazio + Microsoft deve entrar como Admin institucional;
+   - `daniel...` deve entrar como Gestor de Implantação;
+   - `thomas...` deve entrar como Analista de Especificação/DevOps.
+2. Não reintroduzir usuários antigos como Douglas/admin.teste.
+3. Manter a pendência visual da órbita de departamentos registrada, mas não bloquear o fluxo real Daniel/Thomas por causa dela.

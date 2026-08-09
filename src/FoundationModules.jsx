@@ -635,9 +635,16 @@ const LOGIN_TEXT={
     keep:"Manter sessão neste dispositivo",
     forgot:"Esqueci minha senha",
     enter:"Entrar no InventOps",
+    connecting:"Conectando...",
     or:"ou",
     microsoft:"Continuar com Microsoft / Azure AD",
     footer:"Conectando pessoas, processos e resultados.",
+    assurance:["SSO corporativo","Perfis validados","Acesso auditável"],
+    highlights:[
+      {title:"Acesso governado",body:"Perfis, visões e ações alinhadas à responsabilidade de cada pessoa."},
+      {title:"Operação rastreável",body:"Solicitações, projetos, decisões e evidências conectados na mesma linha."},
+      {title:"Leitura executiva viva",body:"O que mudou, o que trava e qual é a próxima ação entram já no primeiro acesso."}
+    ],
     pulseA:"projetos ativos",
     pulseB:"solicitações no mês",
     pulseC:"usuários conectados",
@@ -656,9 +663,16 @@ const LOGIN_TEXT={
     keep:"Mantener la sesión en este dispositivo",
     forgot:"Olvidé mi contraseña",
     enter:"Entrar en InventOps",
+    connecting:"Conectando...",
     or:"o",
     microsoft:"Continuar con Microsoft / Azure AD",
     footer:"Conectando personas, procesos y resultados.",
+    assurance:["SSO corporativo","Perfiles validados","Acceso auditable"],
+    highlights:[
+      {title:"Acceso gobernado",body:"Perfiles, vistas y acciones alineadas con la responsabilidad de cada persona."},
+      {title:"Operación trazable",body:"Solicitudes, proyectos, decisiones y evidencias conectados en la misma línea."},
+      {title:"Lectura ejecutiva viva",body:"Lo que cambió, lo que bloquea y la próxima acción entran desde el primer acceso."}
+    ],
     pulseA:"proyectos activos",
     pulseB:"solicitudes del mes",
     pulseC:"usuarios conectados",
@@ -677,9 +691,16 @@ const LOGIN_TEXT={
     keep:"Keep me signed in on this device",
     forgot:"Forgot my password",
     enter:"Enter InventOps",
+    connecting:"Connecting...",
     or:"or",
     microsoft:"Continue with Microsoft / Azure AD",
     footer:"Connecting people, processes, and results.",
+    assurance:["Corporate SSO","Validated profiles","Auditable access"],
+    highlights:[
+      {title:"Governed access",body:"Profiles, views, and actions aligned to each person’s responsibility."},
+      {title:"Traceable operation",body:"Requests, projects, decisions, and evidence connected on the same line."},
+      {title:"Live executive reading",body:"What changed, what blocks, and the next action appear from the first access."}
+    ],
     pulseA:"active projects",
     pulseB:"requests this month",
     pulseC:"connected users",
@@ -724,8 +745,8 @@ const LOGIN_SYNC_TEXT={
 };
 
 export function LoginScreen({onLogin}){
-  const [email,setEmail]=useState("daniel.almeida@invent-corp.com");
-  const [password,setPassword]=useState("inventops2026");
+  const [email,setEmail]=useState("");
+  const [password,setPassword]=useState("");
   const [lang,setLang]=useState("pt");
   const [isSubmitting,setIsSubmitting]=useState(false);
   const [syncStep,setSyncStep]=useState(0);
@@ -740,9 +761,9 @@ export function LoginScreen({onLogin}){
     dashboard:Gauge
   };
   const valueHighlights=[
-    {icon:ShieldCheck,title:"Acesso governado",body:"Perfis, visões e ações alinhadas à responsabilidade de cada pessoa."},
-    {icon:ClipboardText,title:"Operação rastreável",body:"Solicitações, projetos, decisões e evidências conectados na mesma linha."},
-    {icon:Factory,title:"Leitura executiva viva",body:"O que mudou, o que trava e qual é a próxima ação entram já no primeiro acesso."}
+    {icon:ShieldCheck,...copy.highlights[0]},
+    {icon:ClipboardText,...copy.highlights[1]},
+    {icon:Factory,...copy.highlights[2]}
   ];
   const runLogin=async(nextEmail)=>{
     if(isSubmitting)return;
@@ -814,13 +835,13 @@ export function LoginScreen({onLogin}){
         <label>{copy.password}<input type="password" value={password} onChange={e=>setPassword(e.target.value)} required disabled={isSubmitting}/></label>
         <div className="login-options"><label><input type="checkbox" disabled={isSubmitting}/> {copy.keep}</label></div>
         <div className="login-support-row"><span>{copy.forgot}</span></div>
-        <button className="primary" type="submit" disabled={isSubmitting}>{isSubmitting?<><MonitorPlay/>Conectando...</>:<>{copy.enter}<ArrowRight/></>}</button>
+        <button className="primary" type="submit" disabled={isSubmitting}>{isSubmitting?<><MonitorPlay/>{copy.connecting}</>:<>{copy.enter}<ArrowRight/></>}</button>
         <div className="sso-divider"><span>{copy.or}</span></div>
-        <button className="sso-button" type="button" onClick={()=>runLogin("daniel.almeida@invent-corp.com")} disabled={isSubmitting}><span>M</span>{copy.microsoft}</button>
+        <button className="sso-button" type="button" onClick={()=>runLogin(email || "admin@invent-corp.com")} disabled={isSubmitting}><span>M</span>{copy.microsoft}</button>
         <div className="login-assurance-row">
-          <span><ShieldCheck/>SSO corporativo</span>
-          <span><UsersThree/>Perfis validados</span>
-          <span><MonitorPlay/>Acesso auditável</span>
+          <span><ShieldCheck/>{copy.assurance[0]}</span>
+          <span><UsersThree/>{copy.assurance[1]}</span>
+          <span><MonitorPlay/>{copy.assurance[2]}</span>
         </div>
         <footer><ShieldCheck/>{copy.footer}</footer>
       </form>
