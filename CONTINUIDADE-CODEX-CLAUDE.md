@@ -571,3 +571,30 @@ Se Claude continuar:
 2. Confirmar que a navegação respeita perfil: Gestor/Analista/Admin.
 3. Se o fluxo Daniel/Thomas for aprofundado, manter essa sessão como fonte de contexto para Operação Assistida.
 4. Próximo bloco recomendado: ligar Home -> Bastões em movimento -> Operação Assistida com filtros reais por Daniel/Thomas.
+
+## 2026-08-09 - Code health Bloco B.5: Home conecta sessão à Operação Assistida
+
+Aplicado pelo Codex:
+
+- A página de Operação Assistida agora recebe `currentUser`.
+- Ao abrir Daniel/Thomas a partir da Home, o componente é remontado por `cockpitDept`, evitando herdar estado visual do departamento anterior.
+- A faixa da Operação Assistida mostra a sessão ativa junto do ponto focal da área.
+- Mantida a lógica atual de handoff, chat, cobrança, aceite/devolução e histórico.
+
+Validação:
+
+- `node tools/check-text-quality.cjs` passou.
+- `pnpm build` passou.
+
+Se Claude continuar:
+
+1. Validar o fluxo em navegador limpo:
+   - login Daniel -> Home -> Bastões em movimento -> Implantação;
+   - login Thomas -> Home -> Bastões em movimento -> Especificação/DevOps.
+2. Conferir se as ações da Operação Assistida continuam funcionando:
+   - concluir checkpoint;
+   - cobrar pendência;
+   - sinalizar prontidão;
+   - aceitar/devolver handoff;
+   - registrar mensagem no histórico.
+3. Próximo bloco recomendado: criar teste automatizado leve cobrindo clique Home -> Operação Assistida para IMP/ESP.

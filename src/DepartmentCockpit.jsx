@@ -239,7 +239,7 @@ function makeStamp() {
   return { hh, stamp: `hoje - ${hh}` };
 }
 
-export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP" }) {
+export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", currentUser = { name: "Admin", role: "Admin", dept: "ADM" } }) {
   const [dept, setDept] = useState(initialDept);
   const [doneMap, setDoneMap] = useState({});
   const [feed, setFeed] = useState(FEED_SEED);
@@ -441,7 +441,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP" }
             {isPilot ? (
               <span className="pilot-tag">
                 <Sparkle size={13} weight="fill" />
-                operação assistida · {pilotConfig.source} · ponto focal {pilotConfig.focal}
+                operação assistida · {pilotConfig.source} · ponto focal {pilotConfig.focal} · sessão {currentUser.name}
               </span>
             ) : (
               <span className="sample-tag">área aguardando ativação operacional</span>
