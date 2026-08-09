@@ -598,3 +598,29 @@ Se Claude continuar:
    - aceitar/devolver handoff;
    - registrar mensagem no histórico.
 3. Próximo bloco recomendado: criar teste automatizado leve cobrindo clique Home -> Operação Assistida para IMP/ESP.
+
+## 2026-08-09 - Code health Bloco B.6: trava de fluxo operacional
+
+Aplicado pelo Codex:
+
+- Criado `tools/check-operational-flow.cjs`.
+- Criado script `pnpm check:quality`, que roda:
+  1. trava de texto/I18N;
+  2. trava de fluxo Daniel/Thomas/Home/Cockpit;
+  3. build de produção.
+- A nova trava impede regressões como:
+  - Daniel sem perfil Gestor/Implantação;
+  - Thomas sem perfil Analista/Especificação-DevOps;
+  - Home sem abrir Operação Assistida por departamento;
+  - Cockpit sem receber sessão ativa;
+  - retorno de usuários antigos de teste.
+
+Validação:
+
+- `pnpm check:quality` passou.
+
+Se Claude continuar:
+
+1. Antes de declarar qualquer bloco pronto, rodar `pnpm check:quality`.
+2. Se o check falhar, corrigir primeiro; não avançar funcionalidade em cima de regressão.
+3. Próximo bloco recomendado: revisar visualmente o fluxo em navegador limpo e, depois, aprofundar Operação Assistida com histórico/chat/aceite/devolução por Daniel e Thomas.
