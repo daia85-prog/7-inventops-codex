@@ -526,3 +526,25 @@ Próximo ponto se Claude continuar:
 2. Confirmar que a entrada do sistema não mostra usuários antigos, demo ou métricas de demonstração.
 3. Se necessário, trocar o acesso padrão para Thomas quando a próxima validação for Especificação/DevOps.
 4. Seguir para Home/Admin/Operação Assistida com Daniel e Thomas como produto real.
+
+## 2026-08-09 - Code health Bloco B.3: lateral mais compacta
+
+Aplicado pelo Codex:
+
+- Lateral principal compactada em telas desktop.
+- Menu por módulos preservado.
+- Controles de perfil/tema continuam fora da lateral principal; Administração deve concentrar governança de usuário.
+- Objetivo: ganhar área útil sem voltar ao menu cortado/ilegível.
+
+Validação esperada:
+
+- Abrir em janela limpa.
+- Confirmar que os nomes do menu cabem.
+- Confirmar que o menu segue por módulos recolhíveis.
+- Confirmar que a lateral não volta a ocupar espaço exagerado.
+
+Se Claude continuar:
+
+1. Fazer ajuste fino visual da lateral somente se houver corte real.
+2. Não reintroduzir seletores de perfil/tema na lateral.
+3. Manter Administração como local oficial para perfis, usuários, tema e capacidades.
