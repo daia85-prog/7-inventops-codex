@@ -118,6 +118,8 @@ Obrigatorio antes de dizer "pronto":
 - [x] Gate de aceite aparece na esteira e diferencia aberto / ajuste solicitado / aceito.
 - [x] Solicitar ajuste antes do aceite gera chat e linha do tempo.
 - [x] Chat operacional/contexto fica na mesma tela da area.
+- [x] Home mostra bastoes em movimento com atalho para a area correta.
+- [x] Administracao mostra Gate, ultima acao e proxima acao para Daniel/Thomas.
 - [ ] Validar visualmente com Daia em janela limpa.
 - [ ] Claude revisar se a paridade com inventops79 ficou completa.
 - [ ] Refinar login/orbita de departamentos em ciclo separado, sem bloquear uso real.

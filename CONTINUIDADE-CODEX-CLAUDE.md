@@ -379,3 +379,29 @@ Pendente para validar:
 - Concluir checkpoints ate liberar handoff.
 - Confirmar handoff e conferir chat/historico.
 - Em outro projeto, solicitar ajuste e conferir que o aceite nao e concluido.
+
+## 2026-08-09 - Home e Administracao conectadas ao fluxo real
+
+Aplicado no P7:
+
+- Home passou a mostrar `Bastoes em movimento` em PT/ES/EN.
+- Os cards de bastao apontam para Implantacao/Daniel e Especificacao-DevOps/Thomas.
+- Cada bastao mostra projeto, responsavel, estado e proxima leitura operacional.
+- Administracao passou a mostrar para cada usuario valido:
+  - Gate atual;
+  - Ultima acao;
+  - Proxima acao esperada.
+- Daniel e Thomas deixam de ser apenas nomes de teste e passam a aparecer como usuarios operacionais com contexto.
+
+Por que isso existe:
+
+- O usuario precisa entender na Home onde agir sem depender de explicacao externa.
+- Administracao precisa governar usuario e capacidade, nao apenas cadastrar perfil.
+- O P7 deve absorver o que o `inventops79` ja tinha de bom em passagem de bastao, historico e acao por area.
+
+Pendente para validar:
+
+- Abrir Home em PT/ES/EN e confirmar que os bastoes traduzem corretamente.
+- Clicar em cada bastao e confirmar abertura da Operacao Assistida na area correta.
+- Abrir Administracao e clicar em Daniel/Thomas para confirmar contexto correto.
+- Ajustar visual se a nova secao ocupar espaco demais em telas menores.

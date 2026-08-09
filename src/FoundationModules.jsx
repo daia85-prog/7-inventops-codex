@@ -118,7 +118,14 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept,lang="pt"
       chargeTitle:"Quem o COO deve cobrar hoje",
       chargeSub:"Priorização calculada por impacto, prazo e SLA",
       pulseTitle:"Pulso do portfólio",
-      pulseSub:"Tendência dos últimos 30 dias."
+      pulseSub:"Tendência dos últimos 30 dias.",
+      handoffTitle:"Bastões em movimento",
+      handoffSub:"Onde Daniel e Thomas precisam agir agora",
+      handoffItems:[
+        {dept:"IMP",area:"Implantação",owner:"Daniel",project:"PETER 2",state:"Ajuste solicitado",detail:"Cliente sem retorno há 5 dias. A passagem final só libera com aceite registrado.",tone:"attention"},
+        {dept:"ESP",area:"Espec. + DevOps",owner:"Thomas",project:"QUELUZ Fase 2",state:"Checklist em curso",detail:"4 de 6 checkpoints concluídos antes de liberar Implantação.",tone:"open"},
+        {dept:"IMP",area:"Implantação",owner:"Daniel",project:"QUELUZ Fase 1",state:"Pronto para aceite",detail:"8 de 10 itens concluídos. Decisão necessária antes do go-live.",tone:"ready"}
+      ]
     },
     es:{
       pulse:[
@@ -175,7 +182,14 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept,lang="pt"
       chargeTitle:"A quién debe cobrar el COO hoy",
       chargeSub:"Priorización calculada por impacto, plazo y SLA",
       pulseTitle:"Pulso de la cartera",
-      pulseSub:"Tendencia de los últimos 30 días."
+      pulseSub:"Tendencia de los últimos 30 días.",
+      handoffTitle:"Traspasos en movimiento",
+      handoffSub:"Dónde Daniel y Thomas deben actuar ahora",
+      handoffItems:[
+        {dept:"IMP",area:"Implantación",owner:"Daniel",project:"PETER 2",state:"Ajuste solicitado",detail:"Cliente sin respuesta hace 5 días. El traspaso final sólo libera con aceptación registrada.",tone:"attention"},
+        {dept:"ESP",area:"Espec. + DevOps",owner:"Thomas",project:"QUELUZ Fase 2",state:"Checklist en curso",detail:"4 de 6 checkpoints concluidos antes de liberar Implantación.",tone:"open"},
+        {dept:"IMP",area:"Implantación",owner:"Daniel",project:"QUELUZ Fase 1",state:"Listo para aceptación",detail:"8 de 10 ítems concluidos. Decisión necesaria antes del go-live.",tone:"ready"}
+      ]
     },
     en:{
       pulse:[
@@ -232,7 +246,14 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept,lang="pt"
       chargeTitle:"Who the COO should challenge today",
       chargeSub:"Prioritization calculated by impact, due date, and SLA",
       pulseTitle:"Portfolio pulse",
-      pulseSub:"Trend over the last 30 days."
+      pulseSub:"Trend over the last 30 days.",
+      handoffTitle:"Handoffs in motion",
+      handoffSub:"Where Daniel and Thomas need to act now",
+      handoffItems:[
+        {dept:"IMP",area:"Implementation",owner:"Daniel",project:"PETER 2",state:"Adjustment requested",detail:"Client has been silent for 5 days. Final handoff only clears with registered acceptance.",tone:"attention"},
+        {dept:"ESP",area:"Spec. + DevOps",owner:"Thomas",project:"QUELUZ Phase 2",state:"Checklist in progress",detail:"4 of 6 checkpoints completed before releasing Implementation.",tone:"open"},
+        {dept:"IMP",area:"Implementation",owner:"Daniel",project:"QUELUZ Phase 1",state:"Ready for acceptance",detail:"8 of 10 items completed. Decision needed before go-live.",tone:"ready"}
+      ]
     }
   };
   const copy=copyByLang[lang]||copyByLang.pt;
@@ -288,6 +309,20 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept,lang="pt"
         </div>
         <button className="ghost" onClick={()=>openCockpitDept(area.code)}><ArrowRight/>{area.cta}</button>
       </article>)}
+    </div>
+    <div className="home-handoff-board">
+      <header>
+        <small>{copy.handoffTitle}</small>
+        <b>{copy.handoffSub}</b>
+      </header>
+      <div>
+        {copy.handoffItems.map(item=><button key={`${item.dept}-${item.project}-${item.state}`} className={`home-handoff-card ${item.tone}`} type="button" onClick={()=>openCockpitDept(item.dept)}>
+          <span>{item.area}</span>
+          <b>{item.project}</b>
+          <p>{item.detail}</p>
+          <em><strong>{item.owner}</strong><i>{item.state}</i><ArrowRight/></em>
+        </button>)}
+      </div>
     </div>
     <div className="executive-signal-grid">
       <article className="signal-panel priority">
@@ -396,9 +431,9 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
   const permissions=["Visualizar","Editar operação","Gerenciar projetos","Administrar acessos","Configurar integrações"];
   const [invite,setInvite]=useState({name:"",email:"",profile:"Analista",area:"Infraestrutura"});
   const [users,setUsers]=useState([
-    {name:"Admin InventOps", profile:"Admin", area:"Administração", status:"Ativo", dept:"INF", source:"Plataforma"},
-    {name:"Daniel", profile:"Gestor", area:"Implantação", status:"Operação ativa", dept:"IMP", source:"Planner"},
-    {name:"Thomas", profile:"Analista", area:"Espec. Software / DevOps", status:"Operação ativa", dept:"ESP", source:"Planner"},
+    {name:"Admin InventOps", profile:"Admin", area:"Administração", status:"Ativo", dept:"INF", source:"Plataforma", gate:"Governança liberada", lastAction:"Revisão de acesso e permissões por capacidade", nextAction:"Acompanhar Daniel e Thomas na operação assistida"},
+    {name:"Daniel", profile:"Gestor", area:"Implantação", status:"Operação ativa", dept:"IMP", source:"Planner", gate:"2 bastões em aceite", lastAction:"PETER 2 com ajuste solicitado após 5 dias sem retorno", nextAction:"Registrar aceite ou devolver bastão com motivo"},
+    {name:"Thomas", profile:"Analista", area:"Espec. Software / DevOps", status:"Operação ativa", dept:"ESP", source:"Planner", gate:"4/6 checkpoints", lastAction:"QUELUZ Fase 2 em validação técnica antes de Implantação", nextAction:"Fechar checkpoints e liberar passagem para Daniel"},
   ]);
   const roleMeta={
     Admin:{label:"Enterprise Admin",helper:"Controle total da plataforma e das integrações.",scope:"Administração, governança, acessos e regras centrais."},
@@ -441,7 +476,10 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
       area:invite.area,
       status:"Acesso preparado",
       dept:deptMap[invite.area]||"INF",
-      source:"Administração"
+      source:"Administração",
+      gate:"Aguardando primeira operação",
+      lastAction:"Acesso criado pela Administração",
+      nextAction:"Associar usuário a uma área operacional"
     };
     setUsers(current=>[newUser,...current.filter(item=>item.name!==newUser.name)]);
     notify(`Acesso preparado para ${invite.name||"novo usuário"} · perfil ${invite.profile} · área ${invite.area}.`);
@@ -497,6 +535,11 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
           <p>{user.area}</p>
           <span>{user.status}</span>
           <em>{user.source}</em>
+          <dl className="admin-user-state">
+            <div><dt>Gate</dt><dd>{user.gate}</dd></div>
+            <div><dt>Última ação</dt><dd>{user.lastAction}</dd></div>
+            <div><dt>Próxima ação</dt><dd>{user.nextAction}</dd></div>
+          </dl>
           <div className="admin-pilot-actions">
             <button className="ghost" type="button" onClick={()=>notify(`${user.name} está registrado como usuário válido em ${user.area}.`)}>Validar usuário</button>
             <button className="ghost" type="button" onClick={()=>{
