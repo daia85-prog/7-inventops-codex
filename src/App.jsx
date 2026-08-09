@@ -186,7 +186,19 @@ function LangSwitch({ lang, setLang, notify }) {
   </span>;
 }
 
-function SidebarEnhanced({ active, setActive, alertCount, notify, role, onLogout }) {
+const DEFAULT_USER = { name: "Admin", initials: "A", role: "Admin", dept: "ADM", email: "admin@invent-corp.com" };
+const SESSION_PROFILES = [
+  { match: "daniel", name: "Daniel", initials: "DA", role: "Gestor", dept: "IMP", email: "daniel.almeida@invent-corp.com" },
+  { match: "thomas", name: "Thomas", initials: "TH", role: "Analista", dept: "ESP", email: "thomas.santos@invent-corp.com" },
+  { match: "admin", ...DEFAULT_USER }
+];
+function resolveSessionProfile(email = "") {
+  const normalized = email.trim().toLowerCase();
+  const profile = SESSION_PROFILES.find(item => normalized.includes(item.match));
+  return profile ? { ...DEFAULT_USER, ...profile, email: normalized || profile.email } : { ...DEFAULT_USER, email: normalized || DEFAULT_USER.email };
+}
+
+function SidebarEnhanced({ active, setActive, alertCount, notify, role, currentUser, onLogout }) {
   const [openGroups,setOpenGroups]=useState({
     "EXECUTIVO":true,
     "OPERAÇÃO":true,
@@ -217,14 +229,14 @@ function SidebarEnhanced({ active, setActive, alertCount, notify, role, onLogout
       </div>)}
     </nav>
     <div className="sidebar-bottom">
-      <button className="profile" onClick={()=>{setActive("admin");notify("Administração aberta para controlar perfil, tema e acessos.")}}><span className="avatar">A</span><span><strong>Admin</strong><small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><CaretDown size={15}/></button>
+      <button className="profile" onClick={()=>{setActive("admin");notify("Administração aberta para controlar perfil, tema e acessos.")}}><span className="avatar">{currentUser.initials}</span><span><strong>{currentUser.name}</strong><small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><CaretDown size={15}/></button>
       <button className="logout-button" onClick={onLogout}><SignOut/><span>Sair com segurança</span></button>
       <div className="credit"><Sparkle size={15} weight="fill"/><span>Desenvolvido por <b>Daiana Costa</b></span></div>
     </div>
   </aside>;
 }
 
-function Topbar({ active, role, onLogout, notify, lang, setLang }) {
+function Topbar({ active, role, currentUser, onLogout, notify, lang, setLang }) {
   const localizedMeta = pageMetaIntl[lang]?.[active] || pageMeta[active];
   const roadmapTitle = {
     pt: "Este módulo pertence à expansão do produto e mostra a próxima camada operacional que será incorporada ao InventOps.",
@@ -232,7 +244,7 @@ function Topbar({ active, role, onLogout, notify, lang, setLang }) {
     en: "This module belongs to the product expansion and shows the next operational layer that will be incorporated into InventOps."
   };
   return <header className="topbar"><div><div className="title-line"><h1>{localizedMeta[0]}</h1>{VISION_PAGES.includes(active) ? <span className="vision-badge" title={roadmapTitle[lang]}>↗ VISÃO · ROADMAP</span> : null}</div><p>{localizedMeta[1]}</p></div><div className="top-actions">
-    <LangSwitch lang={lang} setLang={setLang} notify={notify} /><span className="date"><CalendarBlank size={18} />11 jul 2026</span><span className="avatar">A</span><span className="top-user">Admin<small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><button className="top-logout" onClick={onLogout} aria-label="Sair"><SignOut /></button>
+    <LangSwitch lang={lang} setLang={setLang} notify={notify} /><span className="date"><CalendarBlank size={18} />11 jul 2026</span><span className="avatar">{currentUser.initials}</span><span className="top-user">{currentUser.name}<small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><button className="top-logout" onClick={onLogout} aria-label="Sair"><SignOut /></button>
   </div></header>;
 }
 
@@ -520,9 +532,10 @@ function SettingsPage(){ const [settings,setSettings]=useState({p0:true,capacity
 
 export function App() {
   const [authenticated,setAuthenticated]=useState(()=>sessionStorage.getItem("inventops-session")==="active");
+  const [currentUser,setCurrentUser]=useState(()=>{try{return JSON.parse(sessionStorage.getItem("inventops-user"))||DEFAULT_USER}catch{return DEFAULT_USER}});
   const [active,setActive]=useState("home");
   const [lang,setLang]=useState(()=>sessionStorage.getItem("inventops-lang")||"pt");
-  const [role,setRole]=useState("Admin");
+  const [role,setRole]=useState(()=>currentUser.role||"Admin");
   const [theme,setTheme]=useState("Escuro");
   const [cockpitDept,setCockpitDept]=useState("IMP");
   const [projects,setProjects]=useState(()=>{try{const saved=sessionStorage.getItem("inventops-projects");return saved?JSON.parse(saved):portfolioData}catch{return portfolioData}});
@@ -540,8 +553,8 @@ export function App() {
   useEffect(()=>{sessionStorage.setItem("inventops-lang",lang)},[lang]);
   const updateProject=useCallback(updated=>{setProjects(current=>current.map(p=>p.code===updated.code?updated:p));setSelectedProject(updated)},[]);
   const openFullProject=()=>{setProjectModalOpen(false);setActive("project")};
-  const login=()=>{sessionStorage.setItem("inventops-session","active");setAuthenticated(true);setActive("home")};
-  const logout=()=>{sessionStorage.removeItem("inventops-session");setAuthenticated(false);setRole("Admin");setActive("home")};
+  const login=(email)=>{const profile=resolveSessionProfile(email);sessionStorage.setItem("inventops-session","active");sessionStorage.setItem("inventops-user",JSON.stringify(profile));setCurrentUser(profile);setRole(profile.role);setCockpitDept(profile.dept);setAuthenticated(true);setActive("home")};
+  const logout=()=>{sessionStorage.removeItem("inventops-session");sessionStorage.removeItem("inventops-user");setCurrentUser(DEFAULT_USER);setAuthenticated(false);setRole("Admin");setCockpitDept("IMP");setActive("home")};
   const openPilotContext=(user)=>{setCockpitDept(user.dept||"INF");setActive("cockpit")};
   const openCockpitDept=(dept)=>{setCockpitDept(dept||"INF");setActive("cockpit")};
   if(!authenticated)return <LoginScreen onLogin={login}/>;
@@ -567,6 +580,6 @@ export function App() {
     evidence:<EvidencePage/>,settings:<SettingsPage/>
   };
   const page=canAccess?pages[active]:<AccessDenied setActive={setActive}/>;
-  return <div className="app-shell" data-theme={theme}><SidebarEnhanced active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} onLogout={logout}/><main className="workspace"><Topbar active={active} role={role} onLogout={logout} notify={notify} lang={lang} setLang={setLang}/><ProductJourneyRail active={active} setActive={setActive} lang={lang} />{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
+  return <div className="app-shell" data-theme={theme}><SidebarEnhanced active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} currentUser={currentUser} onLogout={logout}/><main className="workspace"><Topbar active={active} role={role} currentUser={currentUser} onLogout={logout} notify={notify} lang={lang} setLang={setLang}/><ProductJourneyRail active={active} setActive={setActive} lang={lang} />{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
 }
 

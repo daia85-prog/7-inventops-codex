@@ -548,3 +548,26 @@ Se Claude continuar:
 1. Fazer ajuste fino visual da lateral somente se houver corte real.
 2. Não reintroduzir seletores de perfil/tema na lateral.
 3. Manter Administração como local oficial para perfis, usuários, tema e capacidades.
+
+## 2026-08-09 - Code health Bloco B.4: login contextual por usuário
+
+Aplicado pelo Codex:
+
+- O login deixou de abrir sempre como Admin genérico.
+- `daniel.almeida@invent-corp.com` agora cria sessão como Gestor da área de Implantação (`dept: IMP`).
+- `thomas.santos@invent-corp.com` agora cria sessão como Analista da área de Especificação/DevOps (`dept: ESP`).
+- `admin@invent-corp.com` permanece como perfil Admin.
+- Topbar e lateral passam a mostrar o usuário da sessão, em vez de repetir Admin para todos.
+- A sessão salva `inventops-user` no navegador para manter nome, iniciais, perfil e área.
+
+Validação:
+
+- `node tools/check-text-quality.cjs` passou.
+- `pnpm build` passou.
+
+Se Claude continuar:
+
+1. Validar visualmente login com Daniel e Thomas em janela limpa.
+2. Confirmar que a navegação respeita perfil: Gestor/Analista/Admin.
+3. Se o fluxo Daniel/Thomas for aprofundado, manter essa sessão como fonte de contexto para Operação Assistida.
+4. Próximo bloco recomendado: ligar Home -> Bastões em movimento -> Operação Assistida com filtros reais por Daniel/Thomas.
