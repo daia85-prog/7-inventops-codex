@@ -656,3 +656,30 @@ Se Claude continuar:
    - aprofundar Operação Assistida com histórico, chat, passagem de bastão, aceite/devolução e leitura por área;
    - manter inventops79 como referência principal, mas transformar em produto real, não tela isolada.
 3. Antes de qualquer novo bloco, rodar `pnpm check:quality`.
+
+## 2026-08-09 - Code health Bloco B.8: texto crítico da Operação Assistida
+
+Aplicado pelo Codex:
+
+- Corrigidos textos visíveis da Operação Assistida que ainda estavam sem acentuação:
+  - cobrança;
+  - prontidão;
+  - histórico;
+  - bastão;
+  - evidência;
+  - decisões/dúvidas;
+  - “não considera / está visível”.
+- O histórico inicial do Thomas/Daniel agora aparece com português correto.
+- A trava `tools/check-text-quality.cjs` foi ampliada para reprovar se termos antigos como `cobranca`, `prontidao`, `registrar no historico` e similares voltarem ao `src`.
+
+Validação:
+
+- `pnpm check:quality` passou.
+
+Se Claude continuar:
+
+1. Manter `pnpm check:quality` como primeiro gate.
+2. Se encontrar novo texto visual quebrado, adicionar à lista de bloqueio do `tools/check-text-quality.cjs`.
+3. Próximo bloco recomendado:
+   - aprofundar regras da Operação Assistida;
+   - garantir que Daniel e Thomas conseguem executar: cobrar pendência, sinalizar prontidão, concluir checkpoint, aceitar/devolver handoff e consultar histórico/chat sem texto antigo.

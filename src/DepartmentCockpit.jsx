@@ -199,9 +199,9 @@ const FEED_SEED = [
 ];
 
 const CHAT_SEED = [
-  { t: "09/08 - 16:20", author: "InventAI", role: "Governanca", txt: "Toda passagem de bastao precisa deixar resumo, responsavel, pendencia aberta e proxima acao." },
+  { t: "09/08 - 16:20", author: "InventAI", role: "Governança", txt: "Toda passagem de bastão precisa deixar resumo, responsável, pendência aberta e próxima ação." },
   { t: "09/08 - 15:55", author: "Daniel", role: "Implantacao", txt: "Checklist do Planner revisado. Falta evidenciar o que bloqueia a passagem final para Pos-vendas." },
-  { t: "09/08 - 15:40", author: "Thomas", role: "Especificacao / DevOps", txt: "Quando o descritivo for aprovado, eu sinalizo prontidao para Implantacao seguir sem ruido." },
+  { t: "09/08 - 15:40", author: "Thomas", role: "Especificação / DevOps", txt: "Quando o descritivo for aprovado, eu sinalizo prontidão para Implantação seguir sem ruído." },
 ];
 
 const SAMPLE_PROJECTS = ["TITANO", "QUELUZ", "MARKET PERU", "NAVEPARK", "BP", "MARKET CHILE"];
@@ -326,13 +326,13 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
     const target = base.waiting[0];
     const { stamp } = makeStamp();
     if (target) {
-      setFeed((current) => [{ t: stamp, from: dept, to: target.from === "Cliente" ? "Cliente" : target.from, txt: `Cobranca registrada em ${activeTrack.label}: ${target.what}` }, ...current]);
+      setFeed((current) => [{ t: stamp, from: dept, to: target.from === "Cliente" ? "Cliente" : target.from, txt: `Cobrança registrada em ${activeTrack.label}: ${target.what}` }, ...current]);
       setChatLog((current) => [{ t: stamp, author: pilotConfig?.focal || area.gestor, role: area.nome, txt: `Cobrei ${target.from === "Cliente" ? "cliente" : areaName(target.from)} sobre ${activeTrack.label}: ${target.what}` }, ...current]);
       notify(`Cobrança registrada para ${target.from === "Cliente" ? "cliente" : areaName(target.from)} sobre ${activeTrack.label}.`);
       return;
     }
-    setFeed((current) => [{ t: stamp, from: dept, to: "PMO", txt: `Cobranca interna em ${activeTrack.label}: ${pending[0] || "sem pendencia aberta"}` }, ...current]);
-    setChatLog((current) => [{ t: stamp, author: pilotConfig?.focal || area.gestor, role: area.nome, txt: `Registrei cobranca para destravar ${activeTrack.label}: ${pending[0] || "sem pendencia aberta"}.` }, ...current]);
+    setFeed((current) => [{ t: stamp, from: dept, to: "PMO", txt: `Cobrança interna em ${activeTrack.label}: ${pending[0] || "sem pendência aberta"}` }, ...current]);
+    setChatLog((current) => [{ t: stamp, author: pilotConfig?.focal || area.gestor, role: area.nome, txt: `Registrei cobrança para destravar ${activeTrack.label}: ${pending[0] || "sem pendência aberta"}.` }, ...current]);
     notify(`Cobrança registrada para destravar ${activeTrack.label}: ${pending[0] || "sem pendência aberta"}.`);
   };
 
@@ -342,7 +342,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
     const stamp = `hoje · ${hh}`;
     const key = `${dept}-waiting-${index}`;
     setChargeMap((current) => ({ ...current, [key]: stamp }));
-    setChatLog((current) => [{ t: stamp, author: pilotConfig?.focal || area.gestor, role: area.nome, txt: `Cobranca enviada para ${waitingItem.from === "Cliente" ? "cliente" : areaName(waitingItem.from)}: ${waitingItem.what}` }, ...current]);
+    setChatLog((current) => [{ t: stamp, author: pilotConfig?.focal || area.gestor, role: area.nome, txt: `Cobrança enviada para ${waitingItem.from === "Cliente" ? "cliente" : areaName(waitingItem.from)}: ${waitingItem.what}` }, ...current]);
     setFeed((current) => [{ t: stamp, from: dept, to: waitingItem.from === "Cliente" ? "Cliente" : waitingItem.from, txt: `Cobrança registrada: ${waitingItem.what}` }, ...current]);
     notify(`Cobrança enviada sobre ${waitingItem.project}.`);
   };
@@ -353,7 +353,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
     const stamp = `hoje · ${hh}`;
     const key = `${dept}-waited-${index}`;
     setReadyMap((current) => ({ ...current, [key]: stamp }));
-    setChatLog((current) => [{ t: stamp, author: pilotConfig?.focal || area.gestor, role: area.nome, txt: `Prontidao sinalizada para ${areaName(waitingItem.dept)}: ${waitingItem.what}` }, ...current]);
+    setChatLog((current) => [{ t: stamp, author: pilotConfig?.focal || area.gestor, role: area.nome, txt: `Prontidão sinalizada para ${areaName(waitingItem.dept)}: ${waitingItem.what}` }, ...current]);
     setFeed((current) => [{ t: stamp, from: dept, to: waitingItem.dept, txt: `Área sinalizou prontidão: ${waitingItem.what}` }, ...current]);
     notify(`Prontidão sinalizada para ${areaName(waitingItem.dept)}.`);
   };
@@ -392,7 +392,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
     setHandoffReviewMap((current) => ({ ...current, [activeTrack.id]: { status: "adjustment", stamp, reason } }));
     setChatLog((current) => [{ t: stamp, author: pilotConfig?.focal || area.gestor, role: area.nome, txt: `Solicitei ajuste antes do handoff de ${activeTrack.label}: ${reason}.` }, ...current]);
     setFeed((current) => [{ t: stamp, from: dept, to: "PMO", txt: `Ajuste solicitado antes do aceite: ${activeTrack.label} - ${reason}` }, ...current]);
-    notify(`Ajuste registrado para ${activeTrack.label}. O handoff ainda nao foi aceito.`);
+    notify(`Ajuste registrado para ${activeTrack.label}. O handoff ainda não foi aceito.`);
   };
 
   const sendChatMessage = (event) => {
@@ -404,7 +404,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
     setChatLog((current) => [{ t: stamp, author, role: area.nome, txt: msg }, ...current]);
     setFeed((current) => [{ t: stamp, from: dept, to: "Historico", txt: `Comentario operacional registrado por ${author}: ${msg}` }, ...current]);
     setChatMessage("");
-    notify(`Mensagem registrada no historico de ${area.nome}.`);
+    notify(`Mensagem registrada no histórico de ${area.nome}.`);
   };
 
   return (
@@ -595,7 +595,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
                 <div>
                   <small>GATE DE ACEITE</small>
                   <b>{trackHandoffDone ? `Aceito em ${handoffMap[activeTrack.id]}` : handoffReview?.status === "adjustment" ? `Ajuste solicitado em ${handoffReview.stamp}` : "Aguardando checklist completo"}</b>
-                  <p>{trackHandoffDone ? "Bastao liberado com evidencia e historico." : handoffReview?.status === "adjustment" ? handoffReview.reason : "O sistema nao considera a passagem concluida apenas porque esta visivel."}</p>
+                  <p>{trackHandoffDone ? "Bastão liberado com evidência e histórico." : handoffReview?.status === "adjustment" ? handoffReview.reason : "O sistema não considera a passagem concluída apenas porque está visível."}</p>
                 </div>
               </div>
               <div className="cockpit-track-actions">
@@ -621,7 +621,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
       <article className="cockpit-chat">
         <div className="section-heading">
           <b><ChatCircleText /> Chat operacional</b>
-          <span>Contexto, decisoes e duvidas ficam ligados a mesma area e viram historico auditavel.</span>
+          <span>Contexto, decisões e dúvidas ficam ligados à mesma área e viram histórico auditável.</span>
         </div>
         <div className="chat-list">
           {chatLog.slice(0, 5).map((msg, index) => (
@@ -641,7 +641,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
             placeholder={`Registrar decisao, duvida ou contexto de ${area.nome}...`}
             aria-label="Mensagem operacional"
           />
-          <button type="submit"><PaperPlaneTilt />Registrar no historico</button>
+          <button type="submit"><PaperPlaneTilt />Registrar no histórico</button>
         </form>
       </article>
 

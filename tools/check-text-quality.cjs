@@ -36,6 +36,12 @@ const suspiciousFragments = [
   "daiana soares",
   "demo-credentials",
   "demo-journey",
+  "cobranca",
+  "prontidao",
+  "bastao liberado",
+  "sistema nao considera",
+  "registrar no historico",
+  "decisoes e duvidas",
 ];
 
 function listFiles(dir) {
