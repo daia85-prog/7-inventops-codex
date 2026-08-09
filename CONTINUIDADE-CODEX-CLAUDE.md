@@ -441,3 +441,23 @@ Autonomia de Claude:
 - Pode usar `inventops79` como referência principal e redesenhar partes do P7 quando isso melhorar o produto.
 - Não deve abrir arquitetura nova nem criar linha paralela.
 - Deve priorizar produto real para Daniel/Thomas e Administração, não lapidação superficial.
+
+## 2026-08-09 - Mudança de estratégia: antes de evoluir, endurecer o código
+
+Daia pediu explicitamente parar de tropeçar em problemas antigos antes de continuar expandindo telas.
+
+Novo documento guia criado:
+
+- `CODE-HEALTH-PLANO-CONTINUIDADE.md`
+
+Se o crédito do Codex acabar, Claude deve seguir este plano antes de implementar novas telas:
+
+1. Rodar checagens.
+2. Revisar código crítico.
+3. Corrigir texto/i18n/código velho.
+4. Registrar ponto de parada.
+5. Só então continuar Daniel/Thomas, Administração e Home.
+
+Regra nova:
+
+> Não avançar funcionalidade nova se a base ainda estiver gerando texto quebrado, navegação confusa ou regressão visual fácil.
