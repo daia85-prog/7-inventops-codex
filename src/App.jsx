@@ -364,6 +364,24 @@ function Commissioning({fault,setFault,alerts,setAlerts,setActive,notify}) {
       <dl><div><dt>Projeto</dt><dd>TITANO</dd></div><div><dt>Prioridade</dt><dd className="danger">{fault?"P0 Â· CRÃTICO":"â€”"}</dd></div><div><dt>ResponsÃ¡vel</dt><dd>Rodrigo Baruco</dd></div><div><dt>SLA</dt><dd className="timer">{fault?"07:35:42":"encerrado"}</dd></div><div><dt>Fonte</dt><dd>IoT / CLP</dd></div></dl>
       <button className={fault?"danger-button":"primary"} onClick={fault?clear:inject}>{fault?<><ArrowCounterClockwise/>Normalizar sensor</>:<><Lightning/>Simular nova falha</>}</button></div>
       <div className="telemetry"><div className="panel-title"><b>EvidÃªncia</b><span>Telemetria do Sensor X</span></div><div className="telemetry-chart"><ResponsiveContainer width="100%" height="100%"><AreaChart data={fault?telemetryData:telemetryData.map(x=>({...x,v:18}))}><defs><linearGradient id="redArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#fb5470" stopOpacity={.45}/><stop offset="100%" stopColor="#fb5470" stopOpacity={0}/></linearGradient></defs><CartesianGrid stroke="#19253a" vertical={false}/><XAxis dataKey="t" tick={{fontSize:10}} stroke="#65728a"/><YAxis domain={[0,24]} tick={{fontSize:10}} stroke="#65728a"/><Area type="monotone" dataKey="v" stroke="#fb5470" fill="url(#redArea)" strokeWidth={3} isAnimationActive={false}/></AreaChart></ResponsiveContainer></div><button className="ghost" onClick={()=>setActive("evidence")}>Ver todas as evidÃªncias<ArrowRight/></button></div>
+      <div className="future-vision-card">
+        <div className="future-vision-head">
+          <small>PLANO FUTURO PÃ“S-IMPLANTAÃ‡ÃƒO</small>
+          <span>VISION</span>
+        </div>
+        <h3>O prÃ³ximo passo Ã© simular a linha inteira.</h3>
+        <p>
+          Depois do nÃºcleo operacional consolidado, o InventOps evolui de leitura e resposta
+          para simulaÃ§Ã£o ponta a ponta da operaÃ§Ã£o conectada.
+        </p>
+        <ul className="future-vision-list">
+          <li><Sparkle size={16}/><span><b>SimulaÃ§Ã£o da operaÃ§Ã£o</b><small>cenÃ¡rios de impacto antes do problema explodir</small></span></li>
+          <li><Cpu size={16}/><span><b>Esteira + PLC + sensores</b><small>telemetria fÃ­sica conectada ao contexto do projeto</small></span></li>
+          <li><CloudCheck size={16}/><span><b>Servidores + infraestrutura</b><small>operaÃ§Ã£o de TI entrando no mesmo quadro de decisÃ£o</small></span></li>
+          <li><Circuitry size={16}/><span><b>WCS Velox no mesmo modelo</b><small>gÃªmeo digital real da execuÃ§Ã£o e do software</small></span></li>
+        </ul>
+        <button className="ghost" onClick={()=>setActive("lifecycle")}>Abrir visÃ£o do roadmap<ArrowRight/></button>
+      </div>
     </aside></div></section>;
 }
 
