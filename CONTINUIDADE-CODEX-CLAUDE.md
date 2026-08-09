@@ -156,7 +156,89 @@ com esta ordem:
   - precisa validar com Daia
   - precisa consolidar no P7
 
-## 11. Frase-guia
+## 11. Registro obrigatório de posição atual + próximo passo
+
+Sempre que o Codex parar, encerrar sessão ou ficar sem créditos, deve deixar registrado:
+
+- onde está exatamente no fluxo
+- o que acabou de concluir
+- o que está em andamento
+- o próximo passo imediato
+- o próximo passo estrutural
+- o que pode ser feito pelo Claude sem esperar
+- o que deve voltar para o Codex depois
+
+Formato obrigatório:
+
+### Estado atual do P7
+- Data:
+- Bloco atual:
+- Última entrega concluída:
+- Em andamento agora:
+- Próximo passo imediato:
+- Próximo passo estrutural:
+- Riscos / travas:
+
+### Se o crédito do Codex acabar agora
+Claude deve:
+1.
+2.
+3.
+
+### Depois que o Claude terminar
+Voltar para o Codex com:
+1.
+2.
+3.
+
+## 12. Protocolo de continuidade entre créditos
+
+Objetivo: impedir retrabalho e permitir que Claude avance com autonomia útil enquanto o Codex estiver parado.
+
+Regras:
+
+- Claude não deve tentar “reinventar” a linha principal.
+- Claude deve primeiro estruturar, revisar, organizar e preparar terreno.
+- Claude pode:
+  - analisar `inventops79` em profundidade
+  - mapear tela por tela o que precisa entrar no P7
+  - reorganizar backlog e prioridades
+  - registrar melhorias visuais/funcionais por módulo
+  - atacar pontos pendentes claramente documentados
+  - propor refinamentos para Home, Administração, perfis e departamentos piloto
+- Claude não deve:
+  - trocar arquitetura principal
+  - abrir produto paralelo
+  - mudar contrato de domínio congelado
+
+## 13. Handoff operacional padrão
+
+Se o crédito do Codex acabar, o Claude deve seguir nesta ordem:
+
+1. Revisar 100% do `inventops79`
+2. Produzir mapa: `inventops79` x `P7 atual`
+3. Separar por grupos:
+   - já existe e está bom
+   - existe mas precisa redesenhar
+   - existe no `inventops79` e falta no P7
+   - existe no P7 mas precisa reorganizar
+4. Estruturar a base para:
+   - Login
+   - Carregamento
+   - Home
+   - Administração
+   - Implantação
+   - Especificação / DevOps
+5. Registrar claramente o que ele fez e o que devolve para o Codex implementar / consolidar
+
+Depois disso, quando o Codex voltar, a retomada deve ser:
+
+1. consolidar no P7 o que o Claude estruturou
+2. validar funcionalidade real
+3. publicar
+4. seguir para o próximo bloco sem reabrir discussão antiga
+
+## 14. Frase-guia
 
 Não ganhar por quantidade de telas.
 
