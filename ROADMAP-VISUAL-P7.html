@@ -1,323 +1,394 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, nofollow">
-<title>InventOps — Roadmap Vivo do Produto</title>
-<style>
-  :root{
-    --bg:#05080f; --panel:#0e1420; --text:#eef3fb; --muted:#8b96ab; --dim:#5b6577;
-    --gold:#f5c300; --gold-2:#ffb02e; --gold-soft:#ffd75e; --cyan:#38bdf8; --cyan-2:#7dd3fc;
-  }
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif}
-  body{min-height:100vh;overflow-x:hidden}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InventOps · Roadmap Visual</title>
+  <style>
+    :root{
+      --bg:#07111f;
+      --bg-2:#0c1728;
+      --panel:#0f1c2f;
+      --panel-2:#12233a;
+      --line:#233552;
+      --text:#eef4ff;
+      --muted:#95a6c4;
+      --gold:#f5c400;
+      --gold-soft:#ffdf70;
+      --blue:#4fb4ff;
+      --cyan:#41d7ff;
+      --green:#36d399;
+      --purple:#8d6bff;
+      --red:#ff5a7a;
+      --shadow:0 18px 50px rgba(0,0,0,.35);
+    }
 
-  header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 34px 6px;flex-wrap:wrap}
-  .brand{display:flex;align-items:center;gap:14px}
-  .brand .io{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#ffd75e,#c98a00);display:grid;place-items:center;font-weight:800;color:#131313;font-size:18px;box-shadow:0 0 22px rgba(245,195,0,.45)}
-  .brand h1{margin:0;font-size:22px;letter-spacing:.5px}
-  .brand h1 span{color:var(--gold)}
-  .brand small{display:block;color:var(--muted);font-size:12.5px;letter-spacing:2.5px;margin-top:2px}
-  .actions{display:flex;gap:10px;align-items:center}
-  button.play{background:linear-gradient(135deg,#ffd75e,#e0a800);border:0;color:#131313;font-weight:700;font-size:14px;padding:10px 18px;border-radius:10px;cursor:pointer;letter-spacing:.5px;box-shadow:0 0 18px rgba(245,195,0,.35);transition:transform .15s}
-  button.play:hover{transform:translateY(-1px)}
-  button.ghost{background:transparent;border:1px solid #2a3650;color:var(--muted);font-size:13px;padding:9px 14px;border-radius:10px;cursor:pointer}
-  button.ghost:hover{color:var(--text);border-color:#3d4d6e}
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:
+      radial-gradient(circle at top left, rgba(79,180,255,.12), transparent 24%),
+      radial-gradient(circle at top right, rgba(141,107,255,.10), transparent 28%),
+      linear-gradient(180deg, var(--bg), #050c18 100%);
+      color:var(--text)}
 
-  .tagline{padding:0 34px 4px;color:var(--muted);font-size:14.5px;letter-spacing:.4px}
-  .tagline b{color:var(--gold)}
+    body{min-height:100vh}
+    .wrap{max-width:1440px;margin:0 auto;padding:28px 28px 54px}
 
-  .stage{position:relative;margin:6px 18px 8px;border:1px solid #131d31;border-radius:18px;background:
-    radial-gradient(ellipse 90% 70% at 50% 30%, #0c1424 0%, #05080f 75%);overflow-x:auto;overflow-y:hidden}
-  .stage::-webkit-scrollbar{height:10px}
-  .stage::-webkit-scrollbar-thumb{background:#1c2942;border-radius:6px}
-  svg{display:block;min-width:1720px;width:100%;height:auto}
+    .hero{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:20px;
+      margin-bottom:22px;
+    }
 
-  /* nós */
-  .node{cursor:pointer;opacity:0;transform:translateY(14px);animation:nodeIn .55s ease forwards}
-  .node rect.body{fill:var(--panel);stroke-width:2.5;transition:filter .2s}
-  .node:hover rect.body,.node:focus-visible rect.body{filter:drop-shadow(0 0 14px rgba(245,195,0,.55))}
-  .node:focus{outline:none}
-  .node.cy:hover rect.body,.node.cy:focus-visible rect.body{filter:drop-shadow(0 0 14px rgba(56,189,248,.55))}
-  @keyframes nodeIn{to{opacity:1;transform:translateY(0)}}
-  .era-dim{opacity:.16;transition:opacity .5s}
-  .era-lit{opacity:1;transition:opacity .5s}
+    .brand-card,.status-card,.section,.future-card,.phase-card{
+      background:linear-gradient(180deg, rgba(18,35,58,.94), rgba(11,23,40,.94));
+      border:1px solid rgba(119,150,201,.16);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+    }
 
-  /* trilha que se desenha */
-  #spinePath{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:draw 2.4s ease-out .3s forwards}
-  @keyframes draw{to{stroke-dashoffset:0}}
+    .brand-card{padding:28px 30px;position:relative;overflow:hidden}
+    .brand-card::after{
+      content:"";
+      position:absolute;inset:auto -40px -50px auto;width:220px;height:220px;
+      background:radial-gradient(circle, rgba(141,107,255,.22), transparent 65%);
+      pointer-events:none;
+    }
 
-  /* cometa — o único herói pulsante da tela */
-  .comet-core{filter:drop-shadow(0 0 10px #ffd75e) drop-shadow(0 0 22px rgba(245,195,0,.8))}
+    .brand{
+      display:flex;align-items:center;gap:16px;margin-bottom:18px;
+    }
+    .brand-badge{
+      width:56px;height:56px;border-radius:18px;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg,#ffd94d,#e7a800);
+      color:#151515;font-weight:900;font-size:26px;
+      box-shadow:0 0 24px rgba(245,196,0,.35);
+    }
+    .brand h1{margin:0;font-size:34px;line-height:1}
+    .brand h1 span{color:var(--gold)}
+    .brand small{
+      display:block;margin-top:6px;color:var(--cyan);letter-spacing:.22em;
+      text-transform:uppercase;font-size:12px;font-weight:700;
+    }
 
-  /* tooltip */
-  .tip{position:fixed;z-index:50;max-width:330px;background:#0d1524;border:1px solid rgba(245,195,0,.5);border-radius:14px;
-    padding:14px 16px;box-shadow:0 12px 40px rgba(0,0,0,.6),0 0 24px rgba(245,195,0,.12);pointer-events:none;
-    opacity:0;transform:translateY(6px);transition:opacity .18s,transform .18s}
-  .tip.on{opacity:1;transform:translateY(0)}
-  .tip.cy{border-color:rgba(56,189,248,.5)}
-  .tip .era-tag{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--gold-2)}
-  .tip.cy .era-tag{color:var(--cyan)}
-  .tip h3{margin:4px 0 6px;font-size:16.5px}
-  .tip p{margin:0 0 8px;font-size:13.5px;color:var(--muted);line-height:1.45}
-  .tip .aceite{font-size:12.5px;color:#9fe6c3;border-top:1px dashed #223050;padding-top:8px}
-  .tip .aceite b{color:#40d986}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:10px 16px;border-radius:999px;
+      background:rgba(245,196,0,.08);
+      border:1px solid rgba(245,196,0,.24);
+      color:var(--gold-soft);font-size:12px;font-weight:800;letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+    .title{
+      margin:18px 0 12px;
+      font-size:48px;line-height:1.02;font-weight:900;letter-spacing:-.04em;
+    }
+    .subtitle{
+      margin:0;max-width:760px;color:var(--muted);font-size:19px;line-height:1.6;
+    }
 
-  /* legenda de apresentação */
-  .caption{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);z-index:60;opacity:0;
-    background:#0d1524ee;border:1px solid rgba(245,195,0,.45);border-radius:14px;padding:14px 26px;max-width:760px;
-    text-align:center;box-shadow:0 14px 50px rgba(0,0,0,.65);transition:opacity .4s,transform .4s;pointer-events:none}
-  .caption.on{opacity:1;transform:translateX(-50%) translateY(0)}
-  .caption b{color:var(--gold)}
-  .caption .t{font-size:17px;font-weight:700;letter-spacing:1px}
-  .caption .d{font-size:14px;color:var(--muted);margin-top:5px;line-height:1.5}
+    .status-card{padding:24px 24px 22px}
+    .status-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+    .status-head h2{margin:0;font-size:22px}
+    .status-tag{
+      padding:8px 12px;border-radius:999px;
+      border:1px solid rgba(79,180,255,.28);
+      background:rgba(79,180,255,.08);
+      color:#9ad9ff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.12em;
+    }
+    .progress{
+      margin:20px 0 14px;height:14px;border-radius:999px;background:#08111d;overflow:hidden;
+      border:1px solid rgba(255,255,255,.06)
+    }
+    .progress > div{
+      width:58%;
+      height:100%;
+      background:linear-gradient(90deg, #f5c400, #ffdf70 45%, #4fb4ff 100%);
+      box-shadow:0 0 22px rgba(79,180,255,.25);
+    }
+    .status-grid{
+      display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px;
+    }
+    .mini{
+      padding:14px 15px;border-radius:16px;background:rgba(255,255,255,.02);
+      border:1px solid rgba(255,255,255,.06)
+    }
+    .mini .k{display:block;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.12em;margin-bottom:7px}
+    .mini .v{font-size:22px;font-weight:900}
 
-  footer{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:8px 34px 22px;flex-wrap:wrap}
-  .legend{display:flex;gap:22px;align-items:center;font-size:13px;color:var(--muted)}
-  .legend i{display:inline-block;width:26px;height:4px;border-radius:2px;margin-right:7px;vertical-align:middle}
-  .legend .lg i{background:linear-gradient(90deg,#f5c300,#ffb02e);box-shadow:0 0 8px rgba(245,195,0,.6)}
-  .legend .lc i{background:linear-gradient(90deg,#38bdf8,#7dd3fc);box-shadow:0 0 8px rgba(56,189,248,.5)}
-  .credit{color:var(--dim);font-size:13px}
-  .credit b{color:var(--gold)}
+    .section{padding:24px 24px 26px;margin-top:18px}
+    .section h3{margin:0 0 16px;font-size:22px}
 
-  @media (prefers-reduced-motion: reduce){
-    .node{animation:none;opacity:1;transform:none}
-    #spinePath{animation:none;stroke-dashoffset:0}
-    #comet{display:none}
-  }
-</style>
+    .now-grid{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
+    }
+    .phase-card{
+      padding:18px;position:relative;overflow:hidden;min-height:190px;
+      background:linear-gradient(180deg, rgba(13,25,43,.96), rgba(9,19,33,.98));
+    }
+    .phase-card.current{
+      border:1px solid rgba(245,196,0,.3);
+      box-shadow:0 0 0 1px rgba(245,196,0,.12), 0 16px 50px rgba(245,196,0,.08);
+    }
+    .phase-card.next{
+      border:1px solid rgba(79,180,255,.28);
+    }
+    .phase-top{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px;
+    }
+    .phase-num{
+      width:40px;height:40px;border-radius:14px;display:grid;place-items:center;
+      font-weight:900;font-size:18px;background:#16243b;color:#b9cae7;border:1px solid rgba(255,255,255,.08)
+    }
+    .current .phase-num{background:linear-gradient(135deg,#f5c400,#e3a900);color:#141414}
+    .next .phase-num{background:linear-gradient(135deg,#1c3557,#245d96);color:#d8efff}
+    .phase-state{
+      padding:7px 10px;border-radius:999px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;
+    }
+    .state-current{background:rgba(245,196,0,.10);color:var(--gold-soft);border:1px solid rgba(245,196,0,.22)}
+    .state-next{background:rgba(79,180,255,.10);color:#96d9ff;border:1px solid rgba(79,180,255,.22)}
+    .state-later{background:rgba(255,255,255,.04);color:#c5d3ea;border:1px solid rgba(255,255,255,.08)}
+    .phase-card h4{margin:0 0 10px;font-size:22px}
+    .phase-card p{margin:0 0 14px;color:var(--muted);line-height:1.55}
+    .phase-card ul{margin:0;padding-left:18px;color:#dbe7fb;line-height:1.55}
+    .phase-card li+li{margin-top:7px}
+
+    .route{
+      display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:18px;
+    }
+    .route-step{
+      padding:16px 14px;border-radius:16px;background:rgba(255,255,255,.02);
+      border:1px solid rgba(255,255,255,.07);position:relative;
+    }
+    .route-step strong{display:block;font-size:15px;margin-bottom:6px}
+    .route-step span{color:var(--muted);font-size:13px;line-height:1.45}
+    .route-step.active{border-color:rgba(245,196,0,.28);background:rgba(245,196,0,.06)}
+    .route-step.focus{border-color:rgba(54,211,153,.24);background:rgba(54,211,153,.05)}
+
+    .future-grid{
+      display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:18px;
+    }
+    .future-card{padding:20px}
+    .future-card h4{margin:0 0 10px;font-size:22px}
+    .future-card p{margin:0 0 12px;color:var(--muted);line-height:1.6}
+    .future-card ul{margin:0;padding-left:18px;line-height:1.6;color:#e0ebfb}
+    .future-card li+li{margin-top:7px}
+
+    .future-card.primary{
+      border:1px solid rgba(141,107,255,.26);
+      background:linear-gradient(180deg, rgba(25,22,52,.96), rgba(13,20,38,.98));
+    }
+    .future-card.sim{
+      border:1px solid rgba(65,215,255,.26);
+      background:
+        radial-gradient(circle at top right, rgba(65,215,255,.08), transparent 32%),
+        linear-gradient(180deg, rgba(10,22,40,.98), rgba(8,17,31,.98));
+    }
+
+    .footer-note{
+      margin-top:18px;padding:18px 20px;border-radius:18px;
+      background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+      color:var(--muted);line-height:1.65
+    }
+    .footer-note b{color:var(--text)}
+
+    @media (max-width: 1200px){
+      .hero,.now-grid,.future-grid,.route{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width: 860px){
+      .hero,.now-grid,.future-grid,.route,.status-grid{grid-template-columns:1fr}
+      .title{font-size:38px}
+      .wrap{padding:20px}
+    }
+  </style>
 </head>
 <body>
+  <div class="wrap">
+    <section class="hero">
+      <article class="brand-card">
+        <div class="brand">
+          <div class="brand-badge">IO</div>
+          <div>
+            <h1>Invent<span>Ops</span></h1>
+            <small>Roadmap vivo do produto</small>
+          </div>
+        </div>
+        <div class="eyebrow">P7 oficial · referência premium: inventops79</div>
+        <h2 class="title">Onde estamos, o que entregamos agora e até onde o InventOps vai chegar.</h2>
+        <p class="subtitle">
+          Este painel organiza a execução real do sistema: o núcleo que precisa funcionar já,
+          a ordem oficial de ataque e o plano de expansão pós-implantação.
+        </p>
+      </article>
 
-<header>
-  <div class="brand">
-    <div class="io">IO</div>
-    <div>
-      <h1>Invent<span>Ops</span> · Roadmap do Produto</h1>
-      <small>DA DEMO À OPERAÇÃO VIVA · CONTROLAR → CONECTAR → PREVER → AGIR</small>
-    </div>
+      <aside class="status-card">
+        <div class="status-head">
+          <div>
+            <h2>Status atual</h2>
+            <p style="margin:8px 0 0;color:var(--muted);line-height:1.55">
+              Estamos saindo do básico e subindo a régua para produto real utilizável com áreas reais.
+            </p>
+          </div>
+          <span class="status-tag">Execução ativa</span>
+        </div>
+
+        <div class="progress"><div></div></div>
+
+        <div class="status-grid">
+          <div class="mini">
+            <span class="k">Maturidade visual / funcional</span>
+            <span class="v">58%</span>
+          </div>
+          <div class="mini">
+            <span class="k">Foco imediato</span>
+            <span class="v">Login + Home + Administração</span>
+          </div>
+          <div class="mini">
+            <span class="k">Áreas piloto</span>
+            <span class="v">Implantação + Espec./DevOps</span>
+          </div>
+          <div class="mini">
+            <span class="k">Objetivo da próxima validação</span>
+            <span class="v">Uso real amanhã</span>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section">
+      <h3>Fases oficiais de execução</h3>
+      <div class="now-grid">
+        <article class="phase-card current">
+          <div class="phase-top">
+            <div class="phase-num">A</div>
+            <span class="phase-state state-current">Agora</span>
+          </div>
+          <h4>Login + Carregamento</h4>
+          <p>Porta de entrada premium, confiável e coerente com a jornada inteira.</p>
+          <ul>
+            <li>Entrada enterprise real, não “demo”.</li>
+            <li>Perfis válidos e Microsoft 365 preservado.</li>
+            <li>Transição mais forte até a Home.</li>
+          </ul>
+        </article>
+
+        <article class="phase-card next">
+          <div class="phase-top">
+            <div class="phase-num">B</div>
+            <span class="phase-state state-next">Próximo</span>
+          </div>
+          <h4>Home corporativa</h4>
+          <p>Centro de comando do sistema, já puxando leitura real das áreas piloto.</p>
+          <ul>
+            <li>Leitura executiva em segundos.</li>
+            <li>Atalhos reais, não decorativos.</li>
+            <li>Base premium inspirada no inventops79.</li>
+          </ul>
+        </article>
+
+        <article class="phase-card">
+          <div class="phase-top">
+            <div class="phase-num">C</div>
+            <span class="phase-state state-later">Em seguida</span>
+          </div>
+          <h4>Cockpit Daniel + Thomas</h4>
+          <p>Operação viva dos times piloto, com esteira, handoff, bloqueios e progresso.</p>
+          <ul>
+            <li>Implantação com Daniel.</li>
+            <li>Especificação / DevOps com Thomas.</li>
+            <li>Cockpit real em vez de tela genérica.</li>
+          </ul>
+        </article>
+
+        <article class="phase-card">
+          <div class="phase-top">
+            <div class="phase-num">D</div>
+            <span class="phase-state state-later">Governança</span>
+          </div>
+          <h4>Administração</h4>
+          <p>Centro de perfis, acessos, contexto de usuários e governança operacional.</p>
+          <ul>
+            <li>Admin, Daniel e Thomas válidos.</li>
+            <li>Navegação mais limpa.</li>
+            <li>Perfis fora da lateral principal.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>Sequência oficial de ataque</h3>
+      <div class="route">
+        <div class="route-step active">
+          <strong>1. Login</strong>
+          <span>Fechar entrada premium, trilíngue e confiável.</span>
+        </div>
+        <div class="route-step active">
+          <strong>2. Carregamento</strong>
+          <span>Transição visual forte e leitura de contexto.</span>
+        </div>
+        <div class="route-step active">
+          <strong>3. Home</strong>
+          <span>Organizar a visão inicial para operação real.</span>
+        </div>
+        <div class="route-step focus">
+          <strong>4. Cockpit do Piloto</strong>
+          <span>Daniel + Thomas, esteiras reais e acompanhamento ponta a ponta.</span>
+        </div>
+        <div class="route-step">
+          <strong>5. Administração</strong>
+          <span>Perfis, acessos, módulos e controle funcional.</span>
+        </div>
+        <div class="route-step">
+          <strong>6. Núcleo operacional</strong>
+          <span>Solicitações, atividades, projetos, evidências e leitura diretiva.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h3>O que queremos mostrar amanhã</h3>
+      <div class="future-grid">
+        <article class="future-card primary">
+          <h4>Núcleo real utilizável</h4>
+          <p>
+            Amanhã o InventOps precisa estar apresentável e funcional para mostrar que já existe produto,
+            não só visão.
+          </p>
+          <ul>
+            <li>Login forte e coerente.</li>
+            <li>Home mais limpa e útil.</li>
+            <li>Administração funcional.</li>
+            <li>Daniel e Thomas acessando seus contextos reais.</li>
+            <li>Implantação e Especificação / DevOps como áreas piloto vivas.</li>
+          </ul>
+        </article>
+
+        <article class="future-card sim">
+          <h4>Plano futuro pós-implantação · inteligência da simulação</h4>
+          <p>
+            Depois do núcleo implantado e sendo usado, a próxima ambição oficial do InventOps
+            é virar uma camada de simulação e monitoramento operacional completo.
+          </p>
+          <ul>
+            <li>Simular a linha inteira e não só tarefas isoladas.</li>
+            <li>Ler esteira, PLC, sensores, servidores e WCS Velox no mesmo contexto.</li>
+            <li>Antecipar falhas, gargalos e impacto operacional antes do problema explodir.</li>
+            <li>Gerar cenários de decisão para operação, implantação e diretoria.</li>
+            <li>Evoluir para digital twin operacional com evidência e previsão.</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="footer-note">
+        <b>Leitura estratégica:</b> primeiro fechamos o núcleo funcional premium
+        (Login → Home → Cockpit → Administração → áreas piloto). Depois disso,
+        o sistema avança para a camada de inteligência pesada:
+        simulação da linha, integração com esteira, PLC, servidores e WCS Velox,
+        transformando o InventOps em plataforma mundial de operação conectada.
+      </div>
+    </section>
   </div>
-  <div class="actions">
-    <button class="ghost" id="btnReplay" title="Redesenha a trilha">↻ Redesenhar</button>
-    <button class="play" id="btnPlay">▶ Modo apresentação</button>
-  </div>
-</header>
-<p class="tagline">Passe o mouse (ou Tab) em qualquer entrega pra ver <b>o que é</b> e <b>quando está pronta de verdade</b> · dourado = compromisso · ciano = visão</p>
-
-<div class="stage" id="stage"></div>
-
-<footer>
-  <div class="legend">
-    <span class="lg"><i></i>Eras 1–2 · compromisso</span>
-    <span class="lc"><i></i>Eras 3–5 · visão de futuro</span>
-    <span>🚪 = portão: o critério que abre a era seguinte</span>
-  </div>
-  <div class="credit">✦ Desenvolvido por <b>Daiana Costa</b> · detalhes no ROADMAP-P7.md · 12/07/2026</div>
-</footer>
-
-<div class="tip" id="tip" role="status"></div>
-<div class="caption" id="caption"></div>
-
-<script>
-/* ============ DADOS (separados do desenho — disciplina do blueprint) ============ */
-const ERAS = [
-  { id:"e1", nome:"ERA 1 · CONTROLE", janela:"agora · demo 13/07", portao:"Igor validar a demo", tone:"gold",
-    story:"Tudo começa aqui: a demo empresa-inteira, com departamentos e gestores reais — a maquete rica da casa.",
-    nodes:[
-      {t:["14 Deptos","Reais"], d:"Áreas e gestores de verdade em todas as telas — fim dos nomes fictícios; e-mail @invent-corp.com.", a:"zero gestor fictício no app"},
-      {t:["Cockpit","Meu Depto"], d:"A tela da dor: minhas entregas · o que aguardo · quem espera por mim — e o botão 'Concluir e notificar' com carimbo de hora.", a:"handoff com hora no feed (adeus caça no WhatsApp)"},
-      {t:["Import","Nexus"], d:"O kickoff do gestor vira projeto com pendências já distribuídas pros 14 departamentos — sozinho.", a:"importar o JSON real do BR SUPPLY funciona, sem duplicar"},
-      {t:["SharePoint","+ Vídeo Igor"], d:"Cartão 'Documentos do projeto' apontando pro SharePoint + kit completo do vídeo por nível de acesso.", a:"Daiana grava o vídeo sem perguntar nada"}
-    ]},
-  { id:"e15", nome:"ERA 1.5 · FUNDAÇÃO", janela:"jul–ago/26", portao:"CI verde · zero dado na tela", tone:"gold",
-    story:"Antes de morar, reforçamos a estrutura: código blindado, robô de testes e o alicerce trilíngue.",
-    nodes:[
-      {t:["TypeScript"], d:"O código passa a avisar o erro ANTES de rodar — menos bug bobo, mais velocidade depois.", a:"projeto 100% migrado"},
-      {t:["Testes + CI"], d:"Um robô clica no sistema inteiro a cada mudança e acusa o que quebrou — qualidade sem depender de olho.", a:"esteira verde a cada push"},
-      {t:["Mobile · PWA","+ ES · EN"], d:"Instala no celular do gestor em obra + os idiomas saem do 'em breve' e viram tradução real.", a:"seletor funcional nos 3 idiomas"}
-    ]},
-  { id:"e2", nome:"ERA 2 · CONEXÃO", janela:"set–nov/26", portao:"3 áreas usando no dia a dia", tone:"gold",
-    story:"A casa ganha luz e água: banco de verdade, login da empresa e os dados reais migrados.",
-    nodes:[
-      {t:["Banco real","Supabase"], d:"Fim do 'salvo só no navegador' — os dados moram num banco de verdade, com backup automático.", a:"nada se perde nunca mais"},
-      {t:["Login M365"], d:"Entra com a conta da empresa, sem senha nova — e cada perfil vê só o que deve.", a:"SSO corporativo funcionando"},
-      {t:["Dados reais","+ LGPD"], d:"Migração dos dados do Velox (P1), ambientes separados (demo/homolog/prod) e política de privacidade.", a:"ninguém redigita nada"}
-    ]},
-  { id:"e3", nome:"ERA 3 · INTEGRAÇÕES", janela:"dez/26–mar/27", portao:"1 handoff 100% sem WhatsApp", tone:"cyan",
-    story:"A casa se conecta à rua: avisos de verdade chegando onde as pessoas já estão.",
-    nodes:[
-      {t:["Notificações","reais"], d:"E-mail, Teams e WhatsApp avisando o próximo departamento na hora do handoff — sozinho.", a:"aviso chega sem ninguém pedir"},
-      {t:["SharePoint","total"], d:"Ler E subir arquivos pelo próprio InventOps — o SharePoint vira o cofre invisível por trás.", a:"upload sem sair do sistema"},
-      {t:["Outlook","· Planner"], d:"As pontes que a Daiana já domina no Cowork alimentando o sistema automaticamente.", a:"dado entra sem digitação"}
-    ]},
-  { id:"e4", nome:"ERA 4 · INTELIGÊNCIA", janela:"2027", portao:"acurácia medida e publicada", tone:"cyan",
-    story:"A casa que avisa antes de dar problema: o Simulador deixa de encenar e passa a calcular.",
-    nodes:[
-      {t:["Simulador","real"], d:"'E se o TITANO atrasar 5 dias?' respondido com cálculo sobre o histórico real — não com encenação.", a:"cenários auditáveis"},
-      {t:["Previsão de","gargalos"], d:"O sistema aponta a sobrecarga e o atraso ANTES de doer — com % de confiança honesto.", a:"previsão com acurácia medida"}
-    ]},
-  { id:"e5", nome:"ERA 5 · FÁBRICA + VELOX", janela:"2027+", portao:"1 esteira piloto no ar", tone:"cyan",
-    story:"O diferencial que ninguém tem: o sistema de projetos conversando com a esteira e com o WCS Velox.",
-    nodes:[
-      {t:["CLP · IoT"], d:"A esteira falando com o sistema: falha física de sensor vira alerta P0 com dono e SLA.", a:"telemetria real de 1 linha"},
-      {t:["Passaporte","Velox"], d:"Fim do 'a sete chaves': versão do WCS por cliente, release notes visíveis e progresso do dev por evidência.", a:"inventário Velox completo"}
-    ]}
-];
-
-/* ============ GEOMETRIA ============ */
-const NW=172, NH=78, TOPY=228, BOTY=452, SPINE=378, ERA_GAP=64, STEP=112;
-const startX=60, startW=152;
-let x=startX+startW+58;
-const layout=[];
-for(const era of ERAS){
-  const nodes=era.nodes.map((n,i)=>({...n, cx:x+i*STEP+NW/2, top:i%2===0}));
-  const x0=nodes[0].cx-NW/2, x1=nodes[nodes.length-1].cx+NW/2;
-  layout.push({era, nodes, x0, x1, cx:(x0+x1)/2});
-  x=x1+ERA_GAP;
-}
-const endX=x+20, endW=152, W=endX+endW+70, H=760;
-
-/* ============ SVG ============ */
-const gold="url(#gGold)", cyan="url(#gCyan)";
-let svg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Roadmap do InventOps em 5 eras">
-<defs>
-  <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd75e"/><stop offset="1" stop-color="#c98a00"/></linearGradient>
-  <linearGradient id="gCyan" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#0284c7"/></linearGradient>
-  <linearGradient id="gSpine" x1="0" y1="0" x2="1" y2="0">
-    <stop offset="0" stop-color="#f5c300"/><stop offset=".52" stop-color="#ffb02e"/><stop offset=".78" stop-color="#38bdf8"/><stop offset="1" stop-color="#7dd3fc"/>
-  </linearGradient>
-  <filter id="fGlow" x="-60%" y="-60%" width="220%" height="220%">
-    <feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-  </filter>
-</defs>
-<g stroke="#0f1a2e" stroke-width="1" opacity=".6"><path d="M0 110 H${W} M0 610 H${W}"/>`;
-for(let gx=280; gx<W; gx+=320) svg+=`<path d="M${gx} 0 V${H}"/>`;
-svg+=`</g>`;
-
-/* espinha */
-svg+=`<path id="spinePath" d="M${startX+startW} ${SPINE} H${endX}" stroke="url(#gSpine)" stroke-width="7" fill="none" filter="url(#fGlow)"/>`;
-
-/* nó inicial + pin */
-svg+=`<g filter="url(#fGlow)">
- <rect x="${startX}" y="${SPINE-62}" width="${startW}" height="124" rx="20" fill="#0e1420" stroke="${gold}" stroke-width="3.5"/>
- <text x="${startX+startW/2}" y="${SPINE-12}" text-anchor="middle" fill="#eef3fb" font-size="21" font-weight="700">InventOps</text>
- <text x="${startX+startW/2}" y="${SPINE+14}" text-anchor="middle" fill="#f5c300" font-size="16" font-weight="600">HOJE · demo</text>
- <text x="${startX+startW/2}" y="${SPINE+38}" text-anchor="middle" fill="#8b96ab" font-size="13">nascido do P1+Codex</text>
-</g>
-<g filter="url(#fGlow)">
- <rect x="${startX-6}" y="${SPINE-130}" width="${startW+12}" height="34" rx="17" fill="#1a1305" stroke="#f5c300" stroke-width="1.5"/>
- <text x="${startX+startW/2}" y="${SPINE-107}" text-anchor="middle" fill="#ffd75e" font-size="14" font-weight="700">📍 VOCÊ ESTÁ AQUI</text>
- <path d="M${startX+startW/2} ${SPINE-96} V${SPINE-62}" stroke="#f5c300" stroke-width="2" stroke-dasharray="4 4"/>
-</g>`;
-
-/* eras */
-let nodeIdx=0;
-layout.forEach((L,ei)=>{
-  const tone=L.era.tone==="gold"?gold:cyan;
-  const lineC=L.era.tone==="gold"?"#f5c300":"#38bdf8";
-  const labC=L.era.tone==="gold"?"#ffb02e":"#38bdf8";
-  svg+=`<g class="eraG" id="${L.era.id}">`;
-  L.nodes.forEach(n=>{
-    const y=n.top?TOPY:BOTY;
-    const cyCls=L.era.tone==="cyan"?" cy":"";
-    svg+=`<path d="M${n.cx} ${n.top?y+NH:y} V${SPINE}" stroke="${lineC}" stroke-width="2" opacity=".65"/>`;
-    svg+=`<g class="node${cyCls}" tabindex="0" role="button" data-era="${ei}" data-node="${nodeIdx}" style="animation-delay:${.35+nodeIdx*.12}s" aria-label="${n.t.join(' ')}">
-      <rect class="body" x="${n.cx-NW/2}" y="${y}" width="${NW}" height="${NH}" rx="16" stroke="${tone}"/>`;
-    if(n.t.length===1)
-      svg+=`<text x="${n.cx}" y="${y+46}" text-anchor="middle" fill="#eef3fb" font-size="17.5" font-weight="600">${n.t[0]}</text>`;
-    else
-      svg+=`<text x="${n.cx}" y="${y+32}" text-anchor="middle" fill="#eef3fb" font-size="17" font-weight="600">${n.t[0]}</text>
-            <text x="${n.cx}" y="${y+56}" text-anchor="middle" fill="#eef3fb" font-size="17" font-weight="600">${n.t[1]||""}</text>`;
-    svg+=`</g>`;
-    nodeIdx++;
-  });
-  /* chave + rótulos */
-  svg+=`<path d="M${L.x0} 574 v14 h${L.x1-L.x0} v-14" stroke="${lineC}" stroke-width="2.5" fill="none" opacity=".85"/>
-  <text x="${L.cx}" y="620" text-anchor="middle" fill="${labC}" font-size="18" font-weight="700" letter-spacing="2">${L.era.nome}</text>
-  <text x="${L.cx}" y="646" text-anchor="middle" fill="#5b6577" font-size="13.5">${L.era.janela}</text>
-  <text x="${L.cx}" y="676" text-anchor="middle" fill="#7c8699" font-size="13" font-style="italic">🚪 ${L.era.portao}</text></g>`;
-  /* seta na espinha entre eras */
-  if(ei<layout.length-1){
-    const ax=L.x1+ERA_GAP/2;
-    svg+=`<path d="M${ax} ${SPINE} l-15 -8 v16 z" fill="#ffe27a" filter="url(#fGlow)"/>`;
-  }
-});
-
-/* nó final */
-svg+=`<g filter="url(#fGlow)">
- <rect x="${endX+20}" y="${SPINE-62}" width="${endW}" height="124" rx="20" fill="#0e1420" stroke="${cyan}" stroke-width="3.5"/>
- <text x="${endX+20+endW/2}" y="${SPINE-12}" text-anchor="middle" fill="#eef3fb" font-size="19" font-weight="700">Produto</text>
- <text x="${endX+20+endW/2}" y="${SPINE+14}" text-anchor="middle" fill="#7dd3fc" font-size="16" font-weight="600">vendável</text>
- <text x="${endX+20+endW/2}" y="${SPINE+38}" text-anchor="middle" fill="#8b96ab" font-size="13">PT · ES · EN</text>
-</g>`;
-
-/* cometa (herói único) */
-svg+=`<g id="comet"><circle r="7" fill="#ffd75e" class="comet-core">
-  <animateMotion dur="9s" repeatCount="indefinite" path="M${startX+startW} ${SPINE} H${endX}"/>
-</circle></g>`;
-
-svg+=`</svg>`;
-document.getElementById("stage").innerHTML=svg;
-
-/* comprimento da trilha p/ animação de desenho */
-const sp=document.getElementById("spinePath");
-sp.style.setProperty("--len", sp.getTotalLength());
-
-/* ============ TOOLTIP ============ */
-const tip=document.getElementById("tip");
-const flat=[]; layout.forEach((L,ei)=>L.nodes.forEach(n=>flat.push({era:L.era,n})));
-function showTip(el){
-  const i=+el.dataset.node, {era,n}=flat[i];
-  tip.className="tip on"+(era.tone==="cyan"?" cy":"");
-  tip.innerHTML=`<div class="era-tag">${era.nome} · ${era.janela}</div>
-    <h3>${n.t.join(" ")}</h3><p>${n.d}</p>
-    <div class="aceite"><b>✓ pronto quando:</b> ${n.a}</div>`;
-  const r=el.getBoundingClientRect();
-  let tx=r.left+r.width/2-165, ty=r.top>window.innerHeight/2 ? r.top-tip.offsetHeight-14 : r.bottom+14;
-  requestAnimationFrame(()=>{ /* reposiciona com altura real */
-    ty=r.top>window.innerHeight/2 ? r.top-tip.offsetHeight-14 : r.bottom+14;
-    tip.style.left=Math.max(10,Math.min(tx,window.innerWidth-345))+"px";
-    tip.style.top=Math.max(10,ty)+"px";
-  });
-}
-function hideTip(){tip.classList.remove("on")}
-document.querySelectorAll(".node").forEach(el=>{
-  el.addEventListener("mouseenter",()=>showTip(el));
-  el.addEventListener("mouseleave",hideTip);
-  el.addEventListener("focus",()=>showTip(el));
-  el.addEventListener("blur",hideTip);
-});
-
-/* ============ MODO APRESENTAÇÃO ============ */
-const caption=document.getElementById("caption");
-let playing=false;
-function present(){
-  if(playing) return; playing=true;
-  const groups=[...document.querySelectorAll(".eraG")];
-  const stage=document.getElementById("stage");
-  let step=0;
-  const tick=()=>{
-    groups.forEach((g,i)=>{g.classList.toggle("era-dim",i!==step);g.classList.toggle("era-lit",i===step)});
-    const L=layout[step];
-    caption.innerHTML=`<div class="t">${L.era.nome} <span style="color:#5b6577;font-weight:400">· ${L.era.janela}</span></div>
-      <div class="d">${L.era.story}<br>🚪 <b>Portão:</b> ${L.era.portao}</div>`;
-    caption.classList.add("on");
-    stage.scrollTo({left:Math.max(0,(L.cx/W)*stage.scrollWidth-stage.clientWidth/2),behavior:"smooth"});
-    step++;
-    if(step<groups.length){ setTimeout(tick,6500); }
-    else setTimeout(()=>{
-      groups.forEach(g=>{g.classList.remove("era-dim","era-lit")});
-      caption.innerHTML=`<div class="t">Um produto. <b>Cinco eras.</b></div><div class="d">Da demo de amanhã ao sistema que conversa com a esteira — cada porta só abre com a anterior batida. ✦</div>`;
-      stage.scrollTo({left:0,behavior:"smooth"});
-      setTimeout(()=>{caption.classList.remove("on");playing=false},6000);
-    },6500);
-  };
-  tick();
-}
-document.getElementById("btnPlay").addEventListener("click",present);
-document.getElementById("btnReplay").addEventListener("click",()=>location.reload());
-</script>
 </body>
 </html>

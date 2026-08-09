@@ -243,7 +243,33 @@ Para considerar esse marco atingido:
 
 ---
 
-## 7. Frase-guia desta fase
+## 7. Plano futuro pós-implantação
+
+Depois de estabilizar o núcleo real utilizável, o próximo salto oficial do InventOps será a camada de inteligência e simulação operacional completa.
+
+Objetivo:
+
+- simular a linha num todo;
+- conectar esteira, PLC, sensores, servidores e WCS Velox no mesmo contexto;
+- antecipar falhas, gargalos e impactos operacionais;
+- transformar o sistema em digital twin operacional com leitura, evidência e previsão.
+
+Blocos futuros previstos:
+
+1. Simulador de impacto real sobre a operação.
+2. Monitoramento de esteira e PLC.
+3. Integração com servidores e telemetria.
+4. Contexto operacional conectado ao WCS Velox.
+5. Sala de decisão com cenários e recomendações.
+
+Princípio:
+
+primeiro o InventOps precisa funcionar muito bem como produto real para pessoas reais;
+depois ele sobe para a inteligência pesada da simulação ponta a ponta.
+
+---
+
+## 8. Frase-guia desta fase
 
 Não estamos mais desenhando uma coleção de telas.
 
