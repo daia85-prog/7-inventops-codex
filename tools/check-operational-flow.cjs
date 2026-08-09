@@ -37,6 +37,10 @@ const checks = [
     ok: cockpit.includes("currentUser") && cockpit.includes("sessão {currentUser.name}"),
   },
   {
+    name: "Operação Assistida persiste ações por departamento",
+    ok: cockpit.includes("inventops-cockpit-state-") && cockpit.includes("window.localStorage.setItem(storageKey") && cockpit.includes("readStoredCockpitState(storageKey)"),
+  },
+  {
     name: "Login não volta para usuários antigos de teste",
     ok: !app.includes("admin.teste") && !app.includes("douglas.alves") && !foundation.includes("admin.teste") && !foundation.includes("douglas.alves"),
   },

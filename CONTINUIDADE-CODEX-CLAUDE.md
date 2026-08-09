@@ -710,3 +710,36 @@ Se Claude continuar:
    - `thomas...` deve entrar como Analista de Especificação/DevOps.
 2. Não reintroduzir usuários antigos como Douglas/admin.teste.
 3. Manter a pendência visual da órbita de departamentos registrada, mas não bloquear o fluxo real Daniel/Thomas por causa dela.
+## 2026-08-09 - Code health Bloco B.10: Operação Assistida com persistência local por área
+
+Aplicado pelo Codex:
+
+- A Operação Assistida agora grava no navegador, por departamento, o estado de:
+  - entregas concluídas;
+  - checkpoints;
+  - cobranças;
+  - prontidão sinalizada;
+  - aceite/devolução de handoff;
+  - chat operacional;
+  - linha do tempo.
+- A chave usada é `inventops-cockpit-state-<DEPARTAMENTO>`, separando Implantação, Especificação/DevOps e demais áreas.
+- Ao trocar de área ou atualizar a página, o histórico daquela área é restaurado.
+- Isso transforma o fluxo Daniel/Thomas em uso real assistido no navegador, não apenas interação visual passageira.
+- A trava `tools/check-operational-flow.cjs` agora reprova se essa persistência sair da Operação Assistida.
+
+Validação:
+
+- `pnpm check:quality` passou:
+  - sem texto quebrado ou marcador de demo visível em `src`;
+  - fluxo Daniel/Thomas/Home/Cockpit preservado;
+  - build de produção verde.
+
+Se Claude continuar:
+
+1. Testar manualmente:
+   - entrar como Daniel;
+   - concluir checkpoint/cobrar/sinalizar prontidão;
+   - atualizar a página;
+   - confirmar que o estado permanece em Implantação.
+2. Repetir para Thomas em Especificação/DevOps.
+3. Se algo não persistir, corrigir em `src/DepartmentCockpit.jsx` antes de avançar telas novas.

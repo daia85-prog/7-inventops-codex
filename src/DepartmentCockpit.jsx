@@ -239,6 +239,15 @@ function makeStamp() {
   return { hh, stamp: `hoje - ${hh}` };
 }
 
+function readStoredCockpitState(key) {
+  try {
+    const raw = window.localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
 export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", currentUser = { name: "Admin", role: "Admin", dept: "ADM" } }) {
   const [dept, setDept] = useState(initialDept);
   const [doneMap, setDoneMap] = useState({});
@@ -251,9 +260,11 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
   const [readyMap, setReadyMap] = useState({});
   const [chatMessage, setChatMessage] = useState("");
   const [chatLog, setChatLog] = useState(CHAT_SEED);
+  const [loadedStateKey, setLoadedStateKey] = useState("");
   const area = AREAS.find((a) => a.code === dept);
   const pilotConfig = PILOT_DEPARTMENTS[dept];
   const isPilot = Boolean(pilotConfig);
+  const storageKey = `inventops-cockpit-state-${dept}`;
 
   const base = useMemo(
     () => (isPilot ? pilotConfig : sampleFor(dept)),
@@ -293,6 +304,37 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
     setDept(initialDept);
     setSelectedTrack("");
   }, [initialDept]);
+
+  useEffect(() => {
+    const stored = readStoredCockpitState(storageKey);
+    setDoneMap(stored?.doneMap || {});
+    setFeed(stored?.feed || FEED_SEED);
+    setHandoffMap(stored?.handoffMap || {});
+    setHandoffReviewMap(stored?.handoffReviewMap || {});
+    setTrackDoneMap(stored?.trackDoneMap || {});
+    setChargeMap(stored?.chargeMap || {});
+    setReadyMap(stored?.readyMap || {});
+    setChatLog(stored?.chatLog || CHAT_SEED);
+    setChatMessage("");
+    setLoadedStateKey(storageKey);
+  }, [storageKey]);
+
+  useEffect(() => {
+    if (loadedStateKey !== storageKey) return;
+    const snapshot = {
+      doneMap,
+      feed,
+      handoffMap,
+      handoffReviewMap,
+      trackDoneMap,
+      chargeMap,
+      readyMap,
+      chatLog,
+    };
+    try {
+      window.localStorage.setItem(storageKey, JSON.stringify(snapshot));
+    } catch {}
+  }, [loadedStateKey, storageKey, doneMap, feed, handoffMap, handoffReviewMap, trackDoneMap, chargeMap, readyMap, chatLog]);
 
   const conclude = (item) => {
     const now = new Date();
