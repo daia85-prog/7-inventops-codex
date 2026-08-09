@@ -32,9 +32,10 @@ Foco imediato:
 1. Login
 2. Carregamento / transição
 3. Home
-4. Administração
-5. Implantação
-6. DevOps / Especificação de Software
+4. Cockpit operacional Daniel + Thomas
+5. Administração
+6. Implantação
+7. DevOps / Especificação de Software
 
 Objetivo:
 
@@ -43,6 +44,11 @@ Objetivo:
 - manter tudo funcional
 - garantir PT / ES / EN
 - permitir uso real já na próxima semana com os perfis e áreas piloto
+
+Bloco crítico incorporado:
+
+- `cockpit-piloto` do `inventops79` agora entra na análise oficial como referência de produto real para Daniel + Thomas
+- deve ser convertido para cockpit operacional permanente, não apenas área de piloto visual
 
 ## 4. Regra de execução
 

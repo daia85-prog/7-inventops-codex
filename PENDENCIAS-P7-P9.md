@@ -34,6 +34,24 @@
   - abrir corretamente Daniel / Thomas / Admin Teste
   - garantir leitura e ação nas áreas de Implantação e Especificação/DevOps
 
+## Cockpit operacional Daniel + Thomas
+
+- Status: entra agora como prioridade de análise e incorporação
+- Referência:
+  - `https://velox-demo.pages.dev/inventops79/cockpit-piloto/`
+- Leitura:
+  - a ideia foi aprovada como forte pelo produto
+  - não deve ficar restrita a “piloto” visual
+  - deve virar cockpit real das áreas focais
+- Objetivo:
+  - conectar Daniel / Implantação
+  - conectar Thomas / Especificação / DevOps
+  - mostrar esteira, handoff, projeto, responsável e status em uma mesma camada operacional
+- Próximo passo sugerido:
+  - incluir esse cockpit no mapa oficial `inventops79` x `P7`
+  - avaliar como ele conversa com Home + Administração + DepartmentCockpit atual
+  - transformar a ideia em módulo real do P7
+
 ## Estado atual do P7 — 9 de agosto de 2026
 
 - Bloco atual: transição de “demo/apresentação” para produto real

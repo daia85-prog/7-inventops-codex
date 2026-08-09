@@ -123,8 +123,9 @@ Ordem sugerida de consolidação:
 
 1. Login premium consolidado
 2. Home premium consolidada
-3. Revisão conjunta das duas telas
-4. Só então avançar para a próxima tela da jornada
+3. Cockpit operacional de Implantação + DevOps consolidado
+4. Revisão conjunta das três frentes
+5. Só então avançar para a próxima tela da jornada
 
 ## 5. Conclusão honesta
 
@@ -137,3 +138,41 @@ O melhor caminho é:
 - **construir uma terceira versão melhor do que as duas**
 
 Essa passa a ser a direção oficial para Login e Home.
+
+---
+
+## 6. Cockpit do Daniel + Thomas
+
+Nova leitura registrada em 9 de agosto de 2026:
+
+Referência observada:
+
+- `https://velox-demo.pages.dev/inventops79/cockpit-piloto/`
+
+### O que essa tela acerta muito bem
+
+- traduz o produto para uso real imediato;
+- coloca Daniel e Thomas no centro do fluxo, não como detalhe;
+- conecta projeto, esteira, handoff e responsável em uma única leitura;
+- cria uma ponte forte entre Home, Administração e Departamentos;
+- aproxima o InventOps de operação assistida de verdade.
+
+### Decisão
+
+O `cockpit-piloto` deixa de ser apenas uma ideia interessante e passa a entrar como:
+
+- **referência oficial para o cockpit operacional das áreas piloto**
+- foco imediato para:
+  - Implantação
+  - Espec. Software / DevOps
+
+### Regra
+
+- não precisa carregar a palavra “piloto” como identidade permanente;
+- a estrutura deve ser tratada como cockpit real de operação por responsável / área;
+- Daniel e Thomas passam a ser os casos centrais dessa modelagem no P7.
+
+### Veredito
+
+- `inventops79` não é mais só referência de login/home
+- passa a ser também referência estrutural do cockpit operacional das áreas reais
