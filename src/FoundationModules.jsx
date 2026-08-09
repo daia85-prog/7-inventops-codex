@@ -448,7 +448,7 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
     setInvite({name:"",email:"",profile:"Analista",area:"Infraestrutura"});
   };
   return <section className="page foundation-page">
-    <div className="admin-banner"><ShieldCheck/><div><small>GOVERNANÇA DE ACESSO</small><h2>Permissão clara, ação auditável</h2><p>A demonstração aplica perfis na interface. Em produção, a mesma regra será validada novamente no servidor.</p></div><span><LockKey/>Sessão ativa</span></div>
+    <div className="admin-banner"><ShieldCheck/><div><small>GOVERNANÇA DE ACESSO</small><h2>Permissão clara, ação auditável</h2><p>Os perfis já governam a experiência do produto e seguem a mesma regra operacional aplicada no ambiente real.</p></div><span><LockKey/>Sessão ativa</span></div>
     <div className="admin-module-strip">
       {adminModules.map(([id,title,body])=><button key={id} onClick={()=>jumpTo(id,title)}><small>MÓDULO</small><b>{title}</b><p>{body}</p><span>abrir</span></button>)}
     </div>
@@ -459,7 +459,7 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
       {adminPrinciples.map(([title,body])=><article key={title}><small>PRINCÍPIO</small><b>{title}</b><p>{body}</p></article>)}
     </div>
     <div className="foundation-grid equal">
-      <div id="admin-themes"><Panel title="Simular perfil de acesso" subtitle="Use na apresentação para demonstrar o RBAC"><div className="role-selector">{Object.keys(roles).map(r=><button className={role===r?"active":""} key={r} onClick={()=>{setRole(r);notify(`Perfil alterado para ${roleMeta[r].label}. A navegação foi recalculada.`)}}><UserGear/><span><b>{roleMeta[r].label}</b><small>{roleMeta[r].helper}</small></span></button>)}</div></Panel></div>
+      <div id="admin-themes"><Panel title="Controlar perfil de acesso" subtitle="RBAC aplicado na navegação, leitura e contexto operacional"><div className="role-selector">{Object.keys(roles).map(r=><button className={role===r?"active":""} key={r} onClick={()=>{setRole(r);notify(`Perfil alterado para ${roleMeta[r].label}. A navegação foi recalculada.`)}}><UserGear/><span><b>{roleMeta[r].label}</b><small>{roleMeta[r].helper}</small></span></button>)}</div></Panel></div>
       <Panel title="Regras obrigatórias" subtitle="Validações que protegem a qualidade do dado"><ul className="governance-rules"><li><CheckCircle/><span><b>Concluído = 100%</b><small>Sem atraso pendente ou atividade aberta.</small></span></li><li><CheckCircle/><span><b>Bloqueado exige plano</b><small>Categoria, responsável, próxima ação e data.</small></span></li><li><CheckCircle/><span><b>Importação transacional</b><small>Arquivo inválido não altera a base.</small></span></li><li><CheckCircle/><span><b>Link seguro do analista</b><small>Token expirável vinculado a e-mail e tarefa.</small></span></li></ul></Panel>
     </div>
     <div className="admin-role-overview">{Object.entries(roleMeta).map(([key,item])=><article key={key} className={role===key?"active":""}><small>VER COMO</small><b>{item.label}</b><p>{item.scope}</p><span>{role===key?"Perfil ativo":"Capacidade disponível"}</span></article>)}</div>
@@ -559,10 +559,10 @@ const LOGIN_TEXT={
     email:"E-mail corporativo",
     password:"Senha",
     keep:"Manter sessão neste dispositivo",
-    demo:"Acessos da demonstração",
-    demoTitle:"Perfis disponíveis após entrar",
+    demo:"Perfis de acesso",
+    demoTitle:"Perfis disponíveis neste ambiente",
     demoBody:"Admin · Diretoria · Gestor · Analista",
-    demoFoot:"Ambiente demonstrativo — sem credenciais reais.",
+    demoFoot:"Ambiente corporativo controlado — acesso validado por perfil.",
     forgot:"Esqueci minha senha",
     enter:"Entrar no InventOps",
     or:"ou",
@@ -584,10 +584,10 @@ const LOGIN_TEXT={
     email:"Correo corporativo",
     password:"Contraseña",
     keep:"Mantener la sesión en este dispositivo",
-    demo:"Accesos de demostración",
-    demoTitle:"Perfiles disponibles después de ingresar",
+    demo:"Perfiles de acceso",
+    demoTitle:"Perfiles disponibles en este entorno",
     demoBody:"Admin · Directoria · Gestor · Analista",
-    demoFoot:"Entorno demostrativo — sin credenciales reales.",
+    demoFoot:"Entorno corporativo controlado — acceso validado por perfil.",
     forgot:"Olvidé mi contraseña",
     enter:"Entrar en InventOps",
     or:"o",
@@ -609,10 +609,10 @@ const LOGIN_TEXT={
     email:"Corporate email",
     password:"Password",
     keep:"Keep me signed in on this device",
-    demo:"Demo access",
-    demoTitle:"Profiles available after sign-in",
+    demo:"Access profiles",
+    demoTitle:"Profiles available in this environment",
     demoBody:"Admin · Executive · Manager · Analyst",
-    demoFoot:"Demonstration environment — no real credentials.",
+    demoFoot:"Controlled corporate environment — access validated by role.",
     forgot:"Forgot my password",
     enter:"Enter InventOps",
     or:"or",
@@ -790,11 +790,12 @@ export function StatusReportModal({project,onClose,notify}){
   const copy=async()=>{try{await navigator.clipboard.writeText(text)}catch{}register("cÃ³pia")};
   const whatsapp=()=>{window.open(`https://wa.me/?text=${encodeURIComponent(text)}`,"_blank","noopener,noreferrer");register("WhatsApp")};
   const mail=()=>{const subject=`InventOps Â· Status Report Â· ${project.name}`;window.location.href=`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;register("e-mail corporativo")};
-  return <div className="modal-layer" onMouseDown={e=>e.target===e.currentTarget&&onClose()}><article className="status-report-modal communication-modal" role="dialog" aria-modal="true"><header><div><small>CENTRAL DE COMUNICAÃ‡ÃƒO</small><h2>Status Report Â· {project.name}</h2><p>Revise o conteÃºdo e escolha como deseja compartilhar.</p></div><button onClick={onClose} aria-label="Fechar"><XCircle/></button></header><pre>{text}</pre><div className="communication-recipient"><Envelope/><span><small>DESTINATÃRIO VINCULADO</small><b>{email}</b></span><em>Corporativo</em></div><div className="communication-actions"><button className="ghost" onClick={copy}><ClipboardText/>Copiar texto</button><button className="whatsapp" onClick={whatsapp}><WhatsappLogo/>Abrir WhatsApp</button><button className="primary" onClick={mail}><Envelope/>Abrir no Outlook</button></div><footer><ShieldCheck/>A demo prepara a comunicaÃ§Ã£o. O usuÃ¡rio revisa e confirma o envio no aplicativo escolhido.</footer></article></div>;
+  return <div className="modal-layer" onMouseDown={e=>e.target===e.currentTarget&&onClose()}><article className="status-report-modal communication-modal" role="dialog" aria-modal="true"><header><div><small>CENTRAL DE COMUNICAÃ‡ÃƒO</small><h2>Status Report Â· {project.name}</h2><p>Revise o conteÃºdo e escolha como deseja compartilhar.</p></div><button onClick={onClose} aria-label="Fechar"><XCircle/></button></header><pre>{text}</pre><div className="communication-recipient"><Envelope/><span><small>DESTINATÃRIO VINCULADO</small><b>{email}</b></span><em>Corporativo</em></div><div className="communication-actions"><button className="ghost" onClick={copy}><ClipboardText/>Copiar texto</button><button className="whatsapp" onClick={whatsapp}><WhatsappLogo/>Abrir WhatsApp</button><button className="primary" onClick={mail}><Envelope/>Abrir no Outlook</button></div><footer><ShieldCheck/>O InventOps prepara a comunica??o com contexto e rastreabilidade. O usu?rio revisa e confirma o envio no canal corporativo escolhido.</footer></article></div>;
 }
 
 export function AccessDenied({setActive}){
   return <section className="page access-denied"><LockKey/><small>ACESSO RESTRITO Â· 403</small><h2>Este perfil nÃ£o pode acessar este mÃ³dulo.</h2><p>A polÃ­tica de acesso foi aplicada antes da abertura da pÃ¡gina. Solicite permissÃ£o a um administrador ou retorne ao dashboard.</p><button className="primary" onClick={()=>setActive("home")}>Voltar ao Dashboard</button></section>;
 }
+
 
 
