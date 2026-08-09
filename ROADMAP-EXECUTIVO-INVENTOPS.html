@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>InventOps · Roadmap Executivo</title>
+  <style>
+    :root{
+      --bg:#060916;
+      --bg2:#0b1020;
+      --panel:#101828;
+      --panel-soft:#0d1424;
+      --text:#f3f7ff;
+      --muted:#8e9ab0;
+      --line:#3d4658;
+      --gold:#f5c400;
+      --gold-soft:#ffdd69;
+      --blue:#60a5fa;
+      --purple:#8b5cf6;
+      --green:#34d399;
+      --border:rgba(255,255,255,.08);
+      --shadow:0 20px 60px rgba(0,0,0,.38);
+    }
+
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;padding:0;
+      font-family:Inter,"Segoe UI",Arial,sans-serif;
+      background:
+        radial-gradient(circle at top center, rgba(139,92,246,.12), transparent 28%),
+        linear-gradient(180deg, #0a0d1a 0%, #050813 100%);
+      color:var(--text);
+    }
+
+    .wrap{max-width:1700px;margin:0 auto;padding:38px 34px 42px}
+
+    .hero{
+      max-width:980px;
+      margin-bottom:30px;
+    }
+    .hero h1{
+      margin:0 0 14px;
+      font-size:58px;
+      line-height:1;
+      letter-spacing:-.05em;
+      font-weight:900;
+    }
+    .hero h1 span{color:var(--gold)}
+    .hero p{
+      margin:0;
+      font-size:28px;
+      line-height:1.55;
+      color:var(--muted);
+      max-width:1220px;
+    }
+
+    .legend{
+      display:flex;
+      flex-wrap:wrap;
+      gap:22px;
+      align-items:center;
+      margin:24px 0 28px;
+      color:var(--muted);
+      font-size:17px;
+    }
+    .legend .dot{
+      width:14px;height:14px;border-radius:50%;display:inline-block;margin-right:9px;
+      vertical-align:middle;
+    }
+    .done{background:var(--gold); box-shadow:0 0 12px rgba(245,196,0,.65)}
+    .doing{background:transparent; border:3px solid var(--gold)}
+    .future{background:transparent; border:3px solid #4a5568}
+
+    .stats{
+      display:flex;
+      gap:48px;
+      flex-wrap:wrap;
+      margin:0 0 30px;
+    }
+    .stat{
+      display:flex;align-items:baseline;gap:12px;
+    }
+    .stat b{
+      font-size:56px;
+      line-height:1;
+      color:var(--gold);
+    }
+    .stat span{
+      color:var(--muted);
+      font-size:22px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    .timeline-shell{
+      position:relative;
+      padding:56px 8px 40px;
+      overflow-x:auto;
+      overflow-y:hidden;
+    }
+    .timeline-shell::-webkit-scrollbar{height:10px}
+    .timeline-shell::-webkit-scrollbar-thumb{background:#1d2537;border-radius:999px}
+
+    .timeline{
+      position:relative;
+      min-width:1720px;
+      padding:54px 24px 150px;
+    }
+
+    .track{
+      position:absolute;
+      left:70px; right:70px; top:255px;
+      height:4px;
+      background:linear-gradient(90deg, var(--gold) 0%, var(--gold) 57%, #4b5565 57%, #4b5565 100%);
+      border-radius:999px;
+      box-shadow:0 0 16px rgba(245,196,0,.18);
+    }
+
+    .nodes{
+      display:grid;
+      grid-template-columns:repeat(12, 1fr);
+      gap:18px;
+      position:relative;
+      z-index:2;
+      align-items:start;
+    }
+
+    .milestone{
+      position:relative;
+      min-height:220px;
+    }
+    .milestone.top{padding-bottom:110px}
+    .milestone.bottom{padding-top:110px}
+
+    .card{
+      background:linear-gradient(180deg, rgba(19,27,42,.94), rgba(12,18,30,.98));
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px 14px 14px;
+      min-height:80px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:7px;
+      box-shadow:var(--shadow);
+    }
+    .card.done{
+      border-color:rgba(245,196,0,.65);
+      background:linear-gradient(180deg, rgba(33,27,9,.82), rgba(18,20,28,.98));
+    }
+    .card.doing{
+      border-color:rgba(245,196,0,.95);
+      box-shadow:0 0 0 1px rgba(245,196,0,.35), 0 0 26px rgba(245,196,0,.16);
+    }
+    .card.future{
+      border-color:rgba(255,255,255,.08);
+      opacity:.72;
+    }
+    .card strong{
+      font-size:15px;
+      line-height:1.3;
+      color:var(--text);
+    }
+    .card small{
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.35;
+    }
+
+    .connector{
+      position:absolute;
+      left:50%;
+      top:128px;
+      width:1px;
+      height:40px;
+      background:#7f6a16;
+      transform:translateX(-50%);
+      opacity:.9;
+    }
+    .bottom .connector{
+      top:32px;
+    }
+
+    .pin{
+      position:absolute;
+      left:50%;
+      top:146px;
+      transform:translateX(-50%);
+      width:18px;height:18px;border-radius:50%;
+      background:var(--gold);
+      box-shadow:0 0 0 6px rgba(245,196,0,.08),0 0 16px rgba(245,196,0,.45);
+    }
+    .doing .pin,
+    .pin.doing{
+      background:transparent;
+      border:4px solid var(--gold);
+      width:22px;height:22px;
+      box-shadow:0 0 0 7px rgba(245,196,0,.08),0 0 18px rgba(245,196,0,.22);
+    }
+    .future .pin,
+    .pin.future{
+      background:#151c2c;
+      border:3px solid #4a5568;
+      box-shadow:none;
+      width:18px;height:18px;
+    }
+
+    .era-row{
+      position:absolute;
+      left:0; right:0; bottom:26px;
+      display:grid;
+      grid-template-columns:2.6fr 2fr 2fr 2fr 2.4fr;
+      gap:20px;
+      padding:0 12px;
+    }
+
+    .era{
+      border-top:2px solid rgba(255,255,255,.12);
+      padding-top:12px;
+      text-align:center;
+      color:var(--muted);
+    }
+    .era.done{
+      border-color:rgba(245,196,0,.55);
+    }
+    .era.doing{
+      border-color:rgba(245,196,0,.35);
+    }
+    .era h3{
+      margin:0;
+      font-size:38px;
+      color:var(--text);
+      font-weight:900;
+      letter-spacing:-.03em;
+    }
+    .era.done h3{color:var(--gold-soft)}
+    .era span{
+      display:block;
+      margin-top:6px;
+      font-size:20px;
+      line-height:1.35;
+    }
+    .era small{
+      display:block;
+      margin-top:4px;
+      font-size:16px;
+      color:#6f7b90;
+    }
+
+    .footer{
+      margin-top:26px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:16px;
+      flex-wrap:wrap;
+      color:#7f8aa0;
+      font-size:18px;
+    }
+    .signature{
+      padding:10px 18px;
+      border-radius:999px;
+      border:1px solid rgba(245,196,0,.28);
+      color:var(--gold-soft);
+      background:rgba(245,196,0,.05);
+    }
+
+    @media (max-width: 980px){
+      .hero h1{font-size:44px}
+      .hero p{font-size:20px}
+      .stat b{font-size:44px}
+      .stat span{font-size:17px}
+      .era h3{font-size:28px}
+      .era span{font-size:16px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <h1>Roadmap da <span>Plataforma</span></h1>
+      <p>
+        A jornada do InventOps — do núcleo real que já estamos consolidando até a visão futura de
+        inteligência operacional. Cada nó representa um marco de produto; as eras agrupam nossa estratégia.
+      </p>
+    </section>
+
+    <div class="legend">
+      <span><i class="dot done"></i>Entregue</span>
+      <span><i class="dot doing"></i>Em andamento</span>
+      <span><i class="dot future"></i>Futuro</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b>4</b><span>marcos-base concluídos</span></div>
+      <div class="stat"><b>4</b><span>frentes em andamento</span></div>
+      <div class="stat"><b>4</b><span>horizontes futuros</span></div>
+    </div>
+
+    <section class="timeline-shell">
+      <div class="timeline">
+        <div class="track"></div>
+
+        <div class="nodes">
+          <div class="milestone top">
+            <div class="card done">
+              <strong>Arquitetura 1.0 congelada</strong>
+              <small>case_id · tenant_id · permissões · trilha auditável · InventAI governado</small>
+            </div>
+            <div class="connector"></div>
+            <div class="pin"></div>
+          </div>
+
+          <div class="milestone bottom">
+            <div class="card done">
+              <strong>Fluxo VPN transversal</strong>
+              <small>prova prática do domínio saindo do documento para o produto</small>
+            </div>
+            <div class="connector"></div>
+            <div class="pin"></div>
+          </div>
+
+          <div class="milestone top">
+            <div class="card done">
+              <strong>Inventops79 como referência premium</strong>
+              <small>nova régua oficial de acabamento, navegação e leitura visual</small>
+            </div>
+            <div class="connector"></div>
+            <div class="pin"></div>
+          </div>
+
+          <div class="milestone bottom">
+            <div class="card done">
+              <strong>Roadmap + continuidade P7/P9</strong>
+              <small>trilha registrada para Codex e Claude seguirem no mesmo sentido</small>
+            </div>
+            <div class="connector"></div>
+            <div class="pin"></div>
+          </div>
+
+          <div class="milestone top">
+            <div class="card doing">
+              <strong>Login enterprise + transição forte</strong>
+              <small>entrada premium, perfis válidos e passagem coerente até a Home</small>
+            </div>
+            <div class="connector"></div>
+            <div class="pin doing"></div>
+          </div>
+
+          <div class="milestone bottom">
+            <div class="card doing">
+              <strong>Home corporativa real</strong>
+              <small>menos mockup, mais leitura útil da operação, Daniel, Thomas e pilotos</small>
+            </div>
+            <div class="connector"></div>
+            <div class="pin doing"></div>
+          </div>
+
+          <div class="milestone top">
+            <div class="card doing">
+              <strong>Cockpit Daniel + Thomas</strong>
+              <small>Implantação e Especificação / DevOps como esteiras reais de uso</small>
+            </div>
+            <div class="connector"></div>
+            <div class="pin doing"></div>
+          </div>
+
+          <div class="milestone bottom">
+            <div class="card doing">
+              <strong>Administração funcional</strong>
+              <small>Admin, Daniel e Thomas com acesso válido, contexto e governança</small>
+            </div>
+            <div class="connector"></div>
+            <div class="pin doing"></div>
+          </div>
+
+          <div class="milestone top">
+            <div class="card future">
+              <strong>Solicitações, atividades, projetos e evidências</strong>
+              <small>núcleo operacional sustentando o cockpit e a Home</small>
+            </div>
+            <div class="connector"></div>
+            <div class="pin future"></div>
+          </div>
+
+          <div class="milestone bottom">
+            <div class="card future">
+              <strong>Diretoria + Executive + Mission Control</strong>
+              <small>visão executiva real alimentada pela mesma verdade da operação</small>
+            </div>
+            <div class="connector"></div>
+            <div class="pin future"></div>
+          </div>
+
+          <div class="milestone top">
+            <div class="card future">
+              <strong>Simulação da linha inteira</strong>
+              <small>esteira, PLC, sensores, servidores e impacto operacional no mesmo modelo</small>
+            </div>
+            <div class="connector"></div>
+            <div class="pin future"></div>
+          </div>
+
+          <div class="milestone bottom">
+            <div class="card future">
+              <strong>Digital Twin + WCS Velox</strong>
+              <small>previsão, decisão e telemetria fechando o ciclo da operação conectada</small>
+            </div>
+            <div class="connector"></div>
+            <div class="pin future"></div>
+          </div>
+        </div>
+
+        <div class="era-row">
+          <div class="era done">
+            <h3>Fundação</h3>
+            <span>domínio, governança e direção comum</span>
+            <small>já consolidado</small>
+          </div>
+          <div class="era doing">
+            <h3>Núcleo</h3>
+            <span>login, home, cockpit e administração</span>
+            <small>em execução agora</small>
+          </div>
+          <div class="era">
+            <h3>Operação</h3>
+            <span>solicitações, projetos, evidências e áreas reais</span>
+            <small>próximo bloco</small>
+          </div>
+          <div class="era">
+            <h3>Direção</h3>
+            <span>camada executiva, mission control e leitura da diretoria</span>
+            <small>após o núcleo estar firme</small>
+          </div>
+          <div class="era">
+            <h3>Simulação</h3>
+            <span>linha completa, esteira, PLC, servidores e WCS Velox</span>
+            <small>plano futuro pós-implantação</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      <span class="signature">Desenvolvido por Daiana Costa</span>
+      <span>InventOps · linha principal P7 · referência premium inventops79</span>
+    </div>
+  </div>
+</body>
+</html>
