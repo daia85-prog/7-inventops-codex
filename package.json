@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "check:quality": "node tools/check-text-quality.cjs && node tools/check-operational-flow.cjs && vite build",
+    "check:quality": "node tools/check-text-quality.cjs && node tools/check-operational-flow.cjs && node tools/check-undefined-jsx.cjs && vite build",
     "preview": "vite preview"
   },
   "dependencies": {

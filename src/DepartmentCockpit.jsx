@@ -10,6 +10,7 @@ import {
   Envelope,
   HandPalm,
   PaperPlaneTilt,
+  ShieldCheck,
   Sparkle,
   UsersThree,
   Warning,
