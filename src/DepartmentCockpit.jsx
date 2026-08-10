@@ -537,6 +537,23 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
         </div>
       </div>
 
+      <article className="assisted-use-guide">
+        <div>
+          <small>COMO USAR HOJE</small>
+          <h3>{pilotConfig?.focal || area.gestor}, siga a esteira sem perder rastro.</h3>
+          <p>Escolha o projeto, conclua o próximo checkpoint, registre cobrança ou sinalize prontidão. No final, exporte a evidência para validar a passagem de bastão.</p>
+        </div>
+        <ol>
+          <li><span>1</span>Selecionar projeto</li>
+          <li><span>2</span>Executar ação</li>
+          <li><span>3</span>Registrar chat/histórico</li>
+          <li><span>4</span>Exportar evidência</li>
+        </ol>
+        <button type="button" className="primary" onClick={activeTrack ? exportOperationalEvidence : undefined} disabled={!activeTrack}>
+          <ShieldCheck /> Gerar evidência da área
+        </button>
+      </article>
+
       <div className="cockpit-priority-row">
         <article>
           <small>PRÓXIMO DESBLOQUEIO</small>

@@ -53,6 +53,10 @@ const checks = [
     ok: cockpit.includes("exportOperationalEvidence") && cockpit.includes("inventops-evidencia-") && cockpit.includes("Exportar evidência"),
   },
   {
+    name: "Operação Assistida orienta uso real por área",
+    ok: cockpit.includes("assisted-use-guide") && cockpit.includes("COMO USAR HOJE") && cockpit.includes("Gerar evidência da área"),
+  },
+  {
     name: "Login não volta para usuários antigos de teste",
     ok: !app.includes("admin.teste") && !app.includes("douglas.alves") && !foundation.includes("admin.teste") && !foundation.includes("douglas.alves"),
   },

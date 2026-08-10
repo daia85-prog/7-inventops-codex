@@ -840,3 +840,25 @@ Diretriz:
 - Corrigir imediatamente se aparecer em `src` ou tela visivel.
 - Atualizar documento operacional atual se estiver orientando o proximo desenvolvimento.
 - Preservar documento historico quando ele apenas registra o passado.
+
+## 2026-08-09 - Produto real Bloco B.15: Guia de uso real da Operacao Assistida
+
+Aplicado pelo Codex:
+
+- A tela de Operacao Assistida ganhou um bloco `COMO USAR HOJE`.
+- O bloco orienta Daniel, Thomas ou o responsavel ativo a seguir a esteira sem perder rastro.
+- A sequencia agora fica explicita: selecionar projeto, executar acao, registrar chat/historico e exportar evidencia.
+- O botao `Gerar evidencia da area` usa a mesma exportacao real criada no bloco B.13.
+- A trava `tools/check-operational-flow.cjs` reprova se essa orientacao sair do produto.
+
+Arquivo criado:
+
+- `qa/ACEITE-GUIA-USO-OPERACAO-2026-08-09.md`
+
+Se Claude continuar:
+
+1. Abrir `/#operacao-implantacao` e `/#operacao-devops`.
+2. Confirmar o bloco `COMO USAR HOJE`.
+3. Testar o botao `Gerar evidencia da area`.
+4. Se quebrar, corrigir primeiro `src/DepartmentCockpit.jsx`.
+5. Depois seguir com historico, chat, passagem de bastao, aceite/devolucao e leitura por area usando inventops79 como referencia principal.
