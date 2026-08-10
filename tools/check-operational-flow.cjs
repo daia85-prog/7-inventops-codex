@@ -41,8 +41,8 @@ const checks = [
     ok: app.includes("readRouteFromHash") && app.includes("routeTokenFor(active,cockpitDept)") && app.includes("operacao-devops") && app.includes("operacao-implantacao") && app.includes("administracao"),
   },
   {
-    name: "Operação Assistida recebe a sessão ativa",
-    ok: cockpit.includes("currentUser") && cockpit.includes("sessão {currentUser.name}"),
+    name: "Operação Assistida recebe a sessão ativa (nome exibido, i18n PT/ES/EN)",
+    ok: cockpit.includes("currentUser") && cockpit.includes("currentUser.name") && cockpit.includes("operacaoAssistida:") && cockpit.includes("lang = \"pt\""),
   },
   {
     name: "Operação Assistida persiste ações por departamento",

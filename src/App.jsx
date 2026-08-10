@@ -151,6 +151,23 @@ const productJourney = [
   { id: "executive", label: "Executivo", helper: "Síntese para decisão" },
 ];
 
+const PRODUCT_JOURNEY_I18N = {
+  es: {
+    home: { label: "Home", helper: "Entrada ejecutiva" },
+    portfolio: { label: "Proyectos", helper: "Cartera activa" },
+    project: { label: "Proyecto", helper: "Control de punta a punta" },
+    pmo: { label: "PMO", helper: "Reclamos y priorización" },
+    executive: { label: "Ejecutivo", helper: "Síntesis para decisión" },
+  },
+  en: {
+    home: { label: "Home", helper: "Executive entry point" },
+    portfolio: { label: "Projects", helper: "Active portfolio" },
+    project: { label: "Project", helper: "End-to-end control" },
+    pmo: { label: "PMO", helper: "Follow-up and prioritization" },
+    executive: { label: "Executive", helper: "Synthesis for decision" },
+  },
+};
+
 const initialAlerts = [
   initialAlert,
   {id:"P1-2026-0711-04",project:"MARKET PERU",priority:"P1",title:"Conectividade sem confirmação do cliente",description:"VPN site-to-site e range IP /24 ainda sem data firme.",owner:"Ivan",source:"Governança",detected:"10/07/2026 15:10:00",status:"Em ação"},
@@ -296,9 +313,10 @@ function ProductJourneyRail({ active, setActive, lang }) {
   const nextStep = productJourney[currentIndex + 1];
   const copy = {
     pt: { title: "JORNADA OPERACIONAL", progress: "concluído na jornada do produto", next: "Próxima etapa", current: "Etapa atual", done: "Jornada operacional completa" },
-    es: { title: "JORNADA OPERACIONAL", progress: "completado en la jornada del producto", next: "Próxima etapa", current: "Etapa actual", done: "Jornada operacional completa" },
+    es: { title: "TRAYECTO OPERATIVO", progress: "completado en el trayecto del producto", next: "Próxima etapa", current: "Etapa actual", done: "Trayecto operativo completo" },
     en: { title: "OPERATIONAL JOURNEY", progress: "completed in the product journey", next: "Next stage", current: "Current stage", done: "Operational journey complete" }
   }[lang];
+  const stepText = (step) => PRODUCT_JOURNEY_I18N[lang]?.[step.id] || { label: step.label, helper: step.helper };
 
   return (
     <section className="product-journey-rail" aria-label={copy.title}>
@@ -306,7 +324,7 @@ function ProductJourneyRail({ active, setActive, lang }) {
         <small>{copy.title}</small>
         <div className="product-journey-meta">
           <b>{currentIndex + 1}/{productJourney.length} {copy.progress}</b>
-          {nextStep ? <button className="ghost" onClick={() => setActive(nextStep.id)}>{copy.next}: {nextStep.label}</button> : <span className="product-journey-done">{copy.done}</span>}
+          {nextStep ? <button className="ghost" onClick={() => setActive(nextStep.id)}>{copy.next}: {stepText(nextStep).label}</button> : <span className="product-journey-done">{copy.done}</span>}
         </div>
       </div>
       <div className="product-journey-track">
@@ -316,8 +334,8 @@ function ProductJourneyRail({ active, setActive, lang }) {
             <div key={step.id} className={`product-journey-step ${state}`}>
               <i>{state === "done" ? <CheckCircle weight="fill" /> : index + 1}</i>
               <span>
-                <b>{step.label}</b>
-                <small>{state === "current" ? copy.current : step.helper}</small>
+                <b>{stepText(step).label}</b>
+                <small>{state === "current" ? copy.current : stepText(step).helper}</small>
               </span>
             </div>
           );
@@ -628,7 +646,7 @@ export function App() {
     portfolio:<PortfolioPage projects={projects} setProjects={setProjects} setActive={setActive} setSelectedProject={setSelectedProject} setProjectModalOpen={setProjectModalOpen} setImportedDemands={setImportedDemands} notify={notify}/>,
     pmo:<PmoControlTower projects={projects} onOpenProject={project=>{setSelectedProject(project);setProjectModalOpen(true)}} notify={notify}/>,
     project:<ProjectWorkspace key={selectedProject.name} project={selectedProject} setActive={setActive} notify={notify}/>,
-    cockpit:<DepartmentCockpit key={cockpitDept} notify={notify} imported={importedDemands} initialDept={cockpitDept} currentUser={currentUser}/>,
+    cockpit:<DepartmentCockpit key={cockpitDept} notify={notify} imported={importedDemands} initialDept={cockpitDept} currentUser={currentUser} lang={lang}/>,
     areas:<AreasPage/>,raid:<RaidPage/>,admin:<AdminGovernance role={role} setRole={setRole} theme={theme} setTheme={setTheme} notify={notify} onOpenPilotUser={openPilotContext}/>,
     presentation:<PresentationPage notify={notify}/>,lifecycle:<LifecyclePage/>,simulator:<Simulator scenario={scenario} setScenario={setScenario} notify={notify}/>,
     commissioning:<Commissioning fault={fault} setFault={setFault} alerts={alerts} setAlerts={setAlerts} setActive={setActive} notify={notify}/>,

@@ -227,13 +227,6 @@ function sampleFor(code) {
   };
 }
 
-const STATUS_LABEL = {
-  pronto: "Pronto p/ concluir",
-  andamento: "Em andamento",
-  aguardando: "Aguardando terceiro",
-  done: "Concluído",
-};
-
 function makeStamp() {
   const now = new Date();
   const hh = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
@@ -249,7 +242,284 @@ function readStoredCockpitState(key) {
   }
 }
 
-export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", currentUser = { name: "Admin", role: "Admin", dept: "ADM" } }) {
+// Traducao da MOLDURA da tela (rotulos, cabecalhos, botoes, textos estaticos).
+// Dados operacionais reais (nomes de area, projetos, checklist do Planner,
+// chat e linha do tempo) permanecem em PT — sao conteudo, nao interface.
+const COCKPIT_I18N = {
+  pt: {
+    areaEmOperacao: "ÁREA EM OPERAÇÃO",
+    esteiraAtiva: "esteira ativa",
+    preparandoEntrada: "preparando entrada",
+    visaoAtiva: "visão ativa",
+    abrirArea: "abrir área",
+    escolherDepartamento: "Escolha o departamento",
+    gestor: "Gestor:",
+    operacaoAssistida: (source, focal, user) => `operação assistida · ${source} · ponto focal ${focal} · sessão ${user}`,
+    areaAguardandoAtivacao: "área aguardando ativação operacional",
+    kpiEntregasAbertas: "entregas abertas",
+    kpiAguardandoOutros: "aguardando de outros",
+    kpiEsperamPorMim: "esperam por mim",
+    kpiHandoffsHoje: "handoffs hoje",
+    comoUsarHoje: "COMO USAR HOJE",
+    siga: (name) => `${name}, siga a esteira sem perder rastro.`,
+    sigaBody: "Escolha o projeto, conclua o próximo checkpoint, registre cobrança ou sinalize prontidão. No final, exporte a evidência para validar a passagem de bastão.",
+    passo1: "Selecionar projeto",
+    passo2: "Executar ação",
+    passo3: "Registrar chat/histórico",
+    passo4: "Exportar evidência",
+    gerarEvidenciaArea: "Gerar evidência da área",
+    proximoDesbloqueio: "PRÓXIMO DESBLOQUEIO",
+    semBloqueioCritico: "Sem bloqueio crítico aberto",
+    aguardandoFmt: (project, who) => `${project} · aguardando ${who}`,
+    areaLivre: "A área está livre para seguir com a próxima etapa.",
+    proximoHandoff: "PRÓXIMO HANDOFF",
+    nenhumaEntregaPendente: "Nenhuma entrega pendente",
+    destinoFmt: (project, to) => `${project} · destino ${to}`,
+    todasConcluidas: "Todas as entregas atuais já estão concluídas.",
+    quemEstaEsperando: "QUEM ESTÁ ESPERANDO",
+    semFilaEspera: "Sem fila de espera",
+    dependeFmt: (project, what) => `${project} · ${what}`,
+    nenhumaAreaDepende: "Nenhuma outra área depende deste módulo agora.",
+    sequenciaEntrega: "SEQUÊNCIA DE ENTREGA",
+    ondeEstamos: "Onde estamos na jornada do produto",
+    usandoRegraReal: (name) => `${name} está usando a regra real da área`,
+    check: "CHECK",
+    atual: "ATUAL",
+    proximo: "PRÓXIMO",
+    minhasEntregas: "Minhas entregas",
+    oQueDepto: "O que este departamento deve ao fluxo.",
+    aguardandoDeOutros: "Aguardando de outros",
+    deQuemBola: "De quem é a bola que me trava.",
+    esperamPorMim: "Esperam por mim",
+    quemDepende: "Quem depende deste departamento agora.",
+    proximaArea: "próxima área:",
+    concluirNotificar: "Concluir e notificar",
+    bastaoPassado: "bastão passado",
+    de: "de:",
+    cliente: "Cliente",
+    esperando: "esperando",
+    cobrar: "Cobrar",
+    bastaoComGente: "o bastão está com a gente",
+    signalReadyAction: "Sinalizar prontidão",
+    esteiraOperacionalReal: "Esteira operacional real",
+    checklistPlanner: "Checklist do Planner incorporado sem alterar a regra do time.",
+    projeto: "PROJETO",
+    checkpoints: "checkpoints",
+    daEsteira: "% da esteira",
+    projetoOperacional: "PROJETO OPERACIONAL",
+    gateDeAceite: "GATE DE ACEITE",
+    aceitoEm: (s) => `Aceito em ${s}`,
+    ajusteSolicitadoEm: (s) => `Ajuste solicitado em ${s}`,
+    aguardandoChecklist: "Aguardando checklist completo",
+    bastaoLiberado: "Bastão liberado com evidência e histórico.",
+    naoContaVisivel: "O sistema não considera a passagem concluída apenas porque está visível.",
+    copiarResumo: "Copiar resumo",
+    concluirProximoCheckpoint: "Concluir próximo checkpoint",
+    logFollowUpAction: "Registrar cobrança",
+    solicitarAjuste: "Solicitar ajuste",
+    handoffConfirmado: "Handoff confirmado",
+    confirmarHandoff: "Confirmar handoff",
+    exportarEvidencia: "Exportar evidência",
+    chatOperacional: "Chat operacional",
+    chatDesc: "Contexto, decisões e dúvidas ficam ligados à mesma área e viram histórico auditável.",
+    registrarPlaceholder: (name) => `Registrar decisão, dúvida ou contexto de ${name}...`,
+    mensagemOperacional: "Mensagem operacional",
+    registrarHistorico: "Registrar no histórico",
+    linhaDoTempo: "Linha do tempo dos handoffs",
+    linhaDoTempoDesc: "Quem passou o bastão, para quem e quando — o fim do “alguém sabe se ficou pronto?”",
+    statusLabel: { pronto: "Pronto p/ concluir", andamento: "Em andamento", aguardando: "Aguardando terceiro", done: "Concluído" },
+    journey: {
+      login: { label: "Login", detail: "Acesso corporativo e perfis validados." },
+      home: { label: "Home", detail: "Panorama executivo conectado às áreas reais." },
+      pmo: { label: "PMO", detail: "Fila única e briefing operacional publicados." },
+      departamentos: { label: "Departamentos", detail: "Esteiras reais de Implantação e DevOps em operação assistida." },
+      executive: { label: "Diretoria", detail: "Próxima etapa: leitura consolidada para decisão." },
+    },
+  },
+  es: {
+    areaEmOperacao: "ÁREA EN OPERACIÓN",
+    esteiraAtiva: "cinta activa",
+    preparandoEntrada: "preparando entrada",
+    visaoAtiva: "vista activa",
+    abrirArea: "abrir área",
+    escolherDepartamento: "Elige el departamento",
+    gestor: "Gestor:",
+    operacaoAssistida: (source, focal, user) => `operación asistida · ${source} · punto focal ${focal} · sesión ${user}`,
+    areaAguardandoAtivacao: "área en espera de activación operativa",
+    kpiEntregasAbertas: "entregas abiertas",
+    kpiAguardandoOutros: "esperando a otros",
+    kpiEsperamPorMim: "esperan por mí",
+    kpiHandoffsHoje: "handoffs hoy",
+    comoUsarHoje: "CÓMO USAR HOY",
+    siga: (name) => `${name}, sigue la cinta sin perder el rastro.`,
+    sigaBody: "Elige el proyecto, completa el próximo checkpoint, registra un reclamo o señala disponibilidad. Al final, exporta la evidencia para validar el traspaso.",
+    passo1: "Seleccionar proyecto",
+    passo2: "Ejecutar acción",
+    passo3: "Registrar chat/historial",
+    passo4: "Exportar evidencia",
+    gerarEvidenciaArea: "Generar evidencia del área",
+    proximoDesbloqueio: "PRÓXIMO DESBLOQUEO",
+    semBloqueioCritico: "Sin bloqueo crítico abierto",
+    aguardandoFmt: (project, who) => `${project} · esperando a ${who}`,
+    areaLivre: "El área está libre para seguir con la próxima etapa.",
+    proximoHandoff: "PRÓXIMO HANDOFF",
+    nenhumaEntregaPendente: "Ninguna entrega pendiente",
+    destinoFmt: (project, to) => `${project} · destino ${to}`,
+    todasConcluidas: "Todas las entregas actuales ya están concluidas.",
+    quemEstaEsperando: "QUIÉN ESTÁ ESPERANDO",
+    semFilaEspera: "Sin fila de espera",
+    dependeFmt: (project, what) => `${project} · ${what}`,
+    nenhumaAreaDepende: "Ninguna otra área depende de este módulo ahora.",
+    sequenciaEntrega: "SECUENCIA DE ENTREGA",
+    ondeEstamos: "Dónde estamos en el recorrido del producto",
+    usandoRegraReal: (name) => `${name} está usando la regla real del área`,
+    check: "LISTO",
+    atual: "ACTUAL",
+    proximo: "PRÓXIMO",
+    minhasEntregas: "Mis entregas",
+    oQueDepto: "Lo que este departamento le debe al flujo.",
+    aguardandoDeOutros: "Esperando de otros",
+    deQuemBola: "De quién es la pelota que me traba.",
+    esperamPorMim: "Esperan por mí",
+    quemDepende: "Quién depende de este departamento ahora.",
+    proximaArea: "próxima área:",
+    concluirNotificar: "Concluir y notificar",
+    bastaoPassado: "testigo entregado",
+    de: "de:",
+    cliente: "Cliente",
+    esperando: "esperando",
+    cobrar: "Reclamar",
+    bastaoComGente: "el testigo está con nosotros",
+    signalReadyAction: "Señalar disponibilidad",
+    esteiraOperacionalReal: "Cinta operativa real",
+    checklistPlanner: "Checklist del Planner incorporado sin alterar la regla del equipo.",
+    projeto: "PROYECTO",
+    checkpoints: "checkpoints",
+    daEsteira: "% de la cinta",
+    projetoOperacional: "PROYECTO OPERATIVO",
+    gateDeAceite: "GATE DE ACEPTACIÓN",
+    aceitoEm: (s) => `Aceptado el ${s}`,
+    ajusteSolicitadoEm: (s) => `Ajuste solicitado el ${s}`,
+    aguardandoChecklist: "Esperando checklist completo",
+    bastaoLiberado: "Testigo liberado con evidencia e historial.",
+    naoContaVisivel: "El sistema no considera el traspaso concluido solo porque está visible.",
+    copiarResumo: "Copiar resumen",
+    concluirProximoCheckpoint: "Concluir próximo checkpoint",
+    logFollowUpAction: "Registrar reclamo",
+    solicitarAjuste: "Solicitar ajuste",
+    handoffConfirmado: "Handoff confirmado",
+    confirmarHandoff: "Confirmar handoff",
+    exportarEvidencia: "Exportar evidencia",
+    chatOperacional: "Chat operativo",
+    chatDesc: "Contexto, decisiones y dudas quedan ligados a la misma área y se vuelven historial auditable.",
+    registrarPlaceholder: (name) => `Registrar decisión, duda o contexto de ${name}...`,
+    mensagemOperacional: "Mensaje operativo",
+    registrarHistorico: "Registrar en el historial",
+    linhaDoTempo: "Línea de tiempo de los handoffs",
+    linhaDoTempoDesc: "Quién pasó el testigo, a quién y cuándo — el fin del “¿alguien sabe si ya quedó listo?”",
+    statusLabel: { pronto: "Listo p/ concluir", andamento: "En curso", aguardando: "Esperando a terceros", done: "Concluido" },
+    journey: {
+      login: { label: "Login", detail: "Acceso corporativo y perfiles validados." },
+      home: { label: "Home", detail: "Panorama ejecutivo conectado a las áreas reales." },
+      pmo: { label: "PMO", detail: "Fila única y briefing operativo publicados." },
+      departamentos: { label: "Departamentos", detail: "Cintas reales de Implantación y DevOps en operación asistida." },
+      executive: { label: "Dirección", detail: "Próxima etapa: lectura consolidada para decisión." },
+    },
+  },
+  en: {
+    areaEmOperacao: "AREA IN OPERATION",
+    esteiraAtiva: "active pipeline",
+    preparandoEntrada: "preparing entry",
+    visaoAtiva: "active view",
+    abrirArea: "open area",
+    escolherDepartamento: "Choose the department",
+    gestor: "Manager:",
+    operacaoAssistida: (source, focal, user) => `assisted operation · ${source} · focal point ${focal} · session ${user}`,
+    areaAguardandoAtivacao: "area awaiting operational activation",
+    kpiEntregasAbertas: "open deliveries",
+    kpiAguardandoOutros: "waiting on others",
+    kpiEsperamPorMim: "waiting on me",
+    kpiHandoffsHoje: "handoffs today",
+    comoUsarHoje: "HOW TO USE TODAY",
+    siga: (name) => `${name}, follow the pipeline without losing track.`,
+    sigaBody: "Pick the project, complete the next checkpoint, log a follow-up or signal readiness. At the end, export the evidence to validate the handoff.",
+    passo1: "Select project",
+    passo2: "Run action",
+    passo3: "Log chat/history",
+    passo4: "Export evidence",
+    gerarEvidenciaArea: "Generate area evidence",
+    proximoDesbloqueio: "NEXT UNBLOCK",
+    semBloqueioCritico: "No critical blocker open",
+    aguardandoFmt: (project, who) => `${project} · waiting on ${who}`,
+    areaLivre: "The area is free to move to the next step.",
+    proximoHandoff: "NEXT HANDOFF",
+    nenhumaEntregaPendente: "No pending delivery",
+    destinoFmt: (project, to) => `${project} · destination ${to}`,
+    todasConcluidas: "All current deliveries are already complete.",
+    quemEstaEsperando: "WHO IS WAITING",
+    semFilaEspera: "No waiting queue",
+    dependeFmt: (project, what) => `${project} · ${what}`,
+    nenhumaAreaDepende: "No other area depends on this module right now.",
+    sequenciaEntrega: "DELIVERY SEQUENCE",
+    ondeEstamos: "Where we are in the product journey",
+    usandoRegraReal: (name) => `${name} is using the area's real rule`,
+    check: "DONE",
+    atual: "CURRENT",
+    proximo: "NEXT",
+    minhasEntregas: "My deliveries",
+    oQueDepto: "What this department owes the flow.",
+    aguardandoDeOutros: "Waiting on others",
+    deQuemBola: "Whose call is holding this up.",
+    esperamPorMim: "Waiting on me",
+    quemDepende: "Who depends on this department now.",
+    proximaArea: "next area:",
+    concluirNotificar: "Complete and notify",
+    bastaoPassado: "baton passed",
+    de: "from:",
+    cliente: "Client",
+    esperando: "waiting",
+    cobrar: "Follow up",
+    bastaoComGente: "the baton is with us",
+    signalReadyAction: "Signal readiness",
+    esteiraOperacionalReal: "Real operational pipeline",
+    checklistPlanner: "Planner checklist incorporated without changing the team's rule.",
+    projeto: "PROJECT",
+    checkpoints: "checkpoints",
+    daEsteira: "% of the pipeline",
+    projetoOperacional: "OPERATIONAL PROJECT",
+    gateDeAceite: "ACCEPTANCE GATE",
+    aceitoEm: (s) => `Accepted on ${s}`,
+    ajusteSolicitadoEm: (s) => `Adjustment requested on ${s}`,
+    aguardandoChecklist: "Awaiting full checklist",
+    bastaoLiberado: "Baton released with evidence and history.",
+    naoContaVisivel: "The system doesn't consider the handoff complete just because it's visible.",
+    copiarResumo: "Copy summary",
+    concluirProximoCheckpoint: "Complete next checkpoint",
+    logFollowUpAction: "Log follow-up",
+    solicitarAjuste: "Request adjustment",
+    handoffConfirmado: "Handoff confirmed",
+    confirmarHandoff: "Confirm handoff",
+    exportarEvidencia: "Export evidence",
+    chatOperacional: "Operational chat",
+    chatDesc: "Context, decisions and questions stay tied to the same area and become an auditable history.",
+    registrarPlaceholder: (name) => `Log a decision, question or context for ${name}...`,
+    mensagemOperacional: "Operational message",
+    registrarHistorico: "Log to history",
+    linhaDoTempo: "Handoff timeline",
+    linhaDoTempoDesc: "Who passed the baton, to whom and when — the end of “does anyone know if it's ready?”",
+    statusLabel: { pronto: "Ready to complete", andamento: "In progress", aguardando: "Waiting on third party", done: "Completed" },
+    journey: {
+      login: { label: "Login", detail: "Corporate access and validated profiles." },
+      home: { label: "Home", detail: "Executive overview connected to the real areas." },
+      pmo: { label: "PMO", detail: "Single queue and operational briefing published." },
+      departamentos: { label: "Departments", detail: "Real Deployment and DevOps pipelines in assisted operation." },
+      executive: { label: "Leadership", detail: "Next step: consolidated read for decision." },
+    },
+  },
+};
+
+export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", currentUser = { name: "Admin", role: "Admin", dept: "ADM" }, lang = "pt" }) {
+  const t = COCKPIT_I18N[lang] || COCKPIT_I18N.pt;
   const [dept, setDept] = useState(initialDept);
   const [doneMap, setDoneMap] = useState({});
   const [feed, setFeed] = useState(FEED_SEED);
@@ -497,16 +767,16 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
           const pilotData = PILOT_DEPARTMENTS[item.code];
           return (
             <button key={item.code} className={activePilot ? "active" : ""} onClick={() => { setDept(item.code); setSelectedTrack(""); }}>
-              <small>ÁREA EM OPERAÇÃO</small>
+              <small>{t.areaEmOperacao}</small>
               <b>{item.nome}</b>
-              <p>{pilotData?.focal || item.gestor} · {pilotData ? "esteira ativa" : "preparando entrada"}</p>
-              <span>{activePilot ? "visão ativa" : "abrir área"}</span>
+              <p>{pilotData?.focal || item.gestor} · {pilotData ? t.esteiraAtiva : t.preparandoEntrada}</p>
+              <span>{activePilot ? t.visaoAtiva : t.abrirArea}</span>
             </button>
           );
         })}
       </div>
 
-      <div className="cockpit-picker" role="tablist" aria-label="Escolha o departamento">
+      <div className="cockpit-picker" role="tablist" aria-label={t.escolherDepartamento}>
         {AREAS.map((a) => (
           <button key={a.code} role="tab" aria-selected={dept === a.code} className={dept === a.code ? "active" : ""} onClick={() => { setDept(a.code); setSelectedTrack(""); }}>
             <b>{a.code}</b>
@@ -519,76 +789,76 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
         <div>
           <h2>{area.nome}</h2>
           <p>
-            Gestor: <b>{area.gestor}</b>
+            {t.gestor} <b>{area.gestor}</b>
             {isPilot ? (
               <span className="pilot-tag">
                 <Sparkle size={13} weight="fill" />
-                operação assistida · {pilotConfig.source} · ponto focal {pilotConfig.focal} · sessão {currentUser.name}
+                {t.operacaoAssistida(pilotConfig.source, pilotConfig.focal, currentUser.name)}
               </span>
             ) : (
-              <span className="sample-tag">área aguardando ativação operacional</span>
+              <span className="sample-tag">{t.areaAguardandoAtivacao}</span>
             )}
           </p>
         </div>
         <div className="cockpit-kpis">
-          <span><b>{open.length}</b><small>entregas abertas</small></span>
-          <span><b>{base.waiting.length}</b><small>aguardando de outros</small></span>
-          <span><b>{base.waitedBy.length}</b><small>esperam por mim</small></span>
-          <span><b>{feed.filter((f) => f.t.startsWith("hoje")).length}</b><small>handoffs hoje</small></span>
+          <span><b>{open.length}</b><small>{t.kpiEntregasAbertas}</small></span>
+          <span><b>{base.waiting.length}</b><small>{t.kpiAguardandoOutros}</small></span>
+          <span><b>{base.waitedBy.length}</b><small>{t.kpiEsperamPorMim}</small></span>
+          <span><b>{feed.filter((f) => f.t.startsWith("hoje")).length}</b><small>{t.kpiHandoffsHoje}</small></span>
         </div>
       </div>
 
       <article className="assisted-use-guide">
         <div>
-          <small>COMO USAR HOJE</small>
-          <h3>{pilotConfig?.focal || area.gestor}, siga a esteira sem perder rastro.</h3>
-          <p>Escolha o projeto, conclua o próximo checkpoint, registre cobrança ou sinalize prontidão. No final, exporte a evidência para validar a passagem de bastão.</p>
+          <small>{t.comoUsarHoje}</small>
+          <h3>{t.siga(pilotConfig?.focal || area.gestor)}</h3>
+          <p>{t.sigaBody}</p>
         </div>
         <ol>
-          <li><span>1</span>Selecionar projeto</li>
-          <li><span>2</span>Executar ação</li>
-          <li><span>3</span>Registrar chat/histórico</li>
-          <li><span>4</span>Exportar evidência</li>
+          <li><span>1</span>{t.passo1}</li>
+          <li><span>2</span>{t.passo2}</li>
+          <li><span>3</span>{t.passo3}</li>
+          <li><span>4</span>{t.passo4}</li>
         </ol>
         <button type="button" className="primary" onClick={activeTrack ? exportOperationalEvidence : undefined} disabled={!activeTrack}>
-          <ShieldCheck /> Gerar evidência da área
+          <ShieldCheck /> {t.gerarEvidenciaArea}
         </button>
       </article>
 
       <div className="cockpit-priority-row">
         <article>
-          <small>PRÓXIMO DESBLOQUEIO</small>
-          <b>{nextDependency ? nextDependency.what : "Sem bloqueio crítico aberto"}</b>
-          <p>{nextDependency ? `${nextDependency.project} · aguardando ${nextDependency.from === "Cliente" ? "cliente" : areaName(nextDependency.from)}` : "A área está livre para seguir com a próxima etapa."}</p>
+          <small>{t.proximoDesbloqueio}</small>
+          <b>{nextDependency ? nextDependency.what : t.semBloqueioCritico}</b>
+          <p>{nextDependency ? t.aguardandoFmt(nextDependency.project, nextDependency.from === "Cliente" ? t.cliente.toLowerCase() : areaName(nextDependency.from)) : t.areaLivre}</p>
         </article>
         <article>
-          <small>PRÓXIMO HANDOFF</small>
-          <b>{nextDelivery ? nextDelivery.title : "Nenhuma entrega pendente"}</b>
-          <p>{nextDelivery ? `${nextDelivery.project} · destino ${areaName(nextDelivery.to)}` : "Todas as entregas atuais já estão concluídas."}</p>
+          <small>{t.proximoHandoff}</small>
+          <b>{nextDelivery ? nextDelivery.title : t.nenhumaEntregaPendente}</b>
+          <p>{nextDelivery ? t.destinoFmt(nextDelivery.project, areaName(nextDelivery.to)) : t.todasConcluidas}</p>
         </article>
         <article>
-          <small>QUEM ESTÁ ESPERANDO</small>
-          <b>{nextConsumer ? areaName(nextConsumer.dept) : "Sem fila de espera"}</b>
-          <p>{nextConsumer ? `${nextConsumer.project} · ${nextConsumer.what}` : "Nenhuma outra área depende deste módulo agora."}</p>
+          <small>{t.quemEstaEsperando}</small>
+          <b>{nextConsumer ? areaName(nextConsumer.dept) : t.semFilaEspera}</b>
+          <p>{nextConsumer ? t.dependeFmt(nextConsumer.project, nextConsumer.what) : t.nenhumaAreaDepende}</p>
         </article>
       </div>
 
       <article className="journey-checklist cockpit-journey">
         <header>
           <div>
-            <small>SEQUÊNCIA DE ENTREGA</small>
-            <h3>Onde estamos na jornada do produto</h3>
+            <small>{t.sequenciaEntrega}</small>
+            <h3>{t.ondeEstamos}</h3>
           </div>
-          <span>{isPilot ? `${area.nome} está usando a regra real da área` : "Área aguardando ativação operacional"}</span>
+          <span>{isPilot ? t.usandoRegraReal(area.nome) : t.areaAguardandoAtivacao}</span>
         </header>
         <div>
           {cockpitJourney.map((step) => (
             <section key={step.id} className={step.state}>
               <i>{step.state === "done" ? <CheckCircle weight="fill" /> : step.state === "active" ? <Sparkle weight="fill" /> : <ClockCountdown weight="fill" />}</i>
               <div>
-                <small>{step.state === "done" ? "CHECK" : step.state === "active" ? "ATUAL" : "PRÓXIMO"}</small>
-                <b>{step.label}</b>
-                <p>{step.detail}</p>
+                <small>{step.state === "done" ? t.check : step.state === "active" ? t.atual : t.proximo}</small>
+                <b>{t.journey[step.id]?.label || step.label}</b>
+                <p>{t.journey[step.id]?.detail || step.detail}</p>
               </div>
             </section>
           ))}
@@ -597,25 +867,25 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
 
       <div className="cockpit-grid">
         <article>
-          <div className="section-heading"><b><CheckCircle /> Minhas entregas</b><span>O que este departamento deve ao fluxo.</span></div>
+          <div className="section-heading"><b><CheckCircle /> {t.minhasEntregas}</b><span>{t.oQueDepto}</span></div>
           <div className="cockpit-list">
             {deliveries.map((d) => (
               <div key={d.id} className={`hand-card ${d.status}`}>
                 <header>
                   <small>{d.project}</small>
                   {d.origin ? <em className="origin-tag">⇪ {d.origin}</em> : null}
-                  <span className={`hstatus ${d.status}`}>{STATUS_LABEL[d.status]}{d.progress ? ` · ${d.progress}` : ""}{d.status === "done" && d.doneAt ? ` ✓ ${d.doneAt}` : ""}</span>
+                  <span className={`hstatus ${d.status}`}>{t.statusLabel[d.status]}{d.progress ? ` · ${d.progress}` : ""}{d.status === "done" && d.doneAt ? ` ✓ ${d.doneAt}` : ""}</span>
                 </header>
                 <h3>{d.title}</h3>
                 <footer>
                   <span><CalendarBlank />{d.due}</span>
-                  <span><ArrowRight /> próxima área: <b>{areaName(d.to)}</b></span>
+                  <span><ArrowRight /> {t.proximaArea} <b>{areaName(d.to)}</b></span>
                   {d.status !== "done" ? (
                     <button className="conclude" onClick={() => conclude(d)} disabled={d.status === "aguardando"} title={d.status === "aguardando" ? "Aguardando terceiro — não dá pra concluir ainda" : "Marca como concluído e avisa a próxima área com carimbo de hora"}>
-                      <PaperPlaneTilt />Concluir e notificar
+                      <PaperPlaneTilt />{t.concluirNotificar}
                     </button>
                   ) : (
-                    <span className="done-stamp"><CheckCircle weight="fill" />bastão passado</span>
+                    <span className="done-stamp"><CheckCircle weight="fill" />{t.bastaoPassado}</span>
                   )}
                 </footer>
               </div>
@@ -624,17 +894,17 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
         </article>
 
         <article>
-          <div className="section-heading"><b><ClockCountdown /> Aguardando de outros</b><span>De quem é a bola que me trava.</span></div>
+          <div className="section-heading"><b><ClockCountdown /> {t.aguardandoDeOutros}</b><span>{t.deQuemBola}</span></div>
           <div className="cockpit-list">
             {base.waiting.map((w, i) => (
               <div key={i} className="hand-card waitrow">
                 <header><small>{w.project}</small><span className={`side-tag ${w.side === "Cliente" ? "cli" : "inv"}`}>{w.side}</span></header>
                 <h3>{w.what}</h3>
                 <footer>
-                  <span><Buildings />de: <b>{w.from === "Cliente" ? "Cliente" : areaName(w.from)}</b></span>
-                  <span><Warning />{w.age} esperando</span>
+                  <span><Buildings />{t.de} <b>{w.from === "Cliente" ? t.cliente : areaName(w.from)}</b></span>
+                  <span><Warning />{w.age} {t.esperando}</span>
                   {chargeMap[`${dept}-waiting-${i}`] ? <span className="mini-state done"><CheckCircle />{chargeMap[`${dept}-waiting-${i}`]}</span> : null}
-                  <button className="ghost-mini" onClick={() => pingWaiting(w, i)}><Envelope />Cobrar</button>
+                  <button className="ghost-mini" onClick={() => pingWaiting(w, i)}><Envelope />{t.cobrar}</button>
                 </footer>
               </div>
             ))}
@@ -642,16 +912,16 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
         </article>
 
         <article>
-          <div className="section-heading"><b><UsersThree /> Esperam por mim</b><span>Quem depende deste departamento agora.</span></div>
+          <div className="section-heading"><b><UsersThree /> {t.esperamPorMim}</b><span>{t.quemDepende}</span></div>
           <div className="cockpit-list">
             {base.waitedBy.map((w, i) => (
               <div key={i} className="hand-card waitedrow">
                 <header><small>{w.project}</small><span className="side-tag inv">{areaName(w.dept)}</span></header>
                 <h3>{w.what}</h3>
                 <footer>
-                  <span><HandPalm />o bastão está com a gente</span>
+                  <span><HandPalm />{t.bastaoComGente}</span>
                   {readyMap[`${dept}-waited-${i}`] ? <span className="mini-state done"><CheckCircle />{readyMap[`${dept}-waited-${i}`]}</span> : null}
-                  <button className="ghost-mini" onClick={() => signalReady(w, i)}><PaperPlaneTilt />Sinalizar prontidão</button>
+                  <button className="ghost-mini" onClick={() => signalReady(w, i)}><PaperPlaneTilt />{t.signalReadyAction}</button>
                 </footer>
               </div>
             ))}
@@ -662,16 +932,16 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
       {activeTrack ? (
         <article className="cockpit-track">
           <div className="section-heading">
-            <b><Sparkle /> Esteira operacional real</b>
-            <span>Checklist do Planner incorporado sem alterar a regra do time.</span>
+            <b><Sparkle /> {t.esteiraOperacionalReal}</b>
+            <span>{t.checklistPlanner}</span>
           </div>
           <div className="cockpit-track-pulse">
             {pilotSummary.map((item) => (
               <article key={item.id} className={activeTrack.id === item.id ? "active" : ""}>
-                <small>PROJETO</small>
+                <small>{t.projeto}</small>
                 <b>{item.label}</b>
-                <span>{item.done}/{item.total} checkpoints</span>
-                <em>{item.percent}% da esteira</em>
+                <span>{item.done}/{item.total} {t.checkpoints}</span>
+                <em>{item.percent}{t.daEsteira}</em>
               </article>
             ))}
           </div>
@@ -685,25 +955,25 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
           </div>
           <div className="cockpit-track-body">
             <div className="cockpit-track-summary">
-              <small>PROJETO OPERACIONAL</small>
+              <small>{t.projetoOperacional}</small>
               <h3>{activeTrack.label}</h3>
               <p>{activeTrack.summary}</p>
               <span>{activeTrack.handoff}</span>
               <div className={`handoff-gate ${trackHandoffDone ? "accepted" : handoffReview?.status === "adjustment" ? "adjustment" : "open"}`}>
                 {trackHandoffDone ? <CheckCircle weight="fill" /> : handoffReview?.status === "adjustment" ? <XCircle weight="fill" /> : <ClockCountdown weight="fill" />}
                 <div>
-                  <small>GATE DE ACEITE</small>
-                  <b>{trackHandoffDone ? `Aceito em ${handoffMap[activeTrack.id]}` : handoffReview?.status === "adjustment" ? `Ajuste solicitado em ${handoffReview.stamp}` : "Aguardando checklist completo"}</b>
-                  <p>{trackHandoffDone ? "Bastão liberado com evidência e histórico." : handoffReview?.status === "adjustment" ? handoffReview.reason : "O sistema não considera a passagem concluída apenas porque está visível."}</p>
+                  <small>{t.gateDeAceite}</small>
+                  <b>{trackHandoffDone ? t.aceitoEm(handoffMap[activeTrack.id]) : handoffReview?.status === "adjustment" ? t.ajusteSolicitadoEm(handoffReview.stamp) : t.aguardandoChecklist}</b>
+                  <p>{trackHandoffDone ? t.bastaoLiberado : handoffReview?.status === "adjustment" ? handoffReview.reason : t.naoContaVisivel}</p>
                 </div>
               </div>
               <div className="cockpit-track-actions">
-                <button className="ghost cockpit-track-action" type="button" onClick={copyTrackSummary}><ClipboardText />Copiar resumo</button>
-                <button className="ghost cockpit-track-action" type="button" onClick={advanceTrack} disabled={trackCompleted}><CheckCircle />Concluir próximo checkpoint</button>
-                <button className="ghost cockpit-track-action" type="button" onClick={registerCharge}><Envelope />Registrar cobrança</button>
-                <button className="ghost cockpit-track-action" type="button" onClick={requestHandoffAdjustment} disabled={trackHandoffDone}><XCircle />Solicitar ajuste</button>
-                <button className="ghost cockpit-track-action" type="button" onClick={confirmHandoff} disabled={!trackCompleted || trackHandoffDone}><PaperPlaneTilt />{trackHandoffDone ? "Handoff confirmado" : "Confirmar handoff"}</button>
-                <button className="ghost cockpit-track-action" type="button" onClick={exportOperationalEvidence}><ShieldCheck />Exportar evidência</button>
+                <button className="ghost cockpit-track-action" type="button" onClick={copyTrackSummary}><ClipboardText />{t.copiarResumo}</button>
+                <button className="ghost cockpit-track-action" type="button" onClick={advanceTrack} disabled={trackCompleted}><CheckCircle />{t.concluirProximoCheckpoint}</button>
+                <button className="ghost cockpit-track-action" type="button" onClick={registerCharge}><Envelope />{t.logFollowUpAction}</button>
+                <button className="ghost cockpit-track-action" type="button" onClick={requestHandoffAdjustment} disabled={trackHandoffDone}><XCircle />{t.solicitarAjuste}</button>
+                <button className="ghost cockpit-track-action" type="button" onClick={confirmHandoff} disabled={!trackCompleted || trackHandoffDone}><PaperPlaneTilt />{trackHandoffDone ? t.handoffConfirmado : t.confirmarHandoff}</button>
+                <button className="ghost cockpit-track-action" type="button" onClick={exportOperationalEvidence}><ShieldCheck />{t.exportarEvidencia}</button>
               </div>
             </div>
             <div className="cockpit-track-list">
@@ -720,8 +990,8 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
 
       <article className="cockpit-chat">
         <div className="section-heading">
-          <b><ChatCircleText /> Chat operacional</b>
-          <span>Contexto, decisões e dúvidas ficam ligados à mesma área e viram histórico auditável.</span>
+          <b><ChatCircleText /> {t.chatOperacional}</b>
+          <span>{t.chatDesc}</span>
         </div>
         <div className="chat-list">
           {chatLog.slice(0, 5).map((msg, index) => (
@@ -738,15 +1008,15 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
           <input
             value={chatMessage}
             onChange={(event) => setChatMessage(event.target.value)}
-            placeholder={`Registrar decisao, duvida ou contexto de ${area.nome}...`}
-            aria-label="Mensagem operacional"
+            placeholder={t.registrarPlaceholder(area.nome)}
+            aria-label={t.mensagemOperacional}
           />
-          <button type="submit"><PaperPlaneTilt />Registrar no histórico</button>
+          <button type="submit"><PaperPlaneTilt />{t.registrarHistorico}</button>
         </form>
       </article>
 
       <article className="cockpit-feed">
-        <div className="section-heading"><b>Linha do tempo dos handoffs</b><span>Quem passou o bastão, para quem e quando — o fim do “alguém sabe se ficou pronto?”</span></div>
+        <div className="section-heading"><b>{t.linhaDoTempo}</b><span>{t.linhaDoTempoDesc}</span></div>
         <div className="feed-list">
           {feed.map((f, i) => (
             <div key={i} className={i === 0 && f.t.startsWith("hoje") ? "fresh" : ""}>
