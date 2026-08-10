@@ -601,9 +601,44 @@ function ProjectWorkspace({project,setActive,notify}) {
   </section>;
 }
 
-function AlertsPage({alerts,setAlerts}) { const [filter,setFilter]=useState("Todos"); const shown=filter==="Todos"?alerts:alerts.filter(a=>a.priority===filter||a.status===filter); const active=alerts.filter(a=>a.status!=="Resolvido"); return <section className="page list-page"><div className="summary-strip"><span><b>{active.filter(a=>a.priority==="P0").length}</b>P0 crítico</span><span><b>{active.filter(a=>a.priority==="P1").length}</b>P1 alto risco</span><span><b>{active.filter(a=>a.priority==="P2").length}</b>P2 atenção</span><span><b>7h35</b>menor SLA</span></div><div className="filter-row">{["Todos","P0","P1","P2","Em triagem","Em ação","Resolvido"].map(x=><button className={filter===x?"active":""} onClick={()=>setFilter(x)} key={x}>{x}</button>)}</div><div className="alert-table smart-triage"><header><span>Alerta</span><span>Projeto</span><span>Responsável</span><span>SLA</span><span>Status</span></header>{shown.length?shown.map(a=><div className="alert-row" key={a.id}><span><i className={`alert-priority ${a.priority.toLowerCase()}`}>{a.priority}</i><b>{a.title}</b><small>{a.description}</small></span><span>{a.project}<small>{a.source}</small></span><span>{a.owner}</span><span className={a.status==="Resolvido"?"resolved-time":a.priority==="P0"?"timer":"triage-sla"}>{a.status==="Resolvido"?"Encerrado":a.priority==="P0"?"07:35:42":a.priority==="P1"?"23:18:10":"46:42:08"}</span><select aria-label={`Status do alerta ${a.id}`} value={a.status} onChange={e=>setAlerts(alerts.map(x=>x.id===a.id?{...x,status:e.target.value}:x))}><option>Em triagem</option><option>Em ação</option><option>Resolvido</option></select></div>):<div className="empty"><CheckCircle size={34}/>Nenhum alerta nesta etapa.</div>}</div></section>; }
+const ALERTS_I18N={
+  pt:{all:"Todos",p0Crit:"P0 crítico",p1High:"P1 alto risco",p2Att:"P2 atenção",lowestSla:"menor SLA",
+   colAlert:"Alerta",colProject:"Projeto",colOwner:"Responsável",colSla:"SLA",colStatus:"Status",closed:"Encerrado",emptyState:"Nenhum alerta nesta etapa.",
+   statusLabels:{"Em triagem":"Em triagem","Em ação":"Em ação",Resolvido:"Resolvido"}},
+  es:{all:"Todos",p0Crit:"P0 crítico",p1High:"P1 alto riesgo",p2Att:"P2 atención",lowestSla:"menor SLA",
+   colAlert:"Alerta",colProject:"Proyecto",colOwner:"Responsable",colSla:"SLA",colStatus:"Estado",closed:"Cerrado",emptyState:"Ninguna alerta en esta etapa.",
+   statusLabels:{"Em triagem":"En triaje","Em ação":"En acción",Resolvido:"Resuelto"}},
+  en:{all:"All",p0Crit:"P0 critical",p1High:"P1 high risk",p2Att:"P2 attention",lowestSla:"lowest SLA",
+   colAlert:"Alert",colProject:"Project",colOwner:"Owner",colSla:"SLA",colStatus:"Status",closed:"Closed",emptyState:"No alerts in this stage.",
+   statusLabels:{"Em triagem":"Triaging","Em ação":"In progress",Resolvido:"Resolved"}},
+};
+function AlertsPage({alerts,setAlerts,lang="pt"}) {
+  const t=ALERTS_I18N[lang]||ALERTS_I18N.pt;
+  const [filter,setFilter]=useState("Todos");
+  const shown=filter==="Todos"?alerts:alerts.filter(a=>a.priority===filter||a.status===filter);
+  const active=alerts.filter(a=>a.status!=="Resolvido");
+  const filterLabel=x=>x==="Todos"?t.all:t.statusLabels[x]||x;
+  return <section className="page list-page"><div className="summary-strip"><span><b>{active.filter(a=>a.priority==="P0").length}</b>{t.p0Crit}</span><span><b>{active.filter(a=>a.priority==="P1").length}</b>{t.p1High}</span><span><b>{active.filter(a=>a.priority==="P2").length}</b>{t.p2Att}</span><span><b>7h35</b>{t.lowestSla}</span></div><div className="filter-row">{["Todos","P0","P1","P2","Em triagem","Em ação","Resolvido"].map(x=><button className={filter===x?"active":""} onClick={()=>setFilter(x)} key={x}>{filterLabel(x)}</button>)}</div><div className="alert-table smart-triage"><header><span>{t.colAlert}</span><span>{t.colProject}</span><span>{t.colOwner}</span><span>{t.colSla}</span><span>{t.colStatus}</span></header>{shown.length?shown.map(a=><div className="alert-row" key={a.id}><span><i className={`alert-priority ${a.priority.toLowerCase()}`}>{a.priority}</i><b>{a.title}</b><small>{a.description}</small></span><span>{a.project}<small>{a.source}</small></span><span>{a.owner}</span><span className={a.status==="Resolvido"?"resolved-time":a.priority==="P0"?"timer":"triage-sla"}>{a.status==="Resolvido"?t.closed:a.priority==="P0"?"07:35:42":a.priority==="P1"?"23:18:10":"46:42:08"}</span><select aria-label={`Status do alerta ${a.id}`} value={a.status} onChange={e=>setAlerts(alerts.map(x=>x.id===a.id?{...x,status:e.target.value}:x))}><option value="Em triagem">{t.statusLabels["Em triagem"]}</option><option value="Em ação">{t.statusLabels["Em ação"]}</option><option value="Resolvido">{t.statusLabels.Resolvido}</option></select></div>):<div className="empty"><CheckCircle size={34}/>{t.emptyState}</div>}</div></section>; }
 
-function EvidencePage(){ const rows=[{project:"TITANO",progress:73,infra:"4/5",dev:"12",tests:"18/20",confidence:"Alta"},{project:"QUELUZ",progress:68,infra:"5/5",dev:"9",tests:"10/20",confidence:"Média"},{project:"MARKET PERU",progress:42,infra:"3/5",dev:"6",tests:"4/20",confidence:"Média"}]; return <section className="page evidence-page"><div className="evidence-hero"><div><small>FAROL DE PRODUTIVIDADE</small><h2>Progresso que explica a si mesmo</h2><p>O percentual combina entregáveis aceitos, checklists, atividade válida em base homologada e testes de comissionamento.</p></div><div className="formula"><span>35%</span><b>Entregáveis</b><span>25%</span><b>Checklists</b><span>20%</span><b>Commits válidos</b><span>20%</span><b>Testes aprovados</b></div></div><div className="evidence-table"><header><span>Projeto</span><span>Progresso</span><span>Infra</span><span>Dev</span><span>Comissionamento</span><span>Confiança</span></header>{rows.map(r=><div key={r.project}><b>{r.project}</b><span className="progress-cell"><span className="evidence-progress" aria-hidden="true"><i style={{width:`${r.progress}%`}}/></span><strong>{r.progress}%</strong></span><span>{r.infra} checklists</span><span>{r.dev} commits</span><span>{r.tests} testes</span><em>{r.confidence}</em></div>)}</div></section>; }
+const EVIDENCE_I18N={
+  pt:{tag:"FAROL DE PRODUTIVIDADE",title:"Progresso que explica a si mesmo",body:"O percentual combina entregáveis aceitos, checklists, atividade válida em base homologada e testes de comissionamento.",
+   deliverables:"Entregáveis",checklists:"Checklists",commits:"Commits válidos",tests:"Testes aprovados",
+   colProject:"Projeto",colProgress:"Progresso",colInfra:"Infra",colDev:"Dev",colCommissioning:"Comissionamento",colConfidence:"Confiança",
+   checklistsUnit:"checklists",commitsUnit:"commits",testsUnit:"testes",high:"Alta",medium:"Média"},
+  es:{tag:"FAROL DE PRODUCTIVIDAD",title:"Progreso que se explica a sí mismo",body:"El porcentaje combina entregables aceptados, checklists, actividad válida en base homologada y pruebas de comisionamiento.",
+   deliverables:"Entregables",checklists:"Checklists",commits:"Commits válidos",tests:"Pruebas aprobadas",
+   colProject:"Proyecto",colProgress:"Progreso",colInfra:"Infra",colDev:"Dev",colCommissioning:"Comisionamiento",colConfidence:"Confianza",
+   checklistsUnit:"checklists",commitsUnit:"commits",testsUnit:"pruebas",high:"Alta",medium:"Media"},
+  en:{tag:"PRODUCTIVITY BEACON",title:"Progress that explains itself",body:"The percentage combines accepted deliverables, checklists, valid activity on a homologated base and commissioning tests.",
+   deliverables:"Deliverables",checklists:"Checklists",commits:"Valid commits",tests:"Approved tests",
+   colProject:"Project",colProgress:"Progress",colInfra:"Infra",colDev:"Dev",colCommissioning:"Commissioning",colConfidence:"Confidence",
+   checklistsUnit:"checklists",commitsUnit:"commits",testsUnit:"tests",high:"High",medium:"Medium"},
+};
+function EvidencePage({lang="pt"}={}){
+  const t=EVIDENCE_I18N[lang]||EVIDENCE_I18N.pt;
+  const rows=[{project:"TITANO",progress:73,infra:"4/5",dev:"12",tests:"18/20",confidence:"Alta"},{project:"QUELUZ",progress:68,infra:"5/5",dev:"9",tests:"10/20",confidence:"Média"},{project:"MARKET PERU",progress:42,infra:"3/5",dev:"6",tests:"4/20",confidence:"Média"}];
+  const confidenceLabel=c=>c==="Alta"?t.high:c==="Média"?t.medium:c;
+  return <section className="page evidence-page"><div className="evidence-hero"><div><small>{t.tag}</small><h2>{t.title}</h2><p>{t.body}</p></div><div className="formula"><span>35%</span><b>{t.deliverables}</b><span>25%</span><b>{t.checklists}</b><span>20%</span><b>{t.commits}</b><span>20%</span><b>{t.tests}</b></div></div><div className="evidence-table"><header><span>{t.colProject}</span><span>{t.colProgress}</span><span>{t.colInfra}</span><span>{t.colDev}</span><span>{t.colCommissioning}</span><span>{t.colConfidence}</span></header>{rows.map(r=><div key={r.project}><b>{r.project}</b><span className="progress-cell"><span className="evidence-progress" aria-hidden="true"><i style={{width:`${r.progress}%`}}/></span><strong>{r.progress}%</strong></span><span>{r.infra} {t.checklistsUnit}</span><span>{r.dev} {t.commitsUnit}</span><span>{r.tests} {t.testsUnit}</span><em>{confidenceLabel(r.confidence)}</em></div>)}</div></section>; }
 
 function Home({setActive}) {
   const spotlight = [
@@ -643,7 +678,24 @@ function Home({setActive}) {
   </section>;
 }
 
-function SettingsPage(){ const [settings,setSettings]=useState({p0:true,capacity:true,evidence:true}); return <section className="page settings-page"><div className="settings-card"><h2>Regras de governança</h2><p>Controles ativos do produto. Nenhuma chave externa é armazenada no navegador.</p>{[["p0","Criar P0 automaticamente","Falhas críticas de sensores abrem um alerta com SLA."],["capacity","Monitorar sobrecarga de capacidade","Avise quando uma equipe ultrapassar 100% de alocação."],["evidence","Exigir evidência para progresso","Percentuais só avançam com entregáveis verificáveis."]].map(([k,t,d])=><label key={k}><span><b>{t}</b><small>{d}</small></span><input type="checkbox" checked={settings[k]} onChange={()=>setSettings({...settings,[k]:!settings[k]})}/><i/></label>)}</div><div className="settings-card"><h2>Fontes conectadas</h2><p>Estado operacional atual das integrações e leituras ativas.</p><ul className="sources"><li><Circuitry/><span><b>CLP · Linha 01</b><small>Última leitura há 2s</small></span><em>Conectado</em></li><li><Database/><span><b>Base homologada</b><small>Commits e builds válidos</small></span><em>Conectado</em></li><li><LinkSimple/><span><b>Planejamento</b><small>Projetos e dependências</small></span><em>Conectado</em></li></ul></div></section>; }
+const SETTINGS_I18N={
+  pt:{rulesTitle:"Regras de governança",rulesBody:"Controles ativos do produto. Nenhuma chave externa é armazenada no navegador.",
+   toggles:[["p0","Criar P0 automaticamente","Falhas críticas de sensores abrem um alerta com SLA."],["capacity","Monitorar sobrecarga de capacidade","Avise quando uma equipe ultrapassar 100% de alocação."],["evidence","Exigir evidência para progresso","Percentuais só avançam com entregáveis verificáveis."]],
+   sourcesTitle:"Fontes conectadas",sourcesBody:"Estado operacional atual das integrações e leituras ativas.",
+   plcLabel:"CLP · Linha 01",plcNote:"Última leitura há 2s",baseLabel:"Base homologada",baseNote:"Commits e builds válidos",planLabel:"Planejamento",planNote:"Projetos e dependências",connected:"Conectado"},
+  es:{rulesTitle:"Reglas de gobernanza",rulesBody:"Controles activos del producto. Ninguna clave externa se almacena en el navegador.",
+   toggles:[["p0","Crear P0 automáticamente","Fallas críticas de sensores abren una alerta con SLA."],["capacity","Monitorear sobrecarga de capacidad","Avisa cuando un equipo supere el 100% de asignación."],["evidence","Exigir evidencia para el progreso","Los porcentajes solo avanzan con entregables verificables."]],
+   sourcesTitle:"Fuentes conectadas",sourcesBody:"Estado operativo actual de las integraciones y lecturas activas.",
+   plcLabel:"PLC · Línea 01",plcNote:"Última lectura hace 2s",baseLabel:"Base homologada",baseNote:"Commits y builds válidos",planLabel:"Planificación",planNote:"Proyectos y dependencias",connected:"Conectado"},
+  en:{rulesTitle:"Governance rules",rulesBody:"Active product controls. No external key is stored in the browser.",
+   toggles:[["p0","Create P0 automatically","Critical sensor failures open an alert with SLA."],["capacity","Monitor capacity overload","Warn when a team exceeds 100% allocation."],["evidence","Require evidence for progress","Percentages only advance with verifiable deliverables."]],
+   sourcesTitle:"Connected sources",sourcesBody:"Current operational state of active integrations and readings.",
+   plcLabel:"PLC · Line 01",plcNote:"Last reading 2s ago",baseLabel:"Homologated base",baseNote:"Valid commits and builds",planLabel:"Planning",planNote:"Projects and dependencies",connected:"Connected"},
+};
+function SettingsPage({lang="pt"}={}){
+  const t=SETTINGS_I18N[lang]||SETTINGS_I18N.pt;
+  const [settings,setSettings]=useState({p0:true,capacity:true,evidence:true});
+  return <section className="page settings-page"><div className="settings-card"><h2>{t.rulesTitle}</h2><p>{t.rulesBody}</p>{t.toggles.map(([k,title,desc])=><label key={k}><span><b>{title}</b><small>{desc}</small></span><input type="checkbox" checked={settings[k]} onChange={()=>setSettings({...settings,[k]:!settings[k]})}/><i/></label>)}</div><div className="settings-card"><h2>{t.sourcesTitle}</h2><p>{t.sourcesBody}</p><ul className="sources"><li><Circuitry/><span><b>{t.plcLabel}</b><small>{t.plcNote}</small></span><em>{t.connected}</em></li><li><Database/><span><b>{t.baseLabel}</b><small>{t.baseNote}</small></span><em>{t.connected}</em></li><li><LinkSimple/><span><b>{t.planLabel}</b><small>{t.planNote}</small></span><em>{t.connected}</em></li></ul></div></section>; }
 
 export function App() {
   const initialRoute=readRouteFromHash();
@@ -705,8 +757,8 @@ export function App() {
     areas:<AreasPage lang={lang}/>,raid:<RaidPage lang={lang}/>,admin:<AdminGovernance role={role} setRole={setRole} theme={theme} setTheme={setTheme} notify={notify} onOpenPilotUser={openPilotContext} lang={lang}/>,
     presentation:<PresentationPage notify={notify} lang={lang}/>,lifecycle:<LifecyclePage lang={lang}/>,simulator:<Simulator scenario={scenario} setScenario={setScenario} notify={notify}/>,
     commissioning:<Commissioning fault={fault} setFault={setFault} alerts={alerts} setAlerts={setAlerts} setActive={setActive} notify={notify}/>,
-    decision:<DecisionRoom setActive={setActive} notify={notify}/>,alerts:<AlertsPage alerts={alerts} setAlerts={setAlerts}/>,
-    evidence:<EvidencePage/>,settings:<SettingsPage/>
+    decision:<DecisionRoom setActive={setActive} notify={notify} lang={lang}/>,alerts:<AlertsPage alerts={alerts} setAlerts={setAlerts} lang={lang}/>,
+    evidence:<EvidencePage lang={lang}/>,settings:<SettingsPage lang={lang}/>
   };
   const page=canAccess?pages[active]:<AccessDenied setActive={setActive} lang={lang}/>;
   return <div className="app-shell" data-theme={theme}><SidebarEnhanced active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} currentUser={currentUser} onLogout={logout} lang={lang}/><main className="workspace"><Topbar active={active} role={role} currentUser={currentUser} onLogout={logout} notify={notify} lang={lang} setLang={setLang}/><ProductJourneyRail active={active} setActive={setActive} lang={lang} />{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
