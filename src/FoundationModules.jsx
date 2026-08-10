@@ -575,9 +575,96 @@ function readStoredAdminUsers() {
   }
 }
 
-export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotUser}){
+const ADMIN_I18N={
+  pt:{roleMeta:{Admin:{label:"Enterprise Admin",helper:"Controle total da plataforma e das integrações.",scope:"Administração, governança, acessos e regras centrais."},
+     Diretoria:{label:"Diretoria · DIREX",helper:"Leitura executiva, decisão e priorização.",scope:"Visão consolidada, indicadores, riscos e decisões."},
+     Gestor:{label:"Gestor",helper:"Cobrança, coordenação e desbloqueio da operação.",scope:"Projetos, PM, áreas, RAID e evidências."},
+     Analista:{label:"Analista",helper:"Execução com contexto, prazo e evidência.",scope:"Minha operação, projetos, áreas e comissionamento."}},
+   permissions:["Visualizar","Editar operação","Gerenciar projetos","Administrar acessos","Configurar integrações"],
+   governancePulse:[["Perfis ativos","4 perfis","Admin · Diretoria · Gestor · Analista"],["Sessões auditáveis","100%","Toda ação crítica deixa trilha"],["Regra central","RBAC + evidência","Capacidade correta para cada contexto"]],
+   adminPrinciples:[["Permissão por capacidade","Cada perfil vê e faz só o que precisa."],["Acessível de nascença","Contraste forte, leitura clara e navegação sem susto."],["Trilíngue de nascença","PT, ES e EN seguem juntos no mesmo fluxo."],["Auditoria viva","Toda ação crítica fica explicável depois."]],
+   navigateToast:label=>`Navegando para ${label}.`,
+   adminModules:[["admin-access","Acessos","Criar, revisar e preparar usuários válidos."],["admin-themes","Perfis & experiência","Simular RBAC e validar a interface."],["admin-pilots","Operação assistida","Abrir Daniel, Thomas e o contexto de administração no lugar certo."],["admin-audit","Auditoria","Conferir trilha, permissões e regra aplicada."]],
+   themeOptions:[{id:"Escuro",label:"Escuro",helper:"Padrão corporativo"},{id:"Claro",label:"Claro",helper:"Leitura clara"},{id:"Contraste",label:"Contraste",helper:"Máxima legibilidade"}],
+   areaOptions:["Infraestrutura","Implantação","Espec. de Software","WCS Velox","PM"],
+   inviteToast:(name,profile,area)=>`Acesso preparado para ${name||"novo usuário"} · perfil ${profile} · área ${area}.`,
+   validatedStamp:t=>`Validado pela Administração · ${t}`,nextActionIMP:"Abrir Implantação e concluir ou devolver bastão.",nextActionESP:"Abrir Especificação/DevOps e fechar checkpoints.",nextActionOther:"Acompanhar operação assistida e auditoria.",
+   validateToast:(name,area)=>`${name} validado em ${area}. Próxima ação registrada.`,
+   bannerTag:"GOVERNANÇA DE ACESSO",bannerTitle:"Permissão clara, ação auditável",bannerBody:"Os perfis já governam a experiência do produto e seguem a mesma regra operacional aplicada no ambiente real.",activeSession:"Sessão ativa",
+   moduleTag:"MÓDULO",open:"abrir",principleTag:"PRINCÍPIO",
+   roleTitle:"Controlar perfil de acesso",roleSubtitle:"RBAC aplicado na navegação, leitura e contexto operacional",roleChangeToast:label=>`Perfil alterado para ${label}. A navegação foi recalculada.`,
+   rulesTitle:"Regras obrigatórias",rulesSubtitle:"Validações que protegem a qualidade do dado",
+   rules:[["Concluído = 100%","Sem atraso pendente ou atividade aberta."],["Bloqueado exige plano","Categoria, responsável, próxima ação e data."],["Importação transacional","Arquivo inválido não altera a base."],["Link seguro do analista","Token expirável vinculado a e-mail e tarefa."]],
+   viewAs:"VER COMO",activeProfile:"Perfil ativo",availableCapacity:"Capacidade disponível",
+   accessTitle:"Novo acesso",accessSubtitle:"Quem entra e o que cada perfil pode fazer",
+   nameLabel:"Nome",namePlaceholder:"Ex.: Daniel Souza",emailLabel:"E-mail corporativo",emailPlaceholder:"nome@invent-corp.com",profileLabel:"Perfil",areaLabel:"Área",
+   accessNoteTitle:"Permissão por capacidade",accessNoteBody:"Cada perfil enxerga e faz só o que precisa. O usuário recebe o acesso conforme o papel e a área definidos acima.",prepareAccess:"Preparar acesso",
+   visualTitle:"Experiência visual",visualSubtitle:"Tema controlado aqui, não na lateral",themeChangeToast:label=>`Tema visual alterado para ${label}.`,activeTheme:"TEMA ATIVO",
+   pilotsTitle:"Usuários válidos da operação",pilotsSubtitle:"Escopo atual vindo das áreas e do inventops79",gate:"Gate",lastAction:"Última ação",nextAction:"Próxima ação",validateUser:"Validar usuário",openContext:"Abrir contexto",openContextToast:(name,area)=>`Abrindo ${name} no contexto de ${area}.`,
+   matrixTitle:"Matriz de permissões",matrixSubtitle:"Rotas e ações por perfil",permissionCol:"Permissão",
+   auditTitle:"Trilha de auditoria",auditSubtitle:"Quem fez o quê, quando e sobre qual registro",
+   auditLog:[["21:38","Admin InventOps","Alterou prazo do Go Live","TITANO"],["20:54","Daiana Costa","Anexou evidência REV4","QUELUZ"],["19:42","Sistema IoT","Criou alerta P0","TITANO"],["18:17","Ivan","Atualizou bloqueio de VPN","MARKET PERU"]]},
+  es:{roleMeta:{Admin:{label:"Enterprise Admin",helper:"Control total de la plataforma y las integraciones.",scope:"Administración, gobernanza, accesos y reglas centrales."},
+     Diretoria:{label:"Dirección · DIREX",helper:"Lectura ejecutiva, decisión y priorización.",scope:"Visión consolidada, indicadores, riesgos y decisiones."},
+     Gestor:{label:"Gestor",helper:"Reclamo, coordinación y desbloqueo de la operación.",scope:"Proyectos, PM, áreas, RAID y evidencias."},
+     Analista:{label:"Analista",helper:"Ejecución con contexto, plazo y evidencia.",scope:"Mi operación, proyectos, áreas y comisionamiento."}},
+   permissions:["Visualizar","Editar operación","Gestionar proyectos","Administrar accesos","Configurar integraciones"],
+   governancePulse:[["Perfiles activos","4 perfiles","Admin · Dirección · Gestor · Analista"],["Sesiones auditables","100%","Toda acción crítica deja rastro"],["Regla central","RBAC + evidencia","Capacidad correcta para cada contexto"]],
+   adminPrinciples:[["Permiso por capacidad","Cada perfil ve y hace solo lo que necesita."],["Accesible de nacimiento","Contraste fuerte, lectura clara y navegación sin sustos."],["Trilingüe de nacimiento","PT, ES y EN avanzan juntos en el mismo flujo."],["Auditoría viva","Toda acción crítica queda explicable después."]],
+   navigateToast:label=>`Navegando a ${label}.`,
+   adminModules:[["admin-access","Accesos","Crear, revisar y preparar usuarios válidos."],["admin-themes","Perfiles y experiencia","Simular RBAC y validar la interfaz."],["admin-pilots","Operación asistida","Abrir a Daniel, Thomas y el contexto de administración en el lugar correcto."],["admin-audit","Auditoría","Revisar rastro, permisos y regla aplicada."]],
+   themeOptions:[{id:"Escuro",label:"Oscuro",helper:"Estándar corporativo"},{id:"Claro",label:"Claro",helper:"Lectura clara"},{id:"Contraste",label:"Contraste",helper:"Máxima legibilidad"}],
+   areaOptions:["Infraestrutura","Implantação","Espec. de Software","WCS Velox","PM"],
+   inviteToast:(name,profile,area)=>`Acceso preparado para ${name||"nuevo usuario"} · perfil ${profile} · área ${area}.`,
+   validatedStamp:t=>`Validado por la Administración · ${t}`,nextActionIMP:"Abrir Implantación y concluir o devolver el testigo.",nextActionESP:"Abrir Especificación/DevOps y cerrar checkpoints.",nextActionOther:"Acompañar la operación asistida y la auditoría.",
+   validateToast:(name,area)=>`${name} validado en ${area}. Próxima acción registrada.`,
+   bannerTag:"GOBERNANZA DE ACCESO",bannerTitle:"Permiso claro, acción auditable",bannerBody:"Los perfiles ya gobiernan la experiencia del producto y siguen la misma regla operativa aplicada en el ambiente real.",activeSession:"Sesión activa",
+   moduleTag:"MÓDULO",open:"abrir",principleTag:"PRINCIPIO",
+   roleTitle:"Controlar perfil de acceso",roleSubtitle:"RBAC aplicado en la navegación, lectura y contexto operativo",roleChangeToast:label=>`Perfil cambiado a ${label}. La navegación fue recalculada.`,
+   rulesTitle:"Reglas obligatorias",rulesSubtitle:"Validaciones que protegen la calidad del dato",
+   rules:[["Concluido = 100%","Sin atraso pendiente ni actividad abierta."],["Bloqueado exige plan","Categoría, responsable, próxima acción y fecha."],["Importación transaccional","Un archivo inválido no altera la base."],["Enlace seguro del analista","Token expirable vinculado a correo y tarea."]],
+   viewAs:"VER COMO",activeProfile:"Perfil activo",availableCapacity:"Capacidad disponible",
+   accessTitle:"Nuevo acceso",accessSubtitle:"Quién entra y qué puede hacer cada perfil",
+   nameLabel:"Nombre",namePlaceholder:"Ej.: Daniel Souza",emailLabel:"Correo corporativo",emailPlaceholder:"nombre@invent-corp.com",profileLabel:"Perfil",areaLabel:"Área",
+   accessNoteTitle:"Permiso por capacidad",accessNoteBody:"Cada perfil ve y hace solo lo que necesita. El usuario recibe el acceso según el rol y el área definidos arriba.",prepareAccess:"Preparar acceso",
+   visualTitle:"Experiencia visual",visualSubtitle:"Tema controlado aquí, no en la barra lateral",themeChangeToast:label=>`Tema visual cambiado a ${label}.`,activeTheme:"TEMA ACTIVO",
+   pilotsTitle:"Usuarios válidos de la operación",pilotsSubtitle:"Alcance actual proveniente de las áreas y de inventops79",gate:"Gate",lastAction:"Última acción",nextAction:"Próxima acción",validateUser:"Validar usuario",openContext:"Abrir contexto",openContextToast:(name,area)=>`Abriendo a ${name} en el contexto de ${area}.`,
+   matrixTitle:"Matriz de permisos",matrixSubtitle:"Rutas y acciones por perfil",permissionCol:"Permiso",
+   auditTitle:"Rastro de auditoría",auditSubtitle:"Quién hizo qué, cuándo y sobre qué registro",
+   auditLog:[["21:38","Admin InventOps","Cambió el plazo del Go Live","TITANO"],["20:54","Daiana Costa","Adjuntó evidencia REV4","QUELUZ"],["19:42","Sistema IoT","Creó alerta P0","TITANO"],["18:17","Ivan","Actualizó bloqueo de VPN","MARKET PERU"]]},
+  en:{roleMeta:{Admin:{label:"Enterprise Admin",helper:"Full control of the platform and integrations.",scope:"Administration, governance, access and core rules."},
+     Diretoria:{label:"Leadership · DIREX",helper:"Executive read, decision and prioritization.",scope:"Consolidated view, indicators, risks and decisions."},
+     Gestor:{label:"Manager",helper:"Follow-up, coordination and operation unblocking.",scope:"Projects, PM, areas, RAID and evidence."},
+     Analista:{label:"Analyst",helper:"Execution with context, deadline and evidence.",scope:"My operation, projects, areas and commissioning."}},
+   permissions:["View","Edit operation","Manage projects","Administer access","Configure integrations"],
+   governancePulse:[["Active profiles","4 profiles","Admin · Leadership · Manager · Analyst"],["Auditable sessions","100%","Every critical action leaves a trail"],["Core rule","RBAC + evidence","Right capability for each context"]],
+   adminPrinciples:[["Capability-based permission","Each profile sees and does only what it needs."],["Accessible from birth","Strong contrast, clear reading and navigation without surprises."],["Trilingual from birth","PT, ES and EN move together in the same flow."],["Living audit trail","Every critical action stays explainable afterward."]],
+   navigateToast:label=>`Navigating to ${label}.`,
+   adminModules:[["admin-access","Access","Create, review and prepare valid users."],["admin-themes","Profiles & experience","Simulate RBAC and validate the interface."],["admin-pilots","Assisted operation","Open Daniel, Thomas and the admin context in the right place."],["admin-audit","Audit","Check trail, permissions and applied rule."]],
+   themeOptions:[{id:"Escuro",label:"Dark",helper:"Corporate default"},{id:"Claro",label:"Light",helper:"Clear reading"},{id:"Contraste",label:"Contrast",helper:"Maximum legibility"}],
+   areaOptions:["Infraestrutura","Implantação","Espec. de Software","WCS Velox","PM"],
+   inviteToast:(name,profile,area)=>`Access prepared for ${name||"new user"} · profile ${profile} · area ${area}.`,
+   validatedStamp:t=>`Validated by Administration · ${t}`,nextActionIMP:"Open Deployment and close or return the baton.",nextActionESP:"Open Specification/DevOps and close checkpoints.",nextActionOther:"Follow the assisted operation and audit.",
+   validateToast:(name,area)=>`${name} validated in ${area}. Next action logged.`,
+   bannerTag:"ACCESS GOVERNANCE",bannerTitle:"Clear permission, auditable action",bannerBody:"Profiles already govern the product experience and follow the same operational rule applied in the real environment.",activeSession:"Active session",
+   moduleTag:"MODULE",open:"open",principleTag:"PRINCIPLE",
+   roleTitle:"Control access profile",roleSubtitle:"RBAC applied to navigation, reading and operational context",roleChangeToast:label=>`Profile changed to ${label}. Navigation was recalculated.`,
+   rulesTitle:"Mandatory rules",rulesSubtitle:"Validations that protect data quality",
+   rules:[["Done = 100%","No pending delay or open activity."],["Blocked requires a plan","Category, owner, next action and date."],["Transactional import","An invalid file doesn't change the base."],["Analyst's secure link","Expiring token linked to e-mail and task."]],
+   viewAs:"VIEW AS",activeProfile:"Active profile",availableCapacity:"Available capability",
+   accessTitle:"New access",accessSubtitle:"Who's in and what each profile can do",
+   nameLabel:"Name",namePlaceholder:"E.g.: Daniel Souza",emailLabel:"Corporate e-mail",emailPlaceholder:"name@invent-corp.com",profileLabel:"Profile",areaLabel:"Area",
+   accessNoteTitle:"Capability-based permission",accessNoteBody:"Each profile sees and does only what it needs. The user gets access according to the role and area set above.",prepareAccess:"Prepare access",
+   visualTitle:"Visual experience",visualSubtitle:"Theme controlled here, not in the sidebar",themeChangeToast:label=>`Visual theme changed to ${label}.`,activeTheme:"ACTIVE THEME",
+   pilotsTitle:"Valid operational users",pilotsSubtitle:"Current scope coming from the areas and inventops79",gate:"Gate",lastAction:"Last action",nextAction:"Next action",validateUser:"Validate user",openContext:"Open context",openContextToast:(name,area)=>`Opening ${name} in the context of ${area}.`,
+   matrixTitle:"Permission matrix",matrixSubtitle:"Routes and actions by profile",permissionCol:"Permission",
+   auditTitle:"Audit trail",auditSubtitle:"Who did what, when and on which record",
+   auditLog:[["21:38","Admin InventOps","Changed the Go Live deadline","TITANO"],["20:54","Daiana Costa","Attached REV4 evidence","QUELUZ"],["19:42","IoT System","Created P0 alert","TITANO"],["18:17","Ivan","Updated VPN blocker","MARKET PERU"]]},
+};
+export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotUser,lang="pt"}){
+  const t=ADMIN_I18N[lang]||ADMIN_I18N.pt;
   const roles={Admin:[1,1,1,1,1],Diretoria:[1,0,1,0,0],Gestor:[1,1,1,0,0],Analista:[1,1,0,0,0]};
-  const permissions=["Visualizar","Editar operação","Gerenciar projetos","Administrar acessos","Configurar integrações"];
+  const permissions=t.permissions;
   const [invite,setInvite]=useState({name:"",email:"",profile:"Analista",area:"Infraestrutura"});
   const [users,setUsers]=useState(readStoredAdminUsers);
   useEffect(()=>{
@@ -585,38 +672,11 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
       window.localStorage.setItem("inventops-admin-users", JSON.stringify(users));
     } catch {}
   },[users]);
-  const roleMeta={
-    Admin:{label:"Enterprise Admin",helper:"Controle total da plataforma e das integrações.",scope:"Administração, governança, acessos e regras centrais."},
-    Diretoria:{label:"Diretoria · DIREX",helper:"Leitura executiva, decisão e priorização.",scope:"Visão consolidada, indicadores, riscos e decisões."},
-    Gestor:{label:"Gestor",helper:"Cobrança, coordenação e desbloqueio da operação.",scope:"Projetos, PM, áreas, RAID e evidências."},
-    Analista:{label:"Analista",helper:"Execução com contexto, prazo e evidência.",scope:"Minha operação, projetos, áreas e comissionamento."}
-  };
-  const governancePulse=[
-    ["Perfis ativos","4 perfis","Admin · Diretoria · Gestor · Analista"],
-    ["Sessões auditáveis","100%","Toda ação crítica deixa trilha"],
-    ["Regra central","RBAC + evidência","Capacidade correta para cada contexto"]
-  ];
-  const adminPrinciples=[
-    ["Permissão por capacidade","Cada perfil vê e faz só o que precisa."],
-    ["Acessível de nascença","Contraste forte, leitura clara e navegação sem susto."],
-    ["Trilíngue de nascença","PT, ES e EN seguem juntos no mesmo fluxo."],
-    ["Auditoria viva","Toda ação crítica fica explicável depois."]
-  ];
+  const roleMeta=t.roleMeta;
   const jumpTo=(target,label)=>{
     document.getElementById(target)?.scrollIntoView({behavior:"smooth",block:"start"});
-    notify(`Navegando para ${label}.`);
+    notify(t.navigateToast(label));
   };
-  const adminModules=[
-    ["admin-access","Acessos","Criar, revisar e preparar usuários válidos."],
-    ["admin-themes","Perfis & experiência","Simular RBAC e validar a interface."],
-    ["admin-pilots","Operação assistida","Abrir Daniel, Thomas e o contexto de administração no lugar certo."],
-    ["admin-audit","Auditoria","Conferir trilha, permissões e regra aplicada."]
-  ];
-  const themeOptions=[
-    {id:"Escuro",label:"Escuro",helper:"Padrão corporativo",icon:Moon},
-    {id:"Claro",label:"Claro",helper:"Leitura clara",icon:Sun},
-    {id:"Contraste",label:"Contraste",helper:"Máxima legibilidade",icon:Eye}
-  ];
   const sendInvite=(event)=>{
     event.preventDefault();
     const deptMap={Infraestrutura:"INF","Implantação":"IMP","Espec. de Software":"ESP","WCS Velox":"WCS","PM":"PM"};
@@ -632,11 +692,11 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
       nextAction:"Associar usuário a uma área operacional"
     };
     setUsers(current=>[newUser,...current.filter(item=>item.name!==newUser.name)]);
-    notify(`Acesso preparado para ${invite.name||"novo usuário"} · perfil ${invite.profile} · área ${invite.area}.`);
+    notify(t.inviteToast(invite.name,invite.profile,invite.area));
     setInvite({name:"",email:"",profile:"Analista",area:"Infraestrutura"});
   };
   const validateOperationalUser=(user)=>{
-    const stamped=`Validado pela Administração · ${new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"})}`;
+    const stamped=t.validatedStamp(new Date().toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}));
     setUsers(current=>current.map(item=>{
       if(item.name!==user.name||item.area!==user.area) return item;
       return {
@@ -644,54 +704,54 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
         status:"Usuário validado",
         gate:"Acesso operacional confirmado",
         lastAction:stamped,
-        nextAction:item.dept==="IMP"?"Abrir Implantação e concluir ou devolver bastão.":item.dept==="ESP"?"Abrir Especificação/DevOps e fechar checkpoints.":"Acompanhar operação assistida e auditoria."
+        nextAction:item.dept==="IMP"?t.nextActionIMP:item.dept==="ESP"?t.nextActionESP:t.nextActionOther
       };
     }));
-    notify(`${user.name} validado em ${user.area}. Próxima ação registrada.`);
+    notify(t.validateToast(user.name,user.area));
   };
   return <section className="page foundation-page">
-    <div className="admin-banner"><ShieldCheck/><div><small>GOVERNANÇA DE ACESSO</small><h2>Permissão clara, ação auditável</h2><p>Os perfis já governam a experiência do produto e seguem a mesma regra operacional aplicada no ambiente real.</p></div><span><LockKey/>Sessão ativa</span></div>
+    <div className="admin-banner"><ShieldCheck/><div><small>{t.bannerTag}</small><h2>{t.bannerTitle}</h2><p>{t.bannerBody}</p></div><span><LockKey/>{t.activeSession}</span></div>
     <div className="admin-module-strip">
-      {adminModules.map(([id,title,body])=><button key={id} onClick={()=>jumpTo(id,title)}><small>MÓDULO</small><b>{title}</b><p>{body}</p><span>abrir</span></button>)}
+      {t.adminModules.map(([id,title,body])=><button key={id} onClick={()=>jumpTo(id,title)}><small>{t.moduleTag}</small><b>{title}</b><p>{body}</p><span>{t.open}</span></button>)}
     </div>
     <div className="executive-command-strip">
-      {governancePulse.map(item=><span key={item[0]}><small>{item[0]}</small><b>{item[1]}</b><em>{item[2]}</em></span>)}
+      {t.governancePulse.map(item=><span key={item[0]}><small>{item[0]}</small><b>{item[1]}</b><em>{item[2]}</em></span>)}
     </div>
     <div className="admin-principles">
-      {adminPrinciples.map(([title,body])=><article key={title}><small>PRINCÍPIO</small><b>{title}</b><p>{body}</p></article>)}
+      {t.adminPrinciples.map(([title,body])=><article key={title}><small>{t.principleTag}</small><b>{title}</b><p>{body}</p></article>)}
     </div>
     <div className="foundation-grid equal">
-      <div id="admin-themes"><Panel title="Controlar perfil de acesso" subtitle="RBAC aplicado na navegação, leitura e contexto operacional"><div className="role-selector">{Object.keys(roles).map(r=><button className={role===r?"active":""} key={r} onClick={()=>{setRole(r);notify(`Perfil alterado para ${roleMeta[r].label}. A navegação foi recalculada.`)}}><UserGear/><span><b>{roleMeta[r].label}</b><small>{roleMeta[r].helper}</small></span></button>)}</div></Panel></div>
-      <Panel title="Regras obrigatórias" subtitle="Validações que protegem a qualidade do dado"><ul className="governance-rules"><li><CheckCircle/><span><b>Concluído = 100%</b><small>Sem atraso pendente ou atividade aberta.</small></span></li><li><CheckCircle/><span><b>Bloqueado exige plano</b><small>Categoria, responsável, próxima ação e data.</small></span></li><li><CheckCircle/><span><b>Importação transacional</b><small>Arquivo inválido não altera a base.</small></span></li><li><CheckCircle/><span><b>Link seguro do analista</b><small>Token expirável vinculado a e-mail e tarefa.</small></span></li></ul></Panel>
+      <div id="admin-themes"><Panel title={t.roleTitle} subtitle={t.roleSubtitle}><div className="role-selector">{Object.keys(roles).map(r=><button className={role===r?"active":""} key={r} onClick={()=>{setRole(r);notify(t.roleChangeToast(roleMeta[r].label))}}><UserGear/><span><b>{roleMeta[r].label}</b><small>{roleMeta[r].helper}</small></span></button>)}</div></Panel></div>
+      <Panel title={t.rulesTitle} subtitle={t.rulesSubtitle}><ul className="governance-rules">{t.rules.map(([title,body])=><li key={title}><CheckCircle/><span><b>{title}</b><small>{body}</small></span></li>)}</ul></Panel>
     </div>
-    <div className="admin-role-overview">{Object.entries(roleMeta).map(([key,item])=><article key={key} className={role===key?"active":""}><small>VER COMO</small><b>{item.label}</b><p>{item.scope}</p><span>{role===key?"Perfil ativo":"Capacidade disponível"}</span></article>)}</div>
+    <div className="admin-role-overview">{Object.entries(roleMeta).map(([key,item])=><article key={key} className={role===key?"active":""}><small>{t.viewAs}</small><b>{item.label}</b><p>{item.scope}</p><span>{role===key?t.activeProfile:t.availableCapacity}</span></article>)}</div>
     <div className="foundation-grid equal">
-      <div id="admin-access"><Panel title="Novo acesso" subtitle="Quem entra e o que cada perfil pode fazer">
+      <div id="admin-access"><Panel title={t.accessTitle} subtitle={t.accessSubtitle}>
         <form className="admin-access-form" onSubmit={sendInvite}>
-          <label><span>Nome</span><input value={invite.name} onChange={e=>setInvite({...invite,name:e.target.value})} placeholder="Ex.: Daniel Souza" required/></label>
-          <label><span>E-mail corporativo</span><input type="email" value={invite.email} onChange={e=>setInvite({...invite,email:e.target.value})} placeholder="nome@invent-corp.com" required/></label>
+          <label><span>{t.nameLabel}</span><input value={invite.name} onChange={e=>setInvite({...invite,name:e.target.value})} placeholder={t.namePlaceholder} required/></label>
+          <label><span>{t.emailLabel}</span><input type="email" value={invite.email} onChange={e=>setInvite({...invite,email:e.target.value})} placeholder={t.emailPlaceholder} required/></label>
           <div className="admin-access-row">
-            <label><span>Perfil</span><select value={invite.profile} onChange={e=>setInvite({...invite,profile:e.target.value})}>{Object.keys(roleMeta).map(key=><option key={key}>{key}</option>)}</select></label>
-            <label><span>Área</span><select value={invite.area} onChange={e=>setInvite({...invite,area:e.target.value})}>{["Infraestrutura","Implantação","Espec. de Software","WCS Velox","PM"].map(item=><option key={item}>{item}</option>)}</select></label>
+            <label><span>{t.profileLabel}</span><select value={invite.profile} onChange={e=>setInvite({...invite,profile:e.target.value})}>{Object.keys(roleMeta).map(key=><option key={key}>{key}</option>)}</select></label>
+            <label><span>{t.areaLabel}</span><select value={invite.area} onChange={e=>setInvite({...invite,area:e.target.value})}>{t.areaOptions.map(item=><option key={item}>{item}</option>)}</select></label>
           </div>
-          <div className="admin-access-note"><b>Permissão por capacidade</b><p>Cada perfil enxerga e faz só o que precisa. O usuário recebe o acesso conforme o papel e a área definidos acima.</p></div>
-          <button className="primary" type="submit"><Envelope/>Preparar acesso</button>
+          <div className="admin-access-note"><b>{t.accessNoteTitle}</b><p>{t.accessNoteBody}</p></div>
+          <button className="primary" type="submit"><Envelope/>{t.prepareAccess}</button>
         </form>
       </Panel></div>
-      <Panel title="Experiência visual" subtitle="Tema controlado aqui, não na lateral">
+      <Panel title={t.visualTitle} subtitle={t.visualSubtitle}>
         <div className="admin-theme-picker">
-          {themeOptions.map(option=>{
-            const Icon=option.icon;
-            return <button key={option.id} className={theme===option.id?"active":""} onClick={()=>{setTheme(option.id);notify(`Tema visual alterado para ${option.label}.`)}}>
+          {t.themeOptions.map((option,i)=>{
+            const Icon=[Moon,Sun,Eye][i];
+            return <button key={option.id} className={theme===option.id?"active":""} onClick={()=>{setTheme(option.id);notify(t.themeChangeToast(option.label))}}>
               <span className="theme-icon-chip"><Icon size={18} weight={theme===option.id?"fill":"regular"}/></span>
               <span><b>{option.label}</b><small>{option.helper}</small></span>
             </button>;
           })}
         </div>
-        <div className="admin-theme-state"><ShieldCheck/><span><small>TEMA ATIVO</small><b>{theme}</b></span></div>
+        <div className="admin-theme-state"><ShieldCheck/><span><small>{t.activeTheme}</small><b>{theme}</b></span></div>
       </Panel>
     </div>
-    <div id="admin-pilots"><Panel title="Usuários válidos da operação" subtitle="Escopo atual vindo das áreas e do inventops79">
+    <div id="admin-pilots"><Panel title={t.pilotsTitle} subtitle={t.pilotsSubtitle}>
       <div className="admin-pilot-users">
         {users.map((user)=><article key={`${user.name}-${user.area}`}>
           <small>{user.profile}</small>
@@ -700,23 +760,23 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
           <span>{user.status}</span>
           <em>{user.source}</em>
           <dl className="admin-user-state">
-            <div><dt>Gate</dt><dd>{user.gate}</dd></div>
-            <div><dt>Última ação</dt><dd>{user.lastAction}</dd></div>
-            <div><dt>Próxima ação</dt><dd>{user.nextAction}</dd></div>
+            <div><dt>{t.gate}</dt><dd>{user.gate}</dd></div>
+            <div><dt>{t.lastAction}</dt><dd>{user.lastAction}</dd></div>
+            <div><dt>{t.nextAction}</dt><dd>{user.nextAction}</dd></div>
           </dl>
           <div className="admin-pilot-actions">
-            <button className="ghost" type="button" onClick={()=>validateOperationalUser(user)}>Validar usuário</button>
+            <button className="ghost" type="button" onClick={()=>validateOperationalUser(user)}>{t.validateUser}</button>
             <button className="ghost" type="button" onClick={()=>{
               setRole(user.profile);
               onOpenPilotUser?.(user);
-              notify(`Abrindo ${user.name} no contexto de ${user.area}.`);
-            }}>Abrir contexto</button>
+              notify(t.openContextToast(user.name,user.area));
+            }}>{t.openContext}</button>
           </div>
         </article>)}
       </div>
     </Panel></div>
-    <Panel title="Matriz de permissões" subtitle="Rotas e ações por perfil"><div className="permission-table"><header><span>Permissão</span>{Object.keys(roles).map(r=><span key={r}>{r==="Diretoria"?"DIREX":r}</span>)}</header>{permissions.map((p,i)=><div key={p}><b>{p}</b>{Object.keys(roles).map(r=><span key={r}>{roles[r][i]?<CheckCircle/>:<XCircle/>}</span>)}</div>)}</div></Panel>
-    <div id="admin-audit"><Panel title="Trilha de auditoria" subtitle="Quem fez o quê, quando e sobre qual registro"><div className="audit-log">{[["21:38","Admin InventOps","Alterou prazo do Go Live","TITANO"],["20:54","Daiana Costa","Anexou evidência REV4","QUELUZ"],["19:42","Sistema IoT","Criou alerta P0","TITANO"],["18:17","Ivan","Atualizou bloqueio de VPN","MARKET PERU"]].map(x=><div key={x.join()}><span>{x[0]}</span><b>{x[1]}</b><p>{x[2]}</p><em>{x[3]}</em></div>)}</div></Panel></div></section>;
+    <Panel title={t.matrixTitle} subtitle={t.matrixSubtitle}><div className="permission-table"><header><span>{t.permissionCol}</span>{Object.keys(roles).map(r=><span key={r}>{r==="Diretoria"?"DIREX":r}</span>)}</header>{permissions.map((p,i)=><div key={p}><b>{p}</b>{Object.keys(roles).map(r=><span key={r}>{roles[r][i]?<CheckCircle/>:<XCircle/>}</span>)}</div>)}</div></Panel>
+    <div id="admin-audit"><Panel title={t.auditTitle} subtitle={t.auditSubtitle}><div className="audit-log">{t.auditLog.map(x=><div key={x.join()}><span>{x[0]}</span><b>{x[1]}</b><p>{x[2]}</p><em>{x[3]}</em></div>)}</div></Panel></div></section>;
 }
 
 const LIFECYCLE_I18N={
