@@ -469,13 +469,6 @@
   position:absolute;
   left:50%;
   top:50%;
-  width:132px;
-  height:132px;
-  margin:-66px;
-  transform:
-    rotate(calc(var(--i) * 25.714deg))
-    translateY(-214px)
-    rotate(calc(var(--i) * -25.714deg));
   border:1px solid rgba(141,120,255,.46);
   border-radius:999px;
   background:linear-gradient(180deg,rgba(14,22,43,.96),rgba(9,16,29,.96));
@@ -483,21 +476,42 @@
   align-items:center;
   justify-content:center;
   text-align:center;
-  padding:14px 12px;
+  padding:10px 10px;
   color:#d7e0ee;
-  font:700 11px/1.2 Inter;
+  font:700 9.5px/1.22 Inter;
   box-shadow:0 14px 34px rgba(0,0,0,.24),0 0 18px rgba(143,115,255,.16);
   animation:node-breathe 3.6s ease-in-out infinite;
   animation-delay:calc(var(--i) * .12s);
-  gap:3px;
+  gap:2px;
+  overflow:hidden;
+}
+
+/* Anel duplo (indices pares/impares em raios diferentes) para os 14 nodes
+   nao se sobreporem entre si — raio unico nao cabia 14 circulos desse
+   tamanho sem um cobrir o texto do vizinho (bug do "corte" no nome). */
+.ecosystem-orbit > span.ring-outer{
+  width:98px;
+  height:98px;
+  margin:-49px;
+  transform:
+    rotate(calc(var(--i) * 25.714deg))
+    translateY(-224px)
+    rotate(calc(var(--i) * -25.714deg));
+}
+
+.ecosystem-orbit > span.ring-inner{
+  width:90px;
+  height:90px;
+  margin:-45px;
+  transform:
+    rotate(calc(var(--i) * 25.714deg))
+    translateY(-176px)
+    rotate(calc(var(--i) * -25.714deg));
 }
 
 .ecosystem-orbit > span.is-long-department{
-  width:142px;
-  height:142px;
-  margin:-71px;
-  font-size:10px;
-  line-height:1.16;
+  font-size:8.6px;
+  line-height:1.14;
   letter-spacing:-.01em;
 }
 
@@ -1026,22 +1040,32 @@
   }
 
   .ecosystem-orbit > span{
-    width:108px;
-    height:108px;
-    margin:-54px;
+    font-size:8.2px;
+    line-height:1.16;
+  }
+
+  .ecosystem-orbit > span.ring-outer{
+    width:80px;
+    height:80px;
+    margin:-40px;
     transform:
       rotate(calc(var(--i) * 25.714deg))
-      translateY(-164px)
+      translateY(-172px)
       rotate(calc(var(--i) * -25.714deg));
-    font-size:9.4px;
-    line-height:1.14;
+  }
+
+  .ecosystem-orbit > span.ring-inner{
+    width:74px;
+    height:74px;
+    margin:-37px;
+    transform:
+      rotate(calc(var(--i) * 25.714deg))
+      translateY(-135px)
+      rotate(calc(var(--i) * -25.714deg));
   }
 
   .ecosystem-orbit > span.is-long-department{
-    width:118px;
-    height:118px;
-    margin:-59px;
-    font-size:8.8px;
+    font-size:7.4px;
   }
 
   .ecosystem-core{

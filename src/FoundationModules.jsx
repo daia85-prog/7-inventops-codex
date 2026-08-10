@@ -827,7 +827,8 @@ export function LoginScreen({onLogin}){
       <div className="ecosystem-orbit" aria-hidden="true">
         {LOGIN_DEPARTMENTS.map((department,index)=>{
           const isLongDepartment=/Pós-|Elétrica|Mecânica|Infraestrutura|Implantação|Software/.test(department);
-          return <span key={department} className={isLongDepartment?"is-long-department":""} style={{"--i":index}}>{department.split("\n").map((part,partIndex)=><strong key={`${department}-${partIndex}`}>{part}</strong>)}</span>;
+          const ring=index%2===0?"ring-outer":"ring-inner";
+          return <span key={department} className={`${ring}${isLongDepartment?" is-long-department":""}`} style={{"--i":index}}>{department.split("\n").map((part,partIndex)=><strong key={`${department}-${partIndex}`}>{part}</strong>)}</span>;
         })}
         <div className="ecosystem-core"><b>InventOps</b><small>ENTERPRISE</small></div>
       </div>
