@@ -45,7 +45,38 @@ function initialGates(project){
   }));
 }
 
-export function ProjectPhaseGates({project,onUpdate,notify}){
+const PPG_I18N={
+  pt:{statusLabels:{Aprovado:"Aprovado","Em validação":"Em validação",Planejado:"Planejado",Pendente:"Pendente"},
+   heroTag:"GATES DE GOVERNANÇA",heroTitle:"Fase só avança quando o critério de saída está provado.",heroBody:"Percentual não aprova gate. A decisão exige evidência, responsável e registro do PM.",currentPhase:"FASE ATUAL",pendingCriteria:n=>`${n} critérios pendentes`,
+   journeyTag:"SEQUÊNCIA DE ENTREGA",journeyTitle:"Régua de avanço do InventOps",journeySub:"Governança já faz parte da jornada visível do produto",check:"CHECK",current:"ATUAL",next:"PRÓXIMO",
+   activeDetail:"Regras de passagem e aprovação do projeto em foco agora.",nextDetail:"Última camada: fechamento executivo e publicação.",doneDetail:"Etapa já consolidada na jornada principal.",
+   phase:"FASE",readiness:"prontidão",criteriaApproved:(a,t)=>`${a}/${t} critérios aprovados`,
+   expectedEvidence:"Evidência esperada",registeredEvidence:"Evidência registrada",registerEvidence:"Registrar evidência",approveCriterion:"Aprovar critério",
+   gateDecision:"DECISÃO DO GATE",gateApproved:"Gate aprovado",awaitingCriteria:"Aguardando critérios",decisionRegistered:"Decisão registrada",criteriaBlock:n=>`${n} critérios impedem o avanço`,parallelNote:"O projeto continua executando atividades paralelas, mas não muda de fase.",
+   review:"Revisão",daily:"Diária",perGate:"Por gate",rule:"Regra",ruleValue:"100% dos critérios aprovados",approver:"Aprovador",approverValue:"PM responsável",gateDone:"Gate concluído",approveGateBtn:"Aprovar gate e avançar",auditFooter:"A decisão gera histórico auditável no projeto.",
+   evidenceRegisteredToast:"Evidência registrada e enviada para validação.",registerFirstToast:"Registre a evidência antes de aprovar o critério.",criterionApprovedToast:"Critério aprovado pelo PM com trilha de decisão.",onlyCurrentGateToast:"Somente o gate da fase atual pode ser aprovado.",gateBlockedToast:"O gate permanece bloqueado: existem critérios sem aprovação.",gateApprovedToast:n=>`Gate ${n} aprovado. Projeto avançou para a próxima fase.`,now:"Agora"},
+  es:{statusLabels:{Aprovado:"Aprobado","Em validação":"En validación",Planejado:"Planificado",Pendente:"Pendiente"},
+   heroTag:"GATES DE GOBERNANZA",heroTitle:"La fase solo avanza cuando el criterio de salida está probado.",heroBody:"El porcentaje no aprueba el gate. La decisión exige evidencia, responsable y registro del PM.",currentPhase:"FASE ACTUAL",pendingCriteria:n=>`${n} criterios pendientes`,
+   journeyTag:"SECUENCIA DE ENTREGA",journeyTitle:"Regla de avance de InventOps",journeySub:"La gobernanza ya forma parte del recorrido visible del producto",check:"LISTO",current:"ACTUAL",next:"PRÓXIMO",
+   activeDetail:"Reglas de paso y aprobación del proyecto en foco ahora.",nextDetail:"Última capa: cierre ejecutivo y publicación.",doneDetail:"Etapa ya consolidada en el recorrido principal.",
+   phase:"FASE",readiness:"disponibilidad",criteriaApproved:(a,t)=>`${a}/${t} criterios aprobados`,
+   expectedEvidence:"Evidencia esperada",registeredEvidence:"Evidencia registrada",registerEvidence:"Registrar evidencia",approveCriterion:"Aprobar criterio",
+   gateDecision:"DECISIÓN DEL GATE",gateApproved:"Gate aprobado",awaitingCriteria:"Esperando criterios",decisionRegistered:"Decisión registrada",criteriaBlock:n=>`${n} criterios impiden el avance`,parallelNote:"El proyecto sigue ejecutando actividades paralelas, pero no cambia de fase.",
+   review:"Revisión",daily:"Diaria",perGate:"Por gate",rule:"Regla",ruleValue:"100% de los criterios aprobados",approver:"Aprobador",approverValue:"PM responsable",gateDone:"Gate concluido",approveGateBtn:"Aprobar gate y avanzar",auditFooter:"La decisión genera historial auditable en el proyecto.",
+   evidenceRegisteredToast:"Evidencia registrada y enviada a validación.",registerFirstToast:"Registra la evidencia antes de aprobar el criterio.",criterionApprovedToast:"Criterio aprobado por el PM con trazabilidad de decisión.",onlyCurrentGateToast:"Solo se puede aprobar el gate de la fase actual.",gateBlockedToast:"El gate permanece bloqueado: hay criterios sin aprobar.",gateApprovedToast:n=>`Gate ${n} aprobado. El proyecto avanzó a la próxima fase.`,now:"Ahora"},
+  en:{statusLabels:{Aprovado:"Approved","Em validação":"In validation",Planejado:"Planned",Pendente:"Pending"},
+   heroTag:"GOVERNANCE GATES",heroTitle:"A phase only advances when the exit criterion is proven.",heroBody:"A percentage doesn't approve a gate. The decision requires evidence, an owner and a PM record.",currentPhase:"CURRENT PHASE",pendingCriteria:n=>`${n} pending criteria`,
+   journeyTag:"DELIVERY SEQUENCE",journeyTitle:"InventOps' advancement ruler",journeySub:"Governance is already part of the product's visible journey",check:"CHECK",current:"CURRENT",next:"NEXT",
+   activeDetail:"Passage and approval rules for the project currently in focus.",nextDetail:"Last layer: executive closing and publication.",doneDetail:"Stage already consolidated in the main journey.",
+   phase:"PHASE",readiness:"readiness",criteriaApproved:(a,t)=>`${a}/${t} criteria approved`,
+   expectedEvidence:"Expected evidence",registeredEvidence:"Registered evidence",registerEvidence:"Register evidence",approveCriterion:"Approve criterion",
+   gateDecision:"GATE DECISION",gateApproved:"Gate approved",awaitingCriteria:"Awaiting criteria",decisionRegistered:"Decision recorded",criteriaBlock:n=>`${n} criteria block progress`,parallelNote:"The project keeps running parallel activities, but doesn't change phase.",
+   review:"Review",daily:"Daily",perGate:"Per gate",rule:"Rule",ruleValue:"100% of criteria approved",approver:"Approver",approverValue:"Responsible PM",gateDone:"Gate completed",approveGateBtn:"Approve gate and advance",auditFooter:"The decision generates an auditable history on the project.",
+   evidenceRegisteredToast:"Evidence registered and sent for validation.",registerFirstToast:"Register the evidence before approving the criterion.",criterionApprovedToast:"Criterion approved by the PM with a decision trail.",onlyCurrentGateToast:"Only the current phase's gate can be approved.",gateBlockedToast:"The gate stays blocked: there are unapproved criteria.",gateApprovedToast:n=>`Gate ${n} approved. The project advanced to the next phase.`,now:"Now"},
+};
+
+export function ProjectPhaseGates({project,onUpdate,notify,lang="pt"}){
+  const t=PPG_I18N[lang]||PPG_I18N.pt;
   const [gates,setGates]=useState(()=>initialGates(project));
   const [selectedGateId,setSelectedGateId]=useState(()=>initialGates(project)[Math.max(0,project.phase-1)].id);
   const selected=gates.find((gate)=>gate.id===selectedGateId)||gates[0];
@@ -67,87 +98,87 @@ export function ProjectPhaseGates({project,onUpdate,notify}){
     const value=`${criterion.expected} · anexado agora`;
     persist(
       gates.map((gate)=>gate.id===selected.id?{...gate,criteria:gate.criteria.map((item)=>item.id===criterion.id?{...item,evidence:value,status:"Em validação"}:item)}:gate),
-      "Evidência registrada e enviada para validação."
+      t.evidenceRegisteredToast
     );
   };
 
   const approveCriterion=(criterion)=>{
     if(criterion.evidence==="Pendente"){
-      notify("Registre a evidência antes de aprovar o critério.");
+      notify(t.registerFirstToast);
       return;
     }
     const next=gates.map((gate)=>gate.id===selected.id?{...gate,criteria:gate.criteria.map((item)=>item.id===criterion.id?{...item,status:"Aprovado"}:item)}:gate);
-    persist(next,"Critério aprovado pelo PM com trilha de decisão.");
+    persist(next,t.criterionApprovedToast);
   };
 
   const approveGate=()=>{
     if(selected.number!==project.phase){
-      notify("Somente o gate da fase atual pode ser aprovado.");
+      notify(t.onlyCurrentGateToast);
       return;
     }
     if(selected.criteria.some((item)=>item.status!=="Aprovado")){
-      notify("O gate permanece bloqueado: existem critérios sem aprovação.");
+      notify(t.gateBlockedToast);
       return;
     }
-    const next=gates.map((gate)=>gate.id===selected.id?{...gate,status:"Aprovado",decidedBy:"PM · Rodrigo Baruco",decidedAt:"Agora"}:gate);
+    const next=gates.map((gate)=>gate.id===selected.id?{...gate,status:"Aprovado",decidedBy:"PM · Rodrigo Baruco",decidedAt:t.now}:gate);
     setGates(next);
     onUpdate({...project,phase:Math.min(7,project.phase+1),phaseGates:next});
-    notify(`Gate ${selected.number} aprovado. Projeto avançou para a próxima fase.`);
+    notify(t.gateApprovedToast(selected.number));
   };
 
   return <div className="ppg">
     <section className="ppg-hero">
       <div>
-        <small>GATES DE GOVERNANÇA</small>
-        <h3>Fase só avança quando o critério de saída está provado.</h3>
-        <p>Percentual não aprova gate. A decisão exige evidência, responsável e registro do PM.</p>
+        <small>{t.heroTag}</small>
+        <h3>{t.heroTitle}</h3>
+        <p>{t.heroBody}</p>
       </div>
-      <span><ShieldCheck/><small>FASE ATUAL</small><b>{project.phase}/7 · {definitions[project.phase-1].name}</b><em>{summary.pending} critérios pendentes</em></span>
+      <span><ShieldCheck/><small>{t.currentPhase}</small><b>{project.phase}/7 · {definitions[project.phase-1].name}</b><em>{t.pendingCriteria(summary.pending)}</em></span>
     </section>
 
     <article className="journey-checklist">
       <header>
         <div>
-          <small>SEQUÊNCIA DE ENTREGA</small>
-          <h3>Régua de avanço do InventOps</h3>
+          <small>{t.journeyTag}</small>
+          <h3>{t.journeyTitle}</h3>
         </div>
-        <span>Governança já faz parte da jornada visível do produto</span>
+        <span>{t.journeySub}</span>
       </header>
       <div>
         {deliveryJourney.map((step)=><section key={step.id} className={step.state}>
           <i>{step.state==="done"?<CheckCircle weight="fill"/>:step.state==="active"?<FlagCheckered weight="fill"/>:<Clock weight="fill"/>}</i>
           <div>
-            <small>{step.state==="done"?"CHECK":step.state==="active"?"ATUAL":"PRÓXIMO"}</small>
+            <small>{step.state==="done"?t.check:step.state==="active"?t.current:t.next}</small>
             <b>{step.label}</b>
-            <p>{step.state==="active"?"Regras de passagem e aprovação do projeto em foco agora.":step.state==="next"?"Última camada: fechamento executivo e publicação.":"Etapa já consolidada na jornada principal."}</p>
+            <p>{step.state==="active"?t.activeDetail:step.state==="next"?t.nextDetail:t.doneDetail}</p>
           </div>
         </section>)}
       </div>
     </article>
 
     <div className="ppg-rail">{gates.map((gate)=><button key={gate.id} className={`${gate.status.toLowerCase().replace(" ","-")} ${selected.id===gate.id?"selected":""}`} onClick={()=>setSelectedGateId(gate.id)}>
-      <span>{gate.status==="Aprovado"?<CheckCircle weight="fill"/>:gate.number}</span><div><small>FASE {gate.number}</small><b>{gate.name}</b></div><em>{gate.status}</em>{gate.number<7?<ArrowRight/>:null}
+      <span>{gate.status==="Aprovado"?<CheckCircle weight="fill"/>:gate.number}</span><div><small>{t.phase} {gate.number}</small><b>{gate.name}</b></div><em>{t.statusLabels[gate.status]||gate.status}</em>{gate.number<7?<ArrowRight/>:null}
     </button>)}</div>
 
     <div className="ppg-workspace">
       <article className="ppg-gate">
-        <header><div><small>GATE {selected.number} · {selected.status.toUpperCase()}</small><h3>{selected.name}</h3><p>{selected.purpose}</p></div><span><b>{readiness}%</b><small>prontidão</small></span></header>
-        <div className="ppg-progress"><i><em style={{width:`${readiness}%`}}/></i><span>{approved}/{selected.criteria.length} critérios aprovados</span></div>
+        <header><div><small>{t.phase} {selected.number} · {(t.statusLabels[selected.status]||selected.status).toUpperCase()}</small><h3>{selected.name}</h3><p>{selected.purpose}</p></div><span><b>{readiness}%</b><small>{t.readiness}</small></span></header>
+        <div className="ppg-progress"><i><em style={{width:`${readiness}%`}}/></i><span>{t.criteriaApproved(approved,selected.criteria.length)}</span></div>
         <div className="ppg-criteria">{selected.criteria.map((criterion)=><section key={criterion.id} className={criterion.status.toLowerCase().replace(" ","-")}>
-          <header><span>{criterion.area}</span><div><b>{criterion.title}</b><small><User/>{criterion.owner}</small></div><em>{criterion.status}</em></header>
-          <dl><div><dt>Evidência esperada</dt><dd>{criterion.expected}</dd></div><div><dt>Evidência registrada</dt><dd className={criterion.evidence==="Pendente"?"pending":""}>{criterion.evidence}</dd></div></dl>
-          <footer><button className="ghost" disabled={selected.status==="Aprovado"||criterion.status==="Aprovado"} onClick={()=>registerEvidence(criterion)}><FileText/>Registrar evidência</button><button className="primary" disabled={selected.status==="Aprovado"||criterion.status==="Aprovado"} onClick={()=>approveCriterion(criterion)}><CheckCircle/>Aprovar critério</button></footer>
+          <header><span>{criterion.area}</span><div><b>{criterion.title}</b><small><User/>{criterion.owner}</small></div><em>{t.statusLabels[criterion.status]||criterion.status}</em></header>
+          <dl><div><dt>{t.expectedEvidence}</dt><dd>{criterion.expected}</dd></div><div><dt>{t.registeredEvidence}</dt><dd className={criterion.evidence==="Pendente"?"pending":""}>{criterion.evidence}</dd></div></dl>
+          <footer><button className="ghost" disabled={selected.status==="Aprovado"||criterion.status==="Aprovado"} onClick={()=>registerEvidence(criterion)}><FileText/>{t.registerEvidence}</button><button className="primary" disabled={selected.status==="Aprovado"||criterion.status==="Aprovado"} onClick={()=>approveCriterion(criterion)}><CheckCircle/>{t.approveCriterion}</button></footer>
         </section>)}</div>
       </article>
 
       <aside className="ppg-decision">
-        <header><FlagCheckered/><div><small>DECISÃO DO GATE</small><h3>{selected.status==="Aprovado"?"Gate aprovado":"Aguardando critérios"}</h3></div></header>
+        <header><FlagCheckered/><div><small>{t.gateDecision}</small><h3>{selected.status==="Aprovado"?t.gateApproved:t.awaitingCriteria}</h3></div></header>
         {selected.status==="Aprovado"
-          ? <div className="ppg-approved"><CheckCircle weight="fill"/><p><b>Decisão registrada</b><span>{selected.decidedBy}</span><small>{selected.decidedAt}</small></p></div>
-          : <div className="ppg-block"><Warning/><p><b>{selected.criteria.length-approved} critérios impedem o avanço</b><span>O projeto continua executando atividades paralelas, mas não muda de fase.</span></p></div>}
-        <dl><div><dt><Clock/>Revisão</dt><dd>{selected.number===project.phase?"Diária":"Por gate"}</dd></div><div><dt><LockKey/>Regra</dt><dd>100% dos critérios aprovados</dd></div><div><dt><ShieldCheck/>Aprovador</dt><dd>PM responsável</dd></div></dl>
-        <button className="primary" disabled={selected.status==="Aprovado"} onClick={approveGate}><FlagCheckered/>{selected.status==="Aprovado"?"Gate concluído":"Aprovar gate e avançar"}</button>
-        <footer><ShieldCheck/>A decisão gera histórico auditável no projeto.</footer>
+          ? <div className="ppg-approved"><CheckCircle weight="fill"/><p><b>{t.decisionRegistered}</b><span>{selected.decidedBy}</span><small>{selected.decidedAt}</small></p></div>
+          : <div className="ppg-block"><Warning/><p><b>{t.criteriaBlock(selected.criteria.length-approved)}</b><span>{t.parallelNote}</span></p></div>}
+        <dl><div><dt><Clock/>{t.review}</dt><dd>{selected.number===project.phase?t.daily:t.perGate}</dd></div><div><dt><LockKey/>{t.rule}</dt><dd>{t.ruleValue}</dd></div><div><dt><ShieldCheck/>{t.approver}</dt><dd>{t.approverValue}</dd></div></dl>
+        <button className="primary" disabled={selected.status==="Aprovado"} onClick={approveGate}><FlagCheckered/>{selected.status==="Aprovado"?t.gateDone:t.approveGateBtn}</button>
+        <footer><ShieldCheck/>{t.auditFooter}</footer>
       </aside>
     </div>
   </div>;

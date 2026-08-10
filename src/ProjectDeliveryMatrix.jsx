@@ -87,7 +87,37 @@ export function createProjectDeliveries(project) {
   });
 }
 
-export function ProjectDeliveryMatrix({ project, onUpdate, notify }) {
+const PDM_I18N={
+  pt:{statusLabels:{Concluída:"Concluída","Em andamento":"Em andamento","Em paralelo":"Em paralelo",Aguardando:"Aguardando","Em risco":"Em risco",Planejada:"Planejada","Em validação":"Em validação"},
+   filters:{Todas:"Todas","Em andamento":"Em andamento","Em paralelo":"Em paralelo",Atenção:"Atenção",Planejada:"Planejada"},
+   heroTag:"CONTROLE MATRICIAL DO PROJETO",heroTitle:"Entregas por área, sem perder o trabalho paralelo",heroBody:"Cada área responde por uma entrega verificável. Uma atividade só bloqueia outra quando existe dependência técnica real.",connectedAreas:"áreas conectadas",
+   avgProgress:"PROGRESSO MÉDIO",completed:"CONCLUÍDAS",withEvidence:"com evidência",inExecution:"EM EXECUÇÃO",includesParallel:"inclui paralelo",needAttention:"EXIGEM ATENÇÃO",riskOrWait:"risco ou espera",
+   evidenceSustained:"Atualização sustentada por evidência técnica",due:"Prazo",
+   department:"department",progressProven:"progresso comprovado",owner:"Responsável",deliveryDue:"Prazo da entrega",updatedAt:u=>`Atualizado ${u}`,realDependency:"Dependência real",parallelNote:"Não impede outras frentes de avançarem.",monitoredByPm:"Monitorada pelo PM.",currentEvidence:"Evidência atual",evidenceSource:"Fonte do percentual apresentado.",
+   nextHandoff:"PRÓXIMO HANDOFF",chargeEmail:"Cobrar por e-mail",registerEvidence:"Registrar evidência",completeDelivery:"Concluir entrega",
+   updatedToday:"Hoje",updatedYesterday:"Ontem",updatedPlanned:"Planejado",
+   evidencePrompt:"Qual evidência foi registrada?",noEvidence:"Sem evidência",evidenceRegisteredToast:"Evidência registrada e vinculada à entrega.",registerFirstToast:"Registre uma evidência antes de concluir a entrega.",completedToast:"Entrega concluída com evidência e trilha de auditoria.",chargeToast:email=>`Cobrança preparada para ${email}.`},
+  es:{statusLabels:{Concluída:"Concluida","Em andamento":"En curso","Em paralelo":"En paralelo",Aguardando:"Esperando","Em risco":"En riesgo",Planejada:"Planificada","Em validação":"En validación"},
+   filters:{Todas:"Todas","Em andamento":"En curso","Em paralelo":"En paralelo",Atenção:"Atención",Planejada:"Planificada"},
+   heroTag:"CONTROL MATRICIAL DEL PROYECTO",heroTitle:"Entregas por área, sin perder el trabajo paralelo",heroBody:"Cada área responde por una entrega verificable. Una actividad solo bloquea otra cuando existe una dependencia técnica real.",connectedAreas:"áreas conectadas",
+   avgProgress:"PROGRESO PROMEDIO",completed:"CONCLUIDAS",withEvidence:"con evidencia",inExecution:"EN EJECUCIÓN",includesParallel:"incluye paralelo",needAttention:"REQUIEREN ATENCIÓN",riskOrWait:"riesgo o espera",
+   evidenceSustained:"Actualización sustentada por evidencia técnica",due:"Plazo",
+   department:"department",progressProven:"progreso comprobado",owner:"Responsable",deliveryDue:"Plazo de la entrega",updatedAt:u=>`Actualizado ${u}`,realDependency:"Dependencia real",parallelNote:"No impide que otros frentes avancen.",monitoredByPm:"Monitoreada por el PM.",currentEvidence:"Evidencia actual",evidenceSource:"Fuente del porcentaje presentado.",
+   nextHandoff:"PRÓXIMO HANDOFF",chargeEmail:"Reclamar por correo",registerEvidence:"Registrar evidencia",completeDelivery:"Concluir entrega",
+   updatedToday:"Hoy",updatedYesterday:"Ayer",updatedPlanned:"Planificado",
+   evidencePrompt:"¿Qué evidencia fue registrada?",noEvidence:"Sin evidencia",evidenceRegisteredToast:"Evidencia registrada y vinculada a la entrega.",registerFirstToast:"Registra una evidencia antes de concluir la entrega.",completedToast:"Entrega concluida con evidencia y trazabilidad de auditoría.",chargeToast:email=>`Reclamo preparado para ${email}.`},
+  en:{statusLabels:{Concluída:"Done","Em andamento":"In progress","Em paralelo":"In parallel",Aguardando:"Waiting","Em risco":"At risk",Planejada:"Planned","Em validação":"In validation"},
+   filters:{Todas:"All","Em andamento":"In progress","Em paralelo":"In parallel",Atenção:"Attention",Planejada:"Planned"},
+   heroTag:"PROJECT MATRIX CONTROL",heroTitle:"Deliveries by area, without losing parallel work",heroBody:"Each area is accountable for a verifiable delivery. One activity only blocks another when a real technical dependency exists.",connectedAreas:"connected areas",
+   avgProgress:"AVERAGE PROGRESS",completed:"COMPLETED",withEvidence:"with evidence",inExecution:"IN EXECUTION",includesParallel:"includes parallel",needAttention:"NEED ATTENTION",riskOrWait:"risk or wait",
+   evidenceSustained:"Update backed by technical evidence",due:"Due",
+   department:"department",progressProven:"proven progress",owner:"Owner",deliveryDue:"Delivery due",updatedAt:u=>`Updated ${u}`,realDependency:"Real dependency",parallelNote:"Doesn't block other fronts from advancing.",monitoredByPm:"Monitored by PM.",currentEvidence:"Current evidence",evidenceSource:"Source of the shown percentage.",
+   nextHandoff:"NEXT HANDOFF",chargeEmail:"Follow up by e-mail",registerEvidence:"Register evidence",completeDelivery:"Complete delivery",
+   updatedToday:"Today",updatedYesterday:"Yesterday",updatedPlanned:"Planned",
+   evidencePrompt:"What evidence was registered?",noEvidence:"No evidence",evidenceRegisteredToast:"Evidence registered and linked to the delivery.",registerFirstToast:"Register evidence before completing the delivery.",completedToast:"Delivery completed with evidence and audit trail.",chargeToast:email=>`Follow-up prepared for ${email}.`},
+};
+export function ProjectDeliveryMatrix({ project, onUpdate, notify, lang="pt" }) {
+  const t=PDM_I18N[lang]||PDM_I18N.pt;
   const [deliveries, setDeliveries] = useState(() => createProjectDeliveries(project));
   const [filter, setFilter] = useState("Todas");
   const [selectedId, setSelectedId] = useState(() => createProjectDeliveries(project)[0].id);
@@ -133,65 +163,67 @@ export function ProjectDeliveryMatrix({ project, onUpdate, notify }) {
     }
   };
 
+  const updatedLabel = u => u === "Hoje" ? t.updatedToday : u === "Ontem" ? t.updatedYesterday : t.updatedPlanned;
+
   const registerEvidence = () => {
-    const evidence = window.prompt("Qual evidência foi registrada?", selected.evidence === "Sem evidência" ? "" : selected.evidence);
+    const evidence = window.prompt(t.evidencePrompt, selected.evidence === "Sem evidência" ? "" : selected.evidence);
     if (!evidence?.trim()) return;
     updateSelected(
       { evidence: evidence.trim(), status: selected.status === "Planejada" ? "Em validação" : selected.status },
-      "Evidência registrada e vinculada à entrega.",
+      t.evidenceRegisteredToast,
     );
   };
 
   const conclude = () => {
     if (!selected.evidence || selected.evidence === "Sem evidência") {
-      notify("Registre uma evidência antes de concluir a entrega.");
+      notify(t.registerFirstToast);
       return;
     }
-    updateSelected({ status: "Concluída", progress: 100 }, "Entrega concluída com evidência e trilha de auditoria.");
+    updateSelected({ status: "Concluída", progress: 100 }, t.completedToast);
   };
 
   const email = () => {
     const subject = `InventOps · ${project.code} · ${selected.area} · ${selected.delivery}`;
     const body = `Olá, ${selected.owner}.\n\nA entrega abaixo está vinculada ao seu perfil no InventOps.\n\nProjeto: ${project.name}\nÁrea: ${selected.department}\nEntrega: ${selected.delivery}\nPrazo: ${selected.due}\nStatus: ${selected.status}\nDependência real: ${selected.dependency}\nEvidência atual: ${selected.evidence}\n\nPor favor, atualize a evolução e registre a evidência no InventOps.`;
     window.location.href = `mailto:${selected.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    notify(`Cobrança preparada para ${selected.email}.`);
+    notify(t.chargeToast(selected.email));
   };
 
   return (
     <div className="pdm">
       <section className="pdm-hero">
         <div>
-          <small>CONTROLE MATRICIAL DO PROJETO</small>
-          <h3>Entregas por área, sem perder o trabalho paralelo</h3>
-          <p>Cada área responde por uma entrega verificável. Uma atividade só bloqueia outra quando existe dependência técnica real.</p>
+          <small>{t.heroTag}</small>
+          <h3>{t.heroTitle}</h3>
+          <p>{t.heroBody}</p>
         </div>
         <span>
           <Buildings />
           <b>{deliveries.length}</b>
-          <small>áreas conectadas</small>
+          <small>{t.connectedAreas}</small>
         </span>
       </section>
 
       <section className="pdm-summary">
         <article>
-          <small>PROGRESSO MÉDIO</small>
+          <small>{t.avgProgress}</small>
           <b>{summary.average}%</b>
           <i><em style={{ width: `${summary.average}%` }} /></i>
         </article>
         <article>
-          <small>CONCLUÍDAS</small>
+          <small>{t.completed}</small>
           <b>{summary.completed}</b>
-          <span className="success"><CheckCircle />com evidência</span>
+          <span className="success"><CheckCircle />{t.withEvidence}</span>
         </article>
         <article>
-          <small>EM EXECUÇÃO</small>
+          <small>{t.inExecution}</small>
           <b>{summary.running}</b>
-          <span><Clock />inclui paralelo</span>
+          <span><Clock />{t.includesParallel}</span>
         </article>
         <article className={summary.attention ? "attention" : ""}>
-          <small>EXIGEM ATENÇÃO</small>
+          <small>{t.needAttention}</small>
           <b>{summary.attention}</b>
-          <span><Warning />risco ou espera</span>
+          <span><Warning />{t.riskOrWait}</span>
         </article>
       </section>
 
@@ -199,11 +231,11 @@ export function ProjectDeliveryMatrix({ project, onUpdate, notify }) {
         <div>
           {["Todas", "Em andamento", "Em paralelo", "Atenção", "Planejada"].map(option => (
             <button key={option} className={filter === option ? "active" : ""} onClick={() => chooseFilter(option)}>
-              {option}
+              {t.filters[option]}
             </button>
           ))}
         </div>
-        <p><span /> Atualização sustentada por evidência técnica</p>
+        <p><span /> {t.evidenceSustained}</p>
       </div>
 
       <div className="pdm-workspace">
@@ -216,7 +248,7 @@ export function ProjectDeliveryMatrix({ project, onUpdate, notify }) {
             >
               <header>
                 <span>{item.area}</span>
-                <em>{item.status}</em>
+                <em>{t.statusLabels[item.status]||item.status}</em>
               </header>
               <h4>{item.delivery}</h4>
               <p><User />{item.owner}</p>
@@ -225,8 +257,8 @@ export function ProjectDeliveryMatrix({ project, onUpdate, notify }) {
                 <b>{item.progress}%</b>
               </div>
               <footer>
-                <small>Prazo {item.due}</small>
-                <small>{item.updated}</small>
+                <small>{t.due} {item.due}</small>
+                <small>{updatedLabel(item.updated)}</small>
               </footer>
             </button>
           ))}
@@ -239,50 +271,50 @@ export function ProjectDeliveryMatrix({ project, onUpdate, notify }) {
               <small>{selected.department}</small>
               <h3>{selected.delivery}</h3>
             </div>
-            <em className={tones[selected.status]}>{selected.status}</em>
+            <em className={tones[selected.status]}>{t.statusLabels[selected.status]||selected.status}</em>
           </header>
 
           <div className="pdm-detail-progress">
             <span>
               <b>{selected.progress}%</b>
-              <small>progresso comprovado</small>
+              <small>{t.progressProven}</small>
             </span>
             <i><em style={{ width: `${selected.progress}%` }} /></i>
           </div>
 
           <dl>
             <div>
-              <dt><User />Responsável</dt>
+              <dt><User />{t.owner}</dt>
               <dd>
                 <b>{selected.owner}</b>
                 <small>{selected.email}</small>
               </dd>
             </div>
             <div>
-              <dt><Clock />Prazo da entrega</dt>
+              <dt><Clock />{t.deliveryDue}</dt>
               <dd>
                 <b>{selected.due}</b>
-                <small>Atualizado {selected.updated.toLowerCase()}</small>
+                <small>{t.updatedAt(updatedLabel(selected.updated).toLowerCase())}</small>
               </dd>
             </div>
             <div>
-              <dt><LinkSimple />Dependência real</dt>
+              <dt><LinkSimple />{t.realDependency}</dt>
               <dd>
                 <b>{selected.dependency}</b>
-                <small>{selected.status === "Em paralelo" ? "Não impede outras frentes de avançarem." : "Monitorada pelo PM."}</small>
+                <small>{selected.status === "Em paralelo" ? t.parallelNote : t.monitoredByPm}</small>
               </dd>
             </div>
             <div>
-              <dt><FileText />Evidência atual</dt>
+              <dt><FileText />{t.currentEvidence}</dt>
               <dd>
                 <b>{selected.evidence}</b>
-                <small>Fonte do percentual apresentado.</small>
+                <small>{t.evidenceSource}</small>
               </dd>
             </div>
           </dl>
 
           <div className="pdm-handoff">
-            <small>PRÓXIMO HANDOFF</small>
+            <small>{t.nextHandoff}</small>
             <p>{selected.handoff}</p>
             <ArrowRight />
           </div>
@@ -290,15 +322,15 @@ export function ProjectDeliveryMatrix({ project, onUpdate, notify }) {
           <div className="pdm-actions">
             <button className="ghost" onClick={email}>
               <Envelope />
-              Cobrar por e-mail
+              {t.chargeEmail}
             </button>
             <button className="ghost" onClick={registerEvidence}>
               <FileText />
-              Registrar evidência
+              {t.registerEvidence}
             </button>
             <button className="primary" onClick={conclude}>
               <CheckCircle />
-              Concluir entrega
+              {t.completeDelivery}
             </button>
           </div>
         </aside>
