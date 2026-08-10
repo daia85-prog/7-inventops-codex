@@ -821,3 +821,22 @@ Se Claude continuar:
 3. Clicar em `Exportar evidencia`.
 4. Confirmar download do arquivo `inventops-evidencia-*.txt`.
 5. Se nao baixar, corrigir `exportOperationalEvidence` em `src/DepartmentCockpit.jsx`.
+
+## 2026-08-09 - Code health Bloco B.14: Varredura de texto legado
+
+Aplicado pelo Codex:
+
+- Foi feita uma busca ampla por termos antigos: demo, prototipo, mockup, Douglas, admin.teste, piloto visual e Cockpit do Piloto.
+- A trava `pnpm check:quality` confirma que `src` esta limpo para as telas principais.
+- Sobras encontradas estao em documentos historicos, blueprints, roadmaps antigos e registros de decisao.
+
+Arquivo criado:
+
+- `qa/VARREDURA-TEXTO-LEGADO-2026-08-09.md`
+
+Diretriz:
+
+- Nao limpar historico as cegas.
+- Corrigir imediatamente se aparecer em `src` ou tela visivel.
+- Atualizar documento operacional atual se estiver orientando o proximo desenvolvimento.
+- Preservar documento historico quando ele apenas registra o passado.
