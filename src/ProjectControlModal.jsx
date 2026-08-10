@@ -178,6 +178,11 @@ const PCM_I18N={
    savedToast:"Project updated with governance validations and audit log.",updatedSheetAction:"Updated the project sheet",closedToast:"Project closed. Changes preserved in the session.",
    errName:"Enter the project name.",errOwner:"Set the owner.",errCategory:"Select the blocker category.",errBlockOwner:"Set the resolution owner.",errNextAction:"Log the mandatory next action.",errForecast:"Enter the unblock forecast.",now:"Now"},
 };
+const PT_STATUS=["Em andamento","Bloqueado","Concluído","Stand-by"];
+const PT_RISK=["Baixo","Médio","Alto"];
+function statusLabel(t,value){ const i=PT_STATUS.indexOf(value); return i>=0?t.statusOptions[i]:value; }
+function riskLabel(t,value){ const i=PT_RISK.indexOf(value); return i>=0?t.riskOptions[i]:value; }
+
 export function ProjectControlModal({ project, onClose, onUpdate, onOpenFull, notify, lang="pt" }) {
   const t=PCM_I18N[lang]||PCM_I18N.pt;
   const [tab, setTab] = useState("sheet");
@@ -265,9 +270,9 @@ export function ProjectControlModal({ project, onClose, onUpdate, onOpenFull, no
           <div className="pcm-heading">
             <span>
               <small>{project.code}</small>
-              <Badge tone={project.status === "Bloqueado" ? "danger" : "cyan"}>{project.status}</Badge>
+              <Badge tone={project.status === "Bloqueado" ? "danger" : "cyan"}>{statusLabel(t,project.status)}</Badge>
               <Badge tone={project.risk === "Alto" ? "danger" : project.risk === "Médio" ? "yellow" : "green"}>
-                {t.risk} {project.risk}
+                {t.risk} {riskLabel(t,project.risk)}
               </Badge>
             </span>
             <h2 id="pcm-title">{project.name}</h2>
@@ -357,18 +362,13 @@ export function ProjectControlModal({ project, onClose, onUpdate, onOpenFull, no
                     <label>
                       {t.status}
                       <select value={draft.status} onChange={event => setDraft({ ...draft, status: event.target.value })}>
-                        <option>Em andamento</option>
-                        <option>Bloqueado</option>
-                        <option>Concluído</option>
-                        <option>Stand-by</option>
+                        {PT_STATUS.map((value,i) => <option key={value} value={value}>{t.statusOptions[i]}</option>)}
                       </select>
                     </label>
                     <label>
                       {t.riskLabel}
                       <select value={draft.risk} onChange={event => setDraft({ ...draft, risk: event.target.value })}>
-                        <option>Baixo</option>
-                        <option>Médio</option>
-                        <option>Alto</option>
+                        {PT_RISK.map((value,i) => <option key={value} value={value}>{t.riskOptions[i]}</option>)}
                       </select>
                     </label>
                     <label>
@@ -400,11 +400,7 @@ export function ProjectControlModal({ project, onClose, onUpdate, onOpenFull, no
                           {t.category}
                           <select value={draft.blockCategory} onChange={event => setDraft({ ...draft, blockCategory: event.target.value })}>
                             <option value="">{t.select}</option>
-                            <option>Cliente</option>
-                            <option>Hardware</option>
-                            <option>Infraestrutura</option>
-                            <option>Engenharia</option>
-                            <option>Fornecedor</option>
+                            {["Cliente","Hardware","Infraestrutura","Engenharia","Fornecedor"].map((value,i) => <option key={value} value={value}>{t.categoryOptions[i]}</option>)}
                           </select>
                           <small>{errors.blockCategory}</small>
                         </label>
