@@ -644,7 +644,7 @@ export function App() {
     action:<ActionCenter notify={notify} lang={lang}/>,management:<ManagementPage lang={lang}/>,analytics:<AnalyticsPage lang={lang}/>,
     executive:<ExecutiveOnePager projects={projects} notify={notify} lang={lang}/>,
     portfolio:<PortfolioPage projects={projects} setProjects={setProjects} setActive={setActive} setSelectedProject={setSelectedProject} setProjectModalOpen={setProjectModalOpen} setImportedDemands={setImportedDemands} notify={notify}/>,
-    pm:<PmControlTower projects={projects} onOpenProject={project=>{setSelectedProject(project);setProjectModalOpen(true)}} notify={notify}/>,
+    pm:<PmControlTower projects={projects} onOpenProject={project=>{setSelectedProject(project);setProjectModalOpen(true)}} notify={notify} lang={lang}/>,
     project:<ProjectWorkspace key={selectedProject.name} project={selectedProject} setActive={setActive} notify={notify}/>,
     cockpit:<DepartmentCockpit key={cockpitDept} notify={notify} imported={importedDemands} initialDept={cockpitDept} currentUser={currentUser} lang={lang}/>,
     areas:<AreasPage lang={lang}/>,raid:<RaidPage lang={lang}/>,admin:<AdminGovernance role={role} setRole={setRole} theme={theme} setTheme={setTheme} notify={notify} onOpenPilotUser={openPilotContext} lang={lang}/>,
