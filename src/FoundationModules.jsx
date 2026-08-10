@@ -1096,14 +1096,26 @@ export function LoginScreen({onLogin}){
   </main>;
 }
 
-export function StatusReportModal({project,onClose,notify}){
+const STATUS_REPORT_I18N={
+  pt:{title:"CENTRAL DE COMUNICAÇÃO",sub:"Revise o conteúdo e escolha como deseja compartilhar.",close:"Fechar",recipient:"DESTINATÁRIO VINCULADO",corporate:"Corporativo",
+   copyText:"Copiar texto",openWhatsapp:"Abrir WhatsApp",openOutlook:"Abrir no Outlook",footer:"O InventOps prepara a comunicação com contexto e rastreabilidade. O usuário revisa e confirma o envio no canal corporativo escolhido.",
+   registerToast:channel=>`Status Report preparado para ${channel} e registrado no histórico de comunicações.`,copyChannel:"cópia",mailChannel:"e-mail corporativo"},
+  es:{title:"CENTRAL DE COMUNICACIÓN",sub:"Revisa el contenido y elige cómo quieres compartirlo.",close:"Cerrar",recipient:"DESTINATARIO VINCULADO",corporate:"Corporativo",
+   copyText:"Copiar texto",openWhatsapp:"Abrir WhatsApp",openOutlook:"Abrir en Outlook",footer:"InventOps prepara la comunicación con contexto y trazabilidad. El usuario revisa y confirma el envío en el canal corporativo elegido.",
+   registerToast:channel=>`Status Report preparado para ${channel} y registrado en el historial de comunicaciones.`,copyChannel:"copia",mailChannel:"correo corporativo"},
+  en:{title:"COMMUNICATION CENTER",sub:"Review the content and choose how you want to share it.",close:"Close",recipient:"LINKED RECIPIENT",corporate:"Corporate",
+   copyText:"Copy text",openWhatsapp:"Open WhatsApp",openOutlook:"Open in Outlook",footer:"InventOps prepares the communication with context and traceability. The user reviews and confirms sending on the chosen corporate channel.",
+   registerToast:channel=>`Status Report prepared for ${channel} and logged to communication history.`,copyChannel:"copy",mailChannel:"corporate e-mail"},
+};
+export function StatusReportModal({project,onClose,notify,lang="pt"}){
+  const t=STATUS_REPORT_I18N[lang]||STATUS_REPORT_I18N.pt;
   const text=`📊 STATUS REPORT — ${project.name}\n🟡 Saúde: ${project.health}/100 · Progresso: ${project.progress}%\n📍 Fase atual: ${project.phase}/7\n🚩 Próximo marco: ${project.next} — ${project.date}\n⚠️ Ponto de atenção: ${project.blocker}\n✅ Próxima ação: ${project.nextAction}\n👤 Responsável: ${project.owner}`;
   const email=project.ownerEmail||`${(project.owner||"responsavel").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim().replace(/\s+/g,".")}@invent-corp.com`;
-  const register=channel=>notify(`Status Report preparado para ${channel} e registrado no histórico de comunicações.`);
-  const copy=async()=>{try{await navigator.clipboard.writeText(text)}catch{}register("cópia")};
+  const register=channel=>notify(t.registerToast(channel));
+  const copy=async()=>{try{await navigator.clipboard.writeText(text)}catch{}register(t.copyChannel)};
   const whatsapp=()=>{window.open(`https://wa.me/?text=${encodeURIComponent(text)}`,"_blank","noopener,noreferrer");register("WhatsApp")};
-  const mail=()=>{const subject=`InventOps · Status Report · ${project.name}`;window.location.href=`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;register("e-mail corporativo")};
-  return <div className="modal-layer" onMouseDown={e=>e.target===e.currentTarget&&onClose()}><article className="status-report-modal communication-modal" role="dialog" aria-modal="true"><header><div><small>CENTRAL DE COMUNICAÇÃO</small><h2>Status Report · {project.name}</h2><p>Revise o conteúdo e escolha como deseja compartilhar.</p></div><button onClick={onClose} aria-label="Fechar"><XCircle/></button></header><pre>{text}</pre><div className="communication-recipient"><Envelope/><span><small>DESTINATÁRIO VINCULADO</small><b>{email}</b></span><em>Corporativo</em></div><div className="communication-actions"><button className="ghost" onClick={copy}><ClipboardText/>Copiar texto</button><button className="whatsapp" onClick={whatsapp}><WhatsappLogo/>Abrir WhatsApp</button><button className="primary" onClick={mail}><Envelope/>Abrir no Outlook</button></div><footer><ShieldCheck/>O InventOps prepara a comunicação com contexto e rastreabilidade. O usuário revisa e confirma o envio no canal corporativo escolhido.</footer></article></div>;
+  const mail=()=>{const subject=`InventOps · Status Report · ${project.name}`;window.location.href=`mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(text)}`;register(t.mailChannel)};
+  return <div className="modal-layer" onMouseDown={e=>e.target===e.currentTarget&&onClose()}><article className="status-report-modal communication-modal" role="dialog" aria-modal="true"><header><div><small>{t.title}</small><h2>Status Report · {project.name}</h2><p>{t.sub}</p></div><button onClick={onClose} aria-label={t.close}><XCircle/></button></header><pre>{text}</pre><div className="communication-recipient"><Envelope/><span><small>{t.recipient}</small><b>{email}</b></span><em>{t.corporate}</em></div><div className="communication-actions"><button className="ghost" onClick={copy}><ClipboardText/>{t.copyText}</button><button className="whatsapp" onClick={whatsapp}><WhatsappLogo/>{t.openWhatsapp}</button><button className="primary" onClick={mail}><Envelope/>{t.openOutlook}</button></div><footer><ShieldCheck/>{t.footer}</footer></article></div>;
 }
 
 const ACCESS_DENIED_I18N={
