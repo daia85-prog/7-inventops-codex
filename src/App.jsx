@@ -133,14 +133,67 @@ const pageMeta = {
 const pageMetaIntl = {
   es: {
     home: ["Dashboard Ejecutivo", "Toda la cartera traducida en decisiones para hoy."],
-    portfolio: ["Control de Proyectos", "Planifica, acompaña y cobra entregas en una visión operativa."],
+    action: ["Mi Operación", "Trabajo diario priorizado por impacto, dependencia y evidencia."],
+    management: ["Visión Gerencial", "Tendencia, capacidad y cuellos de botella activos."],
+    analytics: ["Análisis / BI", "Indicadores avanzados y compromiso técnico."],
     executive: ["Informe Ejecutivo", "La cartera consolidada en una sola página."],
+    portfolio: ["Control de Proyectos", "Planifica, acompaña y cobra entregas en una visión operativa."],
+    pm: ["Central PM", "La cartera entera organizada por decisiones, dependencias y handoffs."],
+    cockpit: ["Operación Asistida", "La cinta real de cada área: entregas, esperas y handoffs con hora."],
+    project: ["Central del Proyecto", "Fases, actividades, hitos, riesgos y evidencias en un solo lugar."],
+    simulator: ["Simulador de Impacto", "Anticipa riesgos. Decide con confianza."],
+    commissioning: ["Comisionamiento en Tiempo Real", "Telemetría de la operación conectada a la gobernanza."],
+    decision: ["Sala de Decisión", "Conecta evidencias operativas a impactos futuros."],
+    areas: ["Áreas Técnicas", "Capacidad y progreso en las 14 áreas de la operación."],
+    alerts: ["Smart Triage", "Incidentes P0, P1 y P2, responsables y SLA en una sola fila."],
+    raid: ["Matriz RAID", "Riesgos, premisas, impedimentos y dependencias priorizados."],
+    evidence: ["Evidencias", "Progreso explicado por entregas técnicas verificables."],
+    admin: ["Administración", "Perfiles, permisos, validaciones y auditoría."],
+    presentation: ["Presentación por Perfil", "Propósito de InventOps para Analista, Gestor y Director."],
+    lifecycle: ["Releases & Roadmap", "Ciclo de vida y visión de futuro de InventOps."],
+    settings: ["Configuración", "Reglas de simulación, telemetría y gobernanza."],
   },
   en: {
     home: ["Executive Dashboard", "The full portfolio translated into decisions for today."],
-    portfolio: ["Project Control", "Plan, track, and drive deliveries in one operational view."],
+    action: ["My Operation", "Daily work prioritized by impact, dependency and evidence."],
+    management: ["Management View", "Trend, capacity and active bottlenecks."],
+    analytics: ["Analytics / BI", "Advanced indicators and technical engagement."],
     executive: ["Executive Report", "The portfolio consolidated into a single page."],
+    portfolio: ["Project Control", "Plan, track, and drive deliveries in one operational view."],
+    pm: ["Central PM", "The whole portfolio organized by decisions, dependencies and handoffs."],
+    cockpit: ["Assisted Operation", "Each area's real pipeline: deliveries, waits and time-stamped handoffs."],
+    project: ["Project Hub", "Phases, activities, milestones, risks and evidence in one place."],
+    simulator: ["Impact Simulator", "Anticipate risks. Decide with confidence."],
+    commissioning: ["Real-Time Commissioning", "Operational telemetry connected to governance."],
+    decision: ["Decision Room", "Connect operational evidence to future impacts."],
+    areas: ["Technical Areas", "Capacity and progress across the operation's 14 areas."],
+    alerts: ["Smart Triage", "P0, P1 and P2 incidents, owners and SLA in a single queue."],
+    raid: ["RAID Matrix", "Risks, assumptions, impediments and dependencies prioritized."],
+    evidence: ["Evidence", "Progress explained by verifiable technical deliveries."],
+    admin: ["Administration", "Profiles, permissions, validations and audit."],
+    presentation: ["Presentation by Profile", "InventOps' purpose for Analyst, Manager and Director."],
+    lifecycle: ["Releases & Roadmap", "InventOps' lifecycle and vision of the future."],
+    settings: ["Settings", "Simulation, telemetry and governance rules."],
   }
+};
+
+const NAV_I18N = {
+  es: {
+    groups: { "EXECUTIVO":"EJECUTIVO", "OPERAÇÃO":"OPERACIÓN", "INTELIGÊNCIA":"INTELIGENCIA", "GOVERNANÇA":"GOBERNANZA" },
+    items: { home:"Dashboard Ejecutivo", action:"Mi Operación", management:"Gerencial", analytics:"Análisis / BI", executive:"Informe Ejecutivo",
+      portfolio:"Proyectos", pm:"Central PM", cockpit:"Operación Asistida", areas:"Áreas Técnicas", alerts:"Smart Triage", raid:"Matriz RAID",
+      simulator:"Simulador de Impacto", commissioning:"Comisionamiento", decision:"Sala de Decisión", evidence:"Evidencias",
+      admin:"Administración", presentation:"Presentación por Perfil", lifecycle:"Releases & Roadmap", settings:"Configuración" },
+    profile:"Perfil", logout:"Salir con seguridad", developedBy:"Desarrollado por",
+  },
+  en: {
+    groups: { "EXECUTIVO":"EXECUTIVE", "OPERAÇÃO":"OPERATIONS", "INTELIGÊNCIA":"INTELLIGENCE", "GOVERNANÇA":"GOVERNANCE" },
+    items: { home:"Executive Dashboard", action:"My Operation", management:"Management", analytics:"Analytics / BI", executive:"Executive Report",
+      portfolio:"Projects", pm:"Central PM", cockpit:"Assisted Operation", areas:"Technical Areas", alerts:"Smart Triage", raid:"RAID Matrix",
+      simulator:"Impact Simulator", commissioning:"Commissioning", decision:"Decision Room", evidence:"Evidence",
+      admin:"Administration", presentation:"Presentation by Profile", lifecycle:"Releases & Roadmap", settings:"Settings" },
+    profile:"Profile", logout:"Sign out securely", developedBy:"Developed by",
+  },
 };
 
 const productJourney = [
@@ -257,29 +310,31 @@ function routeTokenFor(active, dept) {
   return active || "home";
 }
 
-function SidebarEnhanced({ active, setActive, alertCount, notify, role, currentUser, onLogout }) {
+function SidebarEnhanced({ active, setActive, alertCount, notify, role, currentUser, onLogout, lang="pt" }) {
   const [openGroups,setOpenGroups]=useState({
     "EXECUTIVO":true,
     "OPERAÇÃO":true,
     "INTELIGÊNCIA":false,
     "GOVERNANÇA":false,
   });
+  const navT=NAV_I18N[lang];
 
   return <aside className="sidebar">
     <Logo/>
     <nav>
       {navGroups.map(group=><div className={`nav-group ${openGroups[group.label]?"open":"collapsed"}`} key={group.label}>
         <button type="button" className="nav-group-toggle" aria-expanded={!!openGroups[group.label]} onClick={()=>setOpenGroups(current=>({...current,[group.label]:!current[group.label]}))}>
-          <small>{group.label}</small>
+          <small>{navT?.groups[group.label]||group.label}</small>
           <CaretDown size={12} className={openGroups[group.label]?"open":""}/>
         </button>
         <div className="nav-group-items">
           {group.items.map(({id,label,icon:Icon,mobile,adminOnly}) => {
             const isActive=active===id||(active==="project"&&id==="portfolio");
             const restricted=adminOnly&&role!=="Admin";
-            return <button data-mobile={mobile?"true":"false"} key={id} aria-label={label} className={`${isActive?"active":""} ${restricted?"restricted":""}`} onClick={()=>restricted?notify("Acesso restrito ao perfil Admin."):setActive(id)}>
+            const displayLabel=navT?.items[id]||label;
+            return <button data-mobile={mobile?"true":"false"} key={id} aria-label={displayLabel} className={`${isActive?"active":""} ${restricted?"restricted":""}`} onClick={()=>restricted?notify("Acesso restrito ao perfil Admin."):setActive(id)}>
               <Icon size={19} weight={isActive?"fill":"regular"}/>
-              <span>{label}</span>
+              <span>{displayLabel}</span>
               {restricted?<LockKey size={12}/>:null}
               {id==="alerts"&&alertCount>0?<b>{alertCount}</b>:null}
             </button>
@@ -289,8 +344,8 @@ function SidebarEnhanced({ active, setActive, alertCount, notify, role, currentU
     </nav>
     <div className="sidebar-bottom">
       <button className="profile" onClick={()=>{setActive("admin");notify("Administração aberta para controlar perfil, tema e acessos.")}}><span className="avatar">{currentUser.initials}</span><span><strong>{currentUser.name}</strong><small>{role==="Diretoria"?"Diretoria · DIREX":role}</small></span><CaretDown size={15}/></button>
-      <button className="logout-button" onClick={onLogout}><SignOut/><span>Sair com segurança</span></button>
-      <div className="credit"><Sparkle size={15} weight="fill"/><span>Desenvolvido por <b>Daiana Costa</b></span></div>
+      <button className="logout-button" onClick={onLogout}><SignOut/><span>{navT?.logout||"Sair com segurança"}</span></button>
+      <div className="credit"><Sparkle size={15} weight="fill"/><span>{navT?.developedBy||"Desenvolvido por"} <b>Daiana Costa</b></span></div>
     </div>
   </aside>;
 }
@@ -654,6 +709,6 @@ export function App() {
     evidence:<EvidencePage/>,settings:<SettingsPage/>
   };
   const page=canAccess?pages[active]:<AccessDenied setActive={setActive} lang={lang}/>;
-  return <div className="app-shell" data-theme={theme}><SidebarEnhanced active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} currentUser={currentUser} onLogout={logout}/><main className="workspace"><Topbar active={active} role={role} currentUser={currentUser} onLogout={logout} notify={notify} lang={lang} setLang={setLang}/><ProductJourneyRail active={active} setActive={setActive} lang={lang} />{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
+  return <div className="app-shell" data-theme={theme}><SidebarEnhanced active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} currentUser={currentUser} onLogout={logout} lang={lang}/><main className="workspace"><Topbar active={active} role={role} currentUser={currentUser} onLogout={logout} notify={notify} lang={lang} setLang={setLang}/><ProductJourneyRail active={active} setActive={setActive} lang={lang} />{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
 }
 
