@@ -420,74 +420,147 @@ function ImpactNode({eyebrow,title,value,color,detail,footer}) {
   return <div className="impact-node" style={{"--node-color":color}}><small>{eyebrow}</small><h3>{title}</h3><strong>{value}</strong><p>{detail}</p><span>{footer}</span></div>;
 }
 
-function Simulator({scenario,setScenario,notify}) {
+const SIMULATOR_I18N={
+  pt:{step1:"1. Defina o cenário",step1Sub:"Descreva o evento ou condição que deseja simular.",placeholder:"Cenário a simular",calculating:"Calculando dependências...",simulate:"Simular impacto",aiNote:"Motor de cenários + IA explicativa aplicados ao gêmeo digital.",
+   step2:"2. Cadeia de impacto",step2Result:"(resultado da simulação)",step2Sub:"Como o evento se propaga pela operação.",project:"PROJETO",resource:"RECURSO",directImpact:"Impacto direto",cascadeImpact:"Impacto em cascata",exceededCapacity:"Capacidade excedida",
+   confidence:"CONFIANÇA DA SIMULAÇÃO",confidenceNote:"Baseado na qualidade dos dados e histórico similar.",assumptions:"PRINCIPAIS SUPOSIÇÕES",
+   assumptionItems:["Atraso causado exclusivamente pela falta de hardware.","Redes de precedência conforme baseline atual.","Capacidade e calendário conforme plano registrado."],
+   seeAllAssumptions:"Ver todas as suposições (4)",assumptionToast:"4ª suposição: fornecedores mantêm o prazo confirmado em 10/07.",
+   step3:"3. Linha do tempo — Capacidade do recurso PLC",step3Sub:"Projeção de utilização diária (% da capacidade disponível).",overload:"Sobrecarga prevista entre 28/08 e 20/09.",peak:"Pico de 146% em 10/09.",
+   step4:"4. Ação executiva recomendada",step4Sub:"O que fazer agora para reduzir o impacto.",recTitle:"Acelerar aquisição de hardware para TITANO",recBody:"Antecipar a entrega dos equipamentos críticos em pelo menos 5 dias para eliminar o atraso e evitar a sobrecarga de PLC em setembro.",
+   estImpact:"IMPACTO ESTIMADO",estImpactValue:"Elimina +5 dias e +40% de sobrecarga",estCost:"CUSTO ESTIMADO",createPlan:"Criar plano de ação",createPlanToast:"Plano de ação criado e vinculado ao projeto TITANO.",altPlan:"Ver alternativas de mitigação (2)",altToast:"Alternativas: remanejar PLC ou antecipar o lote crítico de hardware.",
+   footer:"Os resultados são estimativas e dependem da precisão dos dados e das suposições adotadas."},
+  es:{step1:"1. Define el escenario",step1Sub:"Describe el evento o condición que quieres simular.",placeholder:"Escenario a simular",calculating:"Calculando dependencias...",simulate:"Simular impacto",aiNote:"Motor de escenarios + IA explicativa aplicados al gemelo digital.",
+   step2:"2. Cadena de impacto",step2Result:"(resultado de la simulación)",step2Sub:"Cómo se propaga el evento por la operación.",project:"PROYECTO",resource:"RECURSO",directImpact:"Impacto directo",cascadeImpact:"Impacto en cascada",exceededCapacity:"Capacidad excedida",
+   confidence:"CONFIANZA DE LA SIMULACIÓN",confidenceNote:"Basado en la calidad de los datos y un histórico similar.",assumptions:"PRINCIPALES SUPOSICIONES",
+   assumptionItems:["Atraso causado exclusivamente por falta de hardware.","Redes de precedencia según el baseline actual.","Capacidad y calendario según el plan registrado."],
+   seeAllAssumptions:"Ver todas las suposiciones (4)",assumptionToast:"4ª suposición: los proveedores mantienen el plazo confirmado el 10/07.",
+   step3:"3. Línea de tiempo — Capacidad del recurso PLC",step3Sub:"Proyección de uso diario (% de la capacidad disponible).",overload:"Sobrecarga prevista entre el 28/08 y el 20/09.",peak:"Pico de 146% el 10/09.",
+   step4:"4. Acción ejecutiva recomendada",step4Sub:"Qué hacer ahora para reducir el impacto.",recTitle:"Acelerar la adquisición de hardware para TITANO",recBody:"Anticipar la entrega de los equipos críticos en al menos 5 días para eliminar el atraso y evitar la sobrecarga de PLC en septiembre.",
+   estImpact:"IMPACTO ESTIMADO",estImpactValue:"Elimina +5 días y +40% de sobrecarga",estCost:"COSTO ESTIMADO",createPlan:"Crear plan de acción",createPlanToast:"Plan de acción creado y vinculado al proyecto TITANO.",altPlan:"Ver alternativas de mitigación (2)",altToast:"Alternativas: reasignar PLC o anticipar el lote crítico de hardware.",
+   footer:"Los resultados son estimaciones y dependen de la precisión de los datos y las suposiciones adoptadas."},
+  en:{step1:"1. Define the scenario",step1Sub:"Describe the event or condition you want to simulate.",placeholder:"Scenario to simulate",calculating:"Calculating dependencies...",simulate:"Simulate impact",aiNote:"Scenario engine + explanatory AI applied to the digital twin.",
+   step2:"2. Impact chain",step2Result:"(simulation result)",step2Sub:"How the event propagates through the operation.",project:"PROJECT",resource:"RESOURCE",directImpact:"Direct impact",cascadeImpact:"Cascading impact",exceededCapacity:"Exceeded capacity",
+   confidence:"SIMULATION CONFIDENCE",confidenceNote:"Based on data quality and similar historical cases.",assumptions:"KEY ASSUMPTIONS",
+   assumptionItems:["Delay caused exclusively by hardware shortage.","Precedence networks per the current baseline.","Capacity and schedule per the recorded plan."],
+   seeAllAssumptions:"See all assumptions (4)",assumptionToast:"4th assumption: suppliers keep the deadline confirmed on 07/10.",
+   step3:"3. Timeline — PLC resource capacity",step3Sub:"Daily usage projection (% of available capacity).",overload:"Overload expected between 08/28 and 09/20.",peak:"146% peak on 09/10.",
+   step4:"4. Recommended executive action",step4Sub:"What to do now to reduce the impact.",recTitle:"Accelerate hardware acquisition for TITANO",recBody:"Bring forward critical equipment delivery by at least 5 days to eliminate the delay and avoid PLC overload in September.",
+   estImpact:"ESTIMATED IMPACT",estImpactValue:"Eliminates +5 days and +40% overload",estCost:"ESTIMATED COST",createPlan:"Create action plan",createPlanToast:"Action plan created and linked to the TITANO project.",altPlan:"See mitigation alternatives (2)",altToast:"Alternatives: reassign PLC or bring forward the critical hardware batch.",
+   footer:"Results are estimates and depend on data accuracy and the assumptions adopted."},
+};
+function Simulator({scenario,setScenario,notify,lang="pt"}) {
+  const t=SIMULATOR_I18N[lang]||SIMULATOR_I18N.pt;
   const [running,setRunning]=useState(false); const [ready,setReady]=useState(true);
   const runTimer=useRef();
   useEffect(()=>()=>window.clearTimeout(runTimer.current),[]);
   const run=()=>{setRunning(true);setReady(false);window.clearTimeout(runTimer.current);runTimer.current=window.setTimeout(()=>{setRunning(false);setReady(true)},850)};
   return <section className="page simulator-page">
     <div className="sim-grid">
-      <div className="scenario-panel"><div className="section-heading"><b>1. Defina o cenário</b><span>Descreva o evento ou condição que deseja simular.</span></div>
-        <div className="scenario-box"><textarea value={scenario} maxLength={250} onChange={e=>setScenario(e.target.value)} aria-label="Cenário a simular"/><small>{scenario.length} / 250</small></div>
-        <button className="primary" onClick={run} disabled={running}><Play size={19} weight="fill"/>{running?"Calculando dependências...":"Simular impacto"}</button>
-        <p className="ai-note"><Sparkle size={17}/>Motor de cenários + IA explicativa aplicados ao gêmeo digital.</p>
+      <div className="scenario-panel"><div className="section-heading"><b>{t.step1}</b><span>{t.step1Sub}</span></div>
+        <div className="scenario-box"><textarea value={scenario} maxLength={250} onChange={e=>setScenario(e.target.value)} aria-label={t.placeholder}/><small>{scenario.length} / 250</small></div>
+        <button className="primary" onClick={run} disabled={running}><Play size={19} weight="fill"/>{running?t.calculating:t.simulate}</button>
+        <p className="ai-note"><Sparkle size={17}/>{t.aiNote}</p>
       </div>
-      <div className={`impact-panel ${ready?"ready":"loading"}`}><div className="section-heading"><b>2. Cadeia de impacto <em>(resultado da simulação)</em></b><span>Como o evento se propaga pela operação.</span></div>
-        <div className="impact-chain"><ImpactNode eyebrow="PROJETO" title="TITANO" value="+5d" color="#fb5470" detail="Conclusão prevista 25 jul 2026" footer="Impacto direto"/><ArrowRight/>
-          <ImpactNode eyebrow="PROJETO" title="QUELUZ" value="+12d" color="#f5c300" detail="Conclusão prevista 31 jul 2026" footer="Impacto em cascata"/><ArrowRight/>
-          <ImpactNode eyebrow="RECURSO" title="PLC" value="+40%" color="#32bde0" detail="Carga em setembro" footer="Capacidade excedida"/></div>
-        <div className="confidence"><div><small>CONFIANÇA DA SIMULAÇÃO</small><strong>78%</strong><div className="progress"><i style={{width:"78%"}}/></div><span>Baseado na qualidade dos dados e histórico similar.</span></div><div><small>PRINCIPAIS SUPOSIÇÕES</small><ul><li>Atraso causado exclusivamente pela falta de hardware.</li><li>Redes de precedência conforme baseline atual.</li><li>Capacidade e calendário conforme plano registrado.</li></ul><button className="link-button" onClick={()=>notify("4ª suposição: fornecedores mantêm o prazo confirmado em 10/07.")}>Ver todas as suposições (4)</button></div></div>
+      <div className={`impact-panel ${ready?"ready":"loading"}`}><div className="section-heading"><b>{t.step2} <em>{t.step2Result}</em></b><span>{t.step2Sub}</span></div>
+        <div className="impact-chain"><ImpactNode eyebrow={t.project} title="TITANO" value="+5d" color="#fb5470" detail="Conclusão prevista 25 jul 2026" footer={t.directImpact}/><ArrowRight/>
+          <ImpactNode eyebrow={t.project} title="QUELUZ" value="+12d" color="#f5c300" detail="Conclusão prevista 31 jul 2026" footer={t.cascadeImpact}/><ArrowRight/>
+          <ImpactNode eyebrow={t.resource} title="PLC" value="+40%" color="#32bde0" detail="Carga em setembro" footer={t.exceededCapacity}/></div>
+        <div className="confidence"><div><small>{t.confidence}</small><strong>78%</strong><div className="progress"><i style={{width:"78%"}}/></div><span>{t.confidenceNote}</span></div><div><small>{t.assumptions}</small><ul>{t.assumptionItems.map(i=><li key={i}>{i}</li>)}</ul><button className="link-button" onClick={()=>notify(t.assumptionToast)}>{t.seeAllAssumptions}</button></div></div>
       </div>
     </div>
-    <div className="sim-bottom"><article><div className="section-heading"><b>3. Linha do tempo — Capacidade do recurso PLC</b><span>Projeção de utilização diária (% da capacidade disponível).</span></div><CapacityChart/><div className="chart-note"><Info size={22}/><span>Sobrecarga prevista entre 28/08 e 20/09.<b>Pico de 146% em 10/09.</b></span></div></article>
-      <article><div className="section-heading"><b>4. Ação executiva recomendada</b><span>O que fazer agora para reduzir o impacto.</span></div><div className="recommendation"><span className="rec-icon"><TrendUp/></span><div><h3>Acelerar aquisição de hardware para TITANO</h3><p>Antecipar a entrega dos equipamentos críticos em pelo menos 5 dias para eliminar o atraso e evitar a sobrecarga de PLC em setembro.</p></div><div className="rec-metrics"><span><small>IMPACTO ESTIMADO</small><b>Elimina +5 dias e +40% de sobrecarga</b></span><span><small>CUSTO ESTIMADO</small><b>+ R$ 48.000,00</b></span></div><button className="primary" onClick={()=>notify("Plano de ação criado e vinculado ao projeto TITANO.")}><CalendarBlank size={19}/>Criar plano de ação</button><button className="link-button" onClick={()=>notify("Alternativas: remanejar PLC ou antecipar o lote crítico de hardware.")}>Ver alternativas de mitigação (2)</button></div></article>
+    <div className="sim-bottom"><article><div className="section-heading"><b>{t.step3}</b><span>{t.step3Sub}</span></div><CapacityChart/><div className="chart-note"><Info size={22}/><span>{t.overload}<b>{t.peak}</b></span></div></article>
+      <article><div className="section-heading"><b>{t.step4}</b><span>{t.step4Sub}</span></div><div className="recommendation"><span className="rec-icon"><TrendUp/></span><div><h3>{t.recTitle}</h3><p>{t.recBody}</p></div><div className="rec-metrics"><span><small>{t.estImpact}</small><b>{t.estImpactValue}</b></span><span><small>{t.estCost}</small><b>+ R$ 48.000,00</b></span></div><button className="primary" onClick={()=>notify(t.createPlanToast)}><CalendarBlank size={19}/>{t.createPlan}</button><button className="link-button" onClick={()=>notify(t.altToast)}>{t.altPlan}</button></div></article>
     </div>
-    <footer>Os resultados são estimativas e dependem da precisão dos dados e das suposições adotadas.</footer>
+    <footer>{t.footer}</footer>
   </section>;
 }
 
 function SensorTag({className,icon:Icon,title,status="OK",fault=false,detail}) { return <div className={`sensor-tag ${className} ${fault?"fault":""}`}><Icon size={20}/><span><b>{title}</b><small>{fault?<XCircle weight="fill"/>:<CheckCircle weight="fill"/>}{status}</small><em>{detail}</em></span></div>; }
 
-function Commissioning({fault,setFault,alerts,setAlerts,setActive,notify}) {
-  const inject=()=>{setFault(true);if(!alerts.some(a=>a.id===initialAlert.id))setAlerts([initialAlert,...alerts]);notify("Falha crítica detectada: P0 aberto e SLA iniciado.")};
-  const clear=()=>{setFault(false);notify("Sensor X normalizado. O histórico do P0 foi preservado.")};
-  return <section className="page commissioning-page"><div className="commission-grid"><article className="twin-panel"><div className="panel-title"><div><b>Digital Twin</b><span>— Linha de Expedição 01</span></div><span className={fault?"state fault":"state"}><Radio size={16} weight="fill"/>{fault?"Falha detectada":"Operação normal"}</span></div>
+const COMMISSIONING_I18N={
+  pt:{twinTitle:"Digital Twin",twinLine:"— Linha de Expedição 01",faultDetected:"Falha detectada",normalOp:"Operação normal",
+   lineSpeed:"Velocidade da linha",volumeToday:"Volume processado hoje",availability:"Disponibilidade",
+   activeIncident:"INCIDENTE ATIVO",normalOpUpper:"OPERAÇÃO NORMAL",p0Created:"P0 criado automaticamente",sensorNormalized:"Sensor normalizado",
+   faultBody:"Falha crítica detectada no Sensor X e vinculada ao projeto TITANO.",clearBody:"Telemetria estabilizada. O histórico do incidente foi preservado.",
+   project:"Projeto",priority:"Prioridade",owner:"Responsável",sla:"SLA",source:"Fonte",closed:"encerrado",
+   normalizeSensor:"Normalizar sensor",simulateFault:"Simular nova falha",injectToast:"Falha crítica detectada: P0 aberto e SLA iniciado.",clearToast:"Sensor X normalizado. O histórico do P0 foi preservado.",
+   evidence:"Evidência",telemetry:"Telemetria do Sensor X",seeAllEvidence:"Ver todas as evidências",
+   futureTag:"PLANO FUTURO PÓS-IMPLANTAÇÃO",futureTitle:"O próximo passo é simular a linha inteira.",futureBody:"Depois do núcleo operacional consolidado, o InventOps evolui de leitura e resposta para simulação ponta a ponta da operação conectada.",
+   futureItems:[["Simulação da operação","cenários de impacto antes do problema explodir"],["Esteira + PLC + sensores","telemetria física conectada ao contexto do projeto"],["Servidores + infraestrutura","operação de TI entrando no mesmo quadro de decisão"],["WCS Velox no mesmo modelo","gêmeo digital real da execução e do software"]],
+   openRoadmap:"Abrir visão do roadmap"},
+  es:{twinTitle:"Digital Twin",twinLine:"— Línea de Expedición 01",faultDetected:"Falla detectada",normalOp:"Operación normal",
+   lineSpeed:"Velocidad de la línea",volumeToday:"Volumen procesado hoy",availability:"Disponibilidad",
+   activeIncident:"INCIDENTE ACTIVO",normalOpUpper:"OPERACIÓN NORMAL",p0Created:"P0 creado automáticamente",sensorNormalized:"Sensor normalizado",
+   faultBody:"Falla crítica detectada en el Sensor X y vinculada al proyecto TITANO.",clearBody:"Telemetría estabilizada. El historial del incidente fue preservado.",
+   project:"Proyecto",priority:"Prioridad",owner:"Responsable",sla:"SLA",source:"Fuente",closed:"cerrado",
+   normalizeSensor:"Normalizar sensor",simulateFault:"Simular nueva falla",injectToast:"Falla crítica detectada: P0 abierto y SLA iniciado.",clearToast:"Sensor X normalizado. El historial del P0 fue preservado.",
+   evidence:"Evidencia",telemetry:"Telemetría del Sensor X",seeAllEvidence:"Ver todas las evidencias",
+   futureTag:"PLAN FUTURO POST-IMPLANTACIÓN",futureTitle:"El próximo paso es simular toda la línea.",futureBody:"Después del núcleo operativo consolidado, InventOps evoluciona de lectura y respuesta a simulación de punta a punta de la operación conectada.",
+   futureItems:[["Simulación de la operación","escenarios de impacto antes de que el problema explote"],["Cinta + PLC + sensores","telemetría física conectada al contexto del proyecto"],["Servidores + infraestructura","operación de TI entrando en el mismo cuadro de decisión"],["WCS Velox en el mismo modelo","gemelo digital real de la ejecución y del software"]],
+   openRoadmap:"Abrir visión del roadmap"},
+  en:{twinTitle:"Digital Twin",twinLine:"— Shipping Line 01",faultDetected:"Fault detected",normalOp:"Normal operation",
+   lineSpeed:"Line speed",volumeToday:"Volume processed today",availability:"Availability",
+   activeIncident:"ACTIVE INCIDENT",normalOpUpper:"NORMAL OPERATION",p0Created:"P0 created automatically",sensorNormalized:"Sensor normalized",
+   faultBody:"Critical fault detected on Sensor X and linked to the TITANO project.",clearBody:"Telemetry stabilized. The incident history was preserved.",
+   project:"Project",priority:"Priority",owner:"Owner",sla:"SLA",source:"Source",closed:"closed",
+   normalizeSensor:"Normalize sensor",simulateFault:"Simulate new fault",injectToast:"Critical fault detected: P0 opened and SLA started.",clearToast:"Sensor X normalized. The P0 history was preserved.",
+   evidence:"Evidence",telemetry:"Sensor X telemetry",seeAllEvidence:"See all evidence",
+   futureTag:"FUTURE PLAN POST-DEPLOYMENT",futureTitle:"The next step is simulating the whole line.",futureBody:"After the operational core is consolidated, InventOps evolves from reading and responding to end-to-end simulation of the connected operation.",
+   futureItems:[["Operation simulation","impact scenarios before the problem explodes"],["Line + PLC + sensors","physical telemetry connected to the project context"],["Servers + infrastructure","IT operation entering the same decision picture"],["WCS Velox on the same model","real digital twin of execution and software"]],
+   openRoadmap:"Open roadmap view"},
+};
+function Commissioning({fault,setFault,alerts,setAlerts,setActive,notify,lang="pt"}) {
+  const t=COMMISSIONING_I18N[lang]||COMMISSIONING_I18N.pt;
+  const inject=()=>{setFault(true);if(!alerts.some(a=>a.id===initialAlert.id))setAlerts([initialAlert,...alerts]);notify(t.injectToast)};
+  const clear=()=>{setFault(false);notify(t.clearToast)};
+  return <section className="page commissioning-page"><div className="commission-grid"><article className="twin-panel"><div className="panel-title"><div><b>{t.twinTitle}</b><span>{t.twinLine}</span></div><span className={fault?"state fault":"state"}><Radio size={16} weight="fill"/>{fault?t.faultDetected:t.normalOp}</span></div>
     <div className="twin-stage"><img src={assetPath("conveyor-twin.png")} alt="Esteira de expedição com scanner, motor, sensor e grade de segurança"/>
       <SensorTag className="plc" icon={Cpu} title="PLC" detail="Último scan: 10:24:18"/><SensorTag className="scanner" icon={Barcode} title="Scanner de código" detail="Leitura: 10:24:17"/>
       <SensorTag className="motor" icon={Wrench} title="Motor" detail="Torque: 18,4 Nm"/><SensorTag className="sensor" icon={Eye} title="Sensor X" status={fault?"FALHA":"OK"} fault={fault} detail={fault?"0,00 mA · 10:23:56":"18,7 mA"}/>
       <SensorTag className="gate" icon={ShieldCheck} title="Safety Gate" detail="Estado: fechado"/>
-    </div><div className="line-stats"><span><b>1,25 m/s</b><small>Velocidade da linha</small></span><span><b>8.432 un.</b><small>Volume processado hoje</small></span><span><b>97,6%</b><small>Disponibilidade</small></span></div></article>
-    <aside className="incident-column"><div className={`incident ${fault?"active":"resolved"}`}><span className="incident-pill">{fault?"INCIDENTE ATIVO":"OPERAÇÃO NORMAL"}</span><h2>{fault?"P0 criado automaticamente":"Sensor normalizado"}</h2><p>{fault?"Falha crítica detectada no Sensor X e vinculada ao projeto TITANO.":"Telemetria estabilizada. O histórico do incidente foi preservado."}</p>
-      <dl><div><dt>Projeto</dt><dd>TITANO</dd></div><div><dt>Prioridade</dt><dd className="danger">{fault?"P0 · CRÍTICO":"—"}</dd></div><div><dt>Responsável</dt><dd>Rodrigo Baruco</dd></div><div><dt>SLA</dt><dd className="timer">{fault?"07:35:42":"encerrado"}</dd></div><div><dt>Fonte</dt><dd>IoT / CLP</dd></div></dl>
-      <button className={fault?"danger-button":"primary"} onClick={fault?clear:inject}>{fault?<><ArrowCounterClockwise/>Normalizar sensor</>:<><Lightning/>Simular nova falha</>}</button></div>
-      <div className="telemetry"><div className="panel-title"><b>Evidência</b><span>Telemetria do Sensor X</span></div><div className="telemetry-chart"><ResponsiveContainer width="100%" height="100%"><AreaChart data={fault?telemetryData:telemetryData.map(x=>({...x,v:18}))}><defs><linearGradient id="redArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#fb5470" stopOpacity={.45}/><stop offset="100%" stopColor="#fb5470" stopOpacity={0}/></linearGradient></defs><CartesianGrid stroke="#19253a" vertical={false}/><XAxis dataKey="t" tick={{fontSize:10}} stroke="#65728a"/><YAxis domain={[0,24]} tick={{fontSize:10}} stroke="#65728a"/><Area type="monotone" dataKey="v" stroke="#fb5470" fill="url(#redArea)" strokeWidth={3} isAnimationActive={false}/></AreaChart></ResponsiveContainer></div><button className="ghost" onClick={()=>setActive("evidence")}>Ver todas as evidências<ArrowRight/></button></div>
+    </div><div className="line-stats"><span><b>1,25 m/s</b><small>{t.lineSpeed}</small></span><span><b>8.432 un.</b><small>{t.volumeToday}</small></span><span><b>97,6%</b><small>{t.availability}</small></span></div></article>
+    <aside className="incident-column"><div className={`incident ${fault?"active":"resolved"}`}><span className="incident-pill">{fault?t.activeIncident:t.normalOpUpper}</span><h2>{fault?t.p0Created:t.sensorNormalized}</h2><p>{fault?t.faultBody:t.clearBody}</p>
+      <dl><div><dt>{t.project}</dt><dd>TITANO</dd></div><div><dt>{t.priority}</dt><dd className="danger">{fault?"P0 · CRÍTICO":"—"}</dd></div><div><dt>{t.owner}</dt><dd>Rodrigo Baruco</dd></div><div><dt>{t.sla}</dt><dd className="timer">{fault?"07:35:42":t.closed}</dd></div><div><dt>{t.source}</dt><dd>IoT / CLP</dd></div></dl>
+      <button className={fault?"danger-button":"primary"} onClick={fault?clear:inject}>{fault?<><ArrowCounterClockwise/>{t.normalizeSensor}</>:<><Lightning/>{t.simulateFault}</>}</button></div>
+      <div className="telemetry"><div className="panel-title"><b>{t.evidence}</b><span>{t.telemetry}</span></div><div className="telemetry-chart"><ResponsiveContainer width="100%" height="100%"><AreaChart data={fault?telemetryData:telemetryData.map(x=>({...x,v:18}))}><defs><linearGradient id="redArea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#fb5470" stopOpacity={.45}/><stop offset="100%" stopColor="#fb5470" stopOpacity={0}/></linearGradient></defs><CartesianGrid stroke="#19253a" vertical={false}/><XAxis dataKey="t" tick={{fontSize:10}} stroke="#65728a"/><YAxis domain={[0,24]} tick={{fontSize:10}} stroke="#65728a"/><Area type="monotone" dataKey="v" stroke="#fb5470" fill="url(#redArea)" strokeWidth={3} isAnimationActive={false}/></AreaChart></ResponsiveContainer></div><button className="ghost" onClick={()=>setActive("evidence")}>{t.seeAllEvidence}<ArrowRight/></button></div>
       <div className="future-vision-card">
         <div className="future-vision-head">
-          <small>PLANO FUTURO PÓS-IMPLANTAÇÃO</small>
+          <small>{t.futureTag}</small>
           <span>VISION</span>
         </div>
-        <h3>O próximo passo é simular a linha inteira.</h3>
-        <p>
-          Depois do núcleo operacional consolidado, o InventOps evolui de leitura e resposta
-          para simulação ponta a ponta da operação conectada.
-        </p>
+        <h3>{t.futureTitle}</h3>
+        <p>{t.futureBody}</p>
         <ul className="future-vision-list">
-          <li><Sparkle size={16}/><span><b>Simulação da operação</b><small>cenários de impacto antes do problema explodir</small></span></li>
-          <li><Cpu size={16}/><span><b>Esteira + PLC + sensores</b><small>telemetria física conectada ao contexto do projeto</small></span></li>
-          <li><CloudCheck size={16}/><span><b>Servidores + infraestrutura</b><small>operação de TI entrando no mesmo quadro de decisão</small></span></li>
-          <li><Circuitry size={16}/><span><b>WCS Velox no mesmo modelo</b><small>gêmeo digital real da execução e do software</small></span></li>
+          {t.futureItems.map(([title,note],i)=><li key={title}>{[<Sparkle key="i0" size={16}/>,<Cpu key="i1" size={16}/>,<CloudCheck key="i2" size={16}/>,<Circuitry key="i3" size={16}/>][i]}<span><b>{title}</b><small>{note}</small></span></li>)}
         </ul>
-        <button className="ghost" onClick={()=>setActive("lifecycle")}>Abrir visão do roadmap<ArrowRight/></button>
+        <button className="ghost" onClick={()=>setActive("lifecycle")}>{t.openRoadmap}<ArrowRight/></button>
       </div>
     </aside></div></section>;
 }
 
 function EvidenceItem({icon:Icon,label,value,ok=true}) { return <li><Icon size={18}/><span>{label}</span><b className={ok?"ok":"warn"}>{value}</b></li>; }
 
-function DecisionRoom({setActive,notify}){ return <section className="page decision-page"><div className="decision-toolbar"><div><b>Linha do tempo de dependências e capacidade</b><span>Projetos selecionados e equipe compartilhada</span></div><button className="ghost" onClick={()=>notify("Janela de decisão fixada em julho–setembro de 2026.")}><CalendarBlank/>Jul — Set 2026<CaretDown/></button></div>
-  <div className="timeline"><div className="months"><span>JUL 2026</span><span>AGO 2026</span><span>SET 2026</span></div><div className="project-row"><header><b>TITANO</b><span>Go Live: 20/07/2026</span></header><div className="track"><i className="bar titano">Desenvolvimento & Integrações</i><i className="risk-marker">Atraso previsto 12 dias</i></div></div><div className="project-row"><header><b>QUELUZ</b><span>Go Live: 30/07/2026</span></header><div className="track"><i className="bar queluz">Desenvolvimento & Integrações</i><i className="risk-marker second">Atraso em cascata 8 dias</i></div></div><div className="capacity-row"><header><UsersThree/><b>Equipe PLC</b><span>Equipe compartilhada</span></header><div><CapacityChart compact/></div></div></div>
-  <div className="evidence-decision"><article><div className="section-heading"><b>Evidências que explicam o cenário</b><span>Progresso real reportado até 11/07/2026</span></div><div className="evidence-columns"><div><h3>TITANO</h3><ul><EvidenceItem icon={CheckSquare} label="Infra" value="4/5 checklists"/><EvidenceItem icon={GitCommit} label="Dev" value="12 commits válidos"/><EvidenceItem icon={TestTube} label="Comissionamento" value="18/20 testes"/></ul></div><div><h3>QUELUZ</h3><ul><EvidenceItem icon={CheckSquare} label="Infra" value="5/5 checklists"/><EvidenceItem icon={GitCommit} label="Dev" value="9 commits válidos"/><EvidenceItem icon={TestTube} label="Comissionamento" value="10/20 testes" ok={false}/></ul></div><div><h3>Equipe PLC</h3><ul><EvidenceItem icon={UsersThree} label="Alocação planejada" value="92%"/><EvidenceItem icon={ChartLineUp} label="Alocação projetada" value="117%" ok={false}/><EvidenceItem icon={Timer} label="Horas extras" value="+128 h" ok={false}/></ul></div></div></article>
-    <article className="decision-rec"><div className="section-heading"><b>Recomendação</b><span>Ação com melhor impacto no prazo do portfólio.</span></div><div><Lightning size={26} weight="fill"/><h3>Repriorizar a Equipe PLC após 20/07 para antecipar o comissionamento do TITANO.</h3><span><b>-6 dias</b> no atraso do TITANO</span><span><b>-4 dias</b> no atraso do QUELUZ</span></div><button className="primary" onClick={()=>setActive("simulator")}>Comparar cenários</button></article></div>
+const DECISION_ROOM_I18N={
+  pt:{toolbarTitle:"Linha do tempo de dependências e capacidade",toolbarSub:"Projetos selecionados e equipe compartilhada",dateWindow:"Jul — Set 2026",windowToast:"Janela de decisão fixada em julho–setembro de 2026.",
+   months:["JUL 2026","AGO 2026","SET 2026"],devIntegrations:"Desenvolvimento & Integrações",delayTitano:"Atraso previsto 12 dias",delayQueluz:"Atraso em cascata 8 dias",team:"Equipe PLC",sharedTeam:"Equipe compartilhada",
+   evidenceTitle:"Evidências que explicam o cenário",evidenceSub:"Progresso real reportado até 11/07/2026",infra:"Infra",dev:"Dev",commissioning:"Comissionamento",validCommits:"commits válidos",tests:"testes",plannedAlloc:"Alocação planejada",projectedAlloc:"Alocação projetada",overtime:"Horas extras",
+   recTitle:"Recomendação",recSub:"Ação com melhor impacto no prazo do portfólio.",recBody:"Repriorizar a Equipe PLC após 20/07 para antecipar o comissionamento do TITANO.",delayReduceTitano:"no atraso do TITANO",delayReduceQueluz:"no atraso do QUELUZ",compareScenarios:"Comparar cenários"},
+  es:{toolbarTitle:"Línea de tiempo de dependencias y capacidad",toolbarSub:"Proyectos seleccionados y equipo compartido",dateWindow:"Jul — Sep 2026",windowToast:"Ventana de decisión fijada entre julio y septiembre de 2026.",
+   months:["JUL 2026","AGO 2026","SEP 2026"],devIntegrations:"Desarrollo e Integraciones",delayTitano:"Atraso previsto de 12 días",delayQueluz:"Atraso en cascada de 8 días",team:"Equipo PLC",sharedTeam:"Equipo compartido",
+   evidenceTitle:"Evidencias que explican el escenario",evidenceSub:"Progreso real reportado hasta el 11/07/2026",infra:"Infra",dev:"Dev",commissioning:"Comisionamiento",validCommits:"commits válidos",tests:"pruebas",plannedAlloc:"Asignación planificada",projectedAlloc:"Asignación proyectada",overtime:"Horas extra",
+   recTitle:"Recomendación",recSub:"Acción con mejor impacto en el plazo del portafolio.",recBody:"Repriorizar el Equipo PLC después del 20/07 para anticipar el comisionamiento de TITANO.",delayReduceTitano:"en el atraso de TITANO",delayReduceQueluz:"en el atraso de QUELUZ",compareScenarios:"Comparar escenarios"},
+  en:{toolbarTitle:"Dependency and capacity timeline",toolbarSub:"Selected projects and shared team",dateWindow:"Jul — Sep 2026",windowToast:"Decision window fixed between July and September 2026.",
+   months:["JUL 2026","AUG 2026","SEP 2026"],devIntegrations:"Development & Integrations",delayTitano:"12-day forecasted delay",delayQueluz:"8-day cascading delay",team:"PLC Team",sharedTeam:"Shared team",
+   evidenceTitle:"Evidence explaining the scenario",evidenceSub:"Real progress reported through 07/11/2026",infra:"Infra",dev:"Dev",commissioning:"Commissioning",validCommits:"valid commits",tests:"tests",plannedAlloc:"Planned allocation",projectedAlloc:"Projected allocation",overtime:"Overtime",
+   recTitle:"Recommendation",recSub:"Action with the best impact on the portfolio schedule.",recBody:"Reprioritize the PLC Team after 07/20 to anticipate TITANO's commissioning.",delayReduceTitano:"in TITANO's delay",delayReduceQueluz:"in QUELUZ's delay",compareScenarios:"Compare scenarios"},
+};
+function DecisionRoom({setActive,notify,lang="pt"}){
+  const t=DECISION_ROOM_I18N[lang]||DECISION_ROOM_I18N.pt;
+  return <section className="page decision-page"><div className="decision-toolbar"><div><b>{t.toolbarTitle}</b><span>{t.toolbarSub}</span></div><button className="ghost" onClick={()=>notify(t.windowToast)}><CalendarBlank/>{t.dateWindow}<CaretDown/></button></div>
+  <div className="timeline"><div className="months"><span>{t.months[0]}</span><span>{t.months[1]}</span><span>{t.months[2]}</span></div><div className="project-row"><header><b>TITANO</b><span>Go Live: 20/07/2026</span></header><div className="track"><i className="bar titano">{t.devIntegrations}</i><i className="risk-marker">{t.delayTitano}</i></div></div><div className="project-row"><header><b>QUELUZ</b><span>Go Live: 30/07/2026</span></header><div className="track"><i className="bar queluz">{t.devIntegrations}</i><i className="risk-marker second">{t.delayQueluz}</i></div></div><div className="capacity-row"><header><UsersThree/><b>{t.team}</b><span>{t.sharedTeam}</span></header><div><CapacityChart compact/></div></div></div>
+  <div className="evidence-decision"><article><div className="section-heading"><b>{t.evidenceTitle}</b><span>{t.evidenceSub}</span></div><div className="evidence-columns"><div><h3>TITANO</h3><ul><EvidenceItem icon={CheckSquare} label={t.infra} value="4/5 checklists"/><EvidenceItem icon={GitCommit} label={t.dev} value={`12 ${t.validCommits}`}/><EvidenceItem icon={TestTube} label={t.commissioning} value={`18/20 ${t.tests}`}/></ul></div><div><h3>QUELUZ</h3><ul><EvidenceItem icon={CheckSquare} label={t.infra} value="5/5 checklists"/><EvidenceItem icon={GitCommit} label={t.dev} value={`9 ${t.validCommits}`}/><EvidenceItem icon={TestTube} label={t.commissioning} value={`10/20 ${t.tests}`} ok={false}/></ul></div><div><h3>{t.team}</h3><ul><EvidenceItem icon={UsersThree} label={t.plannedAlloc} value="92%"/><EvidenceItem icon={ChartLineUp} label={t.projectedAlloc} value="117%" ok={false}/><EvidenceItem icon={Timer} label={t.overtime} value="+128 h" ok={false}/></ul></div></div></article>
+    <article className="decision-rec"><div className="section-heading"><b>{t.recTitle}</b><span>{t.recSub}</span></div><div><Lightning size={26} weight="fill"/><h3>{t.recBody}</h3><span><b>-6 {lang==="en"?"days":"dias"}</b> {t.delayReduceTitano}</span><span><b>-4 {lang==="en"?"days":"dias"}</b> {t.delayReduceQueluz}</span></div><button className="primary" onClick={()=>setActive("simulator")}>{t.compareScenarios}</button></article></div>
   </section>; }
 
 function StatusBadge({status}) { return <span className={`status-badge status-${status.toLowerCase().replaceAll(" ","-")}`}>{status}</span>; }
@@ -755,8 +828,8 @@ export function App() {
     project:<ProjectWorkspace key={selectedProject.name} project={selectedProject} setActive={setActive} notify={notify}/>,
     cockpit:<DepartmentCockpit key={cockpitDept} notify={notify} imported={importedDemands} initialDept={cockpitDept} currentUser={currentUser} lang={lang}/>,
     areas:<AreasPage lang={lang}/>,raid:<RaidPage lang={lang}/>,admin:<AdminGovernance role={role} setRole={setRole} theme={theme} setTheme={setTheme} notify={notify} onOpenPilotUser={openPilotContext} lang={lang}/>,
-    presentation:<PresentationPage notify={notify} lang={lang}/>,lifecycle:<LifecyclePage lang={lang}/>,simulator:<Simulator scenario={scenario} setScenario={setScenario} notify={notify}/>,
-    commissioning:<Commissioning fault={fault} setFault={setFault} alerts={alerts} setAlerts={setAlerts} setActive={setActive} notify={notify}/>,
+    presentation:<PresentationPage notify={notify} lang={lang}/>,lifecycle:<LifecyclePage lang={lang}/>,simulator:<Simulator scenario={scenario} setScenario={setScenario} notify={notify} lang={lang}/>,
+    commissioning:<Commissioning fault={fault} setFault={setFault} alerts={alerts} setAlerts={setAlerts} setActive={setActive} notify={notify} lang={lang}/>,
     decision:<DecisionRoom setActive={setActive} notify={notify} lang={lang}/>,alerts:<AlertsPage alerts={alerts} setAlerts={setAlerts} lang={lang}/>,
     evidence:<EvidencePage lang={lang}/>,settings:<SettingsPage lang={lang}/>
   };
