@@ -20,7 +20,7 @@ const trend = [
 ];
 
 const departments = [
-  ["COM","Comercial / Concept","André Mota",74,66,1],["PMO","PMO","Rodrigo Baruco",91,78,2],
+  ["COM","Comercial / Concept","André Mota",74,66,1],["PM","PM","Rodrigo Baruco",91,78,2],
   ["PCP","PCP","Weslley Silva",86,72,2],["CMP","Compras / Importação","Claudia Duarte",103,61,3],
   ["EMC","Eng. Mecânica","Gustavo Pereira",94,69,2],["EEL","Eng. Elétrica","Gustavo Pereira",88,64,1],
   ["PRD","Produção","Flavio Moreno",82,70,1],["MON","Montagem","Rojekson Souza",83,57,1],
@@ -33,7 +33,7 @@ const actionsSeed = [
   {id:1,p:"P0",project:"TITANO",dept:"PLC",task:"Normalizar falha do Sensor X e anexar telemetria",owner:"Rodrigo Baruco",email:"rodrigo.baruco@invent-corp.com",due:"Hoje · 18:00",status:"Em ação",impact:"Bloqueia a sequência de testes SAT e reduz a confiança do Go Live de 78% para 61%.",dependency:"Troca física do Sensor X",dependencyState:"Bloqueante",evidence:"Telemetria estável + registro de 20 ciclos aprovados",evidenceState:"Pendente"},
   {id:2,p:"P1",project:"MARKET PERU",dept:"INF",task:"Confirmar range IP /24 e VPN site-to-site",owner:"Ivan",email:"ivan@invent-corp.com",due:"Hoje · 16:00",status:"Aguardando cliente",impact:"Sem conectividade, a homologação integrada perde a janela de 15/07.",dependency:"Resposta técnica do cliente",dependencyState:"Externa",evidence:"E-mail de aceite + teste de túnel VPN",evidenceState:"Pendente"},
   {id:3,p:"P1",project:"NAVEPARK",dept:"INF",task:"Fechar topologia das VMs Oracle KVM",owner:"Daiana Costa",email:"daiana.costa@invent-corp.com",due:"12 jul",status:"Em andamento",impact:"Define o ambiente homologado usado por DEV e WCS sem interromper Compras ou Engenharia.",dependency:"Especificação de capacidade",dependencyState:"Paralela",evidence:"Diagrama aprovado + checklist de provisionamento",evidenceState:"Rascunho"},
-  {id:4,p:"P2",project:"QUELUZ",dept:"PMO",task:"Consolidar evidências para o Gate GL1",owner:"Matheus",email:"matheus@invent-corp.com",due:"15 jul",status:"Não iniciado",impact:"O gate não pode ser aprovado sem rastreabilidade das entregas das áreas.",dependency:"Aceites de ENG, INF e DEV",dependencyState:"Paralela",evidence:"Ata do gate + índice de evidências aceitas",evidenceState:"Pendente"},
+  {id:4,p:"P2",project:"QUELUZ",dept:"PM",task:"Consolidar evidências para o Gate GL1",owner:"Matheus",email:"matheus@invent-corp.com",due:"15 jul",status:"Não iniciado",impact:"O gate não pode ser aprovado sem rastreabilidade das entregas das áreas.",dependency:"Aceites de ENG, INF e DEV",dependencyState:"Paralela",evidence:"Ata do gate + índice de evidências aceitas",evidenceState:"Pendente"},
   {id:5,p:"P2",project:"BP",dept:"IMP",task:"Confirmar equipe de campo para Go Live",owner:"Giovanni",email:"giovanni@invent-corp.com",due:"18 jul",status:"Não iniciado",impact:"Protege a escala de implantação e evita conflito com o projeto TITANO.",dependency:"Agenda de campo",dependencyState:"Paralela",evidence:"Escala nominal validada pelo gestor",evidenceState:"Pendente"}
 ];
 
@@ -105,7 +105,7 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept,currentUs
       readingTitle:"LEITURA DO INVENTOPS",
       readingBody:"A carteira está controlada, mas o sistema já aponta a próxima pressão.",
       readingText:"O InventOps cruza capacidade, bloqueios e datas de marco para mostrar onde a coordenação precisa acontecer antes do problema aparecer no cronograma executivo.",
-      openPmo:"Abrir PMO Control Tower",
+      openPm:"Abrir PM Control Tower",
       seeDecision:"Ver Decision Room",
       coordTitle:"Mapa de coordenação",
       coordSub:"Quem precisa andar junto agora",
@@ -171,7 +171,7 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept,currentUs
       readingTitle:"LECTURA DEL INVENTOPS",
       readingBody:"La cartera está controlada, pero el sistema ya señala la próxima presión.",
       readingText:"InventOps cruza capacidad, bloqueos y fechas clave para mostrar dónde debe ocurrir la coordinación antes de que el problema aparezca en el cronograma ejecutivo.",
-      openPmo:"Abrir PMO Control Tower",
+      openPm:"Abrir PM Control Tower",
       seeDecision:"Ver Decision Room",
       coordTitle:"Mapa de coordinación",
       coordSub:"Quién necesita avanzar en conjunto ahora",
@@ -237,7 +237,7 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept,currentUs
       readingTitle:"INVENTOPS READING",
       readingBody:"The portfolio is controlled, but the system is already pointing to the next pressure point.",
       readingText:"InventOps crosses capacity, blockers, and milestone dates to show where coordination must happen before the issue appears in the executive schedule.",
-      openPmo:"Open PMO Control Tower",
+      openPm:"Open PM Control Tower",
       seeDecision:"View Decision Room",
       coordTitle:"Coordination map",
       coordSub:"Who needs to move together right now",
@@ -353,7 +353,7 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept,currentUs
         <b>{copy.readingBody}</b>
         <p>{copy.readingText}</p>
         <div className="synopsis-actions">
-          <button className="ghost" onClick={()=>setActive("pmo")}><ChartLineUp/>{copy.openPmo}</button>
+          <button className="ghost" onClick={()=>setActive("pm")}><ChartLineUp/>{copy.openPm}</button>
           <button className="ghost" onClick={()=>setActive("decision")}><Sparkle/>{copy.seeDecision}</button>
         </div>
       </article>
@@ -362,12 +362,12 @@ export function ExecutiveDashboard({projects,setActive,openCockpitDept,currentUs
       <Panel title={copy.coordTitle} subtitle={copy.coordSub}>
         <div className="coordination-map">
           {coordinationNodes.map(node=><span key={node.label} className={`coord-node ${node.className}`}>{node.label}</span>)}
-          <div className="coord-core"><b>PMO</b><small>núcleo da decisão</small></div>
+          <div className="coord-core"><b>PM</b><small>núcleo da decisão</small></div>
         </div>
       </Panel>
       <Panel title={copy.routeTitle} subtitle={copy.routeSub}>
         <div className="critical-route-list">
-          {criticalRoute.map(([project,task,eta],index)=><button key={project} type="button" onClick={()=>setActive(index===0?"action":index===1?"alerts":"pmo")}><strong>{String(index+1).padStart(2,"0")}</strong><span><b>{project}</b><small>{task}</small></span><em>{eta}</em><ArrowRight/></button>)}
+          {criticalRoute.map(([project,task,eta],index)=><button key={project} type="button" onClick={()=>setActive(index===0?"action":index===1?"alerts":"pm")}><strong>{String(index+1).padStart(2,"0")}</strong><span><b>{project}</b><small>{task}</small></span><em>{eta}</em><ArrowRight/></button>)}
         </div>
       </Panel>
     </div>
@@ -412,7 +412,7 @@ export function ExecutiveOnePager({projects,notify}){
   const executiveJourney = [
     ["Login","Check"],
     ["Home","Check"],
-    ["PMO","Check"],
+    ["PM","Check"],
     ["Executive","Em fechamento"]
   ];
   return <section className="page foundation-page onepager-page"><div className="onepager-actions"><span>Relatório executivo · atualizado em 11/07/2026 às 21:40</span><button className="ghost" onClick={()=>window.print()}><Printer/>Imprimir</button><button className="primary" onClick={()=>notify("One-page preparado para envio com trilha de auditoria.")}><Envelope/>Compartilhar</button></div><article className="onepager"><header><div><small>INVENTOPS · RELATÓRIO EXECUTIVO</small><h2>Portfólio de Projetos</h2><p>Decisões, riscos e próximos marcos em uma página.</p></div><span><b>68</b><small>HEALTH SCORE</small></span></header><div className="onepage-kpis"><span><small>PROJETOS</small><b>{projects.length}</b><em>2 bloqueados</em></span><span><small>RISCO FINANCEIRO</small><b>R$ 1,8 mi</b><em>exposição estimada</em></span><span><small>GO LIVES 90D</small><b>4</b><em>2 confirmados</em></span><span><small>CAPACIDADE</small><b>117%</b><em>PLC em setembro</em></span></div><section><h3>Leitura executiva</h3><p>A carteira evoluiu 7 pontos em saúde nos últimos 30 dias. O avanço é sustentado por evidências técnicas, mas três dependências ameaçam a previsibilidade: conectividade do Market Peru, ambiente HML do Navepark e capacidade compartilhada de PLC.</p></section><section className="onepage-journey"><div><small>JORNADA VALIDADA</small><h3>Sequência visível da entrega</h3></div><div className="journey-strip">{executiveJourney.map(([label,state],index)=><span key={label} className={index===executiveJourney.length-1?"over":""}><b>{label}</b><small>{state}</small></span>)}</div></section><div className="onepage-columns"><section><h3>Decisões solicitadas</h3><ol><li>Autorizar aceleração do hardware TITANO.</li><li>Escalar conectividade Market Peru com o cliente.</li><li>Repriorizar capacidade PLC para agosto e setembro.</li></ol></section><section><h3>Próximos marcos</h3>{projects.slice(0,4).map(p=><div className="onepage-project" key={p.name}><b>{p.name}</b><span>{p.next}</span><em>{p.date}</em></div>)}</section></div><footer><span>Fonte: InventOps · dados auditáveis</span><b>Uso executivo interno</b></footer></article></section>;
@@ -470,7 +470,7 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
   const roleMeta={
     Admin:{label:"Enterprise Admin",helper:"Controle total da plataforma e das integrações.",scope:"Administração, governança, acessos e regras centrais."},
     Diretoria:{label:"Diretoria · DIREX",helper:"Leitura executiva, decisão e priorização.",scope:"Visão consolidada, indicadores, riscos e decisões."},
-    Gestor:{label:"Gestor",helper:"Cobrança, coordenação e desbloqueio da operação.",scope:"Projetos, PMO, áreas, RAID e evidências."},
+    Gestor:{label:"Gestor",helper:"Cobrança, coordenação e desbloqueio da operação.",scope:"Projetos, PM, áreas, RAID e evidências."},
     Analista:{label:"Analista",helper:"Execução com contexto, prazo e evidência.",scope:"Minha operação, projetos, áreas e comissionamento."}
   };
   const governancePulse=[
@@ -501,7 +501,7 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
   ];
   const sendInvite=(event)=>{
     event.preventDefault();
-    const deptMap={Infraestrutura:"INF","Implantação":"IMP","Espec. de Software":"ESP","WCS Velox":"WCS","PMO":"PMO"};
+    const deptMap={Infraestrutura:"INF","Implantação":"IMP","Espec. de Software":"ESP","WCS Velox":"WCS","PM":"PM"};
     const newUser={
       name:invite.name,
       profile:invite.profile,
@@ -554,7 +554,7 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
           <label><span>E-mail corporativo</span><input type="email" value={invite.email} onChange={e=>setInvite({...invite,email:e.target.value})} placeholder="nome@invent-corp.com" required/></label>
           <div className="admin-access-row">
             <label><span>Perfil</span><select value={invite.profile} onChange={e=>setInvite({...invite,profile:e.target.value})}>{Object.keys(roleMeta).map(key=><option key={key}>{key}</option>)}</select></label>
-            <label><span>Área</span><select value={invite.area} onChange={e=>setInvite({...invite,area:e.target.value})}>{["Infraestrutura","Implantação","Espec. de Software","WCS Velox","PMO"].map(item=><option key={item}>{item}</option>)}</select></label>
+            <label><span>Área</span><select value={invite.area} onChange={e=>setInvite({...invite,area:e.target.value})}>{["Infraestrutura","Implantação","Espec. de Software","WCS Velox","PM"].map(item=><option key={item}>{item}</option>)}</select></label>
           </div>
           <div className="admin-access-note"><b>Permissão por capacidade</b><p>Cada perfil enxerga e faz só o que precisa. O usuário recebe o acesso conforme o papel e a área definidos acima.</p></div>
           <button className="primary" type="submit"><Envelope/>Preparar acesso</button>
@@ -604,9 +604,9 @@ export function AdminGovernance({role,setRole,theme,setTheme,notify,onOpenPilotU
 export function LifecyclePage(){
   const [horizon,setHorizon]=useState("12 meses");
   const milestones=[
-    {version:"V17.9",period:"JUL · 2026",status:"ATUAL",title:"Governança operacional",owner:"PMO + Tecnologia",progress:98,tone:"yellow",value:"Uma carteira única, auditável e explicável.",scope:["Central PMO e plano integrado","Sete fases com gates formais","Dependências, evidências e handoffs"],gate:"Operação assistida validada pelo PMO"},
+    {version:"V17.9",period:"JUL · 2026",status:"ATUAL",title:"Governança operacional",owner:"PM + Tecnologia",progress:98,tone:"yellow",value:"Uma carteira única, auditável e explicável.",scope:["Central PM e plano integrado","Sete fases com gates formais","Dependências, evidências e handoffs"],gate:"Operação assistida validada pelo PM"},
     {version:"V18",period:"AGO–SET · 2026",status:"PRÓXIMO",title:"Operação conectada",owner:"TI + Dados",progress:24,tone:"cyan",value:"Fim das planilhas paralelas e atualização manual.",scope:["PostgreSQL e APIs reais","SSO Microsoft 365 + RBAC","Importação segura e notificações"],gate:"Base integrada com 3 projetos reais"},
-    {version:"V19",period:"OUT–DEZ · 2026",status:"PLANEJADO",title:"Inteligência preditiva",owner:"PMO + Genius AI",progress:8,tone:"purple",value:"Decidir antes que o atraso vire custo.",scope:["Simulador de impacto IA","Previsão de gargalos e capacidade","Briefing executivo recomendado"],gate:"Acurácia preditiva ≥ 80%"},
+    {version:"V19",period:"OUT–DEZ · 2026",status:"PLANEJADO",title:"Inteligência preditiva",owner:"PM + Genius AI",progress:8,tone:"purple",value:"Decidir antes que o atraso vire custo.",scope:["Simulador de impacto IA","Previsão de gargalos e capacidade","Briefing executivo recomendado"],gate:"Acurácia preditiva ≥ 80%"},
     {version:"V20",period:"JAN–MAR · 2027",status:"VISÃO",title:"Chão de fábrica vivo",owner:"Automação + IoT",progress:0,tone:"green",value:"TI e TA conectadas ao mesmo projeto.",scope:["Telemetria de CLPs e sensores","Gêmeo digital de comissionamento","Falha física gera alerta P0"],gate:"Uma esteira real em produção assistida"},
     {version:"V21",period:"ABR–JUN · 2027",status:"NORTH STAR",title:"Operação autônoma assistida",owner:"Diretoria + Operações",progress:0,tone:"blue",value:"O sistema recomenda, orquestra e aprende.",scope:["Workflows automáticos","Playbooks de recuperação","Benchmark de projetos e squads"],gate:"Redução mensurável de atraso e retrabalho"}
   ];
@@ -627,7 +627,7 @@ export function LifecyclePage(){
 export function PresentationPage({notify}){
   const profiles={
     Analista:{icon:CheckSquare,color:"cyan",promise:"Minha rotina, sem planilhas paralelas.",screens:["Minha Operação","Entregas por Área","Evidências"],focus:["Demandas vinculadas ao perfil","Prazo, dependência e handoff","Progresso sustentado por evidência"],script:"Para o analista, o InventOps centraliza a rotina e elimina planilhas paralelas. Cada demanda chega vinculada ao perfil corporativo, com prazo, evidência esperada e contexto do projeto. O analista atualiza a entrega e transforma trabalho técnico em progresso confiável."},
-    Gestor:{icon:UsersThree,color:"yellow",promise:"Distribuir, cobrar e desbloquear com contexto.",screens:["Central PMO","Plano integrado","Matriz RAID"],focus:["Fila única de decisões e cobranças","Atividades, responsáveis e evidências","Riscos com plano de resposta"],script:"Para o gestor, o InventOps reúne a carteira em uma Central PMO e detalha cada entrega no plano integrado. A fila mostra quem cobrar, enquanto o projeto distribui atividades com responsável, dependência e evidência. O briefing diário prepara a comunicação para WhatsApp e Outlook."},
+    Gestor:{icon:UsersThree,color:"yellow",promise:"Distribuir, cobrar e desbloquear com contexto.",screens:["Central PM","Plano integrado","Matriz RAID"],focus:["Fila única de decisões e cobranças","Atividades, responsáveis e evidências","Riscos com plano de resposta"],script:"Para o gestor, o InventOps reúne a carteira em uma Central PM e detalha cada entrega no plano integrado. A fila mostra quem cobrar, enquanto o projeto distribui atividades com responsável, dependência e evidência. O briefing diário prepara a comunicação para WhatsApp e Outlook."},
     Diretor:{icon:ChartLineUp,color:"purple",promise:"Decidir antes que o atraso vire custo.",screens:["Dashboard Executivo","Simulador de Impacto","Releases & Roadmap"],focus:["Health Score e decisões do dia","Cenários de prazo e capacidade","Evolução do produto por valor"],script:"Para a diretoria, o InventOps traduz a carteira em decisões. O dashboard aponta onde agir hoje, o simulador antecipa impactos entre projetos e o roadmap mostra como a plataforma evolui da V17.9, com governança operacional por gates, para a prevenção automática no chão de fábrica."}
   };
   const [selected,setSelected]=useState("Diretor");

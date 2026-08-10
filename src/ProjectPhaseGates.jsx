@@ -5,19 +5,19 @@ import {
 } from "@phosphor-icons/react";
 
 const definitions = [
-  {name:"Kickoff",purpose:"Autorizar o início com escopo, responsáveis e governança definidos.",criteria:[["COM","Escopo contratado e premissas registradas","Proposta técnica aprovada"],["PMO","Termo de abertura publicado","Termo de abertura assinado"],["PCP","Cronograma macro validado","Baseline inicial"]]},
+  {name:"Kickoff",purpose:"Autorizar o início com escopo, responsáveis e governança definidos.",criteria:[["COM","Escopo contratado e premissas registradas","Proposta técnica aprovada"],["PM","Termo de abertura publicado","Termo de abertura assinado"],["PCP","Cronograma macro validado","Baseline inicial"]]},
   {name:"Levantamento",purpose:"Congelar requisitos suficientes para engenharias e software avançarem.",criteria:[["EMC","Levantamento mecânico validado","Pacote de levantamento"],["EEL","Premissas elétricas aprovadas","Memorial elétrico"],["ESP","Fluxos funcionais aceitos pelo cliente","Especificação funcional"]]},
   {name:"Provisionamento",purpose:"Garantir materiais, ambiente e capacidade para execução.",criteria:[["CMP","Itens críticos contratados","Pedidos emitidos"],["INF","Arquitetura e conectividade aprovadas","Checklist de infraestrutura"],["PCP","Capacidade das equipes confirmada","Plano mestre nivelado"]]},
   {name:"Implantação",purpose:"Confirmar equipamentos montados e prontidão de campo.",criteria:[["PRD","Lotes críticos produzidos","Inspeção de qualidade"],["MON","Montagem eletromecânica liberada","Checklist de montagem"],["IMP","Plano de implantação validado","Plano de cutover"]]},
   {name:"Homologação",purpose:"Comprovar o funcionamento integrado antes do Go Live.",criteria:[["WCS","Integrações homologadas","Relatório de testes"],["PLC","Automação aprovada em SAT","Aceite técnico PLC"],["IMP","Pendências críticas zeradas","Checklist de prontidão"]]},
-  {name:"Go Live",purpose:"Autorizar entrada em produção com contingência e suporte definidos.",criteria:[["IMP","Plano de virada aprovado","Ata de Go/No-Go"],["PMO","Riscos residuais aceitos","Registro de decisão"],["POS","Hypercare e escala confirmados","Plano de hypercare"]]},
-  {name:"Encerramento",purpose:"Formalizar aceite, lições aprendidas e transição para sustentação.",criteria:[["POS","Transição para suporte concluída","Termo de transição"],["PMO","Lições aprendidas registradas","Ata de encerramento"],["COM","Aceite final do cliente arquivado","Termo de aceite final"]]}
+  {name:"Go Live",purpose:"Autorizar entrada em produção com contingência e suporte definidos.",criteria:[["IMP","Plano de virada aprovado","Ata de Go/No-Go"],["PM","Riscos residuais aceitos","Registro de decisão"],["POS","Hypercare e escala confirmados","Plano de hypercare"]]},
+  {name:"Encerramento",purpose:"Formalizar aceite, lições aprendidas e transição para sustentação.",criteria:[["POS","Transição para suporte concluída","Termo de transição"],["PM","Lições aprendidas registradas","Ata de encerramento"],["COM","Aceite final do cliente arquivado","Termo de aceite final"]]}
 ];
 
 const deliveryJourney = [
   { id:"login", label:"Login", state:"done" },
   { id:"home", label:"Home", state:"done" },
-  { id:"pmo", label:"PMO", state:"done" },
+  { id:"pm", label:"PM", state:"done" },
   { id:"infra", label:"Infra", state:"done" },
   { id:"gates", label:"Gates", state:"active" },
   { id:"executive", label:"Executive", state:"next" }
@@ -31,7 +31,7 @@ function initialGates(project){
     name:phase.name,
     purpose:phase.purpose,
     status:phaseIndex+1<project.phase?"Aprovado":phaseIndex+1===project.phase?"Em validação":"Planejado",
-    decidedBy:phaseIndex+1<project.phase?"PMO · Rodrigo Baruco":"—",
+    decidedBy:phaseIndex+1<project.phase?"PM · Rodrigo Baruco":"—",
     decidedAt:phaseIndex+1<project.phase?`${Math.min(phaseIndex+3,7)} ago · 16:40`:"—",
     criteria:phase.criteria.map(([area,title,expected], criterionIndex) => ({
       id:`${project.code}-G${phaseIndex+1}-C${criterionIndex+1}`,
@@ -40,7 +40,7 @@ function initialGates(project){
       expected,
       status:phaseIndex+1<project.phase?"Aprovado":phaseIndex+1===project.phase&&criterionIndex<2?"Aprovado":phaseIndex+1===project.phase?"Pendente":"Planejado",
       evidence:phaseIndex+1<project.phase||phaseIndex+1===project.phase&&criterionIndex<2?expected:"Pendente",
-      owner:area==="PMO"?"Rodrigo Baruco":area==="INF"?"Admin Invent":area==="IMP"?"Daniel":area==="ESP"?"Thomas":area==="WCS"?"Marcelo Sanches":"Gestor da área"
+      owner:area==="PM"?"Rodrigo Baruco":area==="INF"?"Admin Invent":area==="IMP"?"Daniel":area==="ESP"?"Thomas":area==="WCS"?"Marcelo Sanches":"Gestor da área"
     }))
   }));
 }
@@ -77,7 +77,7 @@ export function ProjectPhaseGates({project,onUpdate,notify}){
       return;
     }
     const next=gates.map((gate)=>gate.id===selected.id?{...gate,criteria:gate.criteria.map((item)=>item.id===criterion.id?{...item,status:"Aprovado"}:item)}:gate);
-    persist(next,"Critério aprovado pelo PMO com trilha de decisão.");
+    persist(next,"Critério aprovado pelo PM com trilha de decisão.");
   };
 
   const approveGate=()=>{
@@ -89,7 +89,7 @@ export function ProjectPhaseGates({project,onUpdate,notify}){
       notify("O gate permanece bloqueado: existem critérios sem aprovação.");
       return;
     }
-    const next=gates.map((gate)=>gate.id===selected.id?{...gate,status:"Aprovado",decidedBy:"PMO · Rodrigo Baruco",decidedAt:"Agora"}:gate);
+    const next=gates.map((gate)=>gate.id===selected.id?{...gate,status:"Aprovado",decidedBy:"PM · Rodrigo Baruco",decidedAt:"Agora"}:gate);
     setGates(next);
     onUpdate({...project,phase:Math.min(7,project.phase+1),phaseGates:next});
     notify(`Gate ${selected.number} aprovado. Projeto avançou para a próxima fase.`);
@@ -100,7 +100,7 @@ export function ProjectPhaseGates({project,onUpdate,notify}){
       <div>
         <small>GATES DE GOVERNANÇA</small>
         <h3>Fase só avança quando o critério de saída está provado.</h3>
-        <p>Percentual não aprova gate. A decisão exige evidência, responsável e registro do PMO.</p>
+        <p>Percentual não aprova gate. A decisão exige evidência, responsável e registro do PM.</p>
       </div>
       <span><ShieldCheck/><small>FASE ATUAL</small><b>{project.phase}/7 · {definitions[project.phase-1].name}</b><em>{summary.pending} critérios pendentes</em></span>
     </section>
@@ -145,7 +145,7 @@ export function ProjectPhaseGates({project,onUpdate,notify}){
         {selected.status==="Aprovado"
           ? <div className="ppg-approved"><CheckCircle weight="fill"/><p><b>Decisão registrada</b><span>{selected.decidedBy}</span><small>{selected.decidedAt}</small></p></div>
           : <div className="ppg-block"><Warning/><p><b>{selected.criteria.length-approved} critérios impedem o avanço</b><span>O projeto continua executando atividades paralelas, mas não muda de fase.</span></p></div>}
-        <dl><div><dt><Clock/>Revisão</dt><dd>{selected.number===project.phase?"Diária":"Por gate"}</dd></div><div><dt><LockKey/>Regra</dt><dd>100% dos critérios aprovados</dd></div><div><dt><ShieldCheck/>Aprovador</dt><dd>PMO responsável</dd></div></dl>
+        <dl><div><dt><Clock/>Revisão</dt><dd>{selected.number===project.phase?"Diária":"Por gate"}</dd></div><div><dt><LockKey/>Regra</dt><dd>100% dos critérios aprovados</dd></div><div><dt><ShieldCheck/>Aprovador</dt><dd>PM responsável</dd></div></dl>
         <button className="primary" disabled={selected.status==="Aprovado"} onClick={approveGate}><FlagCheckered/>{selected.status==="Aprovado"?"Gate concluído":"Aprovar gate e avançar"}</button>
         <footer><ShieldCheck/>A decisão gera histórico auditável no projeto.</footer>
       </aside>

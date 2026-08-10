@@ -8,7 +8,7 @@ import { createProjectDeliveries } from "./ProjectDeliveryMatrix";
 
 const focus = {
   TITANO:{area:"PLC",priority:"Hoje",decision:"Confirmar a janela de testes SAT após a estabilização do Sensor X.",waitedBy:"Implantação e operação do cliente",sla:"Hoje · 18:00"},
-  QUELUZ:{area:"ESP",priority:"Handoff",decision:"Validar a especificação funcional para liberar o fechamento das regras WCS.",waitedBy:"WCS e PMO do Gate GL1",sla:"Hoje · 16:30"},
+  QUELUZ:{area:"ESP",priority:"Handoff",decision:"Validar a especificação funcional para liberar o fechamento das regras WCS.",waitedBy:"WCS e PM do Gate GL1",sla:"Hoje · 16:30"},
   "MARKET PERU":{area:"INF",priority:"Crítico",decision:"Escalar VPN e range IP /24 com o cliente e fixar uma data de aceite.",waitedBy:"WCS, Homologação e cronograma de exportação",sla:"SLA · 07:35"},
   NAVEPARK:{area:"INF",priority:"Crítico",decision:"Aprovar a topologia Oracle KVM ou registrar a alternativa técnica.",waitedBy:"WCS e ambiente HML",sla:"SLA · 11:20"},
   BP:{area:"IMP",priority:"Handoff",decision:"Confirmar a equipe de campo e a prontidão para o Go Live.",waitedBy:"Operação e Pós-vendas",sla:"18 jul"},
@@ -36,12 +36,12 @@ const handoffs = [
 const journeySteps = [
   { id:"login", label:"Login", status:"done", detail:"Experiência inicial já repaginada e validada." },
   { id:"home", label:"Home", status:"done", detail:"Dashboard principal já elevado para a nova régua visual." },
-  { id:"pmo", label:"PMO", status:"active", detail:"Tela atual em fechamento com fila única, briefing e handoffs." },
+  { id:"pm", label:"PM", status:"active", detail:"Tela atual em fechamento com fila única, briefing e handoffs." },
   { id:"infra", label:"Infra", status:"next", detail:"Próxima frente: Mission Control e enforcement operacional." },
   { id:"executive", label:"Executive", status:"next", detail:"Fechamento visual da camada diretiva e narrativa final." }
 ];
 
-export function PmoControlTower({projects,onOpenProject,notify}){
+export function PmControlTower({projects,onOpenProject,notify}){
   const [queue,setQueue]=useState(()=>buildQueue(projects));
   const [filter,setFilter]=useState("Todos");
   const [selectedId,setSelectedId]=useState(()=>buildQueue(projects)[0]?.id);
@@ -72,11 +72,11 @@ export function PmoControlTower({projects,onOpenProject,notify}){
   };
   const followUp=()=>{
     setQueue(current=>current.map(item=>item.id===selected.id?{...item,followed:true}:item));
-    notify(`Cobrança registrada para ${selected.owner}. A Central PMO foi atualizada.`);
+    notify(`Cobrança registrada para ${selected.owner}. A Central PM foi atualizada.`);
   };
   const openEmail=()=>{
     const subject=`InventOps · ${selected.project} · ${selected.area} · decisão pendente`;
-    const body=`Olá, ${selected.owner}.\n\nO PMO registrou uma ação de governança para a entrega abaixo.\n\nProjeto: ${selected.project}\nÁrea: ${selected.department}\nEntrega: ${selected.delivery}\nDecisão necessária: ${selected.decision}\nPrazo/SLA: ${selected.sla}\nEvidência atual: ${selected.evidence}\n\nPor favor, atualize a entrega e registre a evidência no InventOps.`;
+    const body=`Olá, ${selected.owner}.\n\nO PM registrou uma ação de governança para a entrega abaixo.\n\nProjeto: ${selected.project}\nÁrea: ${selected.department}\nEntrega: ${selected.delivery}\nDecisão necessária: ${selected.decision}\nPrazo/SLA: ${selected.sla}\nEvidência atual: ${selected.evidence}\n\nPor favor, atualize a entrega e registre a evidência no InventOps.`;
     window.location.href=`mailto:${selected.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     notify(`Atualização preparada para ${selected.email}.`);
   };
@@ -84,7 +84,7 @@ export function PmoControlTower({projects,onOpenProject,notify}){
     const project=projects.find(item=>item.code===selected.projectCode);
     if(project)onOpenProject(project);
   };
-  const briefing=`📍 INVENTOPS · BRIEFING PMO
+  const briefing=`📍 INVENTOPS · BRIEFING PM
 Atualização da carteira · 18/07/2026
 
 🔴 DECISÕES PRIORITÁRIAS
@@ -104,13 +104,13 @@ Atualização da carteira · 18/07/2026
 Fonte: InventOps · dados rastreáveis por projeto, área e evidência.`;
   const copyBriefing=async()=>{
     await navigator.clipboard.writeText(briefing);
-    notify("Briefing PMO copiado para a área de transferência.");
+    notify("Briefing PM copiado para a área de transferência.");
   };
 
-  return <section className="page pmo-page">
-    <div className="pmo-hero">
-      <div><small>CENTRAL DE GOVERNANÇA · PMO</small><h2>Uma fila única para mover a carteira inteira.</h2><p>O InventOps cruza entregas, dependências e evidências dos projetos e mostra exatamente quem cobrar, por quê e quem está esperando.</p></div>
-      <div className="pmo-hero-side"><span><ShieldCheck/><small>INTEGRIDADE DA CARTEIRA</small><b>100% com responsável</b><em>nenhuma cobrança sem contexto</em></span><button className="primary" onClick={()=>setBriefingOpen(true)}><ClipboardText/>Gerar briefing do dia</button></div>
+  return <section className="page pm-page">
+    <div className="pm-hero">
+      <div><small>CENTRAL DE GOVERNANÇA · PM</small><h2>Uma fila única para mover a carteira inteira.</h2><p>O InventOps cruza entregas, dependências e evidências dos projetos e mostra exatamente quem cobrar, por quê e quem está esperando.</p></div>
+      <div className="pm-hero-side"><span><ShieldCheck/><small>INTEGRIDADE DA CARTEIRA</small><b>100% com responsável</b><em>nenhuma cobrança sem contexto</em></span><button className="primary" onClick={()=>setBriefingOpen(true)}><ClipboardText/>Gerar briefing do dia</button></div>
     </div>
 
     <article className="journey-checklist">
@@ -133,48 +133,48 @@ Fonte: InventOps · dados rastreáveis por projeto, área e evidência.`;
       </div>
     </article>
 
-    <div className="pmo-metrics">
+    <div className="pm-metrics">
       <article><span><FileText/></span><div><small>ENTREGAS MAPEADAS</small><b>{metrics.deliveries}</b><em>{metrics.projects} projetos × 14 áreas</em></div></article>
       <article className="attention"><span><Warning/></span><div><small>COBRANÇAS PRIORITÁRIAS</small><b>{metrics.attention}</b><em>impactam marcos da carteira</em></div></article>
       <article><span><ArrowsLeftRight/></span><div><small>HANDOFFS EM CURSO</small><b>{metrics.handoffs}</b><em>áreas passando o bastão</em></div></article>
       <article><span><UsersThree/></span><div><small>SEM RESPONSÁVEL</small><b>0</b><em>governança íntegra</em></div></article>
     </div>
 
-    <div className="pmo-toolbar">
+    <div className="pm-toolbar">
       <div><Funnel/>{["Todos","Atenção","Handoffs","Planejado","Em validação"].map(option=><button key={option} className={filter===option?"active":""} onClick={()=>chooseFilter(option)}>{option}</button>)}</div>
       <p><span/> Carteira recalculada com as últimas evidências</p>
     </div>
 
-    <div className="pmo-workspace">
-      <article className="pmo-queue">
-        <header><div><small>RITUAL DIÁRIO DO PMO</small><h3>Fila de governança</h3></div><span>{filtered.length} ações visíveis</span></header>
-        <div className="pmo-table">
-          <div className="pmo-table-head"><span>Prioridade / projeto</span><span>Entrega que precisa andar</span><span>Área e responsável</span><span>Prazo / SLA</span><span>Estado</span></div>
+    <div className="pm-workspace">
+      <article className="pm-queue">
+        <header><div><small>RITUAL DIÁRIO DO PM</small><h3>Fila de governança</h3></div><span>{filtered.length} ações visíveis</span></header>
+        <div className="pm-table">
+          <div className="pm-table-head"><span>Prioridade / projeto</span><span>Entrega que precisa andar</span><span>Área e responsável</span><span>Prazo / SLA</span><span>Estado</span></div>
           {filtered.length?filtered.map(item=><button key={item.id} className={`${selected.id===item.id?"selected":""} ${item.followed?"followed":""}`} onClick={()=>setSelectedId(item.id)}>
             <span><em className={item.priority.toLowerCase()}>{item.followed?"Acompanhada":item.priority}</em><b>{item.project}</b><small>{item.projectCode}</small></span>
             <span><b>{item.delivery}</b><small>{item.decision}</small></span>
             <span><i>{item.area}</i><b>{item.owner}</b><small>{item.email}</small></span>
             <span><ClockCountdown/><b>{item.sla}</b><small>Prazo base {item.due}</small></span>
             <span><strong>{item.progress}%</strong><small>{item.status}</small></span>
-          </button>):<div className="pmo-empty"><CheckCircle/><b>Nenhuma ação neste filtro.</b><small>A governança está íntegra para este recorte.</small></div>}
+          </button>):<div className="pm-empty"><CheckCircle/><b>Nenhuma ação neste filtro.</b><small>A governança está íntegra para este recorte.</small></div>}
         </div>
       </article>
 
-      <aside className="pmo-context">
+      <aside className="pm-context">
         <header><span>{selected.area}</span><div><small>{selected.project} · {selected.department}</small><h3>{selected.delivery}</h3></div><em className={selected.priority.toLowerCase()}>{selected.followed?"Acompanhada":selected.priority}</em></header>
-        <section className="pmo-decision"><BellRinging/><div><small>DECISÃO DO PMO</small><p>{selected.decision}</p></div></section>
+        <section className="pm-decision"><BellRinging/><div><small>DECISÃO DO PM</small><p>{selected.decision}</p></div></section>
         <dl>
           <div><dt><Warning/>Dependência real</dt><dd><b>{selected.dependency}</b><small>{selected.projectStatus==="Bloqueado"?"Bloqueio materializado no projeto.":"Monitorada sem impedir frentes paralelas."}</small></dd></div>
           <div><dt><UsersThree/>Quem está esperando</dt><dd><b>{selected.waitedBy}</b><small>O handoff será registrado ao liberar a entrega.</small></dd></div>
           <div><dt><FileText/>Evidência disponível</dt><dd><b>{selected.evidence}</b><small>Progresso atual: {selected.progress}%.</small></dd></div>
           <div><dt><User/>Responsável</dt><dd><b>{selected.owner}</b><small>{selected.email}</small></dd></div>
         </dl>
-        <div className="pmo-context-actions"><button className="ghost" onClick={openProject}><Eye/>Abrir projeto</button><button className="ghost" onClick={openEmail}><Envelope/>Preparar e-mail</button><button className="primary" disabled={selected.followed} onClick={followUp}><CheckCircle/>{selected.followed?"Cobrança registrada":"Registrar cobrança"}</button></div>
+        <div className="pm-context-actions"><button className="ghost" onClick={openProject}><Eye/>Abrir projeto</button><button className="ghost" onClick={openEmail}><Envelope/>Preparar e-mail</button><button className="primary" disabled={selected.followed} onClick={followUp}><CheckCircle/>{selected.followed?"Cobrança registrada":"Registrar cobrança"}</button></div>
         <footer><ShieldCheck/>A ação fica vinculada ao projeto, à área e ao responsável.</footer>
       </aside>
     </div>
 
-    <article className="pmo-handoffs">
+    <article className="pm-handoffs">
       <header><div><small>FLUXO ENTRE ÁREAS</small><h3>Radar de handoffs</h3></div><p>O fim do “alguém sabe se ficou pronto?”</p></header>
       <div>{handoffs.map(item=><section className={item.tone} key={`${item.project}-${item.from}`}>
         <small>{item.project}</small><div><span>{item.from}</span><ArrowRight/><span>{item.to}</span></div><b>{item.label}</b><em>{item.state}</em>
@@ -182,14 +182,14 @@ Fonte: InventOps · dados rastreáveis por projeto, área e evidência.`;
     </article>
 
     {briefingOpen?<div className="modal-layer" onMouseDown={event=>event.target===event.currentTarget&&setBriefingOpen(false)}>
-      <article className="pmo-briefing" role="dialog" aria-modal="true" aria-labelledby="pmo-briefing-title">
-        <header><div><small>COMUNICAÇÃO OPERACIONAL</small><h2 id="pmo-briefing-title">Briefing diário do PMO</h2><p>Revise antes de compartilhar. O InventOps nunca envia automaticamente.</p></div><button onClick={()=>setBriefingOpen(false)} aria-label="Fechar briefing"><XCircle/></button></header>
-        <div className="pmo-briefing-recipient"><Envelope/><span><small>DESTINATÁRIOS SUGERIDOS</small><b>PMO, gestores das áreas e diretoria</b></span><em>revisão obrigatória</em></div>
+      <article className="pm-briefing" role="dialog" aria-modal="true" aria-labelledby="pm-briefing-title">
+        <header><div><small>COMUNICAÇÃO OPERACIONAL</small><h2 id="pm-briefing-title">Briefing diário do PM</h2><p>Revise antes de compartilhar. O InventOps nunca envia automaticamente.</p></div><button onClick={()=>setBriefingOpen(false)} aria-label="Fechar briefing"><XCircle/></button></header>
+        <div className="pm-briefing-recipient"><Envelope/><span><small>DESTINATÁRIOS SUGERIDOS</small><b>PM, gestores das áreas e diretoria</b></span><em>revisão obrigatória</em></div>
         <pre>{briefing}</pre>
-        <div className="pmo-briefing-actions">
+        <div className="pm-briefing-actions">
           <button className="ghost" onClick={copyBriefing}><CopySimple/>Copiar texto</button>
           <a className="whatsapp" href={`https://wa.me/?text=${encodeURIComponent(briefing)}`} target="_blank" rel="noopener noreferrer"><WhatsappLogo/>Abrir WhatsApp</a>
-          <a className="primary" href={`mailto:?subject=${encodeURIComponent("InventOps · Briefing PMO · 18/07/2026")}&body=${encodeURIComponent(briefing)}`}><Envelope/>Abrir Outlook</a>
+          <a className="primary" href={`mailto:?subject=${encodeURIComponent("InventOps · Briefing PM · 18/07/2026")}&body=${encodeURIComponent(briefing)}`}><Envelope/>Abrir Outlook</a>
         </div>
         <footer><ShieldCheck/>O conteúdo permanece vinculado à fonte oficial da carteira.</footer>
       </article>

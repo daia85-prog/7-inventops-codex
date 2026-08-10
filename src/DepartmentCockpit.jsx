@@ -19,7 +19,7 @@ import {
 
 export const AREAS = [
   { code: "COM", nome: "Comercial / Concept", gestor: "André Mota" },
-  { code: "PMO", nome: "PMO", gestor: "Rodrigo Baruco" },
+  { code: "PM", nome: "PM", gestor: "Rodrigo Baruco" },
   { code: "PCP", nome: "PCP", gestor: "Weslley Silva" },
   { code: "CMP", nome: "Compras / Importação", gestor: "Claudia Duarte" },
   { code: "EMC", nome: "Eng. Mecânica", gestor: "Gustavo Pereira" },
@@ -39,7 +39,7 @@ const areaName = (code) => (AREAS.find((a) => a.code === code) || {}).nome || co
 const cockpitJourney = [
   { id: "login", label: "Login", state: "done", detail: "Acesso corporativo e perfis validados." },
   { id: "home", label: "Home", state: "done", detail: "Panorama executivo conectado às áreas reais." },
-  { id: "pmo", label: "PMO", state: "done", detail: "Fila única e briefing operacional publicados." },
+  { id: "pm", label: "PM", state: "done", detail: "Fila única e briefing operacional publicados." },
   { id: "departamentos", label: "Departamentos", state: "active", detail: "Esteiras reais de Implantação e DevOps em operação assistida." },
   { id: "executive", label: "Diretoria", state: "next", detail: "Próxima etapa: leitura consolidada para decisão." },
 ];
@@ -196,7 +196,7 @@ const PILOT_DEPARTMENTS = {
 const FEED_SEED = [
   { t: "09/08 · 16:12", from: "INF", to: "WCS", txt: "Servidor SaaS AWS do TITANO liberado — DEV pode iniciar a instalação" },
   { t: "08/08 · 11:47", from: "CMP", to: "PRD", txt: "Materiais do QUELUZ entregues na produção" },
-  { t: "05/08 · 09:20", from: "COM", to: "PMO", txt: "BR SUPPLY assinado — kickoff autorizado" },
+  { t: "05/08 · 09:20", from: "COM", to: "PM", txt: "BR SUPPLY assinado — kickoff autorizado" },
 ];
 
 const CHAT_SEED = [
@@ -331,7 +331,7 @@ const COCKPIT_I18N = {
     journey: {
       login: { label: "Login", detail: "Acesso corporativo e perfis validados." },
       home: { label: "Home", detail: "Panorama executivo conectado às áreas reais." },
-      pmo: { label: "PMO", detail: "Fila única e briefing operacional publicados." },
+      pm: { label: "PM", detail: "Fila única e briefing operacional publicados." },
       departamentos: { label: "Departamentos", detail: "Esteiras reais de Implantação e DevOps em operação assistida." },
       executive: { label: "Diretoria", detail: "Próxima etapa: leitura consolidada para decisão." },
     },
@@ -421,7 +421,7 @@ const COCKPIT_I18N = {
     journey: {
       login: { label: "Login", detail: "Acceso corporativo y perfiles validados." },
       home: { label: "Home", detail: "Panorama ejecutivo conectado a las áreas reales." },
-      pmo: { label: "PMO", detail: "Fila única y briefing operativo publicados." },
+      pm: { label: "PM", detail: "Fila única y briefing operativo publicados." },
       departamentos: { label: "Departamentos", detail: "Cintas reales de Implantación y DevOps en operación asistida." },
       executive: { label: "Dirección", detail: "Próxima etapa: lectura consolidada para decisión." },
     },
@@ -511,7 +511,7 @@ const COCKPIT_I18N = {
     journey: {
       login: { label: "Login", detail: "Corporate access and validated profiles." },
       home: { label: "Home", detail: "Executive overview connected to the real areas." },
-      pmo: { label: "PMO", detail: "Single queue and operational briefing published." },
+      pm: { label: "PM", detail: "Single queue and operational briefing published." },
       departamentos: { label: "Departments", detail: "Real Deployment and DevOps pipelines in assisted operation." },
       executive: { label: "Leadership", detail: "Next step: consolidated read for decision." },
     },
@@ -547,7 +547,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
     id: `imp-${dept}-${i}`,
     project: d.project,
     title: d.title,
-    to: d.to || "PMO",
+    to: d.to || "PM",
     due: d.due || "a definir",
     status: "andamento",
     origin: "Kickoff Nexus",
@@ -622,7 +622,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
     const text = `${area.nome} · ${activeTrack.label}\n${activeTrack.summary}\n${activeTrack.items.map((item)=>`${item.done ? "✓" : "•"} ${item.label}`).join("\n")}\nHandoff: ${activeTrack.handoff}`;
     try { await navigator.clipboard.writeText(text); } catch {}
     const { stamp } = makeStamp();
-    setFeed((current) => [{ t: stamp, from: dept, to: "PMO", txt: `Resumo operacional copiado: ${activeTrack.label} - ${activeTrack.handoff}` }, ...current]);
+    setFeed((current) => [{ t: stamp, from: dept, to: "PM", txt: `Resumo operacional copiado: ${activeTrack.label} - ${activeTrack.handoff}` }, ...current]);
     notify(`Resumo de ${activeTrack.label} preparado para Daniel/Thomas revisar.`);
   };
 
@@ -644,7 +644,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
       notify(`Cobrança registrada para ${target.from === "Cliente" ? "cliente" : areaName(target.from)} sobre ${activeTrack.label}.`);
       return;
     }
-    setFeed((current) => [{ t: stamp, from: dept, to: "PMO", txt: `Cobrança interna em ${activeTrack.label}: ${pending[0] || "sem pendência aberta"}` }, ...current]);
+    setFeed((current) => [{ t: stamp, from: dept, to: "PM", txt: `Cobrança interna em ${activeTrack.label}: ${pending[0] || "sem pendência aberta"}` }, ...current]);
     setChatLog((current) => [{ t: stamp, author: pilotConfig?.focal || area.gestor, role: area.nome, txt: `Registrei cobrança para destravar ${activeTrack.label}: ${pending[0] || "sem pendência aberta"}.` }, ...current]);
     notify(`Cobrança registrada para destravar ${activeTrack.label}: ${pending[0] || "sem pendência aberta"}.`);
   };
@@ -704,7 +704,7 @@ export function DepartmentCockpit({ notify, imported = [], initialDept = "IMP", 
     const reason = pending[0] || "validacao manual solicitada antes do aceite final";
     setHandoffReviewMap((current) => ({ ...current, [activeTrack.id]: { status: "adjustment", stamp, reason } }));
     setChatLog((current) => [{ t: stamp, author: pilotConfig?.focal || area.gestor, role: area.nome, txt: `Solicitei ajuste antes do handoff de ${activeTrack.label}: ${reason}.` }, ...current]);
-    setFeed((current) => [{ t: stamp, from: dept, to: "PMO", txt: `Ajuste solicitado antes do aceite: ${activeTrack.label} - ${reason}` }, ...current]);
+    setFeed((current) => [{ t: stamp, from: dept, to: "PM", txt: `Ajuste solicitado antes do aceite: ${activeTrack.label} - ${reason}` }, ...current]);
     notify(`Ajuste registrado para ${activeTrack.label}. O handoff ainda não foi aceito.`);
   };
 

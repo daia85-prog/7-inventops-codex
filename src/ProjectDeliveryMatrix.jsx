@@ -13,7 +13,7 @@ import {
 
 const directory = {
   COM: ["Comercial / Concept", "André Mota"],
-  PMO: ["PMO / Governança", "Rodrigo Baruco"],
+  PM: ["PM / Governança", "Rodrigo Baruco"],
   PCP: ["Planejamento e Controle", "Weslley Silva"],
   CMP: ["Compras / Importação", "Claudia Duarte"],
   EMC: ["Engenharia Mecânica", "Gustavo Pereira"],
@@ -29,8 +29,8 @@ const directory = {
 };
 
 const template = [
-  ["COM", "Escopo comercial validado", "Concluída", "100%", "12 jul", "Proposta técnica aprovada", "—", "PMO recebe premissas contratuais"],
-  ["PMO", "Baseline e governança do projeto", "Em andamento", "82%", "15 jul", "Termo de abertura REV3", "Escopo comercial validado", "PCP consolida o plano mestre"],
+  ["COM", "Escopo comercial validado", "Concluída", "100%", "12 jul", "Proposta técnica aprovada", "—", "PM recebe premissas contratuais"],
+  ["PM", "Baseline e governança do projeto", "Em andamento", "82%", "15 jul", "Termo de abertura REV3", "Escopo comercial validado", "PCP consolida o plano mestre"],
   ["PCP", "Plano mestre integrado", "Em andamento", "68%", "18 jul", "Cronograma com 7 fases", "Baseline aprovada", "Compras e engenharias trabalham em paralelo"],
   ["CMP", "Itens críticos contratados", "Em risco", "54%", "22 jul", "8 de 12 pedidos emitidos", "Lista crítica de materiais", "Produção recebe os componentes"],
   ["EMC", "Desenhos mecânicos liberados", "Em paralelo", "76%", "19 jul", "Pacote CAD REV4", "Premissas técnicas", "Produção inicia lotes liberados"],
@@ -269,7 +269,7 @@ export function ProjectDeliveryMatrix({ project, onUpdate, notify }) {
               <dt><LinkSimple />Dependência real</dt>
               <dd>
                 <b>{selected.dependency}</b>
-                <small>{selected.status === "Em paralelo" ? "Não impede outras frentes de avançarem." : "Monitorada pelo PMO."}</small>
+                <small>{selected.status === "Em paralelo" ? "Não impede outras frentes de avançarem." : "Monitorada pelo PM."}</small>
               </dd>
             </div>
             <div>

@@ -93,7 +93,7 @@ const defaultAudit = project => [
   {
     id: 4,
     time: "10 jul · 17:15",
-    actor: "PMO",
+    actor: "PM",
     action: "Gerou Status Report",
     detail: "Comunicação preparada para diretoria",
     type: "comunicação",
@@ -388,7 +388,7 @@ export function ProjectControlModal({ project, onClose, onUpdate, onOpenFull, no
                     <div><dt>Cliente</dt><dd>{project.client}</dd></div>
                     <div><dt>Localização</dt><dd>{project.location}</dd></div>
                     <div><dt>Responsável</dt><dd>{project.owner}</dd></div>
-                    <div><dt>PMO</dt><dd>{project.pmo}</dd></div>
+                    <div><dt>PM</dt><dd>{project.pm}</dd></div>
                     <div><dt>Próximo marco</dt><dd>{project.next} · {project.date}</dd></div>
                     <div><dt>Próxima ação</dt><dd>{project.nextAction}</dd></div>
                   </dl>
@@ -482,7 +482,7 @@ export function ProjectControlModal({ project, onClose, onUpdate, onOpenFull, no
                 </div>
                 <div className="pcm-comms">
                   <span><b>11 jul · 17:15</b><small>Diretoria · WhatsApp</small><em>Preparado</em></span>
-                  <span><b>10 jul · 09:20</b><small>PMO · E-mail HTML</small><em>Registrado</em></span>
+                  <span><b>10 jul · 09:20</b><small>PM · E-mail HTML</small><em>Registrado</em></span>
                   <span><b>08 jul · 18:04</b><small>Equipe técnica · E-mail</small><em>Registrado</em></span>
                 </div>
                 <button className="ghost" onClick={() => notify("Histórico de comunicações exportado com sucesso.")}>

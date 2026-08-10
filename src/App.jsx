@@ -20,7 +20,7 @@ import {
 } from "./FoundationModules";
 import { ProjectControlModal } from "./ProjectControlModal";
 import { DepartmentCockpit } from "./DepartmentCockpit";
-import { PmoControlTower } from "./PmoControlTower";
+import { PmControlTower } from "./PmControlTower";
 
 const assetPath = (name) => `${import.meta.env.BASE_URL}assets/${name}`;
 
@@ -46,12 +46,12 @@ const telemetryData = [
 const phaseNames = ["Kickoff","Levantamento","Provisionamento","Implantação","Homologação","Go Live","Encerramento"];
 
 const portfolioData = [
-  {name:"TITANO",code:"I25.8049",client:"Stellantis",location:"Betim · MG",owner:"Daiana Costa",pmo:"Alex",status:"Em andamento",risk:"Médio",phase:4,progress:73,next:"Go Live operacional",date:"20 jul 2026",health:78,blocker:"Sem bloqueio crítico. Servidor SaaS AWS em provisionamento.",nextAction:"Agendar VPN site-to-site e consolidar evidências de segurança.",milestones:["Servidor SaaS aprovado · 23/06","Go Live operacional · 20/07","OAuth2 · D+20 após Go Live"]},
-  {name:"QUELUZ",code:"I25.3505",client:"D. Müller",location:"Itajaí · SC",owner:"Daiana Costa",pmo:"Fabio",status:"Em andamento",risk:"Médio",phase:4,progress:68,next:"GL1 · Conferência",date:"30 jul 2026",health:72,blocker:"SSH porta 9844 e VPN do time de Dados aguardando confirmação do cliente.",nextAction:"Garantir ambiente HML liberado antes do GL1.",milestones:["GL1 Conferência · 30/07","GL2 Sorter · 30/09","GL3 IA · 30/11","GL4 PBL · 25/01/27"]},
-  {name:"MARKET PERU",code:"I25.115",client:"Tottus / Falabella",location:"Lima · Peru",owner:"Daiana Costa",pmo:"Giovanni",status:"Bloqueado",risk:"Alto",phase:3,progress:42,next:"Infra de testes",date:"28 jul 2026",health:41,blocker:"VPN site-to-site, range IP /24 e emulador WCS ainda pendentes.",nextAction:"Escalar definições de rede e homologar arquitetura HA/DR.",milestones:["Servidores IA entregues · 05/06","Infra de testes · 28/07","Equipamentos export · out/26"]},
-  {name:"NAVEPARK",code:"I25.4066",client:"Vedamotors",location:"Navegantes · SC",owner:"Daiana Costa",pmo:"Anderson",status:"Bloqueado",risk:"Alto",phase:3,progress:51,next:"Ambiente HML",date:"14 ago 2026",health:48,blocker:"VMs Oracle KVM e desenho de arquitetura de rede pendentes.",nextAction:"Cobrar retorno do cliente e fechar topologia das VMs.",milestones:["VPN IPSec recebida","Ambiente HML · 14/08","Go Live · 07/09"]},
-  {name:"BP",code:"I24.215",client:"Baspan",location:"São Paulo · SP",owner:"Daiana Costa",pmo:"Giovanni",status:"Em andamento",risk:"Baixo",phase:5,progress:84,next:"Go Live",date:"03 ago 2026",health:86,blocker:"Sem bloqueio crítico; acompanhar disponibilidade do fornecedor PTL.",nextAction:"Concluir homologação e confirmar equipe de campo.",milestones:["REV14 aprovada · 01/06","Homologação · 25/07","Go Live · 03/08"]},
-  {name:"MARKET CHILE",code:"I24.222",client:"Falabella / Tottus",location:"La Farfana · Chile",owner:"Daiana Costa",pmo:"Giovanni",status:"Em andamento",risk:"Baixo",phase:2,progress:36,next:"1º embarque",date:"set 2026",health:81,blocker:"Sem bloqueio; diagrama de rede e VPN em configuração.",nextAction:"Fechar diagrama de rede e concluir VPN site-to-site.",milestones:["Especificação enviada · 24/06","1º embarque · set/26","Go Live · jan/27"]},
+  {name:"TITANO",code:"I25.8049",client:"Stellantis",location:"Betim · MG",owner:"Daiana Costa",pm:"Alex",status:"Em andamento",risk:"Médio",phase:4,progress:73,next:"Go Live operacional",date:"20 jul 2026",health:78,blocker:"Sem bloqueio crítico. Servidor SaaS AWS em provisionamento.",nextAction:"Agendar VPN site-to-site e consolidar evidências de segurança.",milestones:["Servidor SaaS aprovado · 23/06","Go Live operacional · 20/07","OAuth2 · D+20 após Go Live"]},
+  {name:"QUELUZ",code:"I25.3505",client:"D. Müller",location:"Itajaí · SC",owner:"Daiana Costa",pm:"Fabio",status:"Em andamento",risk:"Médio",phase:4,progress:68,next:"GL1 · Conferência",date:"30 jul 2026",health:72,blocker:"SSH porta 9844 e VPN do time de Dados aguardando confirmação do cliente.",nextAction:"Garantir ambiente HML liberado antes do GL1.",milestones:["GL1 Conferência · 30/07","GL2 Sorter · 30/09","GL3 IA · 30/11","GL4 PBL · 25/01/27"]},
+  {name:"MARKET PERU",code:"I25.115",client:"Tottus / Falabella",location:"Lima · Peru",owner:"Daiana Costa",pm:"Giovanni",status:"Bloqueado",risk:"Alto",phase:3,progress:42,next:"Infra de testes",date:"28 jul 2026",health:41,blocker:"VPN site-to-site, range IP /24 e emulador WCS ainda pendentes.",nextAction:"Escalar definições de rede e homologar arquitetura HA/DR.",milestones:["Servidores IA entregues · 05/06","Infra de testes · 28/07","Equipamentos export · out/26"]},
+  {name:"NAVEPARK",code:"I25.4066",client:"Vedamotors",location:"Navegantes · SC",owner:"Daiana Costa",pm:"Anderson",status:"Bloqueado",risk:"Alto",phase:3,progress:51,next:"Ambiente HML",date:"14 ago 2026",health:48,blocker:"VMs Oracle KVM e desenho de arquitetura de rede pendentes.",nextAction:"Cobrar retorno do cliente e fechar topologia das VMs.",milestones:["VPN IPSec recebida","Ambiente HML · 14/08","Go Live · 07/09"]},
+  {name:"BP",code:"I24.215",client:"Baspan",location:"São Paulo · SP",owner:"Daiana Costa",pm:"Giovanni",status:"Em andamento",risk:"Baixo",phase:5,progress:84,next:"Go Live",date:"03 ago 2026",health:86,blocker:"Sem bloqueio crítico; acompanhar disponibilidade do fornecedor PTL.",nextAction:"Concluir homologação e confirmar equipe de campo.",milestones:["REV14 aprovada · 01/06","Homologação · 25/07","Go Live · 03/08"]},
+  {name:"MARKET CHILE",code:"I24.222",client:"Falabella / Tottus",location:"La Farfana · Chile",owner:"Daiana Costa",pm:"Giovanni",status:"Em andamento",risk:"Baixo",phase:2,progress:36,next:"1º embarque",date:"set 2026",health:81,blocker:"Sem bloqueio; diagrama de rede e VPN em configuração.",nextAction:"Fechar diagrama de rede e concluir VPN site-to-site.",milestones:["Especificação enviada · 24/06","1º embarque · set/26","Go Live · jan/27"]},
 ];
 
 const baseActivities = [
@@ -69,7 +69,7 @@ const initialAlert = {
 };
 
 /* E1.4 — contrato Nexus: seção do kickoff → departamento dono (campos 'tbd' viram pendências) */
-const SEC2DEPT = { ge:"PMO", la:"EMC", cu:"WCS", in:"WCS", os:"WCS", pb:"EMC", ct:"EMC", fc:"EMC", pk:"EMC", so:"EMC", pt:"EMC", es:"WCS", et:"ESP", if:"INF" };
+const SEC2DEPT = { ge:"PM", la:"EMC", cu:"WCS", in:"WCS", os:"WCS", pb:"EMC", ct:"EMC", fc:"EMC", pk:"EMC", so:"EMC", pt:"EMC", es:"WCS", et:"ESP", if:"INF" };
 const IF_LABELS = {
   if_resp_infra:"Definir responsável de infra do projeto", if_resp_srv:"Servidor: cliente × Invent",
   if_ambiente:"Ambiente: nuvem × on-premise", if_s:"Especificação técnica de servidores",
@@ -87,7 +87,7 @@ const navGroups = [
   ]},
   { label: "OPERAÇÃO", items: [
     { id: "portfolio", label: "Projetos", icon: FolderOpen, mobile: true },
-    { id: "pmo", label: "Central PMO", icon: BellRinging, mobile: true },
+    { id: "pm", label: "Central PM", icon: BellRinging, mobile: true },
     { id: "cockpit", label: "Operação Assistida", icon: HandWaving, mobile: true },
     { id: "areas", label: "Áreas Técnicas", icon: UsersThree },
     { id: "alerts", label: "Smart Triage", icon: Warning },
@@ -114,7 +114,7 @@ const pageMeta = {
   analytics: ["Análise / BI", "Indicadores avançados e engajamento técnico."],
   executive: ["Relatório Executivo", "O portfólio consolidado em uma página."],
   portfolio: ["Controle de Projetos", "Planeje, acompanhe e cobre entregas em uma visão operacional."],
-  pmo: ["Central PMO", "A carteira inteira organizada por decisões, dependências e handoffs."],
+  pm: ["Central PM", "A carteira inteira organizada por decisões, dependências e handoffs."],
   cockpit: ["Operação Assistida", "A esteira real de cada área: entregas, esperas e handoffs com carimbo de hora."],
   project: ["Central do Projeto", "Fases, atividades, marcos, riscos e evidências em um único lugar."],
   simulator: ["Simulador de Impacto", "Antecipe riscos. Decida com confiança."],
@@ -147,7 +147,7 @@ const productJourney = [
   { id: "home", label: "Home", helper: "Entrada executiva" },
   { id: "portfolio", label: "Projetos", helper: "Carteira ativa" },
   { id: "project", label: "Projeto", helper: "Controle ponta a ponta" },
-  { id: "pmo", label: "PMO", helper: "Cobrança e priorização" },
+  { id: "pm", label: "PM", helper: "Cobrança e priorização" },
   { id: "executive", label: "Executivo", helper: "Síntese para decisão" },
 ];
 
@@ -156,14 +156,14 @@ const PRODUCT_JOURNEY_I18N = {
     home: { label: "Home", helper: "Entrada ejecutiva" },
     portfolio: { label: "Proyectos", helper: "Cartera activa" },
     project: { label: "Proyecto", helper: "Control de punta a punta" },
-    pmo: { label: "PMO", helper: "Reclamos y priorización" },
+    pm: { label: "PM", helper: "Reclamos y priorización" },
     executive: { label: "Ejecutivo", helper: "Síntesis para decisión" },
   },
   en: {
     home: { label: "Home", helper: "Executive entry point" },
     portfolio: { label: "Projects", helper: "Active portfolio" },
     project: { label: "Project", helper: "End-to-end control" },
-    pmo: { label: "PMO", helper: "Follow-up and prioritization" },
+    pm: { label: "PM", helper: "Follow-up and prioritization" },
     executive: { label: "Executive", helper: "Synthesis for decision" },
   },
 };
@@ -171,7 +171,7 @@ const PRODUCT_JOURNEY_I18N = {
 const initialAlerts = [
   initialAlert,
   {id:"P1-2026-0711-04",project:"MARKET PERU",priority:"P1",title:"Conectividade sem confirmação do cliente",description:"VPN site-to-site e range IP /24 ainda sem data firme.",owner:"Ivan",source:"Governança",detected:"10/07/2026 15:10:00",status:"Em ação"},
-  {id:"P1-2026-0711-05",project:"NAVEPARK",priority:"P1",title:"Ambiente HML em risco",description:"Topologia das VMs Oracle KVM aguarda decisão técnica.",owner:"Daiana Costa",source:"PMO",detected:"09/07/2026 09:30:00",status:"Em triagem"},
+  {id:"P1-2026-0711-05",project:"NAVEPARK",priority:"P1",title:"Ambiente HML em risco",description:"Topologia das VMs Oracle KVM aguarda decisão técnica.",owner:"Daiana Costa",source:"PM",detected:"09/07/2026 09:30:00",status:"Em triagem"},
   {id:"P2-2026-0711-08",project:"QUELUZ",priority:"P2",title:"Evidências incompletas para GL1",description:"Dez testes de comissionamento ainda aguardam aprovação.",owner:"Matheus",source:"Evidências",detected:"11/07/2026 08:12:00",status:"Em triagem"}
 ];
 
@@ -232,7 +232,7 @@ const ROUTE_ALIASES = {
   "thomas": { active: "cockpit", dept: "ESP" },
   "operacao-infra": { active: "cockpit", dept: "INF" },
   "infra": { active: "cockpit", dept: "INF" },
-  pmo: { active: "pmo" },
+  pm: { active: "pm" },
   projetos: { active: "portfolio" },
   evidencias: { active: "evidence" },
   roadmap: { active: "presentation" },
@@ -463,16 +463,16 @@ function PortfolioPage({projects,setProjects,setActive,setSelectedProject,setPro
           if(typeof fields!=="object"||!fields)continue;
           for(const [f,val] of Object.entries(fields)){
             if(String(val).trim().toLowerCase()==="tbd"){
-              const dept=SEC2DEPT[k]||"PMO";
+              const dept=SEC2DEPT[k]||"PM";
               const secTitle=(data.progress[k]&&data.progress[k].title)||k;
-              demands.push({dept,project:name.toUpperCase(),title:IF_LABELS[f]||`${secTitle} — definição pendente (${f})`,to:"PMO",due:"kickoff"});
+              demands.push({dept,project:name.toUpperCase(),title:IF_LABELS[f]||`${secTitle} — definição pendente (${f})`,to:"PM",due:"kickoff"});
             }
           }
         }
         const byDept={};demands.forEach(d=>{byDept[d.dept]=(byDept[d.dept]||0)+1});
         const golive=((data.sections.ge&&data.sections.ge.g_golive)||"").trim()||"a definir";
         setPreview({name,code,golive,totalPct:data.meta.total_pct,secs,demands,byDept,
-          project:{name:name.toUpperCase(),code,client:((data.sections.ge&&data.sections.ge.g5)||"Cliente a definir").trim(),location:((data.sections.ge&&data.sections.ge.g3)||"Local a definir").trim().replace(/[-·]\s*$/,""),owner:"Daiana Costa",pmo:"A definir",status:"Em andamento",risk:"Baixo",phase:1,progress:0,next:"Kickoff técnico",date:golive,health:75,blocker:"Sem bloqueio registrado.",nextAction:"Distribuir as pendências do kickoff pelas áreas responsáveis.",milestones:["Kickoff importado do Nexus · hoje",`Go Live · ${golive}`]}});
+          project:{name:name.toUpperCase(),code,client:((data.sections.ge&&data.sections.ge.g5)||"Cliente a definir").trim(),location:((data.sections.ge&&data.sections.ge.g3)||"Local a definir").trim().replace(/[-·]\s*$/,""),owner:"Daiana Costa",pm:"A definir",status:"Em andamento",risk:"Baixo",phase:1,progress:0,next:"Kickoff técnico",date:golive,health:75,blocker:"Sem bloqueio registrado.",nextAction:"Distribuir as pendências do kickoff pelas áreas responsáveis.",milestones:["Kickoff importado do Nexus · hoje",`Go Live · ${golive}`]}});
       }catch{notify("Arquivo inválido — esperado um Nexus_Kickoff_*.json gerado pelo Nexus.")}
     };
     reader.readAsText(file);
@@ -486,7 +486,7 @@ function PortfolioPage({projects,setProjects,setActive,setSelectedProject,setPro
   useEffect(()=>{if(!creating)return;const close=event=>event.key==="Escape"&&setCreating(false);document.addEventListener("keydown",close);return()=>document.removeEventListener("keydown",close)},[creating]);
   const shown=projects.filter(p=>(filter==="Todos"||p.status===filter||p.risk===filter)&&`${p.name} ${p.client} ${p.code}`.toLowerCase().includes(search.toLowerCase()));
   const openProject=(project)=>{setSelectedProject(project);setProjectModalOpen(true)};
-  const createProject=(event)=>{event.preventDefault();const name=draft.name.trim().toUpperCase();if(!name)return;const project={name,code:`I26.${String(projects.length+4100)}`,client:draft.client.trim()||"Cliente a definir",location:"Local a definir",owner:draft.owner,pmo:"A definir",status:"Em andamento",risk:"Baixo",phase:1,progress:0,next:"Kickoff",date:"A definir",health:75,blocker:"Sem bloqueio registrado.",nextAction:"Definir escopo, responsáveis e data do kickoff.",milestones:["Kickoff · A definir","Baseline · A definir","Go Live · A definir"]};setProjects([project,...projects]);setCreating(false);setDraft({name:"",client:"",owner:"Daiana Costa"});notify(`Projeto ${name} criado no portfólio.`)};
+  const createProject=(event)=>{event.preventDefault();const name=draft.name.trim().toUpperCase();if(!name)return;const project={name,code:`I26.${String(projects.length+4100)}`,client:draft.client.trim()||"Cliente a definir",location:"Local a definir",owner:draft.owner,pm:"A definir",status:"Em andamento",risk:"Baixo",phase:1,progress:0,next:"Kickoff",date:"A definir",health:75,blocker:"Sem bloqueio registrado.",nextAction:"Definir escopo, responsáveis e data do kickoff.",milestones:["Kickoff · A definir","Baseline · A definir","Go Live · A definir"]};setProjects([project,...projects]);setCreating(false);setDraft({name:"",client:"",owner:"Daiana Costa"});notify(`Projeto ${name} criado no portfólio.`)};
   return <section className="page portfolio-page">
     <div className="portfolio-kpis">
       <article><FolderOpen/><span><small>CARTEIRA OPERACIONAL</small><b>{projects.length} projetos</b><em>Base operacional priorizada</em></span></article>
@@ -501,7 +501,7 @@ function PortfolioPage({projects,setProjects,setActive,setSelectedProject,setPro
       {shown.map(p=><button key={p.name} className="portfolio-row" onClick={()=>openProject(p)} aria-label={`Abrir projeto ${p.name}`}>
         <span className="project-identity"><b>{p.name}</b><small>{p.code} · {p.client}</small></span><span><StatusBadge status={p.status}/><small>{phaseNames[p.phase-1]}</small></span>
         <span className="portfolio-progress evidence-tooltip" tabIndex="0" data-tooltip={`${p.progress}% = 35% entregáveis + 25% checklists + 20% commits válidos + 20% testes aprovados.`}><i><em style={{width:`${p.progress}%`}}/></i><b>{p.progress}%</b></span><RiskBadge risk={p.risk}/>
-        <span><b>{p.next}</b><small>{p.date}</small></span><span><b>{p.owner}</b><small>PMO {p.pmo}</small></span><ArrowRight/>
+        <span><b>{p.next}</b><small>{p.date}</small></span><span><b>{p.owner}</b><small>PM {p.pm}</small></span><ArrowRight/>
       </button>)}
       {!shown.length?<div className="empty"><MagnifyingGlass size={32}/>Nenhum projeto encontrado.</div>:null}
     </div>:null}
@@ -527,7 +527,7 @@ function ProjectWorkspace({project,setActive,notify}) {
   const hasBlocker=!project.blocker.startsWith("Sem bloqueio");
   return <section className="page project-page">
     <div className="project-top-actions"><button className="back-button" onClick={()=>setActive("portfolio")}><ArrowLeft/>Voltar ao portfólio</button><button className="ghost" onClick={()=>setReportOpen(true)}><ClipboardText/>Gerar Status Report</button></div>
-    <div className="project-head"><div className="project-symbol">{project.name.slice(0,2)}</div><div><div className="project-title-line"><h2>{project.name}</h2><StatusBadge status={project.status}/><RiskBadge risk={project.risk}/></div><p>{project.code} · {project.client} · <MapPin/>{project.location}</p></div><div className="project-owner"><span className="avatar">D</span><span><small>RESPONSÁVEL</small><b>{project.owner}</b><em>PMO {project.pmo}</em></span></div></div>
+    <div className="project-head"><div className="project-symbol">{project.name.slice(0,2)}</div><div><div className="project-title-line"><h2>{project.name}</h2><StatusBadge status={project.status}/><RiskBadge risk={project.risk}/></div><p>{project.code} · {project.client} · <MapPin/>{project.location}</p></div><div className="project-owner"><span className="avatar">D</span><span><small>RESPONSÁVEL</small><b>{project.owner}</b><em>PM {project.pm}</em></span></div></div>
     <div className="project-scorebar"><span><small>SAÚDE DO PROJETO</small><b>{project.health}/100</b><i><em style={{width:`${project.health}%`}}/></i></span><span className="evidence-tooltip" tabIndex="0" data-tooltip="73% calculado por entregáveis aceitos, 4/5 checklists, 12 commits válidos e 18/20 testes aprovados."><small>PROGRESSO COM EVIDÊNCIA</small><b>{project.progress}%</b><i><em style={{width:`${project.progress}%`}}/></i></span><span><small>PRÓXIMO MARCO</small><b>{project.next}</b><em>{project.date}</em></span><span><small>PLANO DE TRABALHO</small><b>{done}/{activities.length}</b><em>atividades concluídas</em></span></div>
     <div className="project-tabs" role="tablist">{[["overview","Visão geral"],["activities","Plano de trabalho"],["risks","Marcos & riscos"]].map(([id,label])=><button role="tab" aria-selected={tab===id} className={tab===id?"active":""} key={id} onClick={()=>setTab(id)}>{label}</button>)}</div>
     {tab==="overview"?<div className="project-overview">
@@ -634,8 +634,8 @@ export function App() {
   if(!authenticated)return <LoginScreen onLogin={login}/>;
   const allowed={
     Admin:"*",
-    Diretoria:["home","management","analytics","executive","portfolio","project","pmo","cockpit","areas","simulator","decision","evidence","presentation","lifecycle"],
-    Gestor:["home","action","management","portfolio","project","pmo","cockpit","areas","alerts","raid","evidence","presentation","lifecycle"],
+    Diretoria:["home","management","analytics","executive","portfolio","project","pm","cockpit","areas","simulator","decision","evidence","presentation","lifecycle"],
+    Gestor:["home","action","management","portfolio","project","pm","cockpit","areas","alerts","raid","evidence","presentation","lifecycle"],
     Analista:["home","action","portfolio","project","cockpit","areas","alerts","commissioning","evidence","presentation"]
   };
   const canAccess=allowed[role]==="*"||allowed[role].includes(active);
@@ -644,7 +644,7 @@ export function App() {
     action:<ActionCenter notify={notify}/>,management:<ManagementPage/>,analytics:<AnalyticsPage/>,
     executive:<ExecutiveOnePager projects={projects} notify={notify}/>,
     portfolio:<PortfolioPage projects={projects} setProjects={setProjects} setActive={setActive} setSelectedProject={setSelectedProject} setProjectModalOpen={setProjectModalOpen} setImportedDemands={setImportedDemands} notify={notify}/>,
-    pmo:<PmoControlTower projects={projects} onOpenProject={project=>{setSelectedProject(project);setProjectModalOpen(true)}} notify={notify}/>,
+    pm:<PmControlTower projects={projects} onOpenProject={project=>{setSelectedProject(project);setProjectModalOpen(true)}} notify={notify}/>,
     project:<ProjectWorkspace key={selectedProject.name} project={selectedProject} setActive={setActive} notify={notify}/>,
     cockpit:<DepartmentCockpit key={cockpitDept} notify={notify} imported={importedDemands} initialDept={cockpitDept} currentUser={currentUser} lang={lang}/>,
     areas:<AreasPage/>,raid:<RaidPage/>,admin:<AdminGovernance role={role} setRole={setRole} theme={theme} setTheme={setTheme} notify={notify} onOpenPilotUser={openPilotContext}/>,

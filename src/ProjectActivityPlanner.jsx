@@ -15,7 +15,7 @@ import { createProjectDeliveries } from "./ProjectDeliveryMatrix";
 
 const taskCatalog = {
   COM: ["Confirmar escopo contratado", "Registrar premissas e exclusões", "Realizar handoff comercial"],
-  PMO: ["Publicar baseline do projeto", "Validar responsáveis das áreas", "Conduzir gate de governança"],
+  PM: ["Publicar baseline do projeto", "Validar responsáveis das áreas", "Conduzir gate de governança"],
   PCP: ["Consolidar cronograma integrado", "Nivelar capacidade das equipes", "Publicar janela dos marcos"],
   CMP: ["Emitir pedidos dos itens críticos", "Confirmar datas com fornecedores", "Atualizar mapa de recebimento"],
   EMC: ["Liberar desenhos por lote", "Validar lista de materiais", "Aprovar revisão mecânica"],
