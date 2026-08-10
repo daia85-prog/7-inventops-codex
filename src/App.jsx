@@ -641,19 +641,19 @@ export function App() {
   const canAccess=allowed[role]==="*"||allowed[role].includes(active);
   const pages={
     home:<ExecutiveDashboard projects={projects} setActive={setActive} openCockpitDept={openCockpitDept} currentUser={currentUser} lang={lang}/>,
-    action:<ActionCenter notify={notify}/>,management:<ManagementPage/>,analytics:<AnalyticsPage/>,
+    action:<ActionCenter notify={notify} lang={lang}/>,management:<ManagementPage lang={lang}/>,analytics:<AnalyticsPage lang={lang}/>,
     executive:<ExecutiveOnePager projects={projects} notify={notify}/>,
     portfolio:<PortfolioPage projects={projects} setProjects={setProjects} setActive={setActive} setSelectedProject={setSelectedProject} setProjectModalOpen={setProjectModalOpen} setImportedDemands={setImportedDemands} notify={notify}/>,
     pm:<PmControlTower projects={projects} onOpenProject={project=>{setSelectedProject(project);setProjectModalOpen(true)}} notify={notify}/>,
     project:<ProjectWorkspace key={selectedProject.name} project={selectedProject} setActive={setActive} notify={notify}/>,
     cockpit:<DepartmentCockpit key={cockpitDept} notify={notify} imported={importedDemands} initialDept={cockpitDept} currentUser={currentUser} lang={lang}/>,
-    areas:<AreasPage/>,raid:<RaidPage/>,admin:<AdminGovernance role={role} setRole={setRole} theme={theme} setTheme={setTheme} notify={notify} onOpenPilotUser={openPilotContext}/>,
+    areas:<AreasPage lang={lang}/>,raid:<RaidPage lang={lang}/>,admin:<AdminGovernance role={role} setRole={setRole} theme={theme} setTheme={setTheme} notify={notify} onOpenPilotUser={openPilotContext} lang={lang}/>,
     presentation:<PresentationPage notify={notify}/>,lifecycle:<LifecyclePage/>,simulator:<Simulator scenario={scenario} setScenario={setScenario} notify={notify}/>,
     commissioning:<Commissioning fault={fault} setFault={setFault} alerts={alerts} setAlerts={setAlerts} setActive={setActive} notify={notify}/>,
     decision:<DecisionRoom setActive={setActive} notify={notify}/>,alerts:<AlertsPage alerts={alerts} setAlerts={setAlerts}/>,
     evidence:<EvidencePage/>,settings:<SettingsPage/>
   };
-  const page=canAccess?pages[active]:<AccessDenied setActive={setActive}/>;
+  const page=canAccess?pages[active]:<AccessDenied setActive={setActive} lang={lang}/>;
   return <div className="app-shell" data-theme={theme}><SidebarEnhanced active={active} setActive={setActive} alertCount={alerts.filter(a=>a.status!=="Resolvido").length} notify={notify} role={role} currentUser={currentUser} onLogout={logout}/><main className="workspace"><Topbar active={active} role={role} currentUser={currentUser} onLogout={logout} notify={notify} lang={lang} setLang={setLang}/><ProductJourneyRail active={active} setActive={setActive} lang={lang} />{page}</main>{projectModalOpen&&selectedProject?<ProjectControlModal project={selectedProject} onClose={()=>setProjectModalOpen(false)} onUpdate={updateProject} onOpenFull={openFullProject} notify={notify}/>:null}{message?<div className="toast" role="status"><CheckCircle weight="fill"/>{message}</div>:null}</div>;
 }
 
