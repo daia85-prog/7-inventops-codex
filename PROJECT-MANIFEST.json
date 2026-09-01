@@ -3,7 +3,7 @@
   "purpose": "Preservar a linha independente Codex do InventOps, com foco em UX, qualidade textual e fluxo operacional.",
   "canonical_root": "Codex/Code/Conta_Invent/7 - InventOps Codex",
   "maintainer": "Daiana Costa",
-  "status": "paused-retomable",
+  "status": "paused",
   "repository": "https://github.com/daia85-prog/7-inventops-codex",
   "environments": [
     "OneDrive - INVENT",
