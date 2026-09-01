@@ -2,7 +2,7 @@
 
 | Ordem | Ação executável | Critério de pronto | Responsável | Risco |
 |---|---|---|---|---|
-| 1 | Catalogar verificadores de UX, texto e fluxo que podem ser reutilizados sem importar a linha inteira. | cada capacidade tem origem, limite e destino candidato registrados | próxima sessão do projeto | médio |
+| 1 | Atualizar Vite/PostCSS/nanoid com regressão e catalogar os verificadores reutilizáveis de UX, texto e fluxo. | auditoria sem os avisos conhecidos e capacidades têm origem/limite registrados | próxima sessão do projeto | alto |
 
 ## Regra
 

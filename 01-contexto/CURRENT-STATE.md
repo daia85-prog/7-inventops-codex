@@ -32,3 +32,9 @@
 - Fonte: Git local, README e instruções do projeto
 - Resultado: contexto mínimo criado sobre o commit `68c9aff`
 - Limitação: inspeção estrutural e documental
+
+## Validação de 01/09/2026
+
+- `check:quality` e build passaram; a publicação corresponde aos assets atuais.
+- O fluxo local de demonstração Microsoft chegou ao Dashboard Executivo sem erro de página.
+- A auditoria registrou seis avisos de dependências de produção.
