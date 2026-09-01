@@ -1,0 +1,26 @@
+{
+  "name": "7-inventops-codex",
+  "purpose": "Preservar a linha independente Codex do InventOps, com foco em UX, qualidade textual e fluxo operacional.",
+  "canonical_root": "Codex/Code/Conta_Invent/7 - InventOps Codex",
+  "maintainer": "Daiana Costa",
+  "status": "paused-retomable",
+  "repository": "https://github.com/daia85-prog/7-inventops-codex",
+  "environments": [
+    "OneDrive - INVENT",
+    "GitHub público",
+    "Vite local"
+  ],
+  "protected_paths": [
+    "baseline segura",
+    "referências visuais aprovadas",
+    "dados ou documentos confidenciais"
+  ],
+  "context_files": [
+    "01-contexto/PROJECT-CONTEXT.md",
+    "01-contexto/CURRENT-STATE.md",
+    "01-contexto/DECISIONS.md",
+    "01-contexto/NEXT-ACTIONS.md",
+    "01-contexto/OPEN-QUESTIONS.md",
+    "01-contexto/HANDOFF.md"
+  ]
+}
