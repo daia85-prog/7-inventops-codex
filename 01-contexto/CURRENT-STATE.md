@@ -37,4 +37,7 @@
 
 - `check:quality` e build passaram; a publicação corresponde aos assets atuais.
 - O fluxo local de demonstração Microsoft chegou ao Dashboard Executivo sem erro de página.
-- A auditoria registrou seis avisos de dependências de produção.
+- Vite foi atualizado para `6.4.3`; os locks npm e pnpm passaram a fixar `browserslist 4.28.7`,
+  `nanoid 3.3.18` e `postcss 8.5.23`.
+- `pnpm audit --prod` e `npm audit --omit=dev --package-lock-only` não reportam vulnerabilidades.
+- `check:quality` e o build foram reexecutados após a atualização.
