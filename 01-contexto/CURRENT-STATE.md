@@ -49,3 +49,10 @@
 - `npm audit --omit=dev --audit-level=high` retornou zero vulnerabilidades.
 - O cache transitório criado pela auditoria passou a ser ignorado pelo Git; nenhuma dependência ou
   código de produto foi alterado.
+
+## Governança de verificadores em 03/09/2026
+
+- Os verificadores de texto, fluxo e referências JSX foram catalogados com origem, execução e
+  limites em `01-contexto/VERIFICADORES-REUTILIZAVEIS.md`.
+- Eles continuam específicos do P7; não foram importados em outros projetos nem promovidos a
+  padrão compartilhado sem uma segunda evidência comparável.
