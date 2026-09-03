@@ -56,3 +56,7 @@
   limites em `01-contexto/VERIFICADORES-REUTILIZAVEIS.md`.
 - Eles continuam específicos do P7; não foram importados em outros projetos nem promovidos a
   padrão compartilhado sem uma segunda evidência comparável.
+## Verificação local em lote — 03/09/2026
+
+- `npm run check:quality` aprovou texto, fluxo operacional e JSX; o bundle de produção foi
+  regenerado localmente. Nenhuma publicação externa foi promovida nesta rodada.
