@@ -2,7 +2,7 @@
 
 ## Estado em
 
-- Data: 2026-08-31
+- Data: 2026-09-02
 - Responsável pela atualização: Codex, sob autorização de Daiana Costa
 - Branch observada: `main`
 - Commit observado: `68c9aff`
@@ -41,3 +41,11 @@
   `nanoid 3.3.18` e `postcss 8.5.23`.
 - `pnpm audit --prod` e `npm audit --omit=dev --package-lock-only` não reportam vulnerabilidades.
 - `check:quality` e o build foram reexecutados após a atualização.
+
+## Verificação em lote de 02/09/2026
+
+- `check:quality` passou novamente: textos, fluxo Daniel/Thomas/Home/Cockpit e referências JSX
+  foram verificados antes do build.
+- `npm audit --omit=dev --audit-level=high` retornou zero vulnerabilidades.
+- O cache transitório criado pela auditoria passou a ser ignorado pelo Git; nenhuma dependência ou
+  código de produto foi alterado.
